@@ -1,19 +1,33 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Globe } from 'lucide-react';
 import { Button } from '../ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { useLanguage } from '../../context/LanguageContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { language, setLanguage, t, isRTL } = useLanguage();
 
   const navLinks = [
-    { path: '/', label: 'Hem' },
-    { path: '/om-oss', label: 'Om Oss' },
-    { path: '/utbildningar', label: 'Utbildningar' },
-    { path: '/kalender', label: 'Kalender' },
-    { path: '/bli-medlem', label: 'Bli Medlem' },
-    { path: '/kontakt', label: 'Kontakt' },
+    { path: '/', label: t('nav.home') },
+    { path: '/om-oss', label: t('nav.about') },
+    { path: '/utbildningar', label: t('nav.programs') },
+    { path: '/kalender', label: t('nav.calendar') },
+    { path: '/bli-medlem', label: t('nav.membership') },
+    { path: '/kontakt', label: t('nav.contact') },
+  ];
+
+  const languages = [
+    { code: 'sv', name: 'Svenska', flag: '🇸🇪' },
+    { code: 'en', name: 'English', flag: '🇬🇧' },
+    { code: 'ar', name: 'العربية', flag: '🇸🇦' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -21,9 +35,9 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-cream-50/95 backdrop-blur-md border-b border-cream-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className={`flex items-center justify-between h-20 ${isRTL ? 'flex-row-reverse' : ''}`}>
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
+          <Link to="/" className={`flex items-center space-x-3 group ${isRTL ? 'space-x-reverse' : ''}`}>
             <div className="w-12 h-12 bg-amber-700 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow duration-300">
               <span className="text-cream-50 font-bold text-xl">H</span>
             </div>
@@ -34,7 +48,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
+          <nav className={`hidden md:flex items-center space-x-1 ${isRTL ? 'space-x-reverse' : ''}`}>
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -48,17 +62,62 @@ const Header = () => {
                 {link.label}
               </Link>
             ))}
+            
+            {/* Language Selector */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="ml-2 text-stone-700 hover:bg-cream-100">
+                  <Globe className="h-4 w-4 mr-2" />
+                  {languages.find(l => l.code === language)?.flag}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-white">
+                {languages.map((lang) => (
+                  <DropdownMenuItem
+                    key={lang.code}
+                    onClick={() => setLanguage(lang.code)}
+                    className={`cursor-pointer ${language === lang.code ? 'bg-amber-50' : ''}`}
+                  >
+                    <span className="mr-2">{lang.flag}</span>
+                    {lang.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
 
           {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden text-stone-700"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
+          <div className={`md:hidden flex items-center space-x-2 ${isRTL ? 'space-x-reverse' : ''}`}>
+            {/* Mobile Language Selector */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-stone-700">
+                  <Globe className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-white">
+                {languages.map((lang) => (
+                  <DropdownMenuItem
+                    key={lang.code}
+                    onClick={() => setLanguage(lang.code)}
+                    className={`cursor-pointer ${language === lang.code ? 'bg-amber-50' : ''}`}
+                  >
+                    <span className="mr-2">{lang.flag}</span>
+                    {lang.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-stone-700"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -70,7 +129,7 @@ const Header = () => {
                   key={link.path}
                   to={link.path}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${isRTL ? 'text-right' : ''} ${
                     isActive(link.path)
                       ? 'bg-amber-700 text-cream-50'
                       : 'text-stone-700 hover:bg-cream-100'
