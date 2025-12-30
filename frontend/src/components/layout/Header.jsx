@@ -15,10 +15,16 @@ const Header = () => {
   const location = useLocation();
   const { language, setLanguage, t, isRTL } = useLanguage();
 
+  const leaderExpLabel = {
+    sv: 'Leader Experience',
+    en: 'Leader Experience',
+    ar: 'تجربة القيادة'
+  };
+
   const navLinks = [
     { path: '/', label: t('nav.home') },
     { path: '/om-oss', label: t('nav.about') },
-    { path: '/utbildningar', label: t('nav.programs') },
+    { path: '/leader-experience', label: leaderExpLabel[language] || 'Leader Experience' },
     { path: '/kalender', label: t('nav.calendar') },
     { path: '/bli-medlem', label: t('nav.membership') },
     { path: '/kontakt', label: t('nav.contact') },
