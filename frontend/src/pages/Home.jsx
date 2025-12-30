@@ -53,9 +53,9 @@ const Home = () => {
                   <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
                 </Button>
               </Link>
-              <Link to="/utbildningar">
+              <Link to="/leader-experience">
                 <Button variant="outline" size="lg" className="border-2 border-stone-300 text-stone-700 hover:bg-cream-100 px-8 py-6 text-lg rounded-xl">
-                  {t('home.explorePrograms')}
+                  {language === 'sv' ? 'Haggai Leader Experience' : language === 'ar' ? 'تجربة هجاي للقيادة' : 'Haggai Leader Experience'}
                 </Button>
               </Link>
             </div>
