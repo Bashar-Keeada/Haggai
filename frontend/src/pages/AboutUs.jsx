@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, Target, Heart, Award, Eye, Compass, Lightbulb, CheckCircle } from 'lucide-react';
+import { Users, Target, Heart, Award, Eye, Compass, Lightbulb, CheckCircle, BookOpen } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/card';
 import { useLanguage } from '../context/LanguageContext';
 import { boardTranslations } from '../data/translations';
