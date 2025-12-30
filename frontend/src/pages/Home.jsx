@@ -25,21 +25,21 @@ const Home = () => {
   return (
     <div className={`min-h-screen ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center bg-gradient-to-br from-cream-100 via-cream-50 to-amber-50">
+      <section className="relative min-h-[90vh] flex items-center bg-gradient-to-br from-haggai-50 via-cream-50 to-cream-100">
         <div className="absolute inset-0 overflow-hidden">
-          <div className={`absolute top-20 ${isRTL ? 'left-10' : 'right-10'} w-72 h-72 bg-amber-200/30 rounded-full blur-3xl`} />
+          <div className={`absolute top-20 ${isRTL ? 'left-10' : 'right-10'} w-72 h-72 bg-haggai-100/50 rounded-full blur-3xl`} />
           <div className={`absolute bottom-20 ${isRTL ? 'right-10' : 'left-10'} w-96 h-96 bg-cream-300/40 rounded-full blur-3xl`} />
         </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
           <div className={`max-w-3xl ${isRTL ? 'mr-auto text-right' : ''}`}>
-            <div className={`inline-flex items-center px-4 py-2 bg-amber-100 rounded-full mb-8`}>
-              <span className="text-amber-800 text-sm font-medium">{t('home.badge')}</span>
+            <div className={`inline-flex items-center px-4 py-2 bg-haggai-100 rounded-full mb-8`}>
+              <span className="text-haggai text-sm font-medium">{t('home.badge')}</span>
             </div>
             
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-stone-800 leading-tight mb-6">
               {t('home.heroTitle1')}
-              <span className="block text-amber-700">{t('home.heroTitle2')}</span>
+              <span className="block text-haggai">{t('home.heroTitle2')}</span>
             </h1>
             
             <p className="text-xl text-stone-600 mb-10 leading-relaxed max-w-2xl">
@@ -48,13 +48,13 @@ const Home = () => {
             
             <div className={`flex flex-col sm:flex-row gap-4 ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
               <Link to="/bli-medlem">
-                <Button size="lg" className={`bg-amber-700 hover:bg-amber-800 text-cream-50 px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <Button size="lg" className={`bg-haggai hover:bg-haggai-light text-cream-50 px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   {t('home.becomeMember')}
                   <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
                 </Button>
               </Link>
               <Link to="/leader-experience">
-                <Button variant="outline" size="lg" className="border-2 border-stone-300 text-stone-700 hover:bg-cream-100 px-8 py-6 text-lg rounded-xl">
+                <Button variant="outline" size="lg" className="border-2 border-haggai text-haggai hover:bg-haggai hover:text-cream-50 px-8 py-6 text-lg rounded-xl">
                   {language === 'sv' ? 'Haggai Leader Experience' : language === 'ar' ? 'تجربة هجاي للقيادة' : 'Haggai Leader Experience'}
                 </Button>
               </Link>
@@ -82,8 +82,8 @@ const Home = () => {
             ].map((value, index) => (
               <Card key={index} className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-cream-50 hover:-translate-y-1">
                 <CardContent className={`p-8 text-center ${isRTL ? 'text-right' : ''}`}>
-                  <div className={`w-16 h-16 mb-6 bg-amber-100 rounded-2xl flex items-center justify-center group-hover:bg-amber-700 transition-colors duration-300 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
-                    <value.icon className="h-8 w-8 text-amber-700 group-hover:text-cream-50 transition-colors duration-300" />
+                  <div className={`w-16 h-16 mb-6 bg-haggai-100 rounded-2xl flex items-center justify-center group-hover:bg-haggai transition-colors duration-300 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
+                    <value.icon className="h-8 w-8 text-haggai group-hover:text-cream-50 transition-colors duration-300" />
                   </div>
                   <h3 className="text-xl font-semibold text-stone-800 mb-3">{value.title}</h3>
                   <p className="text-stone-600 leading-relaxed">{value.desc}</p>
@@ -95,11 +95,11 @@ const Home = () => {
       </section>
 
       {/* About Preview */}
-      <section className="py-24 bg-cream-100">
+      <section className="py-24 bg-haggai-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`grid lg:grid-cols-2 gap-16 items-center ${isRTL ? 'direction-rtl' : ''}`}>
             <div className={isRTL ? 'text-right order-1 lg:order-2' : ''}>
-              <span className="text-amber-700 font-medium text-sm tracking-wider uppercase mb-4 block">{t('home.aboutTitle')}</span>
+              <span className="text-haggai font-medium text-sm tracking-wider uppercase mb-4 block">{t('home.aboutTitle')}</span>
               <h2 className="text-4xl font-bold text-stone-800 mb-6">{t('home.aboutHeading')}</h2>
               <p className="text-lg text-stone-600 mb-6 leading-relaxed">
                 {t('home.aboutText1')}
@@ -108,30 +108,30 @@ const Home = () => {
                 {t('home.aboutText2')}
               </p>
               <Link to="/om-oss">
-                <Button variant="outline" className={`border-2 border-amber-700 text-amber-700 hover:bg-amber-700 hover:text-cream-50 rounded-xl px-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <Button variant="outline" className={`border-2 border-haggai text-haggai hover:bg-haggai hover:text-cream-50 rounded-xl px-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   {t('home.readMore')}
                   <ArrowRight className={`h-4 w-4 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
                 </Button>
               </Link>
             </div>
             <div className={`relative ${isRTL ? 'order-2 lg:order-1' : ''}`}>
-              <div className="absolute -inset-4 bg-amber-200/50 rounded-3xl blur-2xl" />
+              <div className="absolute -inset-4 bg-haggai-100/50 rounded-3xl blur-2xl" />
               <div className="relative bg-white rounded-3xl p-8 shadow-xl">
                 <div className="grid grid-cols-2 gap-6">
-                  <div className="text-center p-6 bg-cream-50 rounded-2xl">
-                    <span className="text-4xl font-bold text-amber-700">50+</span>
+                  <div className="text-center p-6 bg-haggai-50 rounded-2xl">
+                    <span className="text-4xl font-bold text-haggai">50+</span>
                     <p className="text-stone-600 mt-2">{t('home.members')}</p>
                   </div>
-                  <div className="text-center p-6 bg-cream-50 rounded-2xl">
-                    <span className="text-4xl font-bold text-amber-700">10+</span>
+                  <div className="text-center p-6 bg-haggai-50 rounded-2xl">
+                    <span className="text-4xl font-bold text-haggai">10+</span>
                     <p className="text-stone-600 mt-2">{t('home.trainingsPerYear')}</p>
                   </div>
-                  <div className="text-center p-6 bg-cream-50 rounded-2xl">
-                    <span className="text-4xl font-bold text-amber-700">20+</span>
+                  <div className="text-center p-6 bg-haggai-50 rounded-2xl">
+                    <span className="text-4xl font-bold text-haggai">20+</span>
                     <p className="text-stone-600 mt-2">{t('home.denominations')}</p>
                   </div>
-                  <div className="text-center p-6 bg-cream-50 rounded-2xl">
-                    <span className="text-4xl font-bold text-amber-700">∞</span>
+                  <div className="text-center p-6 bg-haggai-50 rounded-2xl">
+                    <span className="text-4xl font-bold text-haggai">∞</span>
                     <p className="text-stone-600 mt-2">{t('home.potential')}</p>
                   </div>
                 </div>
@@ -150,7 +150,7 @@ const Home = () => {
               <p className="text-stone-600">{t('home.upcomingEventsSubtitle')}</p>
             </div>
             <Link to="/kalender" className="mt-4 sm:mt-0">
-              <Button variant="outline" className={`border-amber-700 text-amber-700 hover:bg-amber-700 hover:text-cream-50 rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <Button variant="outline" className={`border-haggai text-haggai hover:bg-haggai hover:text-cream-50 rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
                 {t('home.seeAllEvents')}
                 <ArrowRight className={`h-4 w-4 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
               </Button>
@@ -160,20 +160,20 @@ const Home = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {localizedEvents.slice(0, 3).map((event) => (
               <Card key={event.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                <div className="h-2 bg-amber-600" />
+                <div className="h-2 bg-haggai" />
                 <CardContent className={`p-6 ${isRTL ? 'text-right' : ''}`}>
                   <div className={`flex items-center justify-between mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <span className="text-sm font-medium text-amber-700 bg-amber-50 px-3 py-1 rounded-full">
+                    <span className="text-sm font-medium text-haggai bg-haggai-50 px-3 py-1 rounded-full">
                       {new Date(event.date).toLocaleDateString(language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'sv-SE', { day: 'numeric', month: 'short' })}
                     </span>
                     <span className="text-sm text-stone-500">{event.time}</span>
                   </div>
-                  <h3 className="text-xl font-semibold text-stone-800 mb-3 group-hover:text-amber-700 transition-colors">{event.title}</h3>
+                  <h3 className="text-xl font-semibold text-stone-800 mb-3 group-hover:text-haggai transition-colors">{event.title}</h3>
                   <p className="text-stone-600 mb-4 line-clamp-2">{event.description}</p>
                   <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
                     <span className="text-sm text-stone-500">{event.spotsLeft} {t('home.spotsLeft')}</span>
                     <Link to="/kalender">
-                      <Button size="sm" className="bg-amber-700 hover:bg-amber-800 text-cream-50 rounded-lg">
+                      <Button size="sm" className="bg-haggai hover:bg-haggai-light text-cream-50 rounded-lg">
                         {t('home.signUp')}
                       </Button>
                     </Link>
@@ -186,22 +186,22 @@ const Home = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-stone-800">
+      <section className="py-24 bg-haggai-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
             <h2 className="text-4xl font-bold text-cream-50 mb-4">{t('home.testimonials')}</h2>
-            <p className="text-cream-300">{t('home.testimonialsSubtitle')}</p>
+            <p className="text-haggai-200">{t('home.testimonialsSubtitle')}</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial) => (
-              <Card key={testimonial.id} className="bg-stone-700/50 border-stone-600 backdrop-blur">
+              <Card key={testimonial.id} className="bg-haggai-700/50 border-haggai-700 backdrop-blur">
                 <CardContent className={`p-8 ${isRTL ? 'text-right' : ''}`}>
-                  <div className={`text-amber-400 text-4xl mb-4 ${isRTL ? 'text-right' : ''}`}>"</div>
+                  <div className={`text-haggai-200 text-4xl mb-4 ${isRTL ? 'text-right' : ''}`}>"</div>
                   <p className="text-cream-100 mb-6 leading-relaxed italic">{testimonial.quote}</p>
-                  <div className="border-t border-stone-600 pt-4">
+                  <div className="border-t border-haggai-700 pt-4">
                     <p className="text-cream-50 font-semibold">{testimonial.name}</p>
-                    <p className="text-cream-400 text-sm">{testimonial.church}</p>
+                    <p className="text-haggai-300 text-sm">{testimonial.church}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -211,7 +211,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-amber-50">
+      <section className="py-24 bg-haggai-50">
         <div className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center ${isRTL ? 'text-right' : ''}`}>
           <h2 className="text-4xl font-bold text-stone-800 mb-6">
             {t('home.ctaTitle')}
@@ -221,7 +221,7 @@ const Home = () => {
           </p>
           <div className={`flex flex-col sm:flex-row gap-4 justify-center ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
             <Link to="/bli-medlem">
-              <Button size="lg" className={`bg-amber-700 hover:bg-amber-800 text-cream-50 px-10 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <Button size="lg" className={`bg-haggai hover:bg-haggai-light text-cream-50 px-10 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}>
                 {t('home.becomeMemberToday')}
                 <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
               </Button>
