@@ -44,11 +44,12 @@ const Header = () => {
         <div className={`flex items-center justify-between h-20 ${isRTL ? 'flex-row-reverse' : ''}`}>
           {/* Logo */}
           <Link to="/" className={`flex items-center space-x-3 group ${isRTL ? 'space-x-reverse' : ''}`}>
-            <div className="w-12 h-12 bg-amber-700 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow duration-300">
-              <span className="text-cream-50 font-bold text-xl">H</span>
-            </div>
+            <img 
+              src="/haggai-logo.png" 
+              alt="Haggai International" 
+              className="h-14 w-auto object-contain"
+            />
             <div className="flex flex-col">
-              <span className="text-xl font-semibold text-stone-800 tracking-tight">Haggai</span>
               <span className="text-xs text-amber-700 font-medium tracking-wider uppercase">Sweden</span>
             </div>
           </Link>
