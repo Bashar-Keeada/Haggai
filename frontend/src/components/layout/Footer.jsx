@@ -8,7 +8,7 @@ const Footer = () => {
   const { t, isRTL } = useLanguage();
 
   return (
-    <footer className="bg-stone-800 text-cream-100">
+    <footer className="bg-haggai-dark text-cream-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className={`grid grid-cols-1 md:grid-cols-4 gap-12 ${isRTL ? 'text-right' : ''}`}>
           {/* Brand */}
@@ -21,7 +21,7 @@ const Footer = () => {
                   className="h-10 w-auto object-contain"
                 />
               </div>
-              <span className="text-xs text-amber-400 font-medium tracking-wider uppercase">Sweden</span>
+              <span className="text-xs text-haggai-200 font-medium tracking-wider uppercase">Sweden</span>
             </Link>
             <p className="text-cream-300 text-sm leading-relaxed">
               {t('footer.description')}
@@ -32,10 +32,10 @@ const Footer = () => {
           <div>
             <h4 className="text-cream-50 font-semibold mb-4">{t('footer.quickLinks')}</h4>
             <ul className="space-y-3">
-              <li><Link to="/om-oss" className="text-cream-300 hover:text-amber-400 transition-colors text-sm">{t('nav.about')}</Link></li>
-              <li><Link to="/utbildningar" className="text-cream-300 hover:text-amber-400 transition-colors text-sm">{t('nav.programs')}</Link></li>
-              <li><Link to="/kalender" className="text-cream-300 hover:text-amber-400 transition-colors text-sm">{t('nav.calendar')}</Link></li>
-              <li><Link to="/bli-medlem" className="text-cream-300 hover:text-amber-400 transition-colors text-sm">{t('nav.membership')}</Link></li>
+              <li><Link to="/om-oss" className="text-cream-300 hover:text-haggai-200 transition-colors text-sm">{t('nav.about')}</Link></li>
+              <li><Link to="/leader-experience" className="text-cream-300 hover:text-haggai-200 transition-colors text-sm">Leader Experience</Link></li>
+              <li><Link to="/kalender" className="text-cream-300 hover:text-haggai-200 transition-colors text-sm">{t('nav.calendar')}</Link></li>
+              <li><Link to="/bli-medlem" className="text-cream-300 hover:text-haggai-200 transition-colors text-sm">{t('nav.membership')}</Link></li>
             </ul>
           </div>
 
@@ -44,15 +44,15 @@ const Footer = () => {
             <h4 className="text-cream-50 font-semibold mb-4">{t('footer.contact')}</h4>
             <ul className="space-y-3">
               <li className={`flex items-center space-x-3 text-cream-300 text-sm ${isRTL ? 'space-x-reverse flex-row-reverse justify-end' : ''}`}>
-                <MapPin className="h-4 w-4 text-amber-400 flex-shrink-0" />
+                <MapPin className="h-4 w-4 text-haggai-200 flex-shrink-0" />
                 <span>{contactInfo.address}</span>
               </li>
               <li className={`flex items-center space-x-3 text-cream-300 text-sm ${isRTL ? 'space-x-reverse flex-row-reverse justify-end' : ''}`}>
-                <Phone className="h-4 w-4 text-amber-400 flex-shrink-0" />
+                <Phone className="h-4 w-4 text-haggai-200 flex-shrink-0" />
                 <span>{contactInfo.phone}</span>
               </li>
               <li className={`flex items-center space-x-3 text-cream-300 text-sm ${isRTL ? 'space-x-reverse flex-row-reverse justify-end' : ''}`}>
-                <Mail className="h-4 w-4 text-amber-400 flex-shrink-0" />
+                <Mail className="h-4 w-4 text-haggai-200 flex-shrink-0" />
                 <span>{contactInfo.email}</span>
               </li>
             </ul>
@@ -68,7 +68,7 @@ const Footer = () => {
               href="https://www.haggai-international.org/"
               target="_blank"
               rel="noopener noreferrer"
-              className={`inline-flex items-center text-amber-400 hover:text-amber-300 transition-colors text-sm font-medium ${isRTL ? 'flex-row-reverse' : ''}`}
+              className={`inline-flex items-center text-haggai-200 hover:text-haggai-100 transition-colors text-sm font-medium ${isRTL ? 'flex-row-reverse' : ''}`}
             >
               {t('footer.visitHaggai')}
               <svg className={`h-4 w-4 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,7 +78,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-stone-700 mt-12 pt-8 text-center">
+        <div className="border-t border-haggai-700 mt-12 pt-8 text-center">
           <p className="text-cream-400 text-sm">
             © {new Date().getFullYear()} Haggai Sweden. {t('footer.copyright')}
           </p>
