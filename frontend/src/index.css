@@ -27,25 +27,40 @@ code {
     --card-foreground: 30 10% 15%;
     --popover: 40 30% 98%;
     --popover-foreground: 30 10% 15%;
-    --primary: 30 60% 35%;
+    --primary: 168 60% 21%;
     --primary-foreground: 40 30% 97%;
-    --secondary: 35 20% 90%;
-    --secondary-foreground: 30 10% 25%;
+    --secondary: 168 20% 90%;
+    --secondary-foreground: 168 60% 15%;
     --muted: 35 15% 92%;
     --muted-foreground: 30 10% 45%;
-    --accent: 35 40% 88%;
-    --accent-foreground: 30 60% 30%;
+    --accent: 168 40% 88%;
+    --accent-foreground: 168 60% 20%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 35 20% 85%;
     --input: 35 20% 85%;
-    --ring: 30 60% 40%;
-    --chart-1: 30 70% 50%;
-    --chart-2: 35 50% 45%;
-    --chart-3: 40 40% 55%;
-    --chart-4: 25 60% 45%;
-    --chart-5: 20 65% 50%;
+    --ring: 168 60% 30%;
+    --chart-1: 168 70% 30%;
+    --chart-2: 168 50% 35%;
+    --chart-3: 168 40% 45%;
+    --chart-4: 168 60% 25%;
+    --chart-5: 168 65% 35%;
     --radius: 0.5rem;
+    
+    /* Haggai Brand Color */
+    --haggai-primary: #15564e;
+    --haggai-light: #1a6b61;
+    --haggai-dark: #0f403a;
+    --haggai-50: #e8f5f3;
+    --haggai-100: #d1ebe7;
+    --haggai-200: #a3d7cf;
+    --haggai-300: #75c3b7;
+    --haggai-400: #47af9f;
+    --haggai-500: #1a9b87;
+    --haggai-600: #15564e;
+    --haggai-700: #0f403a;
+    --haggai-800: #0a2a26;
+    --haggai-900: #051513;
   }
 }
 
@@ -58,8 +73,87 @@ code {
   }
 }
 
-/* Custom color utilities for cream/beige theme */
+/* Custom color utilities for Haggai brand colors */
 @layer utilities {
+  /* Haggai Brand Colors */
+  .bg-haggai {
+    background-color: #15564e;
+  }
+  .bg-haggai-light {
+    background-color: #1a6b61;
+  }
+  .bg-haggai-dark {
+    background-color: #0f403a;
+  }
+  .bg-haggai-50 {
+    background-color: #e8f5f3;
+  }
+  .bg-haggai-100 {
+    background-color: #d1ebe7;
+  }
+  .bg-haggai-200 {
+    background-color: #a3d7cf;
+  }
+  .bg-haggai-700 {
+    background-color: #0f403a;
+  }
+  .bg-haggai-800 {
+    background-color: #0a2a26;
+  }
+  
+  .text-haggai {
+    color: #15564e;
+  }
+  .text-haggai-light {
+    color: #1a6b61;
+  }
+  .text-haggai-dark {
+    color: #0f403a;
+  }
+  .text-haggai-50 {
+    color: #e8f5f3;
+  }
+  .text-haggai-100 {
+    color: #d1ebe7;
+  }
+  .text-haggai-200 {
+    color: #a3d7cf;
+  }
+  .text-haggai-300 {
+    color: #75c3b7;
+  }
+  .text-haggai-400 {
+    color: #47af9f;
+  }
+  
+  .border-haggai {
+    border-color: #15564e;
+  }
+  .border-haggai-100 {
+    border-color: #d1ebe7;
+  }
+  .border-haggai-200 {
+    border-color: #a3d7cf;
+  }
+  
+  .hover\:bg-haggai:hover {
+    background-color: #15564e;
+  }
+  .hover\:bg-haggai-light:hover {
+    background-color: #1a6b61;
+  }
+  .hover\:bg-haggai-dark:hover {
+    background-color: #0f403a;
+  }
+  
+  .hover\:text-haggai:hover {
+    color: #15564e;
+  }
+  .hover\:text-haggai-light:hover {
+    color: #1a6b61;
+  }
+  
+  /* Cream colors */
   .bg-cream-50 {
     background-color: #fdfcf9;
   }
