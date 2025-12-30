@@ -10,6 +10,8 @@ import Programs from "./pages/Programs";
 import EventCalendar from "./pages/EventCalendar";
 import Membership from "./pages/Membership";
 import Contact from "./pages/Contact";
+import LeaderExperience from "./pages/LeaderExperience";
+import LeaderExperienceApplication from "./pages/LeaderExperienceApplication";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/om-oss" element={<AboutUs />} />
               <Route path="/utbildningar" element={<Programs />} />
+              <Route path="/leader-experience" element={<LeaderExperience />} />
+              <Route path="/leader-experience/:programId" element={<LeaderExperienceApplication />} />
               <Route path="/kalender" element={<EventCalendar />} />
               <Route path="/bli-medlem" element={<Membership />} />
               <Route path="/kontakt" element={<Contact />} />
