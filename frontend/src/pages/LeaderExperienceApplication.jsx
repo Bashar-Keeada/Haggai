@@ -329,7 +329,7 @@ const LeaderExperienceApplication = () => {
       {/* Header */}
       <section className="py-12 bg-gradient-to-br from-amber-50 via-cream-50 to-cream-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link to="/leader-experience" className={`inline-flex items-center text-amber-700 hover:text-amber-800 mb-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <Link to="/leader-experience" className={`inline-flex items-center text-haggai hover:text-haggai-dark mb-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
             <ArrowLeft className={`h-4 w-4 ${isRTL ? 'ml-2 rotate-180' : 'mr-2'}`} />
             {txt.backToPrograms}
           </Link>
@@ -338,7 +338,7 @@ const LeaderExperienceApplication = () => {
             {txt.applicationForm}
           </h1>
           <p className={`text-lg text-stone-600 ${isRTL ? 'text-right' : ''}`}>
-            {txt.applicationFor}: <span className="font-semibold text-amber-700">{program.title[language]}</span>
+            {txt.applicationFor}: <span className="font-semibold text-haggai">{program.title[language]}</span>
           </p>
         </div>
       </section>
@@ -354,29 +354,29 @@ const LeaderExperienceApplication = () => {
                 </CardHeader>
                 <CardContent className={`space-y-4 ${isRTL ? 'text-right' : ''}`}>
                   <div className={`flex items-center text-sm ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                    <Clock className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                    <Clock className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                     <span><strong>{txt.duration}:</strong> {program.duration[language]}</span>
                   </div>
                   <div className={`flex items-center text-sm ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                    <Calendar className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                    <Calendar className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                     <span><strong>{txt.period}:</strong> {program.period[language]}</span>
                   </div>
                   <div className={`flex items-center text-sm ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                    <MapPin className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                    <MapPin className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                     <span><strong>{txt.location}:</strong> {program.location[language]}</span>
                   </div>
                   <div className={`flex items-center text-sm ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                    <Globe className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                    <Globe className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                     <span><strong>{txt.language}:</strong> {getLanguageLabel(program.language)}</span>
                   </div>
                   <div className={`flex items-center text-sm ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                    <Users className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                    <Users className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                     <span><strong>{program.spotsLeft}</strong> {txt.spotsLeft}</span>
                   </div>
 
                   <div className="border-t pt-4 mt-4">
                     <h4 className="font-semibold text-stone-800 mb-3 flex items-center">
-                      <Award className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      <Award className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       {txt.requirements}
                     </h4>
                     <ul className="space-y-2">
@@ -673,7 +673,7 @@ const LeaderExperienceApplication = () => {
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className={`w-full bg-amber-700 hover:bg-amber-800 text-cream-50 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}
+                      className={`w-full bg-haggai hover:bg-haggai-dark text-cream-50 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}
                     >
                       {isSubmitting ? txt.submitting : txt.submitApplication}
                       <Send className={`h-5 w-5 ${isRTL ? 'mr-2' : 'ml-2'}`} />

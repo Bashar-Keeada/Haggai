@@ -86,7 +86,7 @@ const Membership = () => {
       <section className="py-24 bg-gradient-to-br from-cream-100 via-cream-50 to-amber-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`max-w-3xl ${isRTL ? 'mr-auto text-right' : ''}`}>
-            <span className="text-amber-700 font-medium text-sm tracking-wider uppercase mb-4 block">{t('membership.title')}</span>
+            <span className="text-haggai font-medium text-sm tracking-wider uppercase mb-4 block">{t('membership.title')}</span>
             <h1 className="text-5xl font-bold text-stone-800 mb-6">{t('membership.heading')}</h1>
             <p className="text-xl text-stone-600 leading-relaxed">
               {t('membership.description')}
@@ -113,26 +113,26 @@ const Membership = () => {
                   key={type.id}
                   className={`cursor-pointer transition-all duration-300 border-2 ${
                     isSelected 
-                      ? 'border-amber-600 shadow-xl scale-105' 
-                      : 'border-transparent shadow-lg hover:shadow-xl hover:border-amber-200'
+                      ? 'border-haggai shadow-xl scale-105' 
+                      : 'border-transparent shadow-lg hover:shadow-xl hover:border-haggai-100'
                   }`}
                   onClick={() => setSelectedType(type.id)}
                 >
                   <CardHeader className={`text-center pb-4 ${isRTL ? 'text-right' : ''}`}>
                     <div className={`w-16 h-16 mb-4 rounded-2xl flex items-center justify-center transition-colors ${
-                      isSelected ? 'bg-amber-700' : 'bg-amber-100'
+                      isSelected ? 'bg-haggai' : 'bg-haggai-100'
                     } ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
                       <Icon className={`h-8 w-8 ${
-                        isSelected ? 'text-cream-50' : 'text-amber-700'
+                        isSelected ? 'text-cream-50' : 'text-haggai'
                       }`} />
                     </div>
                     <CardTitle className="text-xl text-stone-800">{type.title}</CardTitle>
                     <CardDescription className="text-stone-600">{type.description}</CardDescription>
                   </CardHeader>
                   <CardContent className={`text-center ${isRTL ? 'text-right' : ''}`}>
-                    <p className="text-3xl font-bold text-amber-700 mb-2">{type.price}{t('membership.perYear')}</p>
+                    <p className="text-3xl font-bold text-haggai mb-2">{type.price}{t('membership.perYear')}</p>
                     {isSelected && (
-                      <div className={`flex items-center justify-center text-amber-700 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className={`flex items-center justify-center text-haggai ${isRTL ? 'flex-row-reverse' : ''}`}>
                         <Check className={`h-5 w-5 ${isRTL ? 'ml-1' : 'mr-1'}`} />
                         <span className="text-sm font-medium">{t('membership.selected')}</span>
                       </div>
@@ -237,7 +237,7 @@ const Membership = () => {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`w-full bg-amber-700 hover:bg-amber-800 text-cream-50 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}
+                    className={`w-full bg-haggai hover:bg-haggai-dark text-cream-50 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}
                   >
                     {isSubmitting ? t('membership.submitting') : t('membership.submitApplication')}
                     <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
@@ -259,8 +259,8 @@ const Membership = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {benefits.map((benefit, index) => (
               <div key={index} className={`flex items-center space-x-3 bg-white p-4 rounded-xl shadow ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
-                <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Check className="h-4 w-4 text-amber-700" />
+                <div className="w-8 h-8 bg-haggai-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Check className="h-4 w-4 text-haggai" />
                 </div>
                 <span className="text-stone-700">{benefit}</span>
               </div>

@@ -29,7 +29,7 @@ const LeaderExperience = () => {
       blue: 'bg-blue-100 text-blue-800 border-blue-200',
       emerald: 'bg-emerald-100 text-emerald-800 border-emerald-200',
       violet: 'bg-violet-100 text-violet-800 border-violet-200',
-      amber: 'bg-amber-100 text-amber-800 border-amber-200'
+      amber: 'bg-haggai-100 text-haggai-dark border-haggai-100'
     };
     return colors[color] || colors.amber;
   };
@@ -40,7 +40,7 @@ const LeaderExperience = () => {
       blue: 'bg-blue-600',
       emerald: 'bg-emerald-600',
       violet: 'bg-violet-600',
-      amber: 'bg-amber-600'
+      amber: 'bg-haggai'
     };
     return colors[color] || colors.amber;
   };
@@ -158,19 +158,19 @@ const LeaderExperience = () => {
       <section className="py-24 bg-gradient-to-br from-amber-50 via-cream-50 to-cream-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`max-w-4xl ${isRTL ? 'mr-auto text-right' : ''}`}>
-            <Badge className="mb-6 bg-amber-100 text-amber-800 border-amber-200 text-sm px-4 py-2">
+            <Badge className="mb-6 bg-haggai-100 text-haggai-dark border-haggai-100 text-sm px-4 py-2">
               Haggai International
             </Badge>
             <h1 className="text-5xl md:text-6xl font-bold text-stone-800 mb-6">
               {txt.pageTitle}
             </h1>
-            <p className="text-2xl text-amber-700 font-medium mb-4">{txt.pageSubtitle}</p>
+            <p className="text-2xl text-haggai font-medium mb-4">{txt.pageSubtitle}</p>
             <p className="text-xl text-stone-600 leading-relaxed mb-8">
               {txt.pageDescription}
             </p>
             
             {/* Requirements Box */}
-            <div className="bg-amber-700 text-cream-50 rounded-2xl p-6 shadow-xl">
+            <div className="bg-haggai text-cream-50 rounded-2xl p-6 shadow-xl">
               <div className={`flex items-start gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <div className="w-12 h-12 bg-cream-50/20 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Award className="h-6 w-6" />
@@ -199,8 +199,8 @@ const LeaderExperience = () => {
               return (
                 <Card key={group.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 group">
                   <CardContent className={`p-6 ${isRTL ? 'text-right' : ''}`}>
-                    <div className={`w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-amber-700 transition-colors ${isRTL ? 'mr-0 ml-auto' : ''}`}>
-                      <Icon className="h-7 w-7 text-amber-700 group-hover:text-cream-50 transition-colors" />
+                    <div className={`w-14 h-14 bg-haggai-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-haggai transition-colors ${isRTL ? 'mr-0 ml-auto' : ''}`}>
+                      <Icon className="h-7 w-7 text-haggai group-hover:text-cream-50 transition-colors" />
                     </div>
                     <h3 className="text-lg font-semibold text-stone-800 mb-2">{group.title[language]}</h3>
                     <p className="text-stone-600 text-sm">{group.description[language]}</p>
@@ -246,26 +246,26 @@ const LeaderExperience = () => {
                   
                   <div className="space-y-3 mb-6">
                     <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <Clock className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      <Clock className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span><strong>{txt.duration}:</strong> {program.duration[language]}</span>
                     </div>
                     <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <Calendar className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      <Calendar className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span><strong>{txt.period}:</strong> {program.period[language]}</span>
                     </div>
                     <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <MapPin className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      <MapPin className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span><strong>{txt.location}:</strong> {program.location[language]}</span>
                     </div>
                     <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <Users className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      <Users className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span><strong>{program.spotsLeft}</strong> {txt.spotsLeft}</span>
                     </div>
                   </div>
                   
                   <div className="mt-auto">
                     <Link to={`/leader-experience/${program.id}`}>
-                      <Button className={`w-full bg-amber-700 hover:bg-amber-800 text-cream-50 rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <Button className={`w-full bg-haggai hover:bg-haggai-dark text-cream-50 rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
                         {txt.applyNow}
                         <ChevronRight className={`h-4 w-4 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
                       </Button>
@@ -304,25 +304,25 @@ const LeaderExperience = () => {
                   
                   <div className={`grid grid-cols-2 gap-4 mb-6 ${isRTL ? 'direction-rtl' : ''}`}>
                     <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <Clock className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      <Clock className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span>{program.duration[language]}</span>
                     </div>
                     <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <MapPin className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      <MapPin className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span>{program.location[language]}</span>
                     </div>
                     <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <Calendar className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      <Calendar className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span>{new Date(program.nextDate).toLocaleDateString(language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'sv-SE')}</span>
                     </div>
                     <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <Users className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      <Users className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span>{program.spotsLeft} {txt.spotsLeft}</span>
                     </div>
                   </div>
                   
                   <Link to={`/leader-experience/${program.id}`}>
-                    <Button className={`bg-amber-700 hover:bg-amber-800 text-cream-50 rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <Button className={`bg-haggai hover:bg-haggai-dark text-cream-50 rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
                       {txt.applyNow}
                       <ChevronRight className={`h-4 w-4 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
                     </Button>
@@ -345,7 +345,7 @@ const LeaderExperience = () => {
           </p>
           <div className={`flex flex-col sm:flex-row gap-4 justify-center ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
             <Link to="/kontakt">
-              <Button size="lg" className={`bg-amber-600 hover:bg-amber-700 text-cream-50 px-10 py-6 text-lg rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <Button size="lg" className={`bg-haggai hover:bg-haggai text-cream-50 px-10 py-6 text-lg rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
                 {t('home.contactUs')}
                 <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
               </Button>

@@ -16,7 +16,7 @@ const Programs = () => {
       <section className="py-24 bg-gradient-to-br from-cream-100 via-cream-50 to-amber-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`max-w-3xl ${isRTL ? 'mr-auto text-right' : ''}`}>
-            <span className="text-amber-700 font-medium text-sm tracking-wider uppercase mb-4 block">{t('programs.title')}</span>
+            <span className="text-haggai font-medium text-sm tracking-wider uppercase mb-4 block">{t('programs.title')}</span>
             <h1 className="text-5xl font-bold text-stone-800 mb-6">{t('programs.heading')}</h1>
             <p className="text-xl text-stone-600 leading-relaxed">
               {t('programs.description')}
@@ -31,15 +31,15 @@ const Programs = () => {
           <div className="grid lg:grid-cols-3 gap-8">
             {programs.map((program) => (
               <Card key={program.id} className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 group flex flex-col">
-                <div className="h-3 bg-amber-600 rounded-t-xl" />
+                <div className="h-3 bg-haggai rounded-t-xl" />
                 <CardHeader className={`pb-4 ${isRTL ? 'text-right' : ''}`}>
                   <div className={`flex items-center justify-between mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <span className={`inline-flex items-center px-3 py-1 bg-amber-100 text-amber-800 text-sm font-medium rounded-full ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <span className={`inline-flex items-center px-3 py-1 bg-haggai-100 text-haggai-dark text-sm font-medium rounded-full ${isRTL ? 'flex-row-reverse' : ''}`}>
                       <Clock className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
                       {program.duration}
                     </span>
                   </div>
-                  <CardTitle className="text-2xl text-stone-800 group-hover:text-amber-700 transition-colors">
+                  <CardTitle className="text-2xl text-stone-800 group-hover:text-haggai transition-colors">
                     {program.title}
                   </CardTitle>
                 </CardHeader>
@@ -47,13 +47,13 @@ const Programs = () => {
                   <p className="text-stone-600 mb-6 leading-relaxed">{program.description}</p>
                   <div className="mb-6">
                     <h4 className={`font-semibold text-stone-800 mb-3 flex items-center ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <BookOpen className={`h-4 w-4 text-amber-700 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      <BookOpen className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       {t('programs.topics')}
                     </h4>
                     <ul className="space-y-2">
                       {program.topics.map((topic, index) => (
                         <li key={index} className={`flex items-center text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                          <CheckCircle className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                          <CheckCircle className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                           {topic}
                         </li>
                       ))}
@@ -61,7 +61,7 @@ const Programs = () => {
                   </div>
                   <div className="mt-auto">
                     <Link to="/kontakt">
-                      <Button className={`w-full bg-amber-700 hover:bg-amber-800 text-cream-50 rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <Button className={`w-full bg-haggai hover:bg-haggai-dark text-cream-50 rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
                         {t('programs.askAbout')}
                         <ArrowRight className={`h-4 w-4 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
                       </Button>
@@ -91,8 +91,8 @@ const Programs = () => {
               { num: 4, title: t('programs.network'), desc: t('programs.networkDesc') }
             ].map((item) => (
               <div key={item.num} className={`bg-white rounded-2xl p-8 shadow-lg text-center ${isRTL ? 'text-right' : ''}`}>
-                <div className={`w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-4 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
-                  <span className="text-amber-700 font-bold text-xl">{item.num}</span>
+                <div className={`w-12 h-12 bg-haggai-100 rounded-full flex items-center justify-center mb-4 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
+                  <span className="text-haggai font-bold text-xl">{item.num}</span>
                 </div>
                 <h3 className="text-xl font-semibold text-stone-800 mb-2">{item.title}</h3>
                 <p className="text-stone-600">{item.desc}</p>
@@ -103,7 +103,7 @@ const Programs = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-amber-50">
+      <section className="py-24 bg-haggai-50">
         <div className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center ${isRTL ? 'text-right' : ''}`}>
           <h2 className="text-4xl font-bold text-stone-800 mb-6">{t('programs.ctaTitle')}</h2>
           <p className="text-xl text-stone-600 mb-10">
@@ -111,7 +111,7 @@ const Programs = () => {
           </p>
           <div className={`flex flex-col sm:flex-row gap-4 justify-center ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
             <Link to="/kalender">
-              <Button size="lg" className={`bg-amber-700 hover:bg-amber-800 text-cream-50 px-10 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <Button size="lg" className={`bg-haggai hover:bg-haggai-dark text-cream-50 px-10 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}>
                 {t('programs.seeDates')}
                 <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
               </Button>

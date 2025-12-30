@@ -79,7 +79,7 @@ const EventCalendar = () => {
       <section className="py-24 bg-gradient-to-br from-cream-100 via-cream-50 to-amber-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`max-w-3xl ${isRTL ? 'mr-auto text-right' : ''}`}>
-            <span className="text-amber-700 font-medium text-sm tracking-wider uppercase mb-4 block">{t('calendar.title')}</span>
+            <span className="text-haggai font-medium text-sm tracking-wider uppercase mb-4 block">{t('calendar.title')}</span>
             <h1 className="text-5xl font-bold text-stone-800 mb-6">{t('calendar.heading')}</h1>
             <p className="text-xl text-stone-600 leading-relaxed">
               {t('calendar.description')}
@@ -97,7 +97,7 @@ const EventCalendar = () => {
               <Card className="border-0 shadow-xl sticky top-24">
                 <CardContent className="p-6">
                   <h3 className={`text-lg font-semibold text-stone-800 mb-4 flex items-center ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                    <CalendarIcon className={`h-5 w-5 text-amber-700 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                    <CalendarIcon className={`h-5 w-5 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                     {t('calendar.selectDate')}
                   </h3>
                   <Calendar
@@ -109,12 +109,12 @@ const EventCalendar = () => {
                       hasEvent: eventDates
                     }}
                     modifiersClassNames={{
-                      hasEvent: 'bg-amber-100 text-amber-800 font-bold'
+                      hasEvent: 'bg-haggai-100 text-haggai-dark font-bold'
                     }}
                   />
                   <div className="mt-4 p-4 bg-cream-50 rounded-lg">
                     <div className={`flex items-center space-x-2 text-sm text-stone-600 ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
-                      <div className="w-3 h-3 bg-amber-100 rounded" />
+                      <div className="w-3 h-3 bg-haggai-100 rounded" />
                       <span>{t('calendar.datesWithEvents')}</span>
                     </div>
                   </div>
@@ -137,7 +137,7 @@ const EventCalendar = () => {
                       <CardContent className="p-0">
                         <div className={`flex flex-col md:flex-row ${isRTL ? 'md:flex-row-reverse' : ''}`}>
                           {/* Date Badge */}
-                          <div className="md:w-32 bg-amber-700 text-cream-50 p-6 flex flex-col items-center justify-center">
+                          <div className="md:w-32 bg-haggai text-cream-50 p-6 flex flex-col items-center justify-center">
                             <span className="text-4xl font-bold">
                               {dateInfo.day}
                             </span>
@@ -151,22 +151,22 @@ const EventCalendar = () => {
                           
                           {/* Event Details */}
                           <div className={`flex-1 p-6 ${isRTL ? 'text-right' : ''}`}>
-                            <h3 className="text-xl font-semibold text-stone-800 mb-3 group-hover:text-amber-700 transition-colors">
+                            <h3 className="text-xl font-semibold text-stone-800 mb-3 group-hover:text-haggai transition-colors">
                               {event.title}
                             </h3>
                             <p className="text-stone-600 mb-4">{event.description}</p>
                             
                             <div className={`flex flex-wrap gap-4 text-sm text-stone-500 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                               <span className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                <Clock className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                                <Clock className={`h-4 w-4 text-haggai ${isRTL ? 'ml-1' : 'mr-1'}`} />
                                 {event.time}
                               </span>
                               <span className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                <MapPin className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                                <MapPin className={`h-4 w-4 text-haggai ${isRTL ? 'ml-1' : 'mr-1'}`} />
                                 {event.location}
                               </span>
                               <span className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                <Users className={`h-4 w-4 text-amber-600 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                                <Users className={`h-4 w-4 text-haggai ${isRTL ? 'ml-1' : 'mr-1'}`} />
                                 {event.spotsLeft} {t('calendar.spotsOf')} {event.spots} {t('calendar.spotsLeft')}
                               </span>
                             </div>
@@ -174,7 +174,7 @@ const EventCalendar = () => {
                           
                           {/* Action */}
                           <div className="md:w-40 p-6 flex items-center justify-center bg-cream-50">
-                            <Button className="bg-amber-700 hover:bg-amber-800 text-cream-50 rounded-xl">
+                            <Button className="bg-haggai hover:bg-haggai-dark text-cream-50 rounded-xl">
                               {t('calendar.signUp')}
                             </Button>
                           </div>
@@ -266,7 +266,7 @@ const EventCalendar = () => {
               </Button>
               <Button
                 type="submit"
-                className="flex-1 bg-amber-700 hover:bg-amber-800 text-cream-50 rounded-xl"
+                className="flex-1 bg-haggai hover:bg-haggai-dark text-cream-50 rounded-xl"
               >
                 {t('calendar.submit')}
               </Button>

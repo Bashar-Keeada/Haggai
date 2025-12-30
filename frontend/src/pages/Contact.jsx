@@ -51,7 +51,7 @@ const Contact = () => {
       <section className="py-24 bg-gradient-to-br from-cream-100 via-cream-50 to-amber-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`max-w-3xl ${isRTL ? 'mr-auto text-right' : ''}`}>
-            <span className="text-amber-700 font-medium text-sm tracking-wider uppercase mb-4 block">{t('contact.title')}</span>
+            <span className="text-haggai font-medium text-sm tracking-wider uppercase mb-4 block">{t('contact.title')}</span>
             <h1 className="text-5xl font-bold text-stone-800 mb-6">{t('contact.heading')}</h1>
             <p className="text-xl text-stone-600 leading-relaxed">
               {t('contact.description')}
@@ -72,8 +72,8 @@ const Contact = () => {
                   <Card className="border-0 shadow-lg">
                     <CardContent className="p-6">
                       <div className={`flex items-start space-x-4 ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
-                        <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <MapPin className="h-6 w-6 text-amber-700" />
+                        <div className="w-12 h-12 bg-haggai-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <MapPin className="h-6 w-6 text-haggai" />
                         </div>
                         <div>
                           <h3 className="font-semibold text-stone-800 mb-1">{t('contact.address')}</h3>
@@ -86,12 +86,12 @@ const Contact = () => {
                   <Card className="border-0 shadow-lg">
                     <CardContent className="p-6">
                       <div className={`flex items-start space-x-4 ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
-                        <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <Phone className="h-6 w-6 text-amber-700" />
+                        <div className="w-12 h-12 bg-haggai-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <Phone className="h-6 w-6 text-haggai" />
                         </div>
                         <div>
                           <h3 className="font-semibold text-stone-800 mb-1">{t('contact.phone')}</h3>
-                          <a href={`tel:${contactInfo.phone}`} className="text-amber-700 hover:text-amber-800" dir="ltr">
+                          <a href={`tel:${contactInfo.phone}`} className="text-haggai hover:text-haggai-dark" dir="ltr">
                             {contactInfo.phone}
                           </a>
                         </div>
@@ -102,12 +102,12 @@ const Contact = () => {
                   <Card className="border-0 shadow-lg">
                     <CardContent className="p-6">
                       <div className={`flex items-start space-x-4 ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
-                        <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <Mail className="h-6 w-6 text-amber-700" />
+                        <div className="w-12 h-12 bg-haggai-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <Mail className="h-6 w-6 text-haggai" />
                         </div>
                         <div>
                           <h3 className="font-semibold text-stone-800 mb-1">{t('contact.email')}</h3>
-                          <a href={`mailto:${contactInfo.email}`} className="text-amber-700 hover:text-amber-800" dir="ltr">
+                          <a href={`mailto:${contactInfo.email}`} className="text-haggai hover:text-haggai-dark" dir="ltr">
                             {contactInfo.email}
                           </a>
                         </div>
@@ -118,8 +118,8 @@ const Contact = () => {
                   <Card className="border-0 shadow-lg">
                     <CardContent className="p-6">
                       <div className={`flex items-start space-x-4 ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
-                        <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <Clock className="h-6 w-6 text-amber-700" />
+                        <div className="w-12 h-12 bg-haggai-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <Clock className="h-6 w-6 text-haggai" />
                         </div>
                         <div>
                           <h3 className="font-semibold text-stone-800 mb-1">{t('contact.responseTime')}</h3>
@@ -221,7 +221,7 @@ const Contact = () => {
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className={`w-full bg-amber-700 hover:bg-amber-800 text-cream-50 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}
+                      className={`w-full bg-haggai hover:bg-haggai-dark text-cream-50 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}
                     >
                       {isSubmitting ? t('contact.submitting') : t('contact.submit')}
                       <Send className={`h-5 w-5 ${isRTL ? 'mr-2' : 'ml-2'}`} />
@@ -244,8 +244,8 @@ const Contact = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="border-0 shadow-lg bg-white">
               <CardContent className={`p-8 text-center ${isRTL ? 'text-right' : ''}`}>
-                <div className={`w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
-                  <span className="text-3xl font-bold text-amber-700">I</span>
+                <div className={`w-16 h-16 bg-haggai-100 rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
+                  <span className="text-3xl font-bold text-haggai">I</span>
                 </div>
                 <h3 className="text-xl font-semibold text-stone-800 mb-3">{t('contact.individualsTitle')}</h3>
                 <p className="text-stone-600">
@@ -255,8 +255,8 @@ const Contact = () => {
             </Card>
             <Card className="border-0 shadow-lg bg-white">
               <CardContent className={`p-8 text-center ${isRTL ? 'text-right' : ''}`}>
-                <div className={`w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
-                  <span className="text-3xl font-bold text-amber-700">K</span>
+                <div className={`w-16 h-16 bg-haggai-100 rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
+                  <span className="text-3xl font-bold text-haggai">K</span>
                 </div>
                 <h3 className="text-xl font-semibold text-stone-800 mb-3">{t('contact.churchesTitle')}</h3>
                 <p className="text-stone-600">
@@ -266,8 +266,8 @@ const Contact = () => {
             </Card>
             <Card className="border-0 shadow-lg bg-white">
               <CardContent className={`p-8 text-center ${isRTL ? 'text-right' : ''}`}>
-                <div className={`w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
-                  <span className="text-3xl font-bold text-amber-700">O</span>
+                <div className={`w-16 h-16 bg-haggai-100 rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
+                  <span className="text-3xl font-bold text-haggai">O</span>
                 </div>
                 <h3 className="text-xl font-semibold text-stone-800 mb-3">{t('contact.organizationsTitle')}</h3>
                 <p className="text-stone-600">
