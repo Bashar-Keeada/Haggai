@@ -47,9 +47,9 @@ const LoginPage = () => {
   const txt = translations[language] || translations.sv;
 
   const languages = [
-    { code: 'sv', name: 'SV', flag: '🇸🇪' },
-    { code: 'en', name: 'EN', flag: '🇬🇧' },
-    { code: 'ar', name: 'AR', flag: '🇸🇦' },
+    { code: 'sv', name: 'Svenska' },
+    { code: 'en', name: 'English' },
+    { code: 'ar', name: 'العربية' },
   ];
 
   const handleSubmit = async (e) => {
