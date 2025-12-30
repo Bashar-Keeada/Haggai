@@ -14,11 +14,13 @@ const Footer = () => {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link to="/" className={`flex items-center space-x-3 mb-6 ${isRTL ? 'space-x-reverse flex-row-reverse justify-end' : ''}`}>
-              <img 
-                src="/haggai-logo.png" 
-                alt="Haggai International" 
-                className="h-12 w-auto object-contain brightness-0 invert"
-              />
+              <div className="bg-cream-50 p-2 rounded-lg">
+                <img 
+                  src="/haggai-logo.png" 
+                  alt="Haggai International" 
+                  className="h-10 w-auto object-contain"
+                />
+              </div>
               <span className="text-xs text-amber-400 font-medium tracking-wider uppercase">Sweden</span>
             </Link>
             <p className="text-cream-300 text-sm leading-relaxed">
