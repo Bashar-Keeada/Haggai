@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   Calendar, MapPin, Clock, Users, Globe, ArrowLeft,
-  CheckCircle, Award, Send
+  CheckCircle, Award, Send, UserPlus, User
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -15,7 +15,7 @@ import { RadioGroup, RadioGroupItem } from '../components/ui/radio-group';
 import { Checkbox } from '../components/ui/checkbox';
 import { toast } from 'sonner';
 import { useLanguage } from '../context/LanguageContext';
-import { leaderExperiences, targetGroups } from '../data/mock';
+import { leaderExperiences } from '../data/mock';
 
 const LeaderExperienceApplication = () => {
   const { programId } = useParams();
@@ -24,8 +24,17 @@ const LeaderExperienceApplication = () => {
   
   const program = leaderExperiences.find(p => p.id === programId);
   
+  const [nominationType, setNominationType] = useState('self'); // 'self' or 'friend'
+  
   const [formData, setFormData] = useState({
-    // Personal Info
+    // Nominator Info (person filling the form)
+    nominatorFirstName: '',
+    nominatorLastName: '',
+    nominatorEmail: '',
+    nominatorPhone: '',
+    nominatorRelationship: '',
+    
+    // Nominee Info (person being nominated - could be same as nominator)
     firstName: '',
     lastName: '',
     email: '',
@@ -44,7 +53,7 @@ const LeaderExperienceApplication = () => {
     peopleLeading: '',
     
     // Motivation
-    whyApply: '',
+    whyNominate: '',
     expectations: '',
     howHeard: '',
     
@@ -59,8 +68,8 @@ const LeaderExperienceApplication = () => {
   const translations = {
     sv: {
       backToPrograms: 'Tillbaka till program',
-      applicationForm: 'Ansökningsformulär',
-      applicationFor: 'Ansökan för',
+      applicationForm: 'Nomineringsformulär',
+      applicationFor: 'Nominering för',
       programInfo: 'Programinformation',
       duration: 'Längd',
       period: 'Period',
@@ -69,10 +78,34 @@ const LeaderExperienceApplication = () => {
       spotsLeft: 'platser kvar',
       requirements: 'Krav för deltagande',
       requirementsList: [
-        'Du måste ha en aktiv ledande roll i kyrka, samhälle eller näringsliv',
-        'Du ska kunna delta i hela programmet',
-        'Du förväntas implementera det du lär dig efter programmet'
+        'Personen måste ha en aktiv ledande roll i kyrka, samhälle eller näringsliv',
+        'Personen ska kunna delta i hela programmet',
+        'Personen förväntas implementera det de lär sig efter programmet'
       ],
+      
+      // Nomination type
+      nominationType: 'Vem vill du nominera?',
+      nominateSelf: 'Jag nominerar mig själv',
+      nominateFriend: 'Jag nominerar en vän/kollega',
+      
+      // Nominator info
+      nominatorInfo: 'Din information (den som nominerar)',
+      nominatorFirstName: 'Ditt förnamn',
+      nominatorLastName: 'Ditt efternamn',
+      nominatorEmail: 'Din e-post',
+      nominatorPhone: 'Ditt telefonnummer',
+      relationship: 'Din relation till den nominerade',
+      relationshipOptions: {
+        pastor: 'Pastor/Andlig ledare',
+        colleague: 'Kollega',
+        friend: 'Vän',
+        mentor: 'Mentor',
+        supervisor: 'Chef/Arbetsledare',
+        other: 'Annat'
+      },
+      
+      // Nominee info
+      nomineeInfo: 'Information om den nominerade',
       personalInfo: 'Personlig information',
       firstName: 'Förnamn',
       lastName: 'Efternamn',
@@ -85,8 +118,9 @@ const LeaderExperienceApplication = () => {
       nationality: 'Nationalitet',
       city: 'Stad',
       country: 'Land',
-      leadershipInfo: 'Information om ditt ledarskap',
-      currentRole: 'Din nuvarande roll/titel',
+      
+      leadershipInfo: 'Information om ledarskap',
+      currentRole: 'Nuvarande roll/titel',
       organization: 'Organisation/Kyrka/Företag',
       organizationType: 'Typ av organisation',
       orgTypes: {
@@ -98,12 +132,15 @@ const LeaderExperienceApplication = () => {
         other: 'Annat'
       },
       yearsInLeadership: 'År i ledarroll',
-      peopleLeading: 'Antal personer du leder',
+      peopleLeading: 'Antal personer som leds',
+      
       motivation: 'Motivation',
-      whyApply: 'Varför vill du delta i detta program?',
-      whyApplyPlaceholder: 'Beskriv varför du söker till programmet och vad du hoppas få ut av det...',
-      expectations: 'Vad förväntar du dig lära dig?',
-      expectationsPlaceholder: 'Beskriv dina förväntningar och mål med deltagandet...',
+      whyNominateSelf: 'Varför vill du delta i detta program?',
+      whyNominateFriend: 'Varför nominerar du denna person?',
+      whyNominatePlaceholderSelf: 'Beskriv varför du söker till programmet och vad du hoppas få ut av det...',
+      whyNominatePlaceholderFriend: 'Beskriv varför du tror att denna person skulle passa för programmet och hur de skulle ha nytta av det...',
+      expectations: 'Vad förväntas personen lära sig?',
+      expectationsPlaceholder: 'Beskriv förväntningar och mål med deltagandet...',
       howHeard: 'Hur hörde du talas om Haggai?',
       howHeardOptions: {
         friend: 'Vän/Bekant',
@@ -114,14 +151,19 @@ const LeaderExperienceApplication = () => {
         alumni: 'Haggai-alumn',
         other: 'Annat'
       },
+      
       additionalInfo: 'Övrig information',
       dietaryRestrictions: 'Kostpreferenser/Allergier',
       specialNeeds: 'Särskilda behov',
-      agreeTerms: 'Jag förstår att detta är ett urvalsbaserat program och att ansökan inte garanterar antagning. Jag godkänner att Haggai Sweden behandlar mina personuppgifter.',
-      submitApplication: 'Skicka ansökan',
+      agreeTermsSelf: 'Jag förstår att detta är ett urvalsbaserat program och att nominering inte garanterar antagning. Jag godkänner att Haggai Sweden behandlar mina personuppgifter.',
+      agreeTermsFriend: 'Jag intygar att den nominerade är medveten om denna nominering och godkänner att Haggai Sweden kontaktar dem. Jag förstår att detta är ett urvalsbaserat program.',
+      
+      submitNomination: 'Skicka nominering',
       submitting: 'Skickar...',
-      successTitle: 'Ansökan skickad!',
-      successDesc: 'Vi granskar din ansökan och återkommer inom 2-3 veckor.',
+      successTitleSelf: 'Din nominering är skickad!',
+      successTitleFriend: 'Nomineringen är skickad!',
+      successDescSelf: 'Vi granskar din ansökan och återkommer inom 2-3 veckor.',
+      successDescFriend: 'Vi kommer att kontakta den nominerade personen. Tack för din nominering!',
       programNotFound: 'Programmet hittades inte',
       arabic: 'Arabiska',
       english: 'Engelska',
@@ -129,8 +171,8 @@ const LeaderExperienceApplication = () => {
     },
     en: {
       backToPrograms: 'Back to programs',
-      applicationForm: 'Application Form',
-      applicationFor: 'Application for',
+      applicationForm: 'Nomination Form',
+      applicationFor: 'Nomination for',
       programInfo: 'Program Information',
       duration: 'Duration',
       period: 'Period',
@@ -139,10 +181,31 @@ const LeaderExperienceApplication = () => {
       spotsLeft: 'spots left',
       requirements: 'Requirements for Participation',
       requirementsList: [
-        'You must have an active leadership role in church, society or business',
-        'You must be able to participate in the entire program',
-        'You are expected to implement what you learn after the program'
+        'The person must have an active leadership role in church, society or business',
+        'The person must be able to participate in the entire program',
+        'The person is expected to implement what they learn after the program'
       ],
+      
+      nominationType: 'Who do you want to nominate?',
+      nominateSelf: 'I nominate myself',
+      nominateFriend: 'I nominate a friend/colleague',
+      
+      nominatorInfo: 'Your information (the nominator)',
+      nominatorFirstName: 'Your first name',
+      nominatorLastName: 'Your last name',
+      nominatorEmail: 'Your email',
+      nominatorPhone: 'Your phone number',
+      relationship: 'Your relationship to the nominee',
+      relationshipOptions: {
+        pastor: 'Pastor/Spiritual leader',
+        colleague: 'Colleague',
+        friend: 'Friend',
+        mentor: 'Mentor',
+        supervisor: 'Manager/Supervisor',
+        other: 'Other'
+      },
+      
+      nomineeInfo: 'Information about the nominee',
       personalInfo: 'Personal Information',
       firstName: 'First Name',
       lastName: 'Last Name',
@@ -155,8 +218,9 @@ const LeaderExperienceApplication = () => {
       nationality: 'Nationality',
       city: 'City',
       country: 'Country',
+      
       leadershipInfo: 'Leadership Information',
-      currentRole: 'Your current role/title',
+      currentRole: 'Current role/title',
       organization: 'Organization/Church/Company',
       organizationType: 'Type of organization',
       orgTypes: {
@@ -168,12 +232,15 @@ const LeaderExperienceApplication = () => {
         other: 'Other'
       },
       yearsInLeadership: 'Years in leadership role',
-      peopleLeading: 'Number of people you lead',
+      peopleLeading: 'Number of people led',
+      
       motivation: 'Motivation',
-      whyApply: 'Why do you want to participate in this program?',
-      whyApplyPlaceholder: 'Describe why you are applying and what you hope to gain...',
-      expectations: 'What do you expect to learn?',
-      expectationsPlaceholder: 'Describe your expectations and goals...',
+      whyNominateSelf: 'Why do you want to participate in this program?',
+      whyNominateFriend: 'Why do you nominate this person?',
+      whyNominatePlaceholderSelf: 'Describe why you are applying and what you hope to gain...',
+      whyNominatePlaceholderFriend: 'Describe why you think this person would be suitable for the program and how they would benefit...',
+      expectations: 'What is the person expected to learn?',
+      expectationsPlaceholder: 'Describe expectations and goals...',
       howHeard: 'How did you hear about Haggai?',
       howHeardOptions: {
         friend: 'Friend/Acquaintance',
@@ -184,14 +251,19 @@ const LeaderExperienceApplication = () => {
         alumni: 'Haggai alumni',
         other: 'Other'
       },
+      
       additionalInfo: 'Additional Information',
       dietaryRestrictions: 'Dietary restrictions/Allergies',
       specialNeeds: 'Special needs',
-      agreeTerms: 'I understand that this is a selection-based program and that application does not guarantee admission. I agree to Haggai Sweden processing my personal data.',
-      submitApplication: 'Submit Application',
+      agreeTermsSelf: 'I understand that this is a selection-based program and that nomination does not guarantee admission. I agree to Haggai Sweden processing my personal data.',
+      agreeTermsFriend: 'I confirm that the nominee is aware of this nomination and agrees to be contacted by Haggai Sweden. I understand that this is a selection-based program.',
+      
+      submitNomination: 'Submit Nomination',
       submitting: 'Submitting...',
-      successTitle: 'Application submitted!',
-      successDesc: 'We will review your application and respond within 2-3 weeks.',
+      successTitleSelf: 'Your nomination has been submitted!',
+      successTitleFriend: 'The nomination has been submitted!',
+      successDescSelf: 'We will review your application and respond within 2-3 weeks.',
+      successDescFriend: 'We will contact the nominated person. Thank you for your nomination!',
       programNotFound: 'Program not found',
       arabic: 'Arabic',
       english: 'English',
@@ -199,8 +271,8 @@ const LeaderExperienceApplication = () => {
     },
     ar: {
       backToPrograms: 'العودة إلى البرامج',
-      applicationForm: 'نموذج الطلب',
-      applicationFor: 'طلب لـ',
+      applicationForm: 'نموذج الترشيح',
+      applicationFor: 'ترشيح لـ',
       programInfo: 'معلومات البرنامج',
       duration: 'المدة',
       period: 'الفترة',
@@ -209,10 +281,31 @@ const LeaderExperienceApplication = () => {
       spotsLeft: 'أماكن متبقية',
       requirements: 'متطلبات المشاركة',
       requirementsList: [
-        'يجب أن يكون لديك دور قيادي نشط في الكنيسة أو المجتمع أو الأعمال',
-        'يجب أن تكون قادراً على المشاركة في البرنامج بأكمله',
-        'من المتوقع أن تطبق ما تتعلمه بعد البرنامج'
+        'يجب أن يكون للشخص دور قيادي نشط في الكنيسة أو المجتمع أو الأعمال',
+        'يجب أن يكون الشخص قادراً على المشاركة في البرنامج بأكمله',
+        'من المتوقع أن يطبق الشخص ما يتعلمه بعد البرنامج'
       ],
+      
+      nominationType: 'من تريد ترشيحه؟',
+      nominateSelf: 'أرشح نفسي',
+      nominateFriend: 'أرشح صديق/زميل',
+      
+      nominatorInfo: 'معلوماتك (المُرشِّح)',
+      nominatorFirstName: 'اسمك الأول',
+      nominatorLastName: 'اسم عائلتك',
+      nominatorEmail: 'بريدك الإلكتروني',
+      nominatorPhone: 'رقم هاتفك',
+      relationship: 'علاقتك بالمرشح',
+      relationshipOptions: {
+        pastor: 'قس/قائد روحي',
+        colleague: 'زميل',
+        friend: 'صديق',
+        mentor: 'مرشد',
+        supervisor: 'مدير/مشرف',
+        other: 'آخر'
+      },
+      
+      nomineeInfo: 'معلومات المرشَّح',
       personalInfo: 'المعلومات الشخصية',
       firstName: 'الاسم الأول',
       lastName: 'اسم العائلة',
@@ -225,8 +318,9 @@ const LeaderExperienceApplication = () => {
       nationality: 'الجنسية',
       city: 'المدينة',
       country: 'البلد',
+      
       leadershipInfo: 'معلومات القيادة',
-      currentRole: 'دورك/منصبك الحالي',
+      currentRole: 'الدور/المنصب الحالي',
       organization: 'المنظمة/الكنيسة/الشركة',
       organizationType: 'نوع المنظمة',
       orgTypes: {
@@ -238,12 +332,15 @@ const LeaderExperienceApplication = () => {
         other: 'آخر'
       },
       yearsInLeadership: 'سنوات في دور قيادي',
-      peopleLeading: 'عدد الأشخاص الذين تقودهم',
+      peopleLeading: 'عدد الأشخاص الذين يقودهم',
+      
       motivation: 'الدافع',
-      whyApply: 'لماذا تريد المشاركة في هذا البرنامج؟',
-      whyApplyPlaceholder: 'صف سبب تقدمك وما تأمل في تحقيقه...',
-      expectations: 'ماذا تتوقع أن تتعلم؟',
-      expectationsPlaceholder: 'صف توقعاتك وأهدافك...',
+      whyNominateSelf: 'لماذا تريد المشاركة في هذا البرنامج؟',
+      whyNominateFriend: 'لماذا ترشح هذا الشخص؟',
+      whyNominatePlaceholderSelf: 'صف سبب تقدمك وما تأمل في تحقيقه...',
+      whyNominatePlaceholderFriend: 'صف لماذا تعتقد أن هذا الشخص مناسب للبرنامج وكيف سيستفيد...',
+      expectations: 'ماذا يُتوقع أن يتعلم الشخص؟',
+      expectationsPlaceholder: 'صف التوقعات والأهداف...',
       howHeard: 'كيف سمعت عن هجاي؟',
       howHeardOptions: {
         friend: 'صديق/معرفة',
@@ -254,14 +351,19 @@ const LeaderExperienceApplication = () => {
         alumni: 'خريج هجاي',
         other: 'آخر'
       },
+      
       additionalInfo: 'معلومات إضافية',
       dietaryRestrictions: 'قيود غذائية/حساسية',
       specialNeeds: 'احتياجات خاصة',
-      agreeTerms: 'أفهم أن هذا برنامج قائم على الاختيار وأن التقديم لا يضمن القبول. أوافق على معالجة هجاي السويد لبياناتي الشخصية.',
-      submitApplication: 'إرسال الطلب',
+      agreeTermsSelf: 'أفهم أن هذا برنامج قائم على الاختيار وأن الترشيح لا يضمن القبول. أوافق على معالجة هجاي السويد لبياناتي الشخصية.',
+      agreeTermsFriend: 'أؤكد أن المرشَّح على علم بهذا الترشيح ويوافق على الاتصال به من قبل هجاي السويد. أفهم أن هذا برنامج قائم على الاختيار.',
+      
+      submitNomination: 'إرسال الترشيح',
       submitting: 'جاري الإرسال...',
-      successTitle: 'تم إرسال الطلب!',
-      successDesc: 'سنراجع طلبك ونرد خلال 2-3 أسابيع.',
+      successTitleSelf: 'تم إرسال ترشيحك!',
+      successTitleFriend: 'تم إرسال الترشيح!',
+      successDescSelf: 'سنراجع طلبك ونرد خلال 2-3 أسابيع.',
+      successDescFriend: 'سنتواصل مع الشخص المرشَّح. شكراً لترشيحك!',
       programNotFound: 'البرنامج غير موجود',
       arabic: 'العربية',
       english: 'الإنجليزية',
@@ -286,7 +388,7 @@ const LeaderExperienceApplication = () => {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-stone-800 mb-4">{txt.programNotFound}</h1>
           <Link to="/leader-experience">
-            <Button>{txt.backToPrograms}</Button>
+            <Button className="bg-haggai hover:bg-haggai-light text-cream-50">{txt.backToPrograms}</Button>
           </Link>
         </div>
       </div>
@@ -303,21 +405,33 @@ const LeaderExperienceApplication = () => {
     
     setIsSubmitting(true);
 
-    // Mock submission - store in localStorage
-    const applications = JSON.parse(localStorage.getItem('leaderExperienceApplications') || '[]');
-    applications.push({
+    // Prepare submission data
+    const submissionData = {
       ...formData,
+      nominationType,
       programId: program.id,
       programTitle: program.title[language],
       submittedAt: new Date().toISOString()
-    });
-    localStorage.setItem('leaderExperienceApplications', JSON.stringify(applications));
+    };
+
+    // If self-nomination, copy nominator info to nominee
+    if (nominationType === 'self') {
+      submissionData.nominatorFirstName = formData.firstName;
+      submissionData.nominatorLastName = formData.lastName;
+      submissionData.nominatorEmail = formData.email;
+      submissionData.nominatorPhone = formData.phone;
+    }
+
+    // Mock submission - store in localStorage
+    const nominations = JSON.parse(localStorage.getItem('leaderExperienceNominations') || '[]');
+    nominations.push(submissionData);
+    localStorage.setItem('leaderExperienceNominations', JSON.stringify(nominations));
 
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    toast.success(txt.successTitle, {
-      description: txt.successDesc
+    toast.success(nominationType === 'self' ? txt.successTitleSelf : txt.successTitleFriend, {
+      description: nominationType === 'self' ? txt.successDescSelf : txt.successDescFriend
     });
 
     setIsSubmitting(false);
@@ -327,9 +441,9 @@ const LeaderExperienceApplication = () => {
   return (
     <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
-      <section className="py-12 bg-gradient-to-br from-amber-50 via-cream-50 to-cream-100">
+      <section className="py-12 bg-gradient-to-br from-haggai-50 via-cream-50 to-cream-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link to="/leader-experience" className={`inline-flex items-center text-haggai hover:text-haggai-dark mb-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <Link to="/leader-experience" className={`inline-flex items-center text-haggai hover:text-haggai-light mb-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
             <ArrowLeft className={`h-4 w-4 ${isRTL ? 'ml-2 rotate-180' : 'mr-2'}`} />
             {txt.backToPrograms}
           </Link>
@@ -375,7 +489,7 @@ const LeaderExperienceApplication = () => {
                   </div>
 
                   <div className="border-t pt-4 mt-4">
-                    <h4 className="font-semibold text-stone-800 mb-3 flex items-center">
+                    <h4 className={`font-semibold text-stone-800 mb-3 flex items-center ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                       <Award className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       {txt.requirements}
                     </h4>
@@ -397,9 +511,110 @@ const LeaderExperienceApplication = () => {
               <Card className="border-0 shadow-xl">
                 <CardContent className="p-8">
                   <form onSubmit={handleSubmit} className={`space-y-8 ${isRTL ? 'text-right' : ''}`}>
-                    {/* Personal Info */}
+                    
+                    {/* Nomination Type Selection */}
+                    <div className="bg-haggai-50 rounded-2xl p-6">
+                      <h3 className={`text-xl font-semibold text-stone-800 mb-4 flex items-center ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                        <UserPlus className={`h-5 w-5 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                        {txt.nominationType}
+                      </h3>
+                      <RadioGroup
+                        value={nominationType}
+                        onValueChange={setNominationType}
+                        className="space-y-3"
+                      >
+                        <div className={`flex items-center space-x-3 p-4 rounded-xl bg-white border-2 transition-all cursor-pointer ${nominationType === 'self' ? 'border-haggai' : 'border-transparent'} ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}
+                             onClick={() => setNominationType('self')}>
+                          <RadioGroupItem value="self" id="self" />
+                          <Label htmlFor="self" className={`cursor-pointer flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
+                            <User className={`h-5 w-5 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                            {txt.nominateSelf}
+                          </Label>
+                        </div>
+                        <div className={`flex items-center space-x-3 p-4 rounded-xl bg-white border-2 transition-all cursor-pointer ${nominationType === 'friend' ? 'border-haggai' : 'border-transparent'} ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}
+                             onClick={() => setNominationType('friend')}>
+                          <RadioGroupItem value="friend" id="friend" />
+                          <Label htmlFor="friend" className={`cursor-pointer flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
+                            <Users className={`h-5 w-5 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                            {txt.nominateFriend}
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+
+                    {/* Nominator Info (only shown when nominating a friend) */}
+                    {nominationType === 'friend' && (
+                      <div>
+                        <h3 className="text-xl font-semibold text-stone-800 mb-6 pb-2 border-b">{txt.nominatorInfo}</h3>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="nominatorFirstName">{txt.nominatorFirstName} *</Label>
+                            <Input
+                              id="nominatorFirstName"
+                              value={formData.nominatorFirstName}
+                              onChange={(e) => setFormData({...formData, nominatorFirstName: e.target.value})}
+                              required
+                              className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="nominatorLastName">{txt.nominatorLastName} *</Label>
+                            <Input
+                              id="nominatorLastName"
+                              value={formData.nominatorLastName}
+                              onChange={(e) => setFormData({...formData, nominatorLastName: e.target.value})}
+                              required
+                              className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="nominatorEmail">{txt.nominatorEmail} *</Label>
+                            <Input
+                              id="nominatorEmail"
+                              type="email"
+                              value={formData.nominatorEmail}
+                              onChange={(e) => setFormData({...formData, nominatorEmail: e.target.value})}
+                              required
+                              className="rounded-lg"
+                              dir="ltr"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="nominatorPhone">{txt.nominatorPhone} *</Label>
+                            <Input
+                              id="nominatorPhone"
+                              value={formData.nominatorPhone}
+                              onChange={(e) => setFormData({...formData, nominatorPhone: e.target.value})}
+                              required
+                              className="rounded-lg"
+                              dir="ltr"
+                            />
+                          </div>
+                          <div className="space-y-2 md:col-span-2">
+                            <Label>{txt.relationship} *</Label>
+                            <Select
+                              value={formData.nominatorRelationship}
+                              onValueChange={(value) => setFormData({...formData, nominatorRelationship: value})}
+                            >
+                              <SelectTrigger className={`rounded-lg ${isRTL ? 'text-right' : ''}`}>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Object.entries(txt.relationshipOptions).map(([key, value]) => (
+                                  <SelectItem key={key} value={key}>{value}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Nominee/Personal Info */}
                     <div>
-                      <h3 className="text-xl font-semibold text-stone-800 mb-6 pb-2 border-b">{txt.personalInfo}</h3>
+                      <h3 className="text-xl font-semibold text-stone-800 mb-6 pb-2 border-b">
+                        {nominationType === 'friend' ? txt.nomineeInfo : txt.personalInfo}
+                      </h3>
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="firstName">{txt.firstName} *</Label>
@@ -589,15 +804,17 @@ const LeaderExperienceApplication = () => {
                       <h3 className="text-xl font-semibold text-stone-800 mb-6 pb-2 border-b">{txt.motivation}</h3>
                       <div className="space-y-4">
                         <div className="space-y-2">
-                          <Label htmlFor="whyApply">{txt.whyApply} *</Label>
+                          <Label htmlFor="whyNominate">
+                            {nominationType === 'self' ? txt.whyNominateSelf : txt.whyNominateFriend} *
+                          </Label>
                           <Textarea
-                            id="whyApply"
-                            value={formData.whyApply}
-                            onChange={(e) => setFormData({...formData, whyApply: e.target.value})}
+                            id="whyNominate"
+                            value={formData.whyNominate}
+                            onChange={(e) => setFormData({...formData, whyNominate: e.target.value})}
                             required
                             rows={4}
                             className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
-                            placeholder={txt.whyApplyPlaceholder}
+                            placeholder={nominationType === 'self' ? txt.whyNominatePlaceholderSelf : txt.whyNominatePlaceholderFriend}
                           />
                         </div>
                         <div className="space-y-2">
@@ -658,14 +875,14 @@ const LeaderExperienceApplication = () => {
                     </div>
 
                     {/* Terms */}
-                    <div className={`flex items-start space-x-3 p-4 bg-cream-100 rounded-xl ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
+                    <div className={`flex items-start space-x-3 p-4 bg-haggai-50 rounded-xl ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
                       <Checkbox
                         id="agreeTerms"
                         checked={formData.agreeTerms}
                         onCheckedChange={(checked) => setFormData({...formData, agreeTerms: checked})}
                       />
                       <Label htmlFor="agreeTerms" className="text-sm text-stone-600 leading-relaxed">
-                        {txt.agreeTerms}
+                        {nominationType === 'self' ? txt.agreeTermsSelf : txt.agreeTermsFriend}
                       </Label>
                     </div>
 
@@ -673,9 +890,9 @@ const LeaderExperienceApplication = () => {
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className={`w-full bg-haggai hover:bg-haggai-dark text-cream-50 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}
+                      className={`w-full bg-haggai hover:bg-haggai-light text-cream-50 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}
                     >
-                      {isSubmitting ? txt.submitting : txt.submitApplication}
+                      {isSubmitting ? txt.submitting : txt.submitNomination}
                       <Send className={`h-5 w-5 ${isRTL ? 'mr-2' : 'ml-2'}`} />
                     </Button>
                   </form>
