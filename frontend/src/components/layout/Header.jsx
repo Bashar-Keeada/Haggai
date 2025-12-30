@@ -50,7 +50,7 @@ const Header = () => {
               className="h-14 w-auto object-contain"
             />
             <div className="flex flex-col">
-              <span className="text-xs text-amber-700 font-medium tracking-wider uppercase">Sweden</span>
+              <span className="text-xs text-haggai font-medium tracking-wider uppercase">Sweden</span>
             </div>
           </Link>
 
@@ -62,8 +62,8 @@ const Header = () => {
                 to={link.path}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                   isActive(link.path)
-                    ? 'bg-amber-700 text-cream-50'
-                    : 'text-stone-700 hover:bg-cream-100 hover:text-amber-800'
+                    ? 'bg-haggai text-cream-50'
+                    : 'text-stone-700 hover:bg-haggai-50 hover:text-haggai'
                 }`}
               >
                 {link.label}
@@ -73,7 +73,7 @@ const Header = () => {
             {/* Language Selector */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="ml-2 text-stone-700 hover:bg-cream-100">
+                <Button variant="ghost" size="sm" className="ml-2 text-stone-700 hover:bg-haggai-50">
                   <Globe className="h-4 w-4 mr-2" />
                   {languages.find(l => l.code === language)?.flag}
                 </Button>
@@ -83,7 +83,7 @@ const Header = () => {
                   <DropdownMenuItem
                     key={lang.code}
                     onClick={() => setLanguage(lang.code)}
-                    className={`cursor-pointer ${language === lang.code ? 'bg-amber-50' : ''}`}
+                    className={`cursor-pointer ${language === lang.code ? 'bg-haggai-50' : ''}`}
                   >
                     <span className="mr-2">{lang.flag}</span>
                     {lang.name}
@@ -107,7 +107,7 @@ const Header = () => {
                   <DropdownMenuItem
                     key={lang.code}
                     onClick={() => setLanguage(lang.code)}
-                    className={`cursor-pointer ${language === lang.code ? 'bg-amber-50' : ''}`}
+                    className={`cursor-pointer ${language === lang.code ? 'bg-haggai-50' : ''}`}
                   >
                     <span className="mr-2">{lang.flag}</span>
                     {lang.name}
@@ -138,8 +138,8 @@ const Header = () => {
                   onClick={() => setIsMenuOpen(false)}
                   className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${isRTL ? 'text-right' : ''} ${
                     isActive(link.path)
-                      ? 'bg-amber-700 text-cream-50'
-                      : 'text-stone-700 hover:bg-cream-100'
+                      ? 'bg-haggai text-cream-50'
+                      : 'text-stone-700 hover:bg-haggai-50'
                   }`}
                 >
                   {link.label}
