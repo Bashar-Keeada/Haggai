@@ -14,13 +14,12 @@ const Footer = () => {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link to="/" className={`flex items-center space-x-3 mb-6 ${isRTL ? 'space-x-reverse flex-row-reverse justify-end' : ''}`}>
-              <div className="w-12 h-12 bg-amber-600 rounded-lg flex items-center justify-center">
-                <span className="text-cream-50 font-bold text-xl">H</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-semibold text-cream-50">Haggai</span>
-                <span className="text-xs text-amber-400 font-medium tracking-wider uppercase">Sweden</span>
-              </div>
+              <img 
+                src="/haggai-logo.png" 
+                alt="Haggai International" 
+                className="h-12 w-auto object-contain brightness-0 invert"
+              />
+              <span className="text-xs text-amber-400 font-medium tracking-wider uppercase">Sweden</span>
             </Link>
             <p className="text-cream-300 text-sm leading-relaxed">
               {t('footer.description')}
