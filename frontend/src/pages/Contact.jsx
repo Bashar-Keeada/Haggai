@@ -7,9 +7,11 @@ import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { toast } from 'sonner';
+import { useLanguage } from '../context/LanguageContext';
 import { contactInfo } from '../data/mock';
 
 const Contact = () => {
+  const { t, isRTL } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -35,8 +37,8 @@ const Contact = () => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    toast.success('Meddelande skickat!', {
-      description: 'Vi återkommer så snart vi kan.'
+    toast.success(t('contact.successTitle'), {
+      description: t('contact.successDesc')
     });
 
     setFormData({ name: '', email: '', phone: '', subject: '', contactType: '', message: '' });
@@ -44,16 +46,15 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cream-50">
+    <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Hero */}
       <section className="py-24 bg-gradient-to-br from-cream-100 via-cream-50 to-amber-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <span className="text-amber-700 font-medium text-sm tracking-wider uppercase mb-4 block">Kontakt</span>
-            <h1 className="text-5xl font-bold text-stone-800 mb-6">Hör av dig till oss</h1>
+          <div className={`max-w-3xl ${isRTL ? 'mr-auto text-right' : ''}`}>
+            <span className="text-amber-700 font-medium text-sm tracking-wider uppercase mb-4 block">{t('contact.title')}</span>
+            <h1 className="text-5xl font-bold text-stone-800 mb-6">{t('contact.heading')}</h1>
             <p className="text-xl text-stone-600 leading-relaxed">
-              Har du frågor om våra utbildningar, medlemskap eller något annat? 
-              Vi finns här för att hjälpa dig.
+              {t('contact.description')}
             </p>
           </div>
         </div>
@@ -62,20 +63,20 @@ const Contact = () => {
       {/* Contact Section */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-3 gap-12">
+          <div className={`grid lg:grid-cols-3 gap-12 ${isRTL ? 'direction-rtl' : ''}`}>
             {/* Contact Info */}
-            <div className="lg:col-span-1 space-y-8">
+            <div className={`lg:col-span-1 space-y-8 ${isRTL ? 'order-2 lg:order-1 text-right' : ''}`}>
               <div>
-                <h2 className="text-2xl font-bold text-stone-800 mb-6">Kontaktuppgifter</h2>
+                <h2 className="text-2xl font-bold text-stone-800 mb-6">{t('contact.contactInfo')}</h2>
                 <div className="space-y-6">
                   <Card className="border-0 shadow-lg">
                     <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
+                      <div className={`flex items-start space-x-4 ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
                         <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
                           <MapPin className="h-6 w-6 text-amber-700" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-stone-800 mb-1">Adress</h3>
+                          <h3 className="font-semibold text-stone-800 mb-1">{t('contact.address')}</h3>
                           <p className="text-stone-600">{contactInfo.address}</p>
                         </div>
                       </div>
@@ -84,13 +85,13 @@ const Contact = () => {
 
                   <Card className="border-0 shadow-lg">
                     <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
+                      <div className={`flex items-start space-x-4 ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
                         <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
                           <Phone className="h-6 w-6 text-amber-700" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-stone-800 mb-1">Telefon</h3>
-                          <a href={`tel:${contactInfo.phone}`} className="text-amber-700 hover:text-amber-800">
+                          <h3 className="font-semibold text-stone-800 mb-1">{t('contact.phone')}</h3>
+                          <a href={`tel:${contactInfo.phone}`} className="text-amber-700 hover:text-amber-800" dir="ltr">
                             {contactInfo.phone}
                           </a>
                         </div>
@@ -100,13 +101,13 @@ const Contact = () => {
 
                   <Card className="border-0 shadow-lg">
                     <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
+                      <div className={`flex items-start space-x-4 ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
                         <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
                           <Mail className="h-6 w-6 text-amber-700" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-stone-800 mb-1">E-post</h3>
-                          <a href={`mailto:${contactInfo.email}`} className="text-amber-700 hover:text-amber-800">
+                          <h3 className="font-semibold text-stone-800 mb-1">{t('contact.email')}</h3>
+                          <a href={`mailto:${contactInfo.email}`} className="text-amber-700 hover:text-amber-800" dir="ltr">
                             {contactInfo.email}
                           </a>
                         </div>
@@ -116,13 +117,13 @@ const Contact = () => {
 
                   <Card className="border-0 shadow-lg">
                     <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
+                      <div className={`flex items-start space-x-4 ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
                         <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
                           <Clock className="h-6 w-6 text-amber-700" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-stone-800 mb-1">Svarstid</h3>
-                          <p className="text-stone-600">Vi svarar vanligtvis inom 1-2 arbetsdagar</p>
+                          <h3 className="font-semibold text-stone-800 mb-1">{t('contact.responseTime')}</h3>
+                          <p className="text-stone-600">{t('contact.responseTimeText')}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -132,26 +133,25 @@ const Contact = () => {
             </div>
 
             {/* Contact Form */}
-            <div className="lg:col-span-2">
+            <div className={`lg:col-span-2 ${isRTL ? 'order-1 lg:order-2' : ''}`}>
               <Card className="border-0 shadow-xl">
                 <CardContent className="p-8">
-                  <h2 className="text-2xl font-bold text-stone-800 mb-6">Skicka meddelande</h2>
+                  <h2 className={`text-2xl font-bold text-stone-800 mb-6 ${isRTL ? 'text-right' : ''}`}>{t('contact.sendMessage')}</h2>
                   
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit} className={`space-y-6 ${isRTL ? 'text-right' : ''}`}>
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="contact-name">Namn *</Label>
+                        <Label htmlFor="contact-name">{t('contact.name')} *</Label>
                         <Input
                           id="contact-name"
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           required
-                          className="rounded-lg"
-                          placeholder="Ditt namn"
+                          className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="contact-email">E-post *</Label>
+                        <Label htmlFor="contact-email">{t('contact.email')} *</Label>
                         <Input
                           id="contact-email"
                           type="email"
@@ -159,72 +159,72 @@ const Contact = () => {
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           required
                           className="rounded-lg"
-                          placeholder="din@email.se"
+                          dir="ltr"
                         />
                       </div>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="contact-phone">Telefon</Label>
+                        <Label htmlFor="contact-phone">{t('contact.phone')}</Label>
                         <Input
                           id="contact-phone"
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           className="rounded-lg"
-                          placeholder="070-XXX XX XX"
+                          dir="ltr"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="contact-type">Jag representerar</Label>
+                        <Label htmlFor="contact-type">{t('contact.iRepresent')}</Label>
                         <Select 
                           value={formData.contactType} 
                           onValueChange={(value) => setFormData({ ...formData, contactType: value })}
                         >
-                          <SelectTrigger className="rounded-lg">
-                            <SelectValue placeholder="Välj..." />
+                          <SelectTrigger className={`rounded-lg ${isRTL ? 'text-right' : ''}`}>
+                            <SelectValue placeholder={t('contact.selectOption')} />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="individual">Mig själv (Individ)</SelectItem>
-                            <SelectItem value="church">En kyrka/Församling</SelectItem>
-                            <SelectItem value="organization">En organisation</SelectItem>
+                            <SelectItem value="individual">{t('contact.myself')}</SelectItem>
+                            <SelectItem value="church">{t('contact.aChurch')}</SelectItem>
+                            <SelectItem value="organization">{t('contact.anOrganization')}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="contact-subject">Ämne *</Label>
+                      <Label htmlFor="contact-subject">{t('contact.subject')} *</Label>
                       <Input
                         id="contact-subject"
                         value={formData.subject}
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                         required
-                        className="rounded-lg"
-                        placeholder="Vad gäller det?"
+                        className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                        placeholder={t('contact.subjectPlaceholder')}
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="contact-message">Meddelande *</Label>
+                      <Label htmlFor="contact-message">{t('contact.message')} *</Label>
                       <Textarea
                         id="contact-message"
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         required
                         rows={6}
-                        className="rounded-lg"
-                        placeholder="Skriv ditt meddelande här..."
+                        className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                        placeholder={t('contact.messagePlaceholder')}
                       />
                     </div>
 
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-amber-700 hover:bg-amber-800 text-cream-50 py-6 text-lg rounded-xl shadow-lg"
+                      className={`w-full bg-amber-700 hover:bg-amber-800 text-cream-50 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}
                     >
-                      {isSubmitting ? 'Skickar...' : 'Skicka meddelande'}
-                      <Send className="ml-2 h-5 w-5" />
+                      {isSubmitting ? t('contact.submitting') : t('contact.submit')}
+                      <Send className={`h-5 w-5 ${isRTL ? 'mr-2' : 'ml-2'}`} />
                     </Button>
                   </form>
                 </CardContent>
@@ -237,41 +237,41 @@ const Contact = () => {
       {/* Target Audience Info */}
       <section className="py-24 bg-cream-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-stone-800 mb-4">Vem kan kontakta oss?</h2>
-            <p className="text-lg text-stone-600">Vi välkomnar kontakt från alla som är intresserade av ledarutveckling</p>
+          <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
+            <h2 className="text-4xl font-bold text-stone-800 mb-4">{t('contact.whoCanContact')}</h2>
+            <p className="text-lg text-stone-600">{t('contact.whoCanContactSubtitle')}</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="border-0 shadow-lg bg-white">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <span className="text-3xl">I</span>
+              <CardContent className={`p-8 text-center ${isRTL ? 'text-right' : ''}`}>
+                <div className={`w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
+                  <span className="text-3xl font-bold text-amber-700">I</span>
                 </div>
-                <h3 className="text-xl font-semibold text-stone-800 mb-3">Individer</h3>
+                <h3 className="text-xl font-semibold text-stone-800 mb-3">{t('contact.individualsTitle')}</h3>
                 <p className="text-stone-600">
-                  Du som har vision och ledarförmåga och vill utvecklas som ledare
+                  {t('contact.individualsDesc')}
                 </p>
               </CardContent>
             </Card>
             <Card className="border-0 shadow-lg bg-white">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <span className="text-3xl">K</span>
+              <CardContent className={`p-8 text-center ${isRTL ? 'text-right' : ''}`}>
+                <div className={`w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
+                  <span className="text-3xl font-bold text-amber-700">K</span>
                 </div>
-                <h3 className="text-xl font-semibold text-stone-800 mb-3">Kyrkor</h3>
+                <h3 className="text-xl font-semibold text-stone-800 mb-3">{t('contact.churchesTitle')}</h3>
                 <p className="text-stone-600">
-                  Församlingar som vill investera i sina ledares utveckling
+                  {t('contact.churchesDesc')}
                 </p>
               </CardContent>
             </Card>
             <Card className="border-0 shadow-lg bg-white">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <span className="text-3xl">O</span>
+              <CardContent className={`p-8 text-center ${isRTL ? 'text-right' : ''}`}>
+                <div className={`w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
+                  <span className="text-3xl font-bold text-amber-700">O</span>
                 </div>
-                <h3 className="text-xl font-semibold text-stone-800 mb-3">Organisationer</h3>
+                <h3 className="text-xl font-semibold text-stone-800 mb-3">{t('contact.organizationsTitle')}</h3>
                 <p className="text-stone-600">
-                  Kristna organisationer som vill samarbeta eller stödja vårt arbete
+                  {t('contact.organizationsDesc')}
                 </p>
               </CardContent>
             </Card>

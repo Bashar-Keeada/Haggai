@@ -5,11 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../co
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
-import { RadioGroup, RadioGroupItem } from '../components/ui/radio-group';
 import { toast } from 'sonner';
-import { memberTypes } from '../data/mock';
+import { useLanguage } from '../context/LanguageContext';
 
 const Membership = () => {
+  const { t, language, isRTL } = useLanguage();
   const [selectedType, setSelectedType] = useState('individual');
   const [formData, setFormData] = useState({
     name: '',
@@ -21,11 +21,40 @@ const Membership = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const icons = {
-    individual: Users,
-    church: Building,
-    organization: Building2
-  };
+  const memberTypes = [
+    {
+      id: 'individual',
+      icon: Users,
+      title: t('membership.individual'),
+      description: t('membership.individualDesc'),
+      price: '500 kr'
+    },
+    {
+      id: 'church',
+      icon: Building,
+      title: t('membership.church'),
+      description: t('membership.churchDesc'),
+      price: '2000 kr'
+    },
+    {
+      id: 'organization',
+      icon: Building2,
+      title: t('membership.organizationType'),
+      description: t('membership.organizationDesc'),
+      price: '3000 kr'
+    }
+  ];
+
+  const benefits = [
+    t('membership.benefit1'),
+    t('membership.benefit2'),
+    t('membership.benefit3'),
+    t('membership.benefit4'),
+    t('membership.benefit5'),
+    t('membership.benefit6'),
+    t('membership.benefit7'),
+    t('membership.benefit8')
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,8 +72,8 @@ const Membership = () => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    toast.success('Ansökan skickad!', {
-      description: 'Vi hör av oss inom kort.'
+    toast.success(t('membership.successTitle'), {
+      description: t('membership.successDesc')
     });
 
     setFormData({ name: '', email: '', phone: '', organization: '', address: '', message: '' });
@@ -52,16 +81,15 @@ const Membership = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cream-50">
+    <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Hero */}
       <section className="py-24 bg-gradient-to-br from-cream-100 via-cream-50 to-amber-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <span className="text-amber-700 font-medium text-sm tracking-wider uppercase mb-4 block">Bli Medlem</span>
-            <h1 className="text-5xl font-bold text-stone-800 mb-6">Gå med i Haggai Sweden</h1>
+          <div className={`max-w-3xl ${isRTL ? 'mr-auto text-right' : ''}`}>
+            <span className="text-amber-700 font-medium text-sm tracking-wider uppercase mb-4 block">{t('membership.title')}</span>
+            <h1 className="text-5xl font-bold text-stone-800 mb-6">{t('membership.heading')}</h1>
             <p className="text-xl text-stone-600 leading-relaxed">
-              Oavsett om du är en individ med vision, representerar en kyrka eller en organisation – 
-              vi välkomnar dig att bli en del av vår gemenskap.
+              {t('membership.description')}
             </p>
           </div>
         </div>
@@ -70,14 +98,14 @@ const Membership = () => {
       {/* Membership Types */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-stone-800 mb-4">Välj medlemstyp</h2>
-            <p className="text-lg text-stone-600">Vilken kategori passar dig bäst?</p>
+          <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
+            <h2 className="text-4xl font-bold text-stone-800 mb-4">{t('membership.chooseType')}</h2>
+            <p className="text-lg text-stone-600">{t('membership.chooseTypeSubtitle')}</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             {memberTypes.map((type) => {
-              const Icon = icons[type.id];
+              const Icon = type.icon;
               const isSelected = selectedType === type.id;
               
               return (
@@ -90,10 +118,10 @@ const Membership = () => {
                   }`}
                   onClick={() => setSelectedType(type.id)}
                 >
-                  <CardHeader className="text-center pb-4">
-                    <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center transition-colors ${
+                  <CardHeader className={`text-center pb-4 ${isRTL ? 'text-right' : ''}`}>
+                    <div className={`w-16 h-16 mb-4 rounded-2xl flex items-center justify-center transition-colors ${
                       isSelected ? 'bg-amber-700' : 'bg-amber-100'
-                    }`}>
+                    } ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
                       <Icon className={`h-8 w-8 ${
                         isSelected ? 'text-cream-50' : 'text-amber-700'
                       }`} />
@@ -101,12 +129,12 @@ const Membership = () => {
                     <CardTitle className="text-xl text-stone-800">{type.title}</CardTitle>
                     <CardDescription className="text-stone-600">{type.description}</CardDescription>
                   </CardHeader>
-                  <CardContent className="text-center">
-                    <p className="text-3xl font-bold text-amber-700 mb-2">{type.price}</p>
+                  <CardContent className={`text-center ${isRTL ? 'text-right' : ''}`}>
+                    <p className="text-3xl font-bold text-amber-700 mb-2">{type.price}{t('membership.perYear')}</p>
                     {isSelected && (
-                      <div className="flex items-center justify-center text-amber-700">
-                        <Check className="h-5 w-5 mr-1" />
-                        <span className="text-sm font-medium">Vald</span>
+                      <div className={`flex items-center justify-center text-amber-700 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                        <Check className={`h-5 w-5 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                        <span className="text-sm font-medium">{t('membership.selected')}</span>
                       </div>
                     )}
                   </CardContent>
@@ -118,28 +146,27 @@ const Membership = () => {
           {/* Registration Form */}
           <div className="max-w-2xl mx-auto">
             <Card className="border-0 shadow-xl">
-              <CardHeader>
-                <CardTitle className="text-2xl text-stone-800">Medlemsansökan</CardTitle>
+              <CardHeader className={isRTL ? 'text-right' : ''}>
+                <CardTitle className="text-2xl text-stone-800">{t('membership.applicationTitle')}</CardTitle>
                 <CardDescription>
-                  Fyll i formuläret nedan så hör vi av oss inom kort.
+                  {t('membership.applicationSubtitle')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className={`space-y-6 ${isRTL ? 'text-right' : ''}`}>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Namn *</Label>
+                      <Label htmlFor="name">{t('membership.name')} *</Label>
                       <Input
                         id="name"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         required
-                        className="rounded-lg"
-                        placeholder="Ditt namn"
+                        className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">E-post *</Label>
+                      <Label htmlFor="email">{t('membership.email')} *</Label>
                       <Input
                         id="email"
                         type="email"
@@ -147,73 +174,73 @@ const Membership = () => {
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         required
                         className="rounded-lg"
-                        placeholder="din@email.se"
+                        dir="ltr"
                       />
                     </div>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="phone">Telefon</Label>
+                      <Label htmlFor="phone">{t('membership.phone')}</Label>
                       <Input
                         id="phone"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         className="rounded-lg"
-                        placeholder="070-XXX XX XX"
+                        dir="ltr"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="organization">
-                        {selectedType === 'individual' ? 'Församling/Kyrka' : 'Organisationsnamn *'}
+                        {selectedType === 'individual' ? t('membership.churchOrg') : `${t('membership.orgName')} *`}
                       </Label>
                       <Input
                         id="organization"
                         value={formData.organization}
                         onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
                         required={selectedType !== 'individual'}
-                        className="rounded-lg"
-                        placeholder={selectedType === 'individual' ? 'Valfritt' : 'Organisationens namn'}
+                        className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                        placeholder={selectedType === 'individual' ? t('membership.optional') : ''}
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="address">Adress</Label>
+                    <Label htmlFor="address">{t('membership.address')}</Label>
                     <Input
                       id="address"
                       value={formData.address}
                       onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                      className="rounded-lg"
-                      placeholder="Gatuadress, postnummer, ort"
+                      className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                      placeholder={t('membership.addressPlaceholder')}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="message">Meddelande</Label>
+                    <Label htmlFor="message">{t('calendar.message')}</Label>
                     <Textarea
                       id="message"
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       rows={4}
-                      className="rounded-lg"
-                      placeholder="Berätta gärna lite om dig själv och varför du vill bli medlem..."
+                      className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                      placeholder={t('membership.messagePlaceholder')}
                     />
                   </div>
 
                   <div className="bg-cream-50 p-4 rounded-xl">
                     <p className="text-sm text-stone-600">
-                      <strong>Vald medlemstyp:</strong> {memberTypes.find(t => t.id === selectedType)?.title} – {memberTypes.find(t => t.id === selectedType)?.price}
+                      <strong>{t('membership.selectedType')}</strong> {memberTypes.find(m => m.id === selectedType)?.title} – {memberTypes.find(m => m.id === selectedType)?.price}{t('membership.perYear')}
                     </p>
                   </div>
 
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-amber-700 hover:bg-amber-800 text-cream-50 py-6 text-lg rounded-xl shadow-lg"
+                    className={`w-full bg-amber-700 hover:bg-amber-800 text-cream-50 py-6 text-lg rounded-xl shadow-lg ${isRTL ? 'flex-row-reverse' : ''}`}
                   >
-                    {isSubmitting ? 'Skickar...' : 'Skicka ansökan'}
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    {isSubmitting ? t('membership.submitting') : t('membership.submitApplication')}
+                    <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
                   </Button>
                 </form>
               </CardContent>
@@ -225,22 +252,13 @@ const Membership = () => {
       {/* Benefits */}
       <section className="py-24 bg-cream-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-stone-800 mb-4">Fördelar med medlemskap</h2>
-            <p className="text-lg text-stone-600">Som medlem får du tillgång till:</p>
+          <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
+            <h2 className="text-4xl font-bold text-stone-800 mb-4">{t('membership.benefits')}</h2>
+            <p className="text-lg text-stone-600">{t('membership.benefitsSubtitle')}</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              'Rabatt på utbildningar',
-              'Nätverksmöjligheter',
-              'Nyhetsbrev och resurser',
-              'Rösträtt på årsmöte',
-              'Mentorprogram',
-              'Exklusiva evenemang',
-              'Internationellt nätverk',
-              'Ledarskapsresurser'
-            ].map((benefit, index) => (
-              <div key={index} className="flex items-center space-x-3 bg-white p-4 rounded-xl shadow">
+            {benefits.map((benefit, index) => (
+              <div key={index} className={`flex items-center space-x-3 bg-white p-4 rounded-xl shadow ${isRTL ? 'space-x-reverse flex-row-reverse' : ''}`}>
                 <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
                   <Check className="h-4 w-4 text-amber-700" />
                 </div>
