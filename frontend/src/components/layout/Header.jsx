@@ -18,13 +18,20 @@ const Header = () => {
   const leaderExpLabel = {
     sv: 'Leader Experience',
     en: 'Leader Experience',
-    ar: 'تجربة القيادة'
+    ar: 'خبرة قادة حجاي'
+  };
+
+  const leadersLabel = {
+    sv: 'Ledare',
+    en: 'Leaders',
+    ar: 'القادة'
   };
 
   const navLinks = [
     { path: '/', label: t('nav.home') },
     { path: '/om-oss', label: t('nav.about') },
     { path: '/leader-experience', label: leaderExpLabel[language] || 'Leader Experience' },
+    { path: '/ledare', label: leadersLabel[language] || 'Ledare' },
     { path: '/kalender', label: t('nav.calendar') },
     { path: '/bli-medlem', label: t('nav.membership') },
     { path: '/kontakt', label: t('nav.contact') },
