@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X, Globe, LogOut, Settings } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '../ui/dropdown-menu';
 import { useLanguage } from '../../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const { language, setLanguage, t, isRTL } = useLanguage();
+  const { logout } = useAuth();
 
   const leaderExpLabel = {
     sv: 'Leader Experience',
@@ -43,6 +46,18 @@ const Header = () => {
     { code: 'ar', name: 'العربية' },
   ];
 
+  const adminLabel = {
+    sv: 'Admin',
+    en: 'Admin',
+    ar: 'المسؤول'
+  };
+
+  const logoutLabel = {
+    sv: 'Logga ut',
+    en: 'Log out',
+    ar: 'تسجيل الخروج'
+  };
+
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -59,12 +74,12 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className={`hidden md:flex items-center space-x-1 ${isRTL ? 'space-x-reverse' : ''}`}>
+          <nav className={`hidden lg:flex items-center space-x-1 ${isRTL ? 'space-x-reverse' : ''}`}>
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                   isActive(link.path)
                     ? 'bg-haggai text-cream-50'
                     : 'text-stone-700 hover:bg-haggai-50 hover:text-haggai'
@@ -74,47 +89,78 @@ const Header = () => {
               </Link>
             ))}
             
-            {/* Language Selector */}
+            {/* Settings Menu (Language + Admin + Logout) */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="ml-2 text-stone-700 hover:bg-haggai-50">
-                  <Globe className="h-4 w-4 mr-1" />
-                  <span className="text-xs uppercase">{language}</span>
+                  <Settings className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-white">
+              <DropdownMenuContent align="end" className="bg-white min-w-[160px]">
                 {languages.map((lang) => (
                   <DropdownMenuItem
                     key={lang.code}
                     onClick={() => setLanguage(lang.code)}
                     className={`cursor-pointer ${language === lang.code ? 'bg-haggai-50' : ''}`}
                   >
+                    <Globe className="h-4 w-4 mr-2" />
                     {lang.name}
                   </DropdownMenuItem>
                 ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/admin/ledare" className="cursor-pointer">
+                    <Settings className="h-4 w-4 mr-2" />
+                    {adminLabel[language]}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  onClick={logout}
+                  className="cursor-pointer text-red-600 focus:text-red-600"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  {logoutLabel[language]}
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </nav>
 
           {/* Mobile Menu Button */}
-          <div className={`md:hidden flex items-center space-x-2 ${isRTL ? 'space-x-reverse' : ''}`}>
-            {/* Mobile Language Selector */}
+          <div className={`lg:hidden flex items-center space-x-2 ${isRTL ? 'space-x-reverse' : ''}`}>
+            {/* Mobile Settings Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="text-stone-700">
-                  <Globe className="h-5 w-5" />
+                  <Settings className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-white">
+              <DropdownMenuContent align="end" className="bg-white min-w-[160px]">
                 {languages.map((lang) => (
                   <DropdownMenuItem
                     key={lang.code}
                     onClick={() => setLanguage(lang.code)}
                     className={`cursor-pointer ${language === lang.code ? 'bg-haggai-50' : ''}`}
                   >
+                    <Globe className="h-4 w-4 mr-2" />
                     {lang.name}
                   </DropdownMenuItem>
                 ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/admin/ledare" className="cursor-pointer">
+                    <Settings className="h-4 w-4 mr-2" />
+                    {adminLabel[language]}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  onClick={logout}
+                  className="cursor-pointer text-red-600 focus:text-red-600"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  {logoutLabel[language]}
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             
@@ -131,7 +177,7 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <nav className="md:hidden py-4 border-t border-cream-200">
+          <nav className="lg:hidden py-4 border-t border-cream-200">
             <div className="flex flex-col space-y-2">
               {navLinks.map((link) => (
                 <Link
