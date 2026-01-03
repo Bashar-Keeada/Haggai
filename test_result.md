@@ -183,27 +183,33 @@ frontend:
 
   - task: "Admin Leaders Page"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/pages/AdminLeaders.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Created admin page at /admin/ledare for managing leaders"
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL ISSUE: Admin page loads but has authentication/session issues. Form submission appears to work (backend API confirmed working via direct testing), but frontend doesn't display created leaders. Possible frontend-backend integration issue or session management problem."
 
   - task: "Leaders Public Page"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/pages/Leaders.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Created public page at /ledare to display leaders"
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL ISSUE: Public leaders page loads but doesn't display any leaders despite backend API having data. Created leader 'Erik Lindström' via API exists in database but not shown on frontend. Frontend-backend integration broken."
 
   - task: "Remove Sweden from Menu"
     implemented: true
@@ -216,18 +222,24 @@ frontend:
       - working: true
         agent: "main"
         comment: "Removed Sweden text from Header and Footer"
+      - working: true
+        agent: "testing"
+        comment: "✅ VERIFIED: No 'Sweden' text found in header navigation. Working correctly."
 
   - task: "Remove Made with Emergent Badge"
     implemented: true
-    working: true
+    working: false
     file: "/app/frontend/public/index.html"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
       - working: true
         agent: "main"
         comment: "Removed emergent badge from index.html"
+      - working: false
+        agent: "testing"
+        comment: "❌ FAILED: Emergent references still found in index.html: meta description 'A product of emergent.sh', title 'Emergent | Fullstack App', and script src 'https://assets.emergent.sh/scripts/emergent-main.js'. These need to be removed/updated."
 
   - task: "Remove Language Flags"
     implemented: true
