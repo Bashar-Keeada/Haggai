@@ -200,6 +200,122 @@ async def get_status_checks():
     
     return status_checks
 
+
+# ==================== LEADER/FACILITATOR ENDPOINTS ====================
+
+@api_router.get("/leaders", response_model=List[Leader])
+async def get_leaders(active_only: bool = True):
+    """Get all leaders/facilitators"""
+    query = {"is_active": True} if active_only else {}
+    leaders = await db.leaders.find(query, {"_id": 0}).to_list(100)
+    return leaders
+
+
+@api_router.get("/leaders/{leader_id}", response_model=Leader)
+async def get_leader(leader_id: str):
+    """Get a specific leader by ID"""
+    leader = await db.leaders.find_one({"id": leader_id}, {"_id": 0})
+    if not leader:
+        raise HTTPException(status_code=404, detail="Leader not found")
+    return leader
+
+
+@api_router.post("/leaders", response_model=Leader)
+async def create_leader(input: LeaderCreate):
+    """Create a new leader/facilitator"""
+    leader = Leader(**input.model_dump())
+    doc = leader.model_dump()
+    await db.leaders.insert_one(doc)
+    return leader
+
+
+@api_router.put("/leaders/{leader_id}", response_model=Leader)
+async def update_leader(leader_id: str, input: LeaderUpdate):
+    """Update an existing leader"""
+    existing = await db.leaders.find_one({"id": leader_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Leader not found")
+    
+    update_data = {k: v for k, v in input.model_dump().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.leaders.update_one({"id": leader_id}, {"$set": update_data})
+    
+    updated = await db.leaders.find_one({"id": leader_id}, {"_id": 0})
+    return updated
+
+
+@api_router.delete("/leaders/{leader_id}")
+async def delete_leader(leader_id: str):
+    """Delete a leader"""
+    result = await db.leaders.delete_one({"id": leader_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Leader not found")
+    return {"message": "Leader deleted successfully"}
+
+
+# ==================== CONTACT FORM ENDPOINTS ====================
+
+@api_router.post("/contact", response_model=ContactSubmission)
+async def submit_contact(input: ContactCreate):
+    """Submit a contact form"""
+    submission = ContactSubmission(**input.model_dump())
+    doc = submission.model_dump()
+    await db.contact_submissions.insert_one(doc)
+    return submission
+
+
+@api_router.get("/contact", response_model=List[ContactSubmission])
+async def get_contact_submissions():
+    """Get all contact form submissions (admin)"""
+    submissions = await db.contact_submissions.find({}, {"_id": 0}).to_list(1000)
+    return submissions
+
+
+# ==================== MEMBERSHIP ENDPOINTS ====================
+
+@api_router.post("/membership", response_model=MembershipApplication)
+async def submit_membership(input: MembershipCreate):
+    """Submit a membership application"""
+    application = MembershipApplication(**input.model_dump())
+    doc = application.model_dump()
+    await db.membership_applications.insert_one(doc)
+    return application
+
+
+@api_router.get("/membership", response_model=List[MembershipApplication])
+async def get_membership_applications():
+    """Get all membership applications (admin)"""
+    applications = await db.membership_applications.find({}, {"_id": 0}).to_list(1000)
+    return applications
+
+
+# ==================== LEADER EXPERIENCE APPLICATION ENDPOINTS ====================
+
+@api_router.post("/leader-experience-applications", response_model=LeaderExperienceApplication)
+async def submit_leader_experience_application(input: LeaderExperienceApplicationCreate):
+    """Submit a Leader Experience application"""
+    application = LeaderExperienceApplication(**input.model_dump())
+    doc = application.model_dump()
+    await db.leader_experience_applications.insert_one(doc)
+    return application
+
+
+@api_router.get("/leader-experience-applications", response_model=List[LeaderExperienceApplication])
+async def get_leader_experience_applications():
+    """Get all Leader Experience applications (admin)"""
+    applications = await db.leader_experience_applications.find({}, {"_id": 0}).to_list(1000)
+    return applications
+
+
+@api_router.get("/leader-experience-applications/{program_id}")
+async def get_applications_by_program(program_id: str):
+    """Get applications for a specific program"""
+    applications = await db.leader_experience_applications.find(
+        {"program_id": program_id}, {"_id": 0}
+    ).to_list(1000)
+    return applications
+
 # Include the router in the main app
 app.include_router(api_router)
 
