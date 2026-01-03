@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 // Simple password for site access - can be changed here
-const SITE_PASSWORD = 'haggai2025';
+const SITE_PASSWORD = 'Keeada2030';
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

@@ -31,9 +31,9 @@ const Header = () => {
   ];
 
   const languages = [
-    { code: 'sv', name: 'Svenska', flag: '🇸🇪' },
-    { code: 'en', name: 'English', flag: '🇬🇧' },
-    { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+    { code: 'sv', name: 'Svenska' },
+    { code: 'en', name: 'English' },
+    { code: 'ar', name: 'العربية' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -43,15 +43,12 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`flex items-center justify-between h-20 ${isRTL ? 'flex-row-reverse' : ''}`}>
           {/* Logo */}
-          <Link to="/" className={`flex items-center space-x-3 group ${isRTL ? 'space-x-reverse' : ''}`}>
+          <Link to="/" className={`flex items-center group`}>
             <img 
               src="/haggai-logo.png" 
               alt="Haggai International" 
               className="h-14 w-auto object-contain"
             />
-            <div className="flex flex-col">
-              <span className="text-xs text-haggai font-medium tracking-wider uppercase">Sweden</span>
-            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -74,8 +71,8 @@ const Header = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="ml-2 text-stone-700 hover:bg-haggai-50">
-                  <Globe className="h-4 w-4 mr-2" />
-                  {languages.find(l => l.code === language)?.flag}
+                  <Globe className="h-4 w-4 mr-1" />
+                  <span className="text-xs uppercase">{language}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-white">
@@ -85,7 +82,6 @@ const Header = () => {
                     onClick={() => setLanguage(lang.code)}
                     className={`cursor-pointer ${language === lang.code ? 'bg-haggai-50' : ''}`}
                   >
-                    <span className="mr-2">{lang.flag}</span>
                     {lang.name}
                   </DropdownMenuItem>
                 ))}
@@ -109,7 +105,6 @@ const Header = () => {
                     onClick={() => setLanguage(lang.code)}
                     className={`cursor-pointer ${language === lang.code ? 'bg-haggai-50' : ''}`}
                   >
-                    <span className="mr-2">{lang.flag}</span>
                     {lang.name}
                   </DropdownMenuItem>
                 ))}

@@ -13,7 +13,7 @@ const Footer = () => {
         <div className={`grid grid-cols-1 md:grid-cols-4 gap-12 ${isRTL ? 'text-right' : ''}`}>
           {/* Brand */}
           <div className="md:col-span-1">
-            <Link to="/" className={`flex items-center space-x-3 mb-6 ${isRTL ? 'space-x-reverse flex-row-reverse justify-end' : ''}`}>
+            <Link to="/" className={`flex items-center mb-6 ${isRTL ? 'justify-end' : ''}`}>
               <div className="bg-cream-50 p-2 rounded-lg">
                 <img 
                   src="/haggai-logo.png" 
@@ -21,7 +21,6 @@ const Footer = () => {
                   className="h-10 w-auto object-contain"
                 />
               </div>
-              <span className="text-xs text-haggai-200 font-medium tracking-wider uppercase">Sweden</span>
             </Link>
             <p className="text-cream-300 text-sm leading-relaxed">
               {t('footer.description')}
