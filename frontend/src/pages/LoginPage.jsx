@@ -88,7 +88,7 @@ const LoginPage = () => {
                 : 'bg-white/80 text-stone-700 hover:bg-white'
             }`}
           >
-            {lang.flag} {lang.name}
+            {lang.name}
           </button>
         ))}
       </div>
