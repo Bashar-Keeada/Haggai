@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -6,9 +6,10 @@ import os
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
-from typing import List
+from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
+import base64
 
 
 ROOT_DIR = Path(__file__).parent
@@ -33,6 +34,139 @@ class StatusCheck(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     client_name: str
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+# Leader/Facilitator Model
+class Leader(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    role: dict  # {sv: "", en: "", ar: ""}
+    bio: dict  # {sv: "", en: "", ar: ""}
+    topics: dict  # {sv: [], en: [], ar: []}
+    image_url: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    is_active: bool = True
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class LeaderCreate(BaseModel):
+    name: str
+    role: dict
+    bio: dict
+    topics: dict
+    image_url: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+
+
+class LeaderUpdate(BaseModel):
+    name: Optional[str] = None
+    role: Optional[dict] = None
+    bio: Optional[dict] = None
+    topics: Optional[dict] = None
+    image_url: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    is_active: Optional[bool] = None
+
+
+# Contact Form Model
+class ContactSubmission(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: str
+    subject: str
+    message: str
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class ContactCreate(BaseModel):
+    name: str
+    email: str
+    subject: str
+    message: str
+
+
+# Membership Application Model
+class MembershipApplication(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    member_type: str  # individual, church, organization
+    first_name: str
+    last_name: str
+    email: str
+    phone: str
+    organization: Optional[str] = None
+    city: str
+    message: Optional[str] = None
+    status: str = "pending"  # pending, approved, rejected
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class MembershipCreate(BaseModel):
+    member_type: str
+    first_name: str
+    last_name: str
+    email: str
+    phone: str
+    organization: Optional[str] = None
+    city: str
+    message: Optional[str] = None
+
+
+# Leader Experience Application Model
+class LeaderExperienceApplication(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    program_id: str
+    nomination_type: str  # self, friend
+    first_name: str
+    last_name: str
+    email: str
+    phone: str
+    city: str
+    country: str
+    church_or_organization: str
+    current_role: str
+    years_in_role: int
+    ministry_description: str
+    why_apply: str
+    expectations: str
+    nominator_name: Optional[str] = None
+    nominator_email: Optional[str] = None
+    nominator_phone: Optional[str] = None
+    nominator_relationship: Optional[str] = None
+    status: str = "pending"
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class LeaderExperienceApplicationCreate(BaseModel):
+    program_id: str
+    nomination_type: str
+    first_name: str
+    last_name: str
+    email: str
+    phone: str
+    city: str
+    country: str
+    church_or_organization: str
+    current_role: str
+    years_in_role: int
+    ministry_description: str
+    why_apply: str
+    expectations: str
+    nominator_name: Optional[str] = None
+    nominator_email: Optional[str] = None
+    nominator_phone: Optional[str] = None
+    nominator_relationship: Optional[str] = None
 
 class StatusCheckCreate(BaseModel):
     client_name: str
