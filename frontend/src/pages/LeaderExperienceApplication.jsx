@@ -17,6 +17,8 @@ import { toast } from 'sonner';
 import { useLanguage } from '../context/LanguageContext';
 import { leaderExperiences } from '../data/mock';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const LeaderExperienceApplication = () => {
   const { programId } = useParams();
   const navigate = useNavigate();
