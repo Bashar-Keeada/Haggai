@@ -236,6 +236,12 @@ const LeaderExperience = () => {
                         {program.ageRange} {language === 'sv' ? 'år' : language === 'ar' ? 'سنة' : 'years'}
                       </Badge>
                     )}
+                    {program.isOnline && (
+                      <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200">
+                        <Monitor className="h-3 w-3 mr-1" />
+                        Online
+                      </Badge>
+                    )}
                   </div>
                   <CardTitle className="text-xl text-stone-800">
                     {program.title[language]}
@@ -257,10 +263,12 @@ const LeaderExperience = () => {
                       <MapPin className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span><strong>{txt.location}:</strong> {program.location[language]}</span>
                     </div>
-                    <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <Users className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                      <span><strong>{program.spotsLeft}</strong> {txt.spotsLeft}</span>
-                    </div>
+                    {program.spotsLeft && (
+                      <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                        <Users className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                        <span><strong>{program.spotsLeft}</strong> {txt.spotsLeft}</span>
+                      </div>
+                    )}
                   </div>
                   
                   <div className="mt-auto">
