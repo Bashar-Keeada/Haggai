@@ -10,6 +10,8 @@ import { toast } from 'sonner';
 import { useLanguage } from '../context/LanguageContext';
 import { contactInfo } from '../data/mock';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const Contact = () => {
   const { t, isRTL } = useLanguage();
   const [formData, setFormData] = useState({
@@ -26,23 +28,32 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Mock submission - store in localStorage
-    const contacts = JSON.parse(localStorage.getItem('contactMessages') || '[]');
-    contacts.push({
-      ...formData,
-      submittedAt: new Date().toISOString()
-    });
-    localStorage.setItem('contactMessages', JSON.stringify(contacts));
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject || formData.contactType,
+          message: formData.message
+        })
+      });
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    toast.success(t('contact.successTitle'), {
-      description: t('contact.successDesc')
-    });
-
-    setFormData({ name: '', email: '', phone: '', subject: '', contactType: '', message: '' });
-    setIsSubmitting(false);
+      if (response.ok) {
+        toast.success(t('contact.successTitle'), {
+          description: t('contact.successDesc')
+        });
+        setFormData({ name: '', email: '', phone: '', subject: '', contactType: '', message: '' });
+      } else {
+        throw new Error('Failed to submit');
+      }
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      toast.error('Kunde inte skicka meddelandet. Försök igen.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
