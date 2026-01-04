@@ -148,7 +148,7 @@ const Header = () => {
                 ))}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/admin/ledare" className="cursor-pointer">
+                  <Link to="/admin" className="cursor-pointer">
                     <Settings className="h-4 w-4 mr-2" />
                     {adminLabel[language]}
                   </Link>
