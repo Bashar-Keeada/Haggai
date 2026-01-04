@@ -171,15 +171,28 @@ const Membership = () => {
                 <form onSubmit={handleSubmit} className={`space-y-6 ${isRTL ? 'text-right' : ''}`}>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name">{t('membership.name')} *</Label>
+                      <Label htmlFor="firstName">{t('membership.firstName') || 'Förnamn'} *</Label>
                       <Input
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        id="firstName"
+                        value={formData.firstName}
+                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                         required
                         className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName">{t('membership.lastName') || 'Efternamn'} *</Label>
+                      <Input
+                        id="lastName"
+                        value={formData.lastName}
+                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                        required
+                        className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="email">{t('membership.email')} *</Label>
                       <Input
@@ -192,11 +205,8 @@ const Membership = () => {
                         dir="ltr"
                       />
                     </div>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="phone">{t('membership.phone')}</Label>
+                      <Label htmlFor="phone">{t('membership.phone')} *</Label>
                       <Input
                         id="phone"
                         value={formData.phone}
