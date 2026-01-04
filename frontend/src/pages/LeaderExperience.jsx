@@ -295,8 +295,10 @@ const LeaderExperience = () => {
           
           <div className="grid lg:grid-cols-2 gap-8">
             {nationalPrograms.map((program) => {
-              const isOnline = program.location?.sv?.toLowerCase().includes('online') || 
+              const isOnline = program.isOnline || 
+                               program.location?.sv?.toLowerCase().includes('online') || 
                                program.location?.en?.toLowerCase().includes('online');
+              const isCustom = program.isCustom;
               return (
               <Card key={program.id} className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
                 <div className={`h-3 ${getBgColorClasses(program.color)}`} />
@@ -314,6 +316,11 @@ const LeaderExperience = () => {
                         Online
                       </Badge>
                     )}
+                    {program.ageRange && (
+                      <Badge variant="outline" className="border-stone-300">
+                        {program.ageRange} {language === 'sv' ? 'år' : language === 'ar' ? 'سنة' : 'years'}
+                      </Badge>
+                    )}
                   </div>
                   
                   <h3 className="text-2xl font-bold text-stone-800 mb-3">{program.title[language]}</h3>
@@ -328,19 +335,29 @@ const LeaderExperience = () => {
                       <MapPin className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span>{program.location[language]}</span>
                     </div>
-                    <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <Calendar className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                      <span>{new Date(program.nextDate).toLocaleDateString(language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'sv-SE')}</span>
-                    </div>
-                    <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <Users className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                      <span>{program.spotsLeft} {txt.spotsLeft}</span>
-                    </div>
+                    {program.nextDate && (
+                      <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                        <Calendar className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                        <span>{new Date(program.nextDate).toLocaleDateString(language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'sv-SE')}</span>
+                      </div>
+                    )}
+                    {!program.nextDate && (
+                      <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                        <Calendar className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                        <span>{program.period[language]}</span>
+                      </div>
+                    )}
+                    {program.spotsLeft && (
+                      <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                        <Users className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                        <span>{program.spotsLeft} {txt.spotsLeft}</span>
+                      </div>
+                    )}
                   </div>
                   
-                  <Link to={`/leader-experience/${program.id}`}>
+                  <Link to={isCustom ? '/kontakt' : `/leader-experience/${program.id}`}>
                     <Button className={`bg-haggai hover:bg-haggai-dark text-cream-50 rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      {txt.applyNow}
+                      {isCustom ? (language === 'sv' ? 'Kontakta oss' : language === 'ar' ? 'اتصل بنا' : 'Contact us') : txt.applyNow}
                       <ChevronRight className={`h-4 w-4 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
                     </Button>
                   </Link>
