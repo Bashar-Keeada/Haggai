@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Calendar, MapPin, Clock, Users, Globe, ChevronRight,
-  Sparkles, Briefcase, Church, Award, ArrowRight
+  Sparkles, Briefcase, Church, Award, ArrowRight, Monitor
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
