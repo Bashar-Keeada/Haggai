@@ -286,17 +286,26 @@ const LeaderExperience = () => {
           </h2>
           
           <div className="grid lg:grid-cols-2 gap-8">
-            {nationalPrograms.map((program) => (
+            {nationalPrograms.map((program) => {
+              const isOnline = program.location?.sv?.toLowerCase().includes('online') || 
+                               program.location?.en?.toLowerCase().includes('online');
+              return (
               <Card key={program.id} className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
                 <div className={`h-3 ${getBgColorClasses(program.color)}`} />
                 <CardContent className={`p-8 ${isRTL ? 'text-right' : ''}`}>
-                  <div className={`flex items-center gap-2 mb-4 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                  <div className={`flex items-center gap-2 mb-4 flex-wrap ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <Badge className={getColorClasses(program.color)}>
                       {program.type === 'national' ? (language === 'sv' ? 'Nationellt' : language === 'ar' ? 'وطني' : 'National') : ''}
                     </Badge>
                     <Badge variant="outline" className="border-stone-300">
                       {getLanguageLabel(program.language)}
                     </Badge>
+                    {isOnline && (
+                      <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200">
+                        <Monitor className="h-3 w-3 mr-1" />
+                        Online
+                      </Badge>
+                    )}
                   </div>
                   
                   <h3 className="text-2xl font-bold text-stone-800 mb-3">{program.title[language]}</h3>
@@ -329,7 +338,8 @@ const LeaderExperience = () => {
                   </Link>
                 </CardContent>
               </Card>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
