@@ -45,185 +45,200 @@ export const events = [
 
 // Haggai Leader Experience Programs - International
 export const leaderExperiences = [
+  // INTERNATIONAL PROGRAMS
   {
-    id: 'women-arabic',
+    id: 'women-arabic-2026',
     type: 'international',
     targetGender: 'women',
     language: 'arabic',
     title: {
-      sv: 'Haggai Leader Experience - Kvinnor',
+      sv: 'خبرة قادة حجاي - سيدات',
       en: 'Haggai Leader Experience - Women',
-      ar: 'تجربة هجاي للقيادة - النساء'
+      ar: 'خبرة قادة حجاي - سيدات'
     },
     description: {
-      sv: 'Internationellt ledarprogram för kvinnor i ledande positioner. Programmet genomförs på arabiska i en inspirerande miljö med deltagare från hela världen.',
-      en: 'International leadership program for women in leadership positions. The program is conducted in Arabic in an inspiring environment with participants from around the world.',
+      sv: 'Internationellt ledarprogram för kvinnor i ledande positioner. Programmet genomförs på arabiska.',
+      en: 'International leadership program for women in leadership positions. The program is conducted in Arabic.',
       ar: 'برنامج قيادي دولي للنساء في المناصب القيادية. يُقدَّم البرنامج باللغة العربية في بيئة ملهمة مع مشاركات من جميع أنحاء العالم.'
     },
     duration: {
-      sv: '10 dagar',
-      en: '10 days',
-      ar: '10 أيام'
+      sv: '10 dagar (13-23 juli 2026)',
+      en: '10 days (July 13-23, 2026)',
+      ar: '10 أيام (13-23 يوليو 2026)'
     },
     period: {
-      sv: 'Slutet av juni varje år',
-      en: 'End of June every year',
-      ar: 'نهاية يونيو كل عام'
+      sv: '13-23 juli 2026',
+      en: 'July 13-23, 2026',
+      ar: '13-23 يوليو 2026'
     },
-    nextDate: '2025-06-20',
+    nextDate: '2026-07-13',
+    endDate: '2026-07-23',
     location: {
       sv: 'Internationell plats (meddelas vid antagning)',
       en: 'International location (announced upon acceptance)',
       ar: 'موقع دولي (يُعلن عند القبول)'
     },
     spots: 30,
-    spotsLeft: 15,
+    spotsLeft: 30,
     ageRange: null,
     color: 'rose'
   },
   {
-    id: 'men-arabic',
+    id: 'men-arabic-2026',
     type: 'international',
     targetGender: 'men',
     language: 'arabic',
     title: {
-      sv: 'Haggai Leader Experience - Män',
+      sv: 'خبرة قادة حجاي - رجال',
       en: 'Haggai Leader Experience - Men',
-      ar: 'تجربة هجاي للقيادة - الرجال'
+      ar: 'خبرة قادة حجاي - رجال'
     },
     description: {
-      sv: 'Internationellt ledarprogram för män i ledande positioner. Programmet genomförs på arabiska och samlar ledare från hela arabvärlden.',
-      en: 'International leadership program for men in leadership positions. The program is conducted in Arabic and gathers leaders from the entire Arab world.',
+      sv: 'Internationellt ledarprogram för män i ledande positioner. Programmet genomförs på arabiska.',
+      en: 'International leadership program for men in leadership positions. The program is conducted in Arabic.',
       ar: 'برنامج قيادي دولي للرجال في المناصب القيادية. يُقدَّم البرنامج باللغة العربية ويجمع قادة من جميع أنحاء العالم العربي.'
     },
     duration: {
-      sv: '10 dagar',
-      en: '10 days',
-      ar: '10 أيام'
+      sv: '10 dagar (första veckan december 2026)',
+      en: '10 days (first week of December 2026)',
+      ar: '10 أيام (الأسبوع الأول من ديسمبر 2026)'
     },
     period: {
-      sv: 'Slutet av november varje år',
-      en: 'End of November every year',
-      ar: 'نهاية نوفمبر كل عام'
+      sv: 'Första veckan december 2026',
+      en: 'First week of December 2026',
+      ar: 'الأسبوع الأول من ديسمبر 2026'
     },
-    nextDate: '2025-11-21',
+    nextDate: '2026-12-01',
     location: {
       sv: 'Internationell plats (meddelas vid antagning)',
       en: 'International location (announced upon acceptance)',
       ar: 'موقع دولي (يُعلن عند القبول)'
     },
     spots: 30,
-    spotsLeft: 12,
+    spotsLeft: 30,
     ageRange: '29-60',
     color: 'blue'
   },
   {
-    id: 'online-english',
+    id: 'vfds2602-online',
     type: 'international',
     targetGender: 'all',
-    language: 'english',
+    language: 'arabic',
     title: {
-      sv: 'Haggai Leader Experience - Online',
-      en: 'Haggai Leader Experience - Online',
-      ar: 'تجربة هجاي للقيادة - عبر الإنترنت'
+      sv: 'VFDS2602 - EUR/ME Online',
+      en: 'VFDS2602 - EUR/ME Online',
+      ar: 'VFDS2602 - أوروبا/الشرق الأوسط'
     },
     description: {
-      sv: 'Flexibelt online-program på engelska för ledare mellan 30-55 år. Perfekt för dig som vill utvecklas utan att resa.',
-      en: 'Flexible online program in English for leaders aged 30-55. Perfect for those who want to develop without traveling.',
-      ar: 'برنامج مرن عبر الإنترنت باللغة الإنجليزية للقادة الذين تتراوح أعمارهم بين 30-55 عامًا. مثالي لمن يريد التطور دون السفر.'
+      sv: 'Online ledarprogram med 6 sessioner plus öppnings- och avslutningssession. Perfekt för dig som vill utvecklas utan att resa.',
+      en: 'Online leadership program with 6 sessions plus opening and closing sessions. Perfect for those who want to develop without traveling.',
+      ar: 'برنامج قيادي عبر الإنترنت مع 6 جلسات بالإضافة إلى جلسات الافتتاح والختام.'
     },
     duration: {
-      sv: '2 sessioner/vecka i 2 månader',
-      en: '2 sessions weekly / 2 months',
-      ar: 'جلستان أسبوعياً / شهران'
+      sv: '8 sessioner (9 feb - 8 mar 2026)',
+      en: '8 sessions (Feb 9 - Mar 8, 2026)',
+      ar: '8 جلسات (9 فبراير - 8 مارس 2026)'
     },
     period: {
-      sv: 'Maj varje år',
-      en: 'May every year',
-      ar: 'مايو كل عام'
+      sv: 'Februari-Mars 2026',
+      en: 'February-March 2026',
+      ar: 'فبراير-مارس 2026'
     },
-    nextDate: '2026-05-10',
+    nextDate: '2026-02-09',
     location: {
       sv: 'Online (Zoom)',
       en: 'Online (Zoom)',
       ar: 'عبر الإنترنت (زووم)'
     },
+    sessions: [
+      { name: 'Opening Session', date: 'Mon 9 Feb' },
+      { name: '1st Session', date: 'Sat 14 Feb / 10am - 3pm' },
+      { name: '2nd Session', date: 'Mon 16 Feb / 7pm - 10pm' },
+      { name: '3rd Session', date: 'Sat 21 Feb / 10am - 3pm' },
+      { name: '4th Session', date: 'Mon 23 Feb / 7pm - 10pm' },
+      { name: '5th Session', date: 'Sat 28 Feb / 10am - 3pm' },
+      { name: '6th Session', date: 'Mon 2 Mar / 7pm - 10pm' },
+      { name: 'Closing Session', date: 'Mon 8 Mar / 7pm - 9pm' }
+    ],
     spots: 50,
-    spotsLeft: 28,
-    ageRange: '30-55',
-    color: 'emerald'
+    spotsLeft: 50,
+    ageRange: '25-55',
+    color: 'emerald',
+    isOnline: true
   },
+  // NATIONAL PROGRAMS
   {
-    id: 'tot',
+    id: 'national-march-2026',
     type: 'national',
     targetGender: 'all',
     language: 'swedish',
     title: {
-      sv: 'TOT - Training of Trainers',
-      en: 'TOT - Training of Trainers',
-      ar: 'تدريب المدربين (TOT)'
+      sv: 'Nationellt Ledarprogram - Mars 2026',
+      en: 'National Leadership Program - March 2026',
+      ar: 'البرنامج الوطني للقيادة - مارس 2026'
     },
     description: {
-      sv: 'Utbildning för dig som vill bli certifierad Haggai-utbildare. Lär dig att leda och facilitera Haggai-program i Sverige.',
-      en: 'Training for those who want to become certified Haggai trainers. Learn to lead and facilitate Haggai programs in Sweden.',
-      ar: 'تدريب لمن يريد أن يصبح مدربًا معتمدًا في هجاي. تعلم قيادة وتيسير برامج هجاي في السويد.'
+      sv: 'Intensivt ledarprogram över två helger i mars. Perfekt för dig som vill utveckla ditt ledarskap i en svensk kontext.',
+      en: 'Intensive leadership program over two weekends in March. Perfect for those who want to develop their leadership in a Swedish context.',
+      ar: 'برنامج قيادي مكثف على مدار عطلتين نهاية الأسبوع في مارس.'
     },
     duration: {
-      sv: '21 timmar',
-      en: '21 hours',
-      ar: '21 ساعة'
+      sv: '2 helger (13-15 & 20-22 mars)',
+      en: '2 weekends (March 13-15 & 20-22)',
+      ar: 'عطلتان نهاية الأسبوع (13-15 و 20-22 مارس)'
     },
     period: {
-      sv: 'Årligen (se datum)',
-      en: 'Annually (see dates)',
-      ar: 'سنويًا (انظر التواريخ)'
+      sv: '13-15 & 20-22 mars 2026',
+      en: 'March 13-15 & 20-22, 2026',
+      ar: '13-15 و 20-22 مارس 2026'
     },
-    nextDate: '2025-09-05',
+    nextDate: '2026-03-13',
     location: {
       sv: 'Stockholm, Sverige',
       en: 'Stockholm, Sweden',
       ar: 'ستوكهولم، السويد'
     },
-    spots: 20,
-    spotsLeft: 8,
-    ageRange: null,
+    spots: 30,
+    spotsLeft: 30,
+    ageRange: '25-55',
     color: 'violet'
   },
   {
-    id: 'national-seminar',
+    id: 'custom-training',
     type: 'national',
     targetGender: 'all',
     language: 'swedish',
     title: {
-      sv: 'National Seminar',
-      en: 'National Seminar',
-      ar: 'الندوة الوطنية'
+      sv: 'Anpassade Utbildningar',
+      en: 'Custom Training Programs',
+      ar: 'برامج تدريبية مخصصة'
     },
     description: {
-      sv: 'Årligt nationellt seminarium för alla Haggai-alumni och intresserade ledare. Nätverka, lär och väx tillsammans.',
-      en: 'Annual national seminar for all Haggai alumni and interested leaders. Network, learn and grow together.',
-      ar: 'ندوة وطنية سنوية لجميع خريجي هجاي والقادة المهتمين. تواصل وتعلم وانمُ معًا.'
+      sv: 'Skräddarsydda ledarutbildningar för kyrkor och organisationer. Vi anpassar innehåll och format efter era behov.',
+      en: 'Tailored leadership training for churches and organizations. We customize content and format to your needs.',
+      ar: 'تدريب قيادي مخصص للكنائس والمنظمات. نقوم بتخصيص المحتوى والشكل وفقًا لاحتياجاتكم.'
     },
     duration: {
-      sv: '21 timmar (3 dagar)',
-      en: '21 hours (3 days)',
-      ar: '21 ساعة (3 أيام)'
+      sv: 'Enligt överenskommelse',
+      en: 'As agreed',
+      ar: 'حسب الاتفاق'
     },
     period: {
-      sv: 'Årligen (se datum)',
-      en: 'Annually (see dates)',
-      ar: 'سنويًا (انظر التواريخ)'
+      sv: 'Flexibelt - kontakta oss',
+      en: 'Flexible - contact us',
+      ar: 'مرن - اتصل بنا'
     },
-    nextDate: '2025-10-17',
+    nextDate: null,
     location: {
-      sv: 'Stockholm, Sverige',
-      en: 'Stockholm, Sweden',
-      ar: 'ستوكهولم، السويد'
+      sv: 'På plats hos er eller online',
+      en: 'On-site or online',
+      ar: 'في موقعكم أو عبر الإنترنت'
     },
-    spots: 100,
-    spotsLeft: 45,
+    spots: null,
+    spotsLeft: null,
     ageRange: null,
-    color: 'amber'
+    color: 'amber',
+    isCustom: true
   }
 ];
 
