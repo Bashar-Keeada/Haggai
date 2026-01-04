@@ -211,8 +211,22 @@ const Membership = () => {
                         id="phone"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        required
                         className="rounded-lg"
                         dir="ltr"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="city">{t('membership.city') || 'Stad'} *</Label>
+                      <Input
+                        id="city"
+                        value={formData.city}
+                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                        required
+                        className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
                       />
                     </div>
                     <div className="space-y-2">
@@ -228,17 +242,6 @@ const Membership = () => {
                         placeholder={selectedType === 'individual' ? t('membership.optional') : ''}
                       />
                     </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="address">{t('membership.address')}</Label>
-                    <Input
-                      id="address"
-                      value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                      className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
-                      placeholder={t('membership.addressPlaceholder')}
-                    />
                   </div>
 
                   <div className="space-y-2">
