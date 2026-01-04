@@ -14,13 +14,11 @@ const Footer = () => {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link to="/" className={`flex items-center mb-6 ${isRTL ? 'justify-end' : ''}`}>
-              <div className="bg-cream-50 p-2 rounded-lg">
-                <img 
-                  src="/haggai-logo.png" 
-                  alt="Haggai International" 
-                  className="h-10 w-auto object-contain"
-                />
-              </div>
+              <img 
+                src="/haggai-logo.png" 
+                alt="Haggai International" 
+                className="h-12 w-auto object-contain"
+              />
             </Link>
             <p className="text-cream-300 text-sm leading-relaxed">
               {t('footer.description')}
