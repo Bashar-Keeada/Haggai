@@ -8,15 +8,18 @@ import { Textarea } from '../components/ui/textarea';
 import { toast } from 'sonner';
 import { useLanguage } from '../context/LanguageContext';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const Membership = () => {
   const { t, language, isRTL } = useLanguage();
   const [selectedType, setSelectedType] = useState('individual');
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
     organization: '',
-    address: '',
+    city: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -60,24 +63,36 @@ const Membership = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Mock submission - store in localStorage
-    const memberships = JSON.parse(localStorage.getItem('membershipApplications') || '[]');
-    memberships.push({
-      ...formData,
-      memberType: selectedType,
-      submittedAt: new Date().toISOString()
-    });
-    localStorage.setItem('membershipApplications', JSON.stringify(memberships));
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/membership`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          member_type: selectedType,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          organization: formData.organization || null,
+          city: formData.city,
+          message: formData.message || null
+        })
+      });
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    toast.success(t('membership.successTitle'), {
-      description: t('membership.successDesc')
-    });
-
-    setFormData({ name: '', email: '', phone: '', organization: '', address: '', message: '' });
-    setIsSubmitting(false);
+      if (response.ok) {
+        toast.success(t('membership.successTitle'), {
+          description: t('membership.successDesc')
+        });
+        setFormData({ firstName: '', lastName: '', email: '', phone: '', organization: '', city: '', message: '' });
+      } else {
+        throw new Error('Failed to submit');
+      }
+    } catch (error) {
+      console.error('Error submitting membership:', error);
+      toast.error('Kunde inte skicka ansökan. Försök igen.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
