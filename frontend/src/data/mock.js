@@ -114,7 +114,7 @@ export const leaderExperiences = [
     },
     spots: 30,
     spotsLeft: 12,
-    ageRange: null,
+    ageRange: '29-60',
     color: 'blue'
   },
   {
@@ -128,21 +128,21 @@ export const leaderExperiences = [
       ar: 'تجربة هجاي للقيادة - عبر الإنترنت'
     },
     description: {
-      sv: 'Flexibelt online-program på engelska för ledare mellan 35-55 år. Perfekt för dig som vill utvecklas utan att resa.',
-      en: 'Flexible online program in English for leaders aged 35-55. Perfect for those who want to develop without traveling.',
-      ar: 'برنامج مرن عبر الإنترنت باللغة الإنجليزية للقادة الذين تتراوح أعمارهم بين 35-55 عامًا. مثالي لمن يريد التطور دون السفر.'
+      sv: 'Flexibelt online-program på engelska för ledare mellan 30-55 år. Perfekt för dig som vill utvecklas utan att resa.',
+      en: 'Flexible online program in English for leaders aged 30-55. Perfect for those who want to develop without traveling.',
+      ar: 'برنامج مرن عبر الإنترنت باللغة الإنجليزية للقادة الذين تتراوح أعمارهم بين 30-55 عامًا. مثالي لمن يريد التطور دون السفر.'
     },
     duration: {
-      sv: '10 dagar (online sessioner)',
-      en: '10 days (online sessions)',
-      ar: '10 أيام (جلسات عبر الإنترنت)'
+      sv: '2 sessioner/vecka i 2 månader',
+      en: '2 sessions weekly / 2 months',
+      ar: 'جلستان أسبوعياً / شهران'
     },
     period: {
-      sv: 'Mars varje år',
-      en: 'March every year',
-      ar: 'مارس كل عام'
+      sv: 'Maj varje år',
+      en: 'May every year',
+      ar: 'مايو كل عام'
     },
-    nextDate: '2026-03-10',
+    nextDate: '2026-05-10',
     location: {
       sv: 'Online (Zoom)',
       en: 'Online (Zoom)',
@@ -150,7 +150,7 @@ export const leaderExperiences = [
     },
     spots: 50,
     spotsLeft: 28,
-    ageRange: '35-55',
+    ageRange: '30-55',
     color: 'emerald'
   },
   {
