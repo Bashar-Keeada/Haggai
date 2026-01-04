@@ -15,7 +15,7 @@ const Footer = () => {
           <div className="md:col-span-1">
             <Link to="/" className={`flex items-center mb-6 ${isRTL ? 'justify-end' : ''}`}>
               <img 
-                src="/haggai-logo.png" 
+                src="/haggai-logo-white.png" 
                 alt="Haggai International" 
                 className="h-12 w-auto object-contain"
               />
