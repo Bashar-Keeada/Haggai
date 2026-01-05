@@ -74,6 +74,47 @@ class LeaderUpdate(BaseModel):
     is_active: Optional[bool] = None
 
 
+# Board Member Model
+class BoardMember(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    role: str  # Ordförande, Kassör, Ledamot, Sekreterare, etc.
+    image_url: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    bio: Optional[str] = None
+    term_start: str  # Start year of term, e.g., "2025"
+    term_end: Optional[str] = None  # End year of term, None if current
+    is_current: bool = True
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class BoardMemberCreate(BaseModel):
+    name: str
+    role: str
+    image_url: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    bio: Optional[str] = None
+    term_start: str
+    term_end: Optional[str] = None
+    is_current: bool = True
+
+
+class BoardMemberUpdate(BaseModel):
+    name: Optional[str] = None
+    role: Optional[str] = None
+    image_url: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    bio: Optional[str] = None
+    term_start: Optional[str] = None
+    term_end: Optional[str] = None
+    is_current: Optional[bool] = None
+
+
 # Contact Form Model
 class ContactSubmission(BaseModel):
     model_config = ConfigDict(extra="ignore")
