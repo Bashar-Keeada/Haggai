@@ -465,31 +465,111 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
             )}
           </Card>
 
-          {/* Board Members Quick View */}
+          {/* Board Members Section - Dynamic from API */}
           <Card className="border-0 shadow-xl mt-8">
             <CardHeader className={isRTL ? 'text-right' : ''}>
-              <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                <Users className="h-6 w-6 text-haggai" />
-                <CardTitle className="text-xl">
-                  {language === 'sv' ? 'Nuvarande styrelse' : language === 'ar' ? 'المجلس الحالي' : 'Current Board'}
-                </CardTitle>
+              <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <Users className="h-6 w-6 text-haggai" />
+                  <CardTitle className="text-xl">{txt.currentBoard}</CardTitle>
+                </div>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {[
-                  { name: 'Bashar', role: language === 'sv' ? 'Ordförande' : language === 'ar' ? 'الرئيس' : 'Chairman' },
-                  { name: 'Ravi', role: language === 'sv' ? 'Kassör' : language === 'ar' ? 'أمين الصندوق' : 'Treasurer' },
-                  { name: 'Mazin', role: language === 'sv' ? 'Ledamot' : language === 'ar' ? 'عضو' : 'Member' },
-                  { name: 'Peter', role: language === 'sv' ? 'Ledamot' : language === 'ar' ? 'عضو' : 'Member' },
-                  { name: 'Alen', role: language === 'sv' ? 'Ledamot' : language === 'ar' ? 'عضو' : 'Member' }
-                ].map((member, idx) => (
-                  <div key={idx} className={`p-4 bg-stone-50 rounded-xl ${isRTL ? 'text-right' : ''}`}>
-                    <p className="font-semibold text-stone-800">{member.name}</p>
-                    <p className="text-sm text-haggai">{member.role}</p>
+              {loadingBoard ? (
+                <div className="flex justify-center py-8">
+                  <div className="w-8 h-8 border-4 border-haggai border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : (
+                <>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {displayBoard.map((member, idx) => (
+                      <div key={member.id || idx} className={`p-4 bg-stone-50 rounded-xl ${isRTL ? 'text-right' : ''}`}>
+                        <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                          {member.image_url ? (
+                            <img 
+                              src={member.image_url} 
+                              alt={member.name}
+                              className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                            />
+                          ) : (
+                            <div className="w-12 h-12 rounded-full bg-haggai-100 flex items-center justify-center flex-shrink-0">
+                              <User className="h-6 w-6 text-haggai" />
+                            </div>
+                          )}
+                          <div className={isRTL ? 'text-right' : ''}>
+                            <p className="font-semibold text-stone-800">{member.name}</p>
+                            <p className="text-sm text-haggai">{member.role}</p>
+                            {member.term_start && (
+                              <p className="text-xs text-stone-500">{txt.term}: {member.term_start} →</p>
+                            )}
+                          </div>
+                        </div>
+                        {member.email && (
+                          <div className={`flex items-center gap-2 mt-2 text-xs text-stone-500 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                            <Mail className="h-3 w-3" />
+                            {member.email}
+                          </div>
+                        )}
+                        {member.phone && (
+                          <div className={`flex items-center gap-2 mt-1 text-xs text-stone-500 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                            <Phone className="h-3 w-3" />
+                            {member.phone}
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+
+                  {/* Previous Boards Accordion */}
+                  {previousBoard.length > 0 && (
+                    <div className="mt-6">
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowPreviousBoard(!showPreviousBoard)}
+                        className={`w-full justify-between ${isRTL ? 'flex-row-reverse' : ''}`}
+                      >
+                        <span>{showPreviousBoard ? txt.hidePrevious : txt.showPrevious}</span>
+                        {showPreviousBoard ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                      </Button>
+                      
+                      {showPreviousBoard && (
+                        <div className="mt-4 p-4 bg-stone-50 rounded-xl">
+                          <h4 className={`font-semibold text-stone-700 mb-4 ${isRTL ? 'text-right' : ''}`}>
+                            {txt.previousBoard}
+                          </h4>
+                          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {previousBoard.map((member) => (
+                              <div key={member.id} className={`p-3 bg-white rounded-lg border border-stone-200 ${isRTL ? 'text-right' : ''}`}>
+                                <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                  {member.image_url ? (
+                                    <img 
+                                      src={member.image_url} 
+                                      alt={member.name}
+                                      className="w-10 h-10 rounded-full object-cover flex-shrink-0 opacity-75"
+                                    />
+                                  ) : (
+                                    <div className="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center flex-shrink-0">
+                                      <User className="h-5 w-5 text-stone-400" />
+                                    </div>
+                                  )}
+                                  <div className={isRTL ? 'text-right' : ''}>
+                                    <p className="font-medium text-stone-700">{member.name}</p>
+                                    <p className="text-xs text-stone-500">{member.role}</p>
+                                    <p className="text-xs text-stone-400">
+                                      {member.term_start} - {member.term_end}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
             </CardContent>
           </Card>
 
