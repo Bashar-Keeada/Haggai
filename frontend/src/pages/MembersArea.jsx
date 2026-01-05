@@ -69,6 +69,11 @@ const MembersArea = () => {
       bylawsDesc: 'اقرأ عن قواعد وإرشادات الجمعية',
       adoptedDate: 'اعتمدت في 16 أبريل 2025',
       downloadPdf: 'تحميل PDF',
+      knowledgeSupport: 'دعم المعرفة',
+      knowledgeSupportDesc: 'المواضيع الأساسية في تدريباتنا الوطنية',
+      coreSubjects: 'المواضيع الأساسية',
+      hours: 'ساعات',
+      totalHours: 'المجموع',
       sections: {
         name: 'اسم الجمعية',
         purpose: 'الغرض',
@@ -84,6 +89,78 @@ const MembersArea = () => {
   };
 
   const txt = translations[language] || translations.sv;
+
+  // Core subjects for national trainings
+  const coreSubjects = [
+    {
+      id: 1,
+      title: { sv: 'Bibliskt uppdrag', en: 'Biblical Mandate', ar: 'التكليف الكتابي' },
+      hours: 3,
+      color: 'bg-blue-500',
+      description: { 
+        sv: 'Grundläggande bibliska principer för ledarskap och tjänande.',
+        en: 'Fundamental biblical principles for leadership and service.',
+        ar: 'المبادئ الكتابية الأساسية للقيادة والخدمة.'
+      }
+    },
+    {
+      id: 2,
+      title: { sv: 'Förvaltarskap', en: 'Stewardship', ar: 'الوكالة' },
+      hours: 3,
+      color: 'bg-emerald-500',
+      description: { 
+        sv: 'Hur man förvaltar resurser, tid och talanger på ett ansvarigt sätt.',
+        en: 'How to manage resources, time and talents responsibly.',
+        ar: 'كيفية إدارة الموارد والوقت والمواهب بمسؤولية.'
+      }
+    },
+    {
+      id: 3,
+      title: { sv: 'Kontext', en: 'Context', ar: 'السياق' },
+      hours: 5,
+      color: 'bg-purple-500',
+      description: { 
+        sv: 'Förståelse för kulturella och samhälleliga sammanhang i ledarskap.',
+        en: 'Understanding cultural and societal contexts in leadership.',
+        ar: 'فهم السياقات الثقافية والاجتماعية في القيادة.'
+      }
+    },
+    {
+      id: 4,
+      title: { sv: 'Nästa generation', en: 'Next Generation', ar: 'الجيل القادم' },
+      hours: 5,
+      color: 'bg-orange-500',
+      description: { 
+        sv: 'Strategier för att utveckla och utrusta framtida ledare.',
+        en: 'Strategies for developing and equipping future leaders.',
+        ar: 'استراتيجيات تطوير وتجهيز القادة المستقبليين.'
+      }
+    },
+    {
+      id: 5,
+      title: { sv: 'Ledarskap', en: 'Leadership', ar: 'القيادة' },
+      hours: 4,
+      color: 'bg-red-500',
+      description: { 
+        sv: 'Praktiska verktyg och principer för effektivt ledarskap.',
+        en: 'Practical tools and principles for effective leadership.',
+        ar: 'أدوات ومبادئ عملية للقيادة الفعالة.'
+      }
+    },
+    {
+      id: 6,
+      title: { sv: 'Målsättning', en: 'Goal Setting', ar: 'وضع الأهداف' },
+      hours: 5,
+      color: 'bg-teal-500',
+      description: { 
+        sv: 'Hur man sätter och uppnår meningsfulla mål.',
+        en: 'How to set and achieve meaningful goals.',
+        ar: 'كيفية وضع وتحقيق أهداف ذات معنى.'
+      }
+    }
+  ];
+
+  const totalHours = coreSubjects.reduce((sum, subject) => sum + subject.hours, 0);
 
   // Bylaws content
   const bylawsContent = [
