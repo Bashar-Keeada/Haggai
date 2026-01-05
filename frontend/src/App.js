@@ -49,6 +49,7 @@ const ProtectedApp = () => {
           <Route path="/bli-medlem" element={<Membership />} />
           <Route path="/kontakt" element={<Contact />} />
           <Route path="/ledare" element={<Leaders />} />
+          <Route path="/medlemmar" element={<MembersArea />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/ledare" element={<AdminLeaders />} />
         </Routes>
