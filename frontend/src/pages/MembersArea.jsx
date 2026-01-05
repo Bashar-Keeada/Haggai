@@ -1,11 +1,13 @@
-import React from 'react';
-import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap } from 'lucide-react';
+import React, { useState } from 'react';
+import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap, ChevronDown, ChevronUp } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
 import { useLanguage } from '../context/LanguageContext';
 
 const MembersArea = () => {
   const { language, isRTL } = useLanguage();
+  const [isBylawsOpen, setIsBylawsOpen] = useState(false);
 
   const translations = {
     sv: {
