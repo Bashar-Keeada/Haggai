@@ -102,6 +102,11 @@ const MembersArea = () => {
       coreSubjects: 'Core Subjects',
       hours: 'hours',
       totalHours: 'Total',
+      currentBoard: 'Current Board',
+      previousBoard: 'Previous Boards',
+      showPrevious: 'Show previous boards',
+      hidePrevious: 'Hide previous boards',
+      term: 'Term',
       sections: {
         name: 'Association Name',
         purpose: 'Purpose',
