@@ -69,6 +69,11 @@ const MembersArea = () => {
       coreSubjects: 'Kärnämnen',
       hours: 'timmar',
       totalHours: 'Totalt',
+      currentBoard: 'Nuvarande Styrelse',
+      previousBoard: 'Föregående Styrelser',
+      showPrevious: 'Visa föregående styrelser',
+      hidePrevious: 'Dölj föregående styrelser',
+      term: 'Mandatperiod',
       sections: {
         name: 'Föreningens namn',
         purpose: 'Syfte',
