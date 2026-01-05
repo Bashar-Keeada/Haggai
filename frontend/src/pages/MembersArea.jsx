@@ -1,13 +1,56 @@
-import React, { useState } from 'react';
-import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap, ChevronDown, ChevronUp, User, Phone } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { useLanguage } from '../context/LanguageContext';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const MembersArea = () => {
   const { language, isRTL } = useLanguage();
   const [isBylawsOpen, setIsBylawsOpen] = useState(false);
+  const [showPreviousBoard, setShowPreviousBoard] = useState(false);
+  const [currentBoard, setCurrentBoard] = useState([]);
+  const [previousBoard, setPreviousBoard] = useState([]);
+  const [loadingBoard, setLoadingBoard] = useState(true);
+
+  useEffect(() => {
+    fetchBoardMembers();
+  }, []);
+
+  const fetchBoardMembers = async () => {
+    try {
+      const [currentRes, archivedRes] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/board-members?current_only=true`),
+        fetch(`${BACKEND_URL}/api/board-members/archive`)
+      ]);
+      
+      if (currentRes.ok) {
+        const data = await currentRes.json();
+        setCurrentBoard(data);
+      }
+      if (archivedRes.ok) {
+        const data = await archivedRes.json();
+        setPreviousBoard(data);
+      }
+    } catch (error) {
+      console.error('Error fetching board members:', error);
+    } finally {
+      setLoadingBoard(false);
+    }
+  };
+
+  // Fallback data if no board members in database
+  const defaultBoard = [
+    { name: 'Bashar', role: language === 'sv' ? 'Ordförande' : language === 'ar' ? 'الرئيس' : 'Chairman' },
+    { name: 'Ravi', role: language === 'sv' ? 'Kassör' : language === 'ar' ? 'أمين الصندوق' : 'Treasurer' },
+    { name: 'Mazin', role: language === 'sv' ? 'Ledamot' : language === 'ar' ? 'عضو' : 'Member' },
+    { name: 'Peter', role: language === 'sv' ? 'Ledamot' : language === 'ar' ? 'عضو' : 'Member' },
+    { name: 'Alen', role: language === 'sv' ? 'Ledamot' : language === 'ar' ? 'عضو' : 'Member' }
+  ];
+
+  const displayBoard = currentBoard.length > 0 ? currentBoard : defaultBoard;
 
   const translations = {
     sv: {
