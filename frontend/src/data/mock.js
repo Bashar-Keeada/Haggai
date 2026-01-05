@@ -222,9 +222,9 @@ export const leaderExperiences = [
     id: 'custom-training',
     type: 'national',
     targetGender: 'all',
-    language: 'swedish',
+    language: 'flexible',
     title: {
-      sv: 'Anpassade Utbildningar',
+      sv: 'برامج تدريبية مخصصة',
       en: 'Custom Training Programs',
       ar: 'برامج تدريبية مخصصة'
     },
