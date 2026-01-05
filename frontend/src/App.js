@@ -15,6 +15,7 @@ import LeaderExperienceApplication from "./pages/LeaderExperienceApplication";
 import Leaders from "./pages/Leaders";
 import AdminLeaders from "./pages/AdminLeaders";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminBoardMembers from "./pages/AdminBoardMembers";
 import MembersArea from "./pages/MembersArea";
 import LoginPage from "./pages/LoginPage";
 
@@ -52,6 +53,7 @@ const ProtectedApp = () => {
           <Route path="/medlemmar" element={<MembersArea />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/ledare" element={<AdminLeaders />} />
+          <Route path="/admin/styrelse" element={<AdminBoardMembers />} />
         </Routes>
       </Layout>
     </BrowserRouter>
