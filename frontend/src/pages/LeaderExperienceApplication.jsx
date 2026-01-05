@@ -407,37 +407,49 @@ const LeaderExperienceApplication = () => {
     
     setIsSubmitting(true);
 
-    // Prepare submission data
-    const submissionData = {
-      ...formData,
-      nominationType,
-      programId: program.id,
-      programTitle: program.title[language],
-      submittedAt: new Date().toISOString()
-    };
+    try {
+      // Prepare submission data for backend
+      const submissionData = {
+        program_id: program.id,
+        nomination_type: nominationType,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        city: formData.city,
+        country: formData.country,
+        church_or_organization: formData.organization,
+        current_role: formData.currentRole,
+        years_in_role: parseInt(formData.yearsInLeadership) || 0,
+        ministry_description: `${formData.organizationType} - Leading ${formData.peopleLeading} people`,
+        why_apply: formData.whyNominate,
+        expectations: formData.expectations,
+        nominator_name: nominationType === 'friend' ? `${formData.nominatorFirstName} ${formData.nominatorLastName}` : null,
+        nominator_email: nominationType === 'friend' ? formData.nominatorEmail : null,
+        nominator_phone: nominationType === 'friend' ? formData.nominatorPhone : null,
+        nominator_relationship: nominationType === 'friend' ? formData.nominatorRelationship : null
+      };
 
-    // If self-nomination, copy nominator info to nominee
-    if (nominationType === 'self') {
-      submissionData.nominatorFirstName = formData.firstName;
-      submissionData.nominatorLastName = formData.lastName;
-      submissionData.nominatorEmail = formData.email;
-      submissionData.nominatorPhone = formData.phone;
+      const response = await fetch(`${BACKEND_URL}/api/leader-experience-applications`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submissionData)
+      });
+
+      if (response.ok) {
+        toast.success(nominationType === 'self' ? txt.successTitleSelf : txt.successTitleFriend, {
+          description: nominationType === 'self' ? txt.successDescSelf : txt.successDescFriend
+        });
+        navigate('/leader-experience');
+      } else {
+        throw new Error('Failed to submit');
+      }
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      toast.error('Kunde inte skicka ansökan. Försök igen.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-    // Mock submission - store in localStorage
-    const nominations = JSON.parse(localStorage.getItem('leaderExperienceNominations') || '[]');
-    nominations.push(submissionData);
-    localStorage.setItem('leaderExperienceNominations', JSON.stringify(nominations));
-
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    toast.success(nominationType === 'self' ? txt.successTitleSelf : txt.successTitleFriend, {
-      description: nominationType === 'self' ? txt.successDescSelf : txt.successDescFriend
-    });
-
-    setIsSubmitting(false);
-    navigate('/leader-experience');
   };
 
   return (
