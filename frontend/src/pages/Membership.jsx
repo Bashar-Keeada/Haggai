@@ -254,7 +254,7 @@ const Membership = () => {
 
                   <div className="bg-cream-50 p-4 rounded-xl">
                     <p className="text-sm text-stone-600">
-                      <strong>{t('membership.selectedType')}</strong> {memberTypes.find(m => m.id === selectedType)?.title} – {memberTypes.find(m => m.id === selectedType)?.price}{t('membership.perYear')}
+                      <strong>{t('membership.selectedType')}</strong> {memberTypes.find(m => m.id === selectedType)?.title}
                     </p>
                   </div>
 
