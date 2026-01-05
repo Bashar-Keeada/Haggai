@@ -103,6 +103,7 @@ user_problem_statement: |
   - Password protected access (password: Keeada2030)
   - Multi-language support (Swedish, English, Arabic with RTL)
   - Admin page for managing leaders/facilitators
+  - Admin page for managing board members with archive functionality
   - No "Sweden" text in menu/logo
   - No "Made with Emergent" badge
   - All form submissions saved to database
@@ -122,6 +123,21 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ ALL TESTS PASSED - Tested complete CRUD operations: GET /api/leaders (empty & populated), POST /api/leaders (create with multilingual data), GET /api/leaders/{id}, PUT /api/leaders/{id} (update), DELETE /api/leaders/{id}, and verified 404 after deletion. All endpoints working correctly with realistic Swedish data."
+
+  - task: "Board Members CRUD API"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented full CRUD API for board members including archive functionality"
+      - working: true
+        agent: "main"
+        comment: "Tested via curl: Created 5 board members (Bashar, Ravi, Mazin, Peter, Alen), GET/POST/PUT/DELETE all working. Archive endpoint tested."
 
   - task: "Contact Form API"
     implemented: true
@@ -180,6 +196,45 @@ frontend:
       - working: true
         agent: "main"
         comment: "Login with password 'Keeada2030' works - tested via screenshot"
+
+  - task: "Admin Board Members Page"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/AdminBoardMembers.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created admin page at /admin/styrelse for managing board members with add, edit, archive, restore functionality"
+      - working: true
+        agent: "main"
+        comment: "Page loads correctly, shows empty state when no members, has 'Lägg till ny medlem' button and 'Visa föregående styrelser' toggle"
+
+  - task: "Members Area with Dynamic Board"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/MembersArea.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Updated MembersArea to fetch board members from API with fallback to default data, includes previous boards accordion"
+
+  - task: "Admin Dashboard Quick Links"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/AdminDashboard.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added quick links to Admin Dashboard for 'Hantera Ledare' (/admin/ledare) and 'Hantera Styrelse' (/admin/styrelse)"
 
   - task: "Admin Leaders Page"
     implemented: true
