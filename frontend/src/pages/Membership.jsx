@@ -142,7 +142,6 @@ const Membership = () => {
                     <CardDescription className="text-stone-600">{type.description}</CardDescription>
                   </CardHeader>
                   <CardContent className={`text-center ${isRTL ? 'text-right' : ''}`}>
-                    <p className="text-3xl font-bold text-haggai mb-2">{type.price}{t('membership.perYear')}</p>
                     {isSelected && (
                       <div className={`flex items-center justify-center text-haggai ${isRTL ? 'flex-row-reverse' : ''}`}>
                         <Check className={`h-5 w-5 ${isRTL ? 'ml-1' : 'mr-1'}`} />
