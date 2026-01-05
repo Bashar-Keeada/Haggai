@@ -343,17 +343,103 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
     }
   ];
 
+  // Handle members login
+  const handleMembersLogin = (e) => {
+    e.preventDefault();
+    setLoginError('');
+    
+    if (loginMembers(membersPassword)) {
+      toast.success(txt.pageTitle, {
+        description: txt.welcomeDesc
+      });
+      setMembersPassword('');
+    } else {
+      setLoginError(txt.loginError);
+    }
+  };
+
+  // If not authenticated for members area, show login screen
+  if (!isMembersAuthenticated) {
+    return (
+      <div className={`min-h-screen bg-cream-50 flex items-center justify-center p-4 ${isRTL ? 'rtl' : 'ltr'}`}>
+        <Card className="w-full max-w-md border-0 shadow-2xl">
+          <CardHeader className="text-center pb-2">
+            <div className="w-20 h-20 bg-haggai rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Lock className="h-10 w-10 text-white" />
+            </div>
+            <CardTitle className="text-2xl text-stone-800">{txt.loginTitle}</CardTitle>
+            <p className="text-stone-500 mt-2">{txt.loginSubtitle}</p>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleMembersLogin} className="space-y-4">
+              <div className="space-y-2">
+                <label className={`block text-sm font-medium text-stone-700 ${isRTL ? 'text-right' : ''}`}>
+                  {txt.password}
+                </label>
+                <div className="relative">
+                  <Lock className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400 ${isRTL ? 'right-3' : 'left-3'}`} />
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    value={membersPassword}
+                    onChange={(e) => setMembersPassword(e.target.value)}
+                    placeholder={txt.passwordPlaceholder}
+                    className={`${isRTL ? 'pr-10 pl-10' : 'pl-10 pr-10'} py-6 text-lg rounded-xl`}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className={`absolute top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 ${isRTL ? 'left-3' : 'right-3'}`}
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                </div>
+              </div>
+
+              {loginError && (
+                <p className="text-red-500 text-sm text-center">{loginError}</p>
+              )}
+
+              <Button
+                type="submit"
+                className="w-full bg-haggai hover:bg-haggai-dark text-white py-6 text-lg rounded-xl"
+              >
+                <LogIn className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                {txt.loginButton}
+              </Button>
+
+              <div className="text-center pt-4 border-t border-stone-200">
+                <p className="text-sm text-stone-500">{txt.contactForAccess}</p>
+                <a href="mailto:info@haggai.se" className="text-haggai hover:underline text-sm">
+                  info@haggai.se
+                </a>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Hero Section */}
       <section className="py-24 bg-gradient-to-br from-haggai-50 via-cream-50 to-cream-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`max-w-3xl ${isRTL ? 'mr-auto text-right' : ''}`}>
-            <div className={`flex items-center gap-2 mb-6 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+            <div className={`flex items-center justify-between mb-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <Badge className="bg-haggai text-cream-50">
                 <Lock className="h-3 w-3 mr-1" />
                 {language === 'sv' ? 'Endast medlemmar' : language === 'ar' ? 'الأعضاء فقط' : 'Members only'}
               </Badge>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={logoutMembers}
+                className="text-stone-600 hover:text-stone-800"
+              >
+                {txt.logout}
+              </Button>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-stone-800 mb-6">
               {txt.pageTitle}
