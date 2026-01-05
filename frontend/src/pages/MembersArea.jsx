@@ -19,6 +19,8 @@ const MembersArea = () => {
       bylawsDesc: 'Läs om föreningens regler och riktlinjer',
       adoptedDate: 'Antagna den 16 april 2025',
       downloadPdf: 'Ladda ner PDF',
+      showBylaws: 'Visa stadgar',
+      hideBylaws: 'Dölj stadgar',
       knowledgeSupport: 'Kunskapsstöd',
       knowledgeSupportDesc: 'Kärnämnen i våra nationella utbildningar',
       coreSubjects: 'Kärnämnen',
