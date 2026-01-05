@@ -47,6 +47,8 @@ const MembersArea = () => {
       bylawsDesc: 'Read about the association\'s rules and guidelines',
       adoptedDate: 'Adopted on April 16, 2025',
       downloadPdf: 'Download PDF',
+      showBylaws: 'Show bylaws',
+      hideBylaws: 'Hide bylaws',
       knowledgeSupport: 'Knowledge Support',
       knowledgeSupportDesc: 'Core subjects in our national trainings',
       coreSubjects: 'Core Subjects',
