@@ -310,21 +310,21 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
           </div>
 
           {/* Total Hours Summary */}
-          <Card className="border-0 shadow-lg bg-gradient-to-r from-haggai to-haggai-dark text-cream-50">
+          <Card className="border-0 shadow-lg bg-haggai overflow-hidden">
             <CardContent className="p-6">
               <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                  <div className="w-14 h-14 bg-cream-50/20 rounded-2xl flex items-center justify-center">
-                    <Clock className="h-7 w-7" />
+                  <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
+                    <Clock className="h-7 w-7 text-white" />
                   </div>
                   <div className={isRTL ? 'text-right' : ''}>
-                    <p className="text-cream-200 text-sm">{txt.totalHours}</p>
-                    <p className="text-3xl font-bold">{totalHours} {txt.hours}</p>
+                    <p className="text-white/80 text-sm">{txt.totalHours}</p>
+                    <p className="text-3xl font-bold text-white">{totalHours} {txt.hours}</p>
                   </div>
                 </div>
                 <div className={`text-sm ${isRTL ? 'text-left' : 'text-right'}`}>
-                  <p className="text-cream-200">6 {txt.coreSubjects}</p>
-                  <p className="font-semibold">
+                  <p className="text-white/80">6 {txt.coreSubjects}</p>
+                  <p className="font-semibold text-white">
                     {language === 'sv' ? 'Fullständig utbildning' : language === 'ar' ? 'التدريب الكامل' : 'Complete training'}
                   </p>
                 </div>
