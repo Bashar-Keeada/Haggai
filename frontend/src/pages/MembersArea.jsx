@@ -85,6 +85,15 @@ const MembersArea = () => {
       showPrevious: 'Visa föregående styrelser',
       hidePrevious: 'Dölj föregående styrelser',
       term: 'Mandatperiod',
+      // Members login
+      loginTitle: 'Medlemsinloggning',
+      loginSubtitle: 'Ange ditt medlemslösenord för att få tillgång',
+      password: 'Lösenord',
+      passwordPlaceholder: 'Ange medlemslösenord...',
+      loginButton: 'Logga in',
+      loginError: 'Felaktigt lösenord. Försök igen.',
+      contactForAccess: 'Kontakta oss för att få tillgång',
+      logout: 'Logga ut från medlemsområdet',
       sections: {
         name: 'Föreningens namn',
         purpose: 'Syfte',
@@ -118,6 +127,15 @@ const MembersArea = () => {
       showPrevious: 'Show previous boards',
       hidePrevious: 'Hide previous boards',
       term: 'Term',
+      // Members login
+      loginTitle: 'Members Login',
+      loginSubtitle: 'Enter your members password to access',
+      password: 'Password',
+      passwordPlaceholder: 'Enter members password...',
+      loginButton: 'Log in',
+      loginError: 'Incorrect password. Please try again.',
+      contactForAccess: 'Contact us for access',
+      logout: 'Log out from members area',
       sections: {
         name: 'Association Name',
         purpose: 'Purpose',
@@ -146,6 +164,15 @@ const MembersArea = () => {
       coreSubjects: 'المواضيع الأساسية',
       hours: 'ساعات',
       totalHours: 'المجموع',
+      // Members login
+      loginTitle: 'تسجيل دخول الأعضاء',
+      loginSubtitle: 'أدخل كلمة مرور الأعضاء للوصول',
+      password: 'كلمة المرور',
+      passwordPlaceholder: 'أدخل كلمة مرور الأعضاء...',
+      loginButton: 'تسجيل الدخول',
+      loginError: 'كلمة المرور غير صحيحة. حاول مرة أخرى.',
+      contactForAccess: 'اتصل بنا للحصول على الوصول',
+      logout: 'تسجيل الخروج من منطقة الأعضاء',
       sections: {
         name: 'اسم الجمعية',
         purpose: 'الغرض',
