@@ -115,6 +115,12 @@ const Header = () => {
                 ))}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
+                  <Link to="/medlemmar" className="cursor-pointer">
+                    <Users className="h-4 w-4 mr-2" />
+                    {membersLabel[language]}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link to="/admin" className="cursor-pointer">
                     <Settings className="h-4 w-4 mr-2" />
                     {adminLabel[language]}
