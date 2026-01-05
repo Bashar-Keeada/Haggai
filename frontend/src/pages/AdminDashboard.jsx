@@ -285,6 +285,49 @@ const AdminDashboard = () => {
           <p className="text-lg text-stone-600">{txt.subtitle}</p>
         </div>
 
+        {/* Admin Quick Links */}
+        <div className={`grid md:grid-cols-2 gap-4 mb-8 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <Link to="/admin/ledare">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all cursor-pointer hover:bg-haggai-50">
+              <CardContent className="p-6">
+                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-14 h-14 bg-haggai rounded-2xl flex items-center justify-center">
+                    <UserCog className="h-7 w-7 text-white" />
+                  </div>
+                  <div className={isRTL ? 'text-right' : ''}>
+                    <h3 className="text-lg font-bold text-stone-800">
+                      {language === 'sv' ? 'Hantera Ledare' : language === 'ar' ? 'إدارة القادة' : 'Manage Leaders'}
+                    </h3>
+                    <p className="text-sm text-stone-500">
+                      {language === 'sv' ? 'Lägg till och redigera facilitatorer' : language === 'ar' ? 'إضافة وتعديل الميسرين' : 'Add and edit facilitators'}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+          
+          <Link to="/admin/styrelse">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all cursor-pointer hover:bg-haggai-50">
+              <CardContent className="p-6">
+                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-14 h-14 bg-haggai rounded-2xl flex items-center justify-center">
+                    <Shield className="h-7 w-7 text-white" />
+                  </div>
+                  <div className={isRTL ? 'text-right' : ''}>
+                    <h3 className="text-lg font-bold text-stone-800">
+                      {language === 'sv' ? 'Hantera Styrelse' : language === 'ar' ? 'إدارة المجلس' : 'Manage Board'}
+                    </h3>
+                    <p className="text-sm text-stone-500">
+                      {language === 'sv' ? 'Styrelsemedlemmar och arkiv' : language === 'ar' ? 'أعضاء المجلس والأرشيف' : 'Board members and archive'}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
+
         {/* Stats Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {tabs.map((tab) => {
