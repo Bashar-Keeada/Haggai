@@ -269,6 +269,71 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
         </div>
       </section>
 
+      {/* Knowledge Support Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className={`text-center mb-12 ${isRTL ? 'text-right' : ''}`}>
+            <div className={`flex items-center justify-center gap-3 mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <GraduationCap className="h-8 w-8 text-haggai" />
+              <h2 className="text-3xl font-bold text-stone-800">{txt.knowledgeSupport}</h2>
+            </div>
+            <p className="text-lg text-stone-600">{txt.knowledgeSupportDesc}</p>
+          </div>
+
+          {/* Core Subjects Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {coreSubjects.map((subject) => (
+              <Card key={subject.id} className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden group">
+                <div className={`h-2 ${subject.color}`} />
+                <CardContent className="p-6">
+                  <div className={`flex items-start justify-between mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className={`w-10 h-10 ${subject.color} rounded-xl flex items-center justify-center`}>
+                        <BookOpen className="h-5 w-5 text-white" />
+                      </div>
+                      <div className={isRTL ? 'text-right' : ''}>
+                        <h3 className="font-bold text-stone-800">{subject.title[language]}</h3>
+                        <p className="text-sm text-stone-500">{subject.title.ar}</p>
+                      </div>
+                    </div>
+                    <Badge className="bg-stone-100 text-stone-700">
+                      <Clock className="h-3 w-3 mr-1" />
+                      {subject.hours} {txt.hours}
+                    </Badge>
+                  </div>
+                  <p className={`text-sm text-stone-600 leading-relaxed ${isRTL ? 'text-right' : ''}`}>
+                    {subject.description[language]}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Total Hours Summary */}
+          <Card className="border-0 shadow-lg bg-gradient-to-r from-haggai to-haggai-dark text-cream-50">
+            <CardContent className="p-6">
+              <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-14 h-14 bg-cream-50/20 rounded-2xl flex items-center justify-center">
+                    <Clock className="h-7 w-7" />
+                  </div>
+                  <div className={isRTL ? 'text-right' : ''}>
+                    <p className="text-cream-200 text-sm">{txt.totalHours}</p>
+                    <p className="text-3xl font-bold">{totalHours} {txt.hours}</p>
+                  </div>
+                </div>
+                <div className={`text-sm ${isRTL ? 'text-left' : 'text-right'}`}>
+                  <p className="text-cream-200">6 {txt.coreSubjects}</p>
+                  <p className="font-semibold">
+                    {language === 'sv' ? 'Fullständig utbildning' : language === 'ar' ? 'التدريب الكامل' : 'Complete training'}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       {/* Bylaws Section */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
