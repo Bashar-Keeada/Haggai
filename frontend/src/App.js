@@ -15,6 +15,7 @@ import LeaderExperienceApplication from "./pages/LeaderExperienceApplication";
 import Leaders from "./pages/Leaders";
 import AdminLeaders from "./pages/AdminLeaders";
 import AdminDashboard from "./pages/AdminDashboard";
+import MembersArea from "./pages/MembersArea";
 import LoginPage from "./pages/LoginPage";
 
 // Protected App content - only shown when authenticated
