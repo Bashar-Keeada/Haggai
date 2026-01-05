@@ -29,22 +29,19 @@ const Membership = () => {
       id: 'individual',
       icon: Users,
       title: t('membership.individual'),
-      description: t('membership.individualDesc'),
-      price: '500 kr'
+      description: t('membership.individualDesc')
     },
     {
       id: 'church',
       icon: Building,
       title: t('membership.church'),
-      description: t('membership.churchDesc'),
-      price: '2000 kr'
+      description: t('membership.churchDesc')
     },
     {
       id: 'organization',
       icon: Building2,
       title: t('membership.organizationType'),
-      description: t('membership.organizationDesc'),
-      price: '3000 kr'
+      description: t('membership.organizationDesc')
     }
   ];
 
