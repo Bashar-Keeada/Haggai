@@ -299,6 +299,188 @@ def test_leader_experience_api():
     except Exception as e:
         print_test_result("GET /api/leader-experience-applications/{program_id}", False, f"Error: {str(e)}")
 
+def test_board_members_api():
+    """Test Board Members CRUD API endpoints"""
+    print("=" * 60)
+    print("TESTING BOARD MEMBERS CRUD API")
+    print("=" * 60)
+    
+    # Test 1: GET /api/board-members?current_only=true (should return current members)
+    try:
+        response = requests.get(f"{BACKEND_URL}/board-members?current_only=true")
+        success = response.status_code == 200
+        current_members = response.json() if success else []
+        print_test_result(
+            "GET /api/board-members?current_only=true", 
+            success, 
+            f"Status: {response.status_code}, Current members count: {len(current_members)}"
+        )
+        
+        # Check if we have the expected 5 current members (Bashar, Ravi, Mazin, Peter, Alen)
+        expected_names = ["Bashar", "Ravi", "Mazin", "Peter", "Alen"]
+        found_names = [member.get('name', '') for member in current_members]
+        expected_found = all(any(expected in found for found in found_names) for expected in expected_names)
+        
+        if len(current_members) == 5 and expected_found:
+            print("   ✅ Found all 5 expected current board members")
+        else:
+            print(f"   ⚠️  Expected 5 members with names containing {expected_names}, found {len(current_members)}: {found_names}")
+            
+    except Exception as e:
+        print_test_result("GET /api/board-members?current_only=true", False, f"Error: {str(e)}")
+        return False
+    
+    # Test 2: GET /api/board-members?current_only=false (should return all members)
+    try:
+        response = requests.get(f"{BACKEND_URL}/board-members?current_only=false")
+        success = response.status_code == 200
+        all_members = response.json() if success else []
+        print_test_result(
+            "GET /api/board-members?current_only=false", 
+            success, 
+            f"Status: {response.status_code}, Total members count: {len(all_members)}"
+        )
+    except Exception as e:
+        print_test_result("GET /api/board-members?current_only=false", False, f"Error: {str(e)}")
+    
+    # Test 3: GET /api/board-members/archive (should return archived members)
+    try:
+        response = requests.get(f"{BACKEND_URL}/board-members/archive")
+        success = response.status_code == 200
+        archived_members = response.json() if success else []
+        print_test_result(
+            "GET /api/board-members/archive", 
+            success, 
+            f"Status: {response.status_code}, Archived members count: {len(archived_members)}"
+        )
+    except Exception as e:
+        print_test_result("GET /api/board-members/archive", False, f"Error: {str(e)}")
+    
+    # Test 4: POST /api/board-members - Create a new member
+    new_member_data = {
+        "name": "Sofia Eriksson",
+        "role": "Sekreterare",
+        "email": "sofia.eriksson@haggai.se",
+        "phone": "+46 70 123 9876",
+        "bio": "Sofia har arbetat med administration och kommunikation i över 10 år.",
+        "term_start": "2025",
+        "is_current": True
+    }
+    
+    try:
+        response = requests.post(f"{BACKEND_URL}/board-members", json=new_member_data)
+        success = response.status_code == 200
+        created_member = response.json() if success else {}
+        member_id = created_member.get('id') if success else None
+        print_test_result(
+            "POST /api/board-members", 
+            success, 
+            f"Status: {response.status_code}, ID: {member_id}, Name: {created_member.get('name', 'N/A')}"
+        )
+    except Exception as e:
+        print_test_result("POST /api/board-members", False, f"Error: {str(e)}")
+        return False
+    
+    if not success or not member_id:
+        print("Cannot continue tests without successful member creation")
+        return False
+    
+    # Test 5: GET /api/board-members/{id} - Get specific member
+    try:
+        response = requests.get(f"{BACKEND_URL}/board-members/{member_id}")
+        success = response.status_code == 200
+        member = response.json() if success else {}
+        name_matches = member.get('name') == new_member_data['name']
+        print_test_result(
+            "GET /api/board-members/{id}", 
+            success and name_matches, 
+            f"Status: {response.status_code}, Name matches: {name_matches}"
+        )
+    except Exception as e:
+        print_test_result("GET /api/board-members/{id}", False, f"Error: {str(e)}")
+    
+    # Test 6: PUT /api/board-members/{id} - Update a member
+    update_data = {
+        "name": "Sofia Eriksson-Lindberg",
+        "phone": "+46 70 987 1234",
+        "bio": "Sofia har arbetat med administration och kommunikation i över 12 år och har nu även ansvar för styrelsearbete."
+    }
+    
+    try:
+        response = requests.put(f"{BACKEND_URL}/board-members/{member_id}", json=update_data)
+        success = response.status_code == 200
+        updated_member = response.json() if success else {}
+        name_updated = updated_member.get('name') == update_data['name']
+        print_test_result(
+            "PUT /api/board-members/{id}", 
+            success and name_updated, 
+            f"Status: {response.status_code}, Name updated: {name_updated}"
+        )
+    except Exception as e:
+        print_test_result("PUT /api/board-members/{id}", False, f"Error: {str(e)}")
+    
+    # Test 7: PUT /api/board-members/{id}/archive?term_end=2024 - Archive a member
+    try:
+        response = requests.put(f"{BACKEND_URL}/board-members/{member_id}/archive?term_end=2024")
+        success = response.status_code == 200
+        print_test_result(
+            "PUT /api/board-members/{id}/archive", 
+            success, 
+            f"Status: {response.status_code}"
+        )
+        
+        # Verify the member is now archived
+        if success:
+            verify_response = requests.get(f"{BACKEND_URL}/board-members/{member_id}")
+            if verify_response.status_code == 200:
+                archived_member = verify_response.json()
+                is_archived = not archived_member.get('is_current', True)
+                term_end_set = archived_member.get('term_end') == "2024"
+                print(f"   ✅ Member archived: is_current={archived_member.get('is_current')}, term_end={archived_member.get('term_end')}")
+            
+    except Exception as e:
+        print_test_result("PUT /api/board-members/{id}/archive", False, f"Error: {str(e)}")
+    
+    # Test 8: Verify archived member appears in archive endpoint
+    try:
+        response = requests.get(f"{BACKEND_URL}/board-members/archive")
+        success = response.status_code == 200
+        archived_members = response.json() if success else []
+        found_archived = any(member.get('id') == member_id for member in archived_members)
+        print_test_result(
+            "GET /api/board-members/archive (after archive)", 
+            success and found_archived, 
+            f"Status: {response.status_code}, Archived member found: {found_archived}, Total archived: {len(archived_members)}"
+        )
+    except Exception as e:
+        print_test_result("GET /api/board-members/archive (after archive)", False, f"Error: {str(e)}")
+    
+    # Test 9: DELETE /api/board-members/{id} - Delete a member permanently
+    try:
+        response = requests.delete(f"{BACKEND_URL}/board-members/{member_id}")
+        success = response.status_code == 200
+        print_test_result(
+            "DELETE /api/board-members/{id}", 
+            success, 
+            f"Status: {response.status_code}"
+        )
+    except Exception as e:
+        print_test_result("DELETE /api/board-members/{id}", False, f"Error: {str(e)}")
+    
+    # Test 10: Verify deletion - GET /api/board-members/{id} should return 404
+    try:
+        response = requests.get(f"{BACKEND_URL}/board-members/{member_id}")
+        success = response.status_code == 404
+        print_test_result(
+            "GET /api/board-members/{id} (after delete)", 
+            success, 
+            f"Status: {response.status_code} (should be 404)"
+        )
+    except Exception as e:
+        print_test_result("GET /api/board-members/{id} (after delete)", False, f"Error: {str(e)}")
+    
+    return True
+
 def main():
     """Run all backend API tests"""
     print("🚀 Starting Backend API Tests for Haggai Sweden Website")
