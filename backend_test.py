@@ -493,6 +493,7 @@ def main():
     test_contact_api()
     test_membership_api()
     test_leader_experience_api()
+    test_board_members_api()
     
     print("=" * 60)
     print("🏁 Backend API Testing Complete")
