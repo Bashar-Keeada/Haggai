@@ -1,23 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap, ChevronDown, ChevronUp, User, Phone } from 'lucide-react';
+import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap, ChevronDown, ChevronUp, User, Phone, Eye, EyeOff, LogIn } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const MembersArea = () => {
   const { language, isRTL } = useLanguage();
+  const { isMembersAuthenticated, loginMembers, logoutMembers } = useAuth();
   const [isBylawsOpen, setIsBylawsOpen] = useState(false);
   const [showPreviousBoard, setShowPreviousBoard] = useState(false);
   const [currentBoard, setCurrentBoard] = useState([]);
   const [previousBoard, setPreviousBoard] = useState([]);
   const [loadingBoard, setLoadingBoard] = useState(true);
+  
+  // Members login state
+  const [membersPassword, setMembersPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   useEffect(() => {
-    fetchBoardMembers();
-  }, []);
+    if (isMembersAuthenticated) {
+      fetchBoardMembers();
+    }
+  }, [isMembersAuthenticated]);
 
   const fetchBoardMembers = async () => {
     try {
