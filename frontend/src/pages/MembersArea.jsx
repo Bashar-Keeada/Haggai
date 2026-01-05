@@ -342,49 +342,74 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
         </div>
       </section>
 
-      {/* Bylaws Section */}
-      <section className="py-20">
+      {/* Bylaws Section - Collapsible */}
+      <section className="py-20 bg-cream-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card className="border-0 shadow-2xl overflow-hidden">
-            <CardHeader className="bg-haggai text-cream-50 p-8">
-              <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <div className="w-16 h-16 bg-cream-50/20 rounded-2xl flex items-center justify-center">
-                  <FileText className="h-8 w-8" />
+            <CardHeader 
+              className="bg-haggai text-white p-8 cursor-pointer hover:bg-haggai-dark transition-colors"
+              onClick={() => setIsBylawsOpen(!isBylawsOpen)}
+            >
+              <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+                    <FileText className="h-8 w-8" />
+                  </div>
+                  <div className={isRTL ? 'text-right' : ''}>
+                    <CardTitle className="text-2xl mb-2 text-white">{txt.bylaws}</CardTitle>
+                    <p className="text-white/80">{txt.adoptedDate}</p>
+                  </div>
                 </div>
-                <div className={isRTL ? 'text-right' : ''}>
-                  <CardTitle className="text-2xl mb-2">{txt.bylaws}</CardTitle>
-                  <p className="text-cream-200">{txt.adoptedDate}</p>
-                </div>
+                <Button 
+                  variant="ghost" 
+                  size="lg"
+                  className="text-white hover:bg-white/20"
+                >
+                  {isBylawsOpen ? (
+                    <>
+                      <span className="mr-2">{txt.hideBylaws}</span>
+                      <ChevronUp className="h-6 w-6" />
+                    </>
+                  ) : (
+                    <>
+                      <span className="mr-2">{txt.showBylaws}</span>
+                      <ChevronDown className="h-6 w-6" />
+                    </>
+                  )}
+                </Button>
               </div>
             </CardHeader>
-            <CardContent className="p-8">
-              <div className="space-y-8">
-                {bylawsContent.map((item, index) => (
-                  <div key={index} className={`border-b border-stone-100 pb-8 last:border-0 last:pb-0 ${isRTL ? 'text-right' : ''}`}>
-                    <div className={`flex items-center gap-3 mb-4 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                      <Badge variant="outline" className="bg-haggai-50 text-haggai-dark border-haggai-100 font-bold">
-                        {item.section}
-                      </Badge>
-                      <h3 className="text-xl font-semibold text-stone-800">{item.title}</h3>
+            
+            {isBylawsOpen && (
+              <CardContent className="p-8">
+                <div className="space-y-8">
+                  {bylawsContent.map((item, index) => (
+                    <div key={index} className={`border-b border-stone-100 pb-8 last:border-0 last:pb-0 ${isRTL ? 'text-right' : ''}`}>
+                      <div className={`flex items-center gap-3 mb-4 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                        <Badge variant="outline" className="bg-haggai-50 text-haggai-dark border-haggai-100 font-bold">
+                          {item.section}
+                        </Badge>
+                        <h3 className="text-xl font-semibold text-stone-800">{item.title}</h3>
+                      </div>
+                      <div className="text-stone-600 leading-relaxed whitespace-pre-line pl-4 border-l-2 border-haggai-100">
+                        {item.content}
+                      </div>
                     </div>
-                    <div className="text-stone-600 leading-relaxed whitespace-pre-line pl-4 border-l-2 border-haggai-100">
-                      {item.content}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              {/* Adoption Notice */}
-              <div className={`mt-12 p-6 bg-stone-50 rounded-xl ${isRTL ? 'text-right' : ''}`}>
-                <p className="text-stone-600 font-medium">
-                  {language === 'sv' 
-                    ? 'Dessa stadgar har antagits vid föreningens konstituerande möte den 16 april 2025.'
-                    : language === 'ar'
-                    ? 'تم اعتماد هذا النظام الأساسي في الاجتماع التأسيسي للجمعية في 16 أبريل 2025.'
-                    : 'These bylaws were adopted at the association\'s constituent meeting on April 16, 2025.'}
-                </p>
-              </div>
-            </CardContent>
+                {/* Adoption Notice */}
+                <div className={`mt-12 p-6 bg-stone-50 rounded-xl ${isRTL ? 'text-right' : ''}`}>
+                  <p className="text-stone-600 font-medium">
+                    {language === 'sv' 
+                      ? 'Dessa stadgar har antagits vid föreningens konstituerande möte den 16 april 2025.'
+                      : language === 'ar'
+                      ? 'تم اعتماد هذا النظام الأساسي في الاجتماع التأسيسي للجمعية في 16 أبريل 2025.'
+                      : 'These bylaws were adopted at the association\'s constituent meeting on April 16, 2025.'}
+                  </p>
+                </div>
+              </CardContent>
+            )}
           </Card>
 
           {/* Board Members Quick View */}
