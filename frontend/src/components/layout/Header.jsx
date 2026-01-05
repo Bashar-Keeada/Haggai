@@ -52,6 +52,12 @@ const Header = () => {
     ar: 'المسؤول'
   };
 
+  const membersLabel = {
+    sv: 'Medlemsområde',
+    en: 'Members Area',
+    ar: 'منطقة الأعضاء'
+  };
+
   const logoutLabel = {
     sv: 'Logga ut',
     en: 'Log out',
