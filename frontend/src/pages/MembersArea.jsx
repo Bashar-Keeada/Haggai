@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, Users, Building2, Calendar, Mail, Download, Lock } from 'lucide-react';
+import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { useLanguage } from '../context/LanguageContext';
@@ -17,6 +17,11 @@ const MembersArea = () => {
       bylawsDesc: 'Läs om föreningens regler och riktlinjer',
       adoptedDate: 'Antagna den 16 april 2025',
       downloadPdf: 'Ladda ner PDF',
+      knowledgeSupport: 'Kunskapsstöd',
+      knowledgeSupportDesc: 'Kärnämnen i våra nationella utbildningar',
+      coreSubjects: 'Kärnämnen',
+      hours: 'timmar',
+      totalHours: 'Totalt',
       sections: {
         name: 'Föreningens namn',
         purpose: 'Syfte',
@@ -38,6 +43,11 @@ const MembersArea = () => {
       bylawsDesc: 'Read about the association\'s rules and guidelines',
       adoptedDate: 'Adopted on April 16, 2025',
       downloadPdf: 'Download PDF',
+      knowledgeSupport: 'Knowledge Support',
+      knowledgeSupportDesc: 'Core subjects in our national trainings',
+      coreSubjects: 'Core Subjects',
+      hours: 'hours',
+      totalHours: 'Total',
       sections: {
         name: 'Association Name',
         purpose: 'Purpose',
