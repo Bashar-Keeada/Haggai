@@ -310,15 +310,15 @@ frontend:
 
 metadata:
   created_by: "main_agent"
-  version: "1.0"
-  test_sequence: 1
+  version: "1.1"
+  test_sequence: 2
   run_ui: true
 
 test_plan:
   current_focus:
-    - "Admin Leaders Page"
-    - "Leaders Public Page"
-    - "Remove Made with Emergent Badge"
+    - "Admin Board Members Page"
+    - "Members Area with Dynamic Board"
+    - "Admin Dashboard Quick Links"
   stuck_tasks:
     - "Admin Leaders Page"
     - "Leaders Public Page"
@@ -329,22 +329,30 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: |
-      I have implemented all the features requested by the user:
-      1. Password protection with "Keeada2030" - WORKING
-      2. Removed "Sweden" from menu - WORKING
-      3. Removed "Made with Emergent" badge - WORKING
-      4. Created Admin page for managing leaders at /admin/ledare
-      5. Created public Leaders page at /ledare
-      6. Implemented backend API for leaders CRUD operations
+      I have completed the Board Member Management System:
+      
+      BACKEND (VERIFIED VIA CURL):
+      - POST /api/board-members - Creates new board member ✅
+      - GET /api/board-members - Gets all members (with current_only filter) ✅
+      - GET /api/board-members/archive - Gets archived members ✅
+      - PUT /api/board-members/{id} - Updates member ✅
+      - PUT /api/board-members/{id}/archive - Archives member ✅
+      - DELETE /api/board-members/{id} - Deletes member ✅
+      
+      Created 5 board members: Bashar (Ordförande), Ravi (Kassör), Mazin, Peter, Alen (Ledamöter)
+      
+      FRONTEND:
+      - AdminBoardMembers page at /admin/styrelse - Full CRUD UI with archive functionality
+      - MembersArea page updated to fetch board members from API
+      - AdminDashboard has quick links to both admin pages
+      - App.js updated with route for /admin/styrelse
       
       Please test:
-      - Backend: GET/POST/PUT/DELETE /api/leaders endpoints
-      - Frontend: Admin page functionality (add, edit, delete leaders)
-      - Frontend: Public leaders page display
-      
-      Login password: Keeada2030
-      Admin page URL: /admin/ledare
-      Leaders page URL: /ledare
+      1. Login with password: Keeada2030
+      2. Navigate to /admin and verify both quick links work
+      3. Test /admin/styrelse - verify 5 board members are displayed
+      4. Test /medlemmar - verify board members section shows data from API
+      5. Test archive functionality (archive a member, check it appears in "Föregående styrelser")
   - agent: "testing"
     message: |
       🎉 BACKEND TESTING COMPLETE - ALL APIS WORKING PERFECTLY!
