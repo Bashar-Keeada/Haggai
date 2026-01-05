@@ -57,9 +57,9 @@ export const leaderExperiences = [
       ar: 'خبرة قادة حجاي - سيدات'
     },
     description: {
-      sv: 'Internationellt ledarprogram för kvinnor i ledande positioner. Programmet genomförs på arabiska.',
-      en: 'International leadership program for women in leadership positions. The program is conducted in Arabic.',
-      ar: 'برنامج قيادي دولي للنساء في المناصب القيادية. يُقدَّم البرنامج باللغة العربية في بيئة ملهمة مع مشاركات من جميع أنحاء العالم.'
+      sv: 'Internationellt ledarprogram för kvinnor i ledande positioner. Programmet genomförs på arabiska. 1-3 platser från Sverige.',
+      en: 'International leadership program for women in leadership positions. The program is conducted in Arabic. 1-3 spots from Sweden.',
+      ar: 'برنامج قيادي دولي للنساء في المناصب القيادية. يُقدَّم البرنامج باللغة العربية. 1-3 مقاعد من السويد.'
     },
     duration: {
       sv: '10 dagar (13-23 juli 2026)',
@@ -78,9 +78,14 @@ export const leaderExperiences = [
       en: 'International location (announced upon acceptance)',
       ar: 'موقع دولي (يُعلن عند القبول)'
     },
-    spots: 30,
-    spotsLeft: 30,
-    ageRange: null,
+    spots: 3,
+    spotsLeft: 3,
+    spotsLabel: {
+      sv: '1-3 platser från Sverige',
+      en: '1-3 spots from Sweden',
+      ar: '1-3 مقاعد من السويد'
+    },
+    ageRange: '29-60',
     color: 'rose'
   },
   {
@@ -94,9 +99,9 @@ export const leaderExperiences = [
       ar: 'خبرة قادة حجاي - رجال'
     },
     description: {
-      sv: 'Internationellt ledarprogram för män i ledande positioner. Programmet genomförs på arabiska.',
-      en: 'International leadership program for men in leadership positions. The program is conducted in Arabic.',
-      ar: 'برنامج قيادي دولي للرجال في المناصب القيادية. يُقدَّم البرنامج باللغة العربية ويجمع قادة من جميع أنحاء العالم العربي.'
+      sv: 'Internationellt ledarprogram för män i ledande positioner. Programmet genomförs på arabiska. 1-3 platser från Sverige.',
+      en: 'International leadership program for men in leadership positions. The program is conducted in Arabic. 1-3 spots from Sweden.',
+      ar: 'برنامج قيادي دولي للرجال في المناصب القيادية. يُقدَّم البرنامج باللغة العربية. 1-3 مقاعد من السويد.'
     },
     duration: {
       sv: '10 dagar (första veckan december 2026)',
@@ -114,8 +119,13 @@ export const leaderExperiences = [
       en: 'International location (announced upon acceptance)',
       ar: 'موقع دولي (يُعلن عند القبول)'
     },
-    spots: 30,
-    spotsLeft: 30,
+    spots: 3,
+    spotsLeft: 3,
+    spotsLabel: {
+      sv: '1-3 platser från Sverige',
+      en: '1-3 spots from Sweden',
+      ar: '1-3 مقاعد من السويد'
+    },
     ageRange: '29-60',
     color: 'blue'
   },
@@ -160,8 +170,13 @@ export const leaderExperiences = [
       { name: '6th Session', date: 'Mon 2 Mar / 7pm - 10pm' },
       { name: 'Closing Session', date: 'Mon 8 Mar / 7pm - 9pm' }
     ],
-    spots: 50,
-    spotsLeft: 50,
+    spots: null,
+    spotsLeft: null,
+    spotsLabel: {
+      sv: 'Begränsat antal',
+      en: 'Limited spots',
+      ar: 'عدد محدود'
+    },
     ageRange: '25-55',
     color: 'emerald',
     isOnline: true
@@ -171,15 +186,15 @@ export const leaderExperiences = [
     id: 'national-march-2026',
     type: 'national',
     targetGender: 'all',
-    language: 'swedish',
+    language: 'arabic',
     title: {
-      sv: 'Nationellt Ledarprogram - Mars 2026',
+      sv: 'البرنامج الوطني للقيادة - مارس 2026',
       en: 'National Leadership Program - March 2026',
       ar: 'البرنامج الوطني للقيادة - مارس 2026'
     },
     description: {
-      sv: 'Intensivt ledarprogram över två helger i mars. Perfekt för dig som vill utveckla ditt ledarskap i en svensk kontext.',
-      en: 'Intensive leadership program over two weekends in March. Perfect for those who want to develop their leadership in a Swedish context.',
+      sv: 'Intensivt ledarprogram över två helger i mars. Perfekt för dig som vill utveckla ditt ledarskap.',
+      en: 'Intensive leadership program over two weekends in March. Perfect for those who want to develop their leadership.',
       ar: 'برنامج قيادي مكثف على مدار عطلتين نهاية الأسبوع في مارس.'
     },
     duration: {
