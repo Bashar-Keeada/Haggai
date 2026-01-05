@@ -328,15 +328,15 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Admin Board Members Page"
-    - "Members Area with Dynamic Board"
-    - "Admin Dashboard Quick Links"
+    - "Admin Leaders Page"
+    - "Leaders Public Page"
+    - "Remove Made with Emergent Badge"
   stuck_tasks:
     - "Admin Leaders Page"
     - "Leaders Public Page"
     - "Remove Made with Emergent Badge"
   test_all: false
-  test_priority: "high_first"
+  test_priority: "stuck_first"
 
 agent_communication:
   - agent: "main"
