@@ -135,7 +135,8 @@ const LeaderExperience = () => {
     const labels = {
       arabic: txt.arabic,
       english: txt.english,
-      swedish: txt.swedish
+      swedish: txt.swedish,
+      flexible: language === 'sv' ? 'Kan anpassas' : language === 'ar' ? 'يمكن تكييفه' : 'Can be adapted'
     };
     return labels[lang] || lang;
   };
