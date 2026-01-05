@@ -264,10 +264,10 @@ const LeaderExperience = () => {
                       <MapPin className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span><strong>{txt.location}:</strong> {program.location[language]}</span>
                     </div>
-                    {program.spotsLeft && (
+                    {(program.spotsLabel || program.spotsLeft) && (
                       <div className={`flex items-center text-sm text-stone-600 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                         <Users className={`h-4 w-4 text-haggai ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                        <span><strong>{program.spotsLeft}</strong> {txt.spotsLeft}</span>
+                        <span>{program.spotsLabel ? program.spotsLabel[language] : `${program.spotsLeft} ${txt.spotsLeft}`}</span>
                       </div>
                     )}
                   </div>
