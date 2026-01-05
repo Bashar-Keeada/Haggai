@@ -75,6 +75,8 @@ const MembersArea = () => {
       bylawsDesc: 'اقرأ عن قواعد وإرشادات الجمعية',
       adoptedDate: 'اعتمدت في 16 أبريل 2025',
       downloadPdf: 'تحميل PDF',
+      showBylaws: 'عرض النظام الأساسي',
+      hideBylaws: 'إخفاء النظام الأساسي',
       knowledgeSupport: 'دعم المعرفة',
       knowledgeSupportDesc: 'المواضيع الأساسية في تدريباتنا الوطنية',
       coreSubjects: 'المواضيع الأساسية',
