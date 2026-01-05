@@ -295,6 +295,80 @@ async def delete_leader(leader_id: str):
     return {"message": "Leader deleted successfully"}
 
 
+# ==================== BOARD MEMBER ENDPOINTS ====================
+
+@api_router.get("/board-members", response_model=List[BoardMember])
+async def get_board_members(current_only: bool = True):
+    """Get board members - optionally filter by current status"""
+    query = {"is_current": True} if current_only else {}
+    members = await db.board_members.find(query, {"_id": 0}).to_list(100)
+    return members
+
+
+@api_router.get("/board-members/archive", response_model=List[BoardMember])
+async def get_archived_board_members():
+    """Get all archived (previous) board members"""
+    members = await db.board_members.find({"is_current": False}, {"_id": 0}).to_list(100)
+    return members
+
+
+@api_router.get("/board-members/{member_id}", response_model=BoardMember)
+async def get_board_member(member_id: str):
+    """Get a specific board member by ID"""
+    member = await db.board_members.find_one({"id": member_id}, {"_id": 0})
+    if not member:
+        raise HTTPException(status_code=404, detail="Board member not found")
+    return member
+
+
+@api_router.post("/board-members", response_model=BoardMember)
+async def create_board_member(input: BoardMemberCreate):
+    """Create a new board member"""
+    member = BoardMember(**input.model_dump())
+    doc = member.model_dump()
+    await db.board_members.insert_one(doc)
+    return member
+
+
+@api_router.put("/board-members/{member_id}", response_model=BoardMember)
+async def update_board_member(member_id: str, input: BoardMemberUpdate):
+    """Update an existing board member"""
+    existing = await db.board_members.find_one({"id": member_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Board member not found")
+    
+    update_data = {k: v for k, v in input.model_dump().items() if v is not None}
+    
+    await db.board_members.update_one({"id": member_id}, {"$set": update_data})
+    
+    updated = await db.board_members.find_one({"id": member_id}, {"_id": 0})
+    return updated
+
+
+@api_router.put("/board-members/{member_id}/archive")
+async def archive_board_member(member_id: str, term_end: str):
+    """Archive a board member (mark as not current)"""
+    existing = await db.board_members.find_one({"id": member_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Board member not found")
+    
+    await db.board_members.update_one(
+        {"id": member_id}, 
+        {"$set": {"is_current": False, "term_end": term_end}}
+    )
+    
+    return {"message": "Board member archived successfully"}
+
+
+@api_router.delete("/board-members/{member_id}")
+async def delete_board_member(member_id: str):
+    """Delete a board member permanently"""
+    result = await db.board_members.delete_one({"id": member_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Board member not found")
+    return {"message": "Board member deleted successfully"}
+
+
 # ==================== CONTACT FORM ENDPOINTS ====================
 
 @api_router.post("/contact", response_model=ContactSubmission)
