@@ -24,6 +24,7 @@ const MembersArea = () => {
   const [membersPassword, setMembersPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
+  const [selectedSubject, setSelectedSubject] = useState(null);
 
   useEffect(() => {
     if (isMembersAuthenticated) {
