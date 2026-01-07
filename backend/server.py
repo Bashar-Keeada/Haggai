@@ -505,6 +505,108 @@ async def update_leader_experience_application(application_id: str, update_data:
     return updated
 
 
+# ==================== ORGANIZATION MEMBER ENDPOINTS ====================
+
+@api_router.post("/organization-members", response_model=OrganizationMember)
+async def create_organization_member(input: OrganizationMemberCreate):
+    """Create a new organization member (church/organization)"""
+    member = OrganizationMember(**input.model_dump())
+    doc = member.model_dump()
+    await db.organization_members.insert_one(doc)
+    return member
+
+
+@api_router.get("/organization-members", response_model=List[OrganizationMember])
+async def get_organization_members(active_only: bool = True):
+    """Get all organization members"""
+    query = {"is_active": True} if active_only else {}
+    members = await db.organization_members.find(query, {"_id": 0}).to_list(1000)
+    return members
+
+
+@api_router.get("/organization-members/{member_id}", response_model=OrganizationMember)
+async def get_organization_member(member_id: str):
+    """Get a specific organization member"""
+    member = await db.organization_members.find_one({"id": member_id}, {"_id": 0})
+    if not member:
+        raise HTTPException(status_code=404, detail="Organization member not found")
+    return member
+
+
+@api_router.put("/organization-members/{member_id}", response_model=OrganizationMember)
+async def update_organization_member(member_id: str, update_data: dict):
+    """Update an organization member"""
+    result = await db.organization_members.update_one(
+        {"id": member_id},
+        {"$set": update_data}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Organization member not found")
+    
+    updated = await db.organization_members.find_one({"id": member_id}, {"_id": 0})
+    return updated
+
+
+@api_router.delete("/organization-members/{member_id}")
+async def delete_organization_member(member_id: str):
+    """Delete an organization member"""
+    result = await db.organization_members.delete_one({"id": member_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Organization member not found")
+    return {"message": "Organization member deleted successfully"}
+
+
+# ==================== PARTNER ENDPOINTS ====================
+
+@api_router.post("/partners", response_model=Partner)
+async def create_partner(input: PartnerCreate):
+    """Create a new partner"""
+    partner = Partner(**input.model_dump())
+    doc = partner.model_dump()
+    await db.partners.insert_one(doc)
+    return partner
+
+
+@api_router.get("/partners", response_model=List[Partner])
+async def get_partners(active_only: bool = True):
+    """Get all partners"""
+    query = {"is_active": True} if active_only else {}
+    partners = await db.partners.find(query, {"_id": 0}).to_list(1000)
+    return partners
+
+
+@api_router.get("/partners/{partner_id}", response_model=Partner)
+async def get_partner(partner_id: str):
+    """Get a specific partner"""
+    partner = await db.partners.find_one({"id": partner_id}, {"_id": 0})
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+    return partner
+
+
+@api_router.put("/partners/{partner_id}", response_model=Partner)
+async def update_partner(partner_id: str, update_data: dict):
+    """Update a partner"""
+    result = await db.partners.update_one(
+        {"id": partner_id},
+        {"$set": update_data}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Partner not found")
+    
+    updated = await db.partners.find_one({"id": partner_id}, {"_id": 0})
+    return updated
+
+
+@api_router.delete("/partners/{partner_id}")
+async def delete_partner(partner_id: str):
+    """Delete a partner"""
+    result = await db.partners.delete_one({"id": partner_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Partner not found")
+    return {"message": "Partner deleted successfully"}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
