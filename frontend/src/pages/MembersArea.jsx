@@ -933,6 +933,80 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
           </Card>
         </div>
       </section>
+
+      {/* Subject Detail Modal */}
+      {selectedSubject && (
+        <Dialog open={!!selectedSubject} onOpenChange={() => setSelectedSubject(null)}>
+          <DialogContent className={`max-w-4xl max-h-[90vh] overflow-y-auto ${isRTL ? 'rtl' : 'ltr'}`}>
+            <DialogHeader>
+              <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <div className={`w-12 h-12 ${selectedSubject.color} rounded-xl flex items-center justify-center`}>
+                  <BookOpen className="h-6 w-6 text-white" />
+                </div>
+                <div className={isRTL ? 'text-right' : ''}>
+                  <DialogTitle className="text-2xl text-stone-800">
+                    {selectedSubject.title[language]}
+                  </DialogTitle>
+                  <p className="text-stone-500 mt-1">{selectedSubject.title.ar}</p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setSelectedSubject(null)}
+                  className={`${isRTL ? 'mr-auto' : 'ml-auto'} text-stone-400 hover:text-stone-600`}
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+            </DialogHeader>
+
+            <div className="space-y-6 mt-6">
+              {/* Hours Badge */}
+              <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                <Badge className="bg-stone-100 text-stone-700 px-3 py-1">
+                  <Clock className="h-4 w-4 mr-1" />
+                  {selectedSubject.hours} {txt.hours}
+                </Badge>
+              </div>
+
+              {/* Overview */}
+              <div className={isRTL ? 'text-right' : ''}>
+                <h3 className="text-lg font-semibold text-stone-800 mb-3">
+                  {language === 'sv' ? 'Översikt' : language === 'ar' ? 'نظرة عامة' : 'Overview'}
+                </h3>
+                <p className="text-stone-600 leading-relaxed">
+                  {selectedSubject.fullContent[language].overview}
+                </p>
+              </div>
+
+              {/* Topics */}
+              <div className={isRTL ? 'text-right' : ''}>
+                <h3 className="text-lg font-semibold text-stone-800 mb-3">
+                  {language === 'sv' ? 'Ämnen som behandlas' : language === 'ar' ? 'المواضيع المغطاة' : 'Topics Covered'}
+                </h3>
+                <ul className={`space-y-2 ${isRTL ? 'text-right' : ''}`}>
+                  {selectedSubject.fullContent[language].topics.map((topic, index) => (
+                    <li key={index} className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className={`w-2 h-2 ${selectedSubject.color} rounded-full mt-2 flex-shrink-0`} />
+                      <span className="text-stone-600">{topic}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Learning Outcome */}
+              <div className={`p-4 bg-haggai-50 rounded-xl ${isRTL ? 'text-right' : ''}`}>
+                <h3 className="text-lg font-semibold text-haggai-dark mb-2">
+                  {language === 'sv' ? 'Lärandemål' : language === 'ar' ? 'نتائج التعلم' : 'Learning Outcome'}
+                </h3>
+                <p className="text-haggai-dark">
+                  {selectedSubject.fullContent[language].outcome}
+                </p>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };
