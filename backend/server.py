@@ -431,6 +431,23 @@ async def get_applications_by_program(program_id: str):
     ).to_list(1000)
     return applications
 
+
+@api_router.put("/leader-experience-applications/{application_id}")
+async def update_leader_experience_application(application_id: str, update_data: dict):
+    """Update a Leader Experience application (status, etc.)"""
+    result = await db.leader_experience_applications.update_one(
+        {"id": application_id},
+        {"$set": update_data}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Application not found")
+    
+    updated = await db.leader_experience_applications.find_one(
+        {"id": application_id}, {"_id": 0}
+    )
+    return updated
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
