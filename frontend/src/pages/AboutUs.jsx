@@ -215,10 +215,12 @@ const AboutUs = () => {
             {/* Vision */}
             <Card className="border-0 shadow-xl bg-haggai text-cream-50 overflow-hidden">
               <CardContent className={`p-10 ${isRTL ? 'text-right' : ''}`}>
-                <div className={`w-16 h-16 bg-cream-50/20 rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : ''}`}>
-                  <Eye className="h-8 w-8 text-cream-50" />
+                <div className={`flex items-center gap-4 mb-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-16 h-16 bg-cream-50/20 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <Eye className="h-8 w-8 text-cream-50" />
+                  </div>
+                  <h2 className="text-3xl font-bold">{txt.visionTitle}</h2>
                 </div>
-                <h2 className="text-3xl font-bold mb-4">{txt.visionTitle}</h2>
                 <p className="text-xl text-haggai-100 leading-relaxed">
                   {txt.visionText}
                 </p>
@@ -228,10 +230,12 @@ const AboutUs = () => {
             {/* Mission */}
             <Card className="border-0 shadow-xl bg-haggai-dark text-cream-50 overflow-hidden">
               <CardContent className={`p-10 ${isRTL ? 'text-right' : ''}`}>
-                <div className={`w-16 h-16 bg-cream-50/20 rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : ''}`}>
-                  <Target className="h-8 w-8 text-cream-50" />
+                <div className={`flex items-center gap-4 mb-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-16 h-16 bg-cream-50/20 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <Target className="h-8 w-8 text-cream-50" />
+                  </div>
+                  <h2 className="text-3xl font-bold">{txt.missionTitle}</h2>
                 </div>
-                <h2 className="text-3xl font-bold mb-4">{txt.missionTitle}</h2>
                 <p className="text-xl text-haggai-100 leading-relaxed">
                   {txt.missionText}
                 </p>
