@@ -209,6 +209,63 @@ class LeaderExperienceApplicationCreate(BaseModel):
     nominator_phone: Optional[str] = None
     nominator_relationship: Optional[str] = None
 
+
+# Organization Member Model (Churches & Organizations that are members)
+class OrganizationMember(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    type: str  # church, organization
+    description: Optional[str] = None
+    logo_url: Optional[str] = None
+    website: Optional[str] = None
+    city: Optional[str] = None
+    country: str = "Sverige"
+    contact_person: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_phone: Optional[str] = None
+    is_active: bool = True
+    member_since: Optional[str] = None
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class OrganizationMemberCreate(BaseModel):
+    name: str
+    type: str
+    description: Optional[str] = None
+    logo_url: Optional[str] = None
+    website: Optional[str] = None
+    city: Optional[str] = None
+    country: str = "Sverige"
+    contact_person: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_phone: Optional[str] = None
+    member_since: Optional[str] = None
+
+
+# Partner Model
+class Partner(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: Optional[str] = None
+    logo_url: Optional[str] = None
+    website: Optional[str] = None
+    partnership_type: str = "standard"  # standard, premium, strategic
+    is_active: bool = True
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class PartnerCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    logo_url: Optional[str] = None
+    website: Optional[str] = None
+    partnership_type: str = "standard"
+
+
 class StatusCheckCreate(BaseModel):
     client_name: str
 
