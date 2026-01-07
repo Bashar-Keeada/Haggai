@@ -278,6 +278,42 @@ export const leaderExperiences = [
     color: 'violet'
   },
   {
+    id: 'national-youth-2026',
+    type: 'national',
+    targetGender: 'all',
+    language: 'swedish-english',
+    title: {
+      sv: 'Nationellt Ungdomsledarprogram - September 2026',
+      en: 'National Youth Leadership Program - September 2026',
+      ar: 'البرنامج الوطني لقيادة الشباب - سبتمبر 2026'
+    },
+    description: {
+      sv: 'Ledarprogram för unga ledare (18-30 år). Utveckla ditt ledarskap tillsammans med andra unga visionärer. Genomförs på svenska/engelska.',
+      en: 'Leadership program for young leaders (18-30 years). Develop your leadership together with other young visionaries. Conducted in Swedish/English.',
+      ar: 'برنامج قيادي للقادة الشباب (18-30 سنة). طور قيادتك مع رؤساء شباب آخرين. يُقدم بالسويدية/الإنجليزية.'
+    },
+    duration: {
+      sv: '2 helger (11-13 & 18-20 september)',
+      en: '2 weekends (September 11-13 & 18-20)',
+      ar: 'عطلتان نهاية الأسبوع (11-13 و 18-20 سبتمبر)'
+    },
+    period: {
+      sv: '11-13 & 18-20 september 2026',
+      en: 'September 11-13 & 18-20, 2026',
+      ar: '11-13 و 18-20 سبتمبر 2026'
+    },
+    nextDate: '2026-09-11',
+    location: {
+      sv: 'Stockholm, Sverige',
+      en: 'Stockholm, Sweden',
+      ar: 'ستوكهولم، السويد'
+    },
+    spots: 25,
+    spotsLeft: 25,
+    ageRange: '18-30',
+    color: 'sky'
+  },
+  {
     id: 'custom-training',
     type: 'national',
     targetGender: 'all',
