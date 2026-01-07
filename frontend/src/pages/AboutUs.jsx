@@ -331,24 +331,44 @@ const AboutUs = () => {
             <h2 className="text-4xl font-bold text-stone-800 mb-4">{txt.board}</h2>
             <p className="text-lg text-stone-600">{txt.boardSubtitle}</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {boardMembers.map((member) => (
-              <Card key={member.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                <CardContent className="p-0">
-                  <div className="h-48 bg-gradient-to-br from-haggai-100 to-haggai-50 flex items-center justify-center">
-                    <div className="w-24 h-24 bg-haggai rounded-full flex items-center justify-center">
-                      <Users className="h-12 w-12 text-cream-50" />
+          {loadingBoard ? (
+            <div className="flex justify-center py-12">
+              <div className="w-10 h-10 border-4 border-haggai border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : boardMembers.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+              {boardMembers.map((member) => (
+                <Card key={member.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                  <CardContent className="p-0">
+                    <div className="h-40 bg-gradient-to-br from-haggai-100 to-haggai-50 flex items-center justify-center">
+                      {member.image_url ? (
+                        <img 
+                          src={member.image_url} 
+                          alt={member.name}
+                          className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+                        />
+                      ) : (
+                        <div className="w-24 h-24 bg-haggai rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                          <User className="h-12 w-12 text-cream-50" />
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  <div className={`p-6 ${isRTL ? 'text-right' : ''}`}>
-                    <h3 className="text-lg font-semibold text-stone-800 mb-1">{member.name}</h3>
-                    <p className="text-haggai text-sm font-medium mb-3">{member.role}</p>
-                    <p className="text-stone-600 text-sm">{member.bio}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    <div className={`p-5 text-center ${isRTL ? 'text-right' : ''}`}>
+                      <h3 className="text-lg font-semibold text-stone-800 mb-1">{member.name}</h3>
+                      <p className="text-haggai text-sm font-medium">{member.role}</p>
+                      {member.term_start && (
+                        <p className="text-stone-400 text-xs mt-2">
+                          {language === 'sv' ? 'Sedan' : language === 'ar' ? 'منذ' : 'Since'} {member.term_start}
+                        </p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-stone-500">{language === 'sv' ? 'Ingen styrelse registrerad ännu.' : language === 'ar' ? 'لم يتم تسجيل أي مجلس بعد.' : 'No board registered yet.'}</p>
+          )}
         </div>
       </section>
 
