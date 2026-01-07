@@ -326,6 +326,46 @@ const AdminDashboard = () => {
               </CardContent>
             </Card>
           </Link>
+          
+          <Link to="/admin/medlemmar">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all cursor-pointer hover:bg-violet-50">
+              <CardContent className="p-6">
+                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-14 h-14 bg-violet-600 rounded-2xl flex items-center justify-center">
+                    <Building2 className="h-7 w-7 text-white" />
+                  </div>
+                  <div className={isRTL ? 'text-right' : ''}>
+                    <h3 className="text-lg font-bold text-stone-800">
+                      {language === 'sv' ? 'Hantera Medlemmar' : language === 'ar' ? 'إدارة الأعضاء' : 'Manage Members'}
+                    </h3>
+                    <p className="text-sm text-stone-500">
+                      {language === 'sv' ? 'Kyrkor och organisationer' : language === 'ar' ? 'الكنائس والمنظمات' : 'Churches and organizations'}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+          
+          <Link to="/admin/partners">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all cursor-pointer hover:bg-amber-50">
+              <CardContent className="p-6">
+                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-14 h-14 bg-amber-500 rounded-2xl flex items-center justify-center">
+                    <Handshake className="h-7 w-7 text-white" />
+                  </div>
+                  <div className={isRTL ? 'text-right' : ''}>
+                    <h3 className="text-lg font-bold text-stone-800">
+                      {language === 'sv' ? 'Hantera Partners' : language === 'ar' ? 'إدارة الشركاء' : 'Manage Partners'}
+                    </h3>
+                    <p className="text-sm text-stone-500">
+                      {language === 'sv' ? 'Samarbetspartners' : language === 'ar' ? 'شركاء التعاون' : 'Collaboration partners'}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Stats Cards */}
