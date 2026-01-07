@@ -1,12 +1,32 @@
-import React from 'react';
-import { Users, Target, Heart, Award, Eye, Compass, Lightbulb, CheckCircle, BookOpen } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Users, Target, Heart, Award, Eye, Compass, Lightbulb, CheckCircle, BookOpen, User } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/card';
 import { useLanguage } from '../context/LanguageContext';
-import { boardTranslations } from '../data/translations';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const AboutUs = () => {
   const { t, language, isRTL } = useLanguage();
-  const boardMembers = boardTranslations[language] || boardTranslations.sv;
+  const [boardMembers, setBoardMembers] = useState([]);
+  const [loadingBoard, setLoadingBoard] = useState(true);
+
+  useEffect(() => {
+    fetchBoardMembers();
+  }, []);
+
+  const fetchBoardMembers = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/board-members?current_only=true`);
+      if (response.ok) {
+        const data = await response.json();
+        setBoardMembers(data);
+      }
+    } catch (error) {
+      console.error('Error fetching board members:', error);
+    } finally {
+      setLoadingBoard(false);
+    }
+  };
 
   const content = {
     sv: {
