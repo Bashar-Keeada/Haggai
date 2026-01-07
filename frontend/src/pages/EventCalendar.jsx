@@ -129,16 +129,24 @@ const EventCalendar = () => {
               <div className="space-y-6">
                 {localizedEvents.map((event) => {
                   const dateInfo = getLocaleDateString(event.date);
+                  const isLeaderExperience = event.type === 'leader-experience';
+                  const isInternational = event.programType === 'international';
+                  
                   return (
                     <Card 
                       key={event.id} 
-                      className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group cursor-pointer"
+                      className={`border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group cursor-pointer ${
+                        isLeaderExperience ? 'ring-2 ring-haggai ring-offset-2' : ''
+                      }`}
                       onClick={() => handleEventClick(event)}
                     >
                       <CardContent className="p-0">
                         <div className={`flex flex-col md:flex-row ${isRTL ? 'md:flex-row-reverse' : ''}`}>
                           {/* Date Badge */}
-                          <div className="md:w-32 bg-haggai text-cream-50 p-6 flex flex-col items-center justify-center">
+                          <div className={`md:w-32 ${isLeaderExperience ? 'bg-gradient-to-br from-haggai to-haggai-dark' : 'bg-haggai'} text-cream-50 p-6 flex flex-col items-center justify-center relative`}>
+                            {isLeaderExperience && (
+                              <Star className="absolute top-2 right-2 h-4 w-4 text-yellow-300 fill-yellow-300" />
+                            )}
                             <span className="text-4xl font-bold">
                               {dateInfo.day}
                             </span>
@@ -152,6 +160,22 @@ const EventCalendar = () => {
                           
                           {/* Event Details */}
                           <div className={`flex-1 p-6 ${isRTL ? 'text-right' : ''}`}>
+                            <div className={`flex items-center gap-2 mb-2 flex-wrap ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                              {isLeaderExperience && (
+                                <Badge className={`${isInternational ? 'bg-blue-100 text-blue-800' : 'bg-violet-100 text-violet-800'}`}>
+                                  {isInternational ? (
+                                    <><Globe className="h-3 w-3 mr-1" /> {language === 'sv' ? 'Internationellt' : language === 'ar' ? 'دولي' : 'International'}</>
+                                  ) : (
+                                    <><Home className="h-3 w-3 mr-1" /> {language === 'sv' ? 'Nationellt' : language === 'ar' ? 'وطني' : 'National'}</>
+                                  )}
+                                </Badge>
+                              )}
+                              {isLeaderExperience && (
+                                <Badge className="bg-haggai-100 text-haggai-dark">
+                                  Leader Experience
+                                </Badge>
+                              )}
+                            </div>
                             <h3 className="text-xl font-semibold text-stone-800 mb-3 group-hover:text-haggai transition-colors">
                               {event.title}
                             </h3>
@@ -166,10 +190,12 @@ const EventCalendar = () => {
                                 <MapPin className={`h-4 w-4 text-haggai ${isRTL ? 'ml-1' : 'mr-1'}`} />
                                 {event.location}
                               </span>
-                              <span className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                <Users className={`h-4 w-4 text-haggai ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                                {event.spotsLeft} {t('calendar.spotsOf')} {event.spots} {t('calendar.spotsLeft')}
-                              </span>
+                              {event.spots && (
+                                <span className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                  <Users className={`h-4 w-4 text-haggai ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                                  {event.spotsLeft} {t('calendar.spotsOf')} {event.spots} {t('calendar.spotsLeft')}
+                                </span>
+                              )}
                             </div>
                           </div>
                           
