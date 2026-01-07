@@ -16,7 +16,10 @@ import Leaders from "./pages/Leaders";
 import AdminLeaders from "./pages/AdminLeaders";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminBoardMembers from "./pages/AdminBoardMembers";
+import AdminOrganizationMembers from "./pages/AdminOrganizationMembers";
+import AdminPartners from "./pages/AdminPartners";
 import MembersArea from "./pages/MembersArea";
+import Partners from "./pages/Partners";
 import LoginPage from "./pages/LoginPage";
 
 // Protected App content - only shown when authenticated
