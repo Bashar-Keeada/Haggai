@@ -1,8 +1,64 @@
 // Mock data for Haggai Sweden website
 
 export const events = [
+  // Leader Experience Programs - International
+  {
+    id: 101,
+    type: 'leader-experience',
+    programType: 'international',
+    title: "Haggai Leader Experience - Kvinnor (Arabiska)",
+    date: "2026-07-13",
+    endDate: "2026-07-23",
+    time: "10 dagar",
+    location: "Internationell plats",
+    description: "Internationellt ledarprogram för kvinnor. Genomförs på arabiska. 1-3 platser från Sverige. Ålder: 29-60 år.",
+    spots: 3,
+    spotsLeft: 3
+  },
+  {
+    id: 102,
+    type: 'leader-experience',
+    programType: 'international',
+    title: "Haggai Leader Experience - Män (Arabiska)",
+    date: "2026-12-01",
+    endDate: "2026-12-10",
+    time: "10 dagar",
+    location: "Internationell plats",
+    description: "Internationellt ledarprogram för män. Genomförs på arabiska. 1-3 platser från Sverige. Ålder: 29-60 år.",
+    spots: 3,
+    spotsLeft: 3
+  },
+  {
+    id: 103,
+    type: 'leader-experience',
+    programType: 'international',
+    title: "VFDS2602 - EUR/ME Online",
+    date: "2026-02-09",
+    endDate: "2026-03-08",
+    time: "8 sessioner",
+    location: "Online (Zoom)",
+    description: "Online ledarprogram med 6 sessioner plus öppnings- och avslutningssession. Ålder: 25-55 år.",
+    spots: 20,
+    spotsLeft: 20
+  },
+  // Leader Experience Programs - National
+  {
+    id: 104,
+    type: 'leader-experience',
+    programType: 'national',
+    title: "Nationellt Ledarprogram - Mars 2026",
+    date: "2026-03-13",
+    endDate: "2026-03-22",
+    time: "2 helger (13-15 & 20-22 mars)",
+    location: "Stockholm, Sverige",
+    description: "Intensivt ledarprogram över två helger. Perfekt för dig som vill utveckla ditt ledarskap. Ålder: 25-55 år.",
+    spots: 30,
+    spotsLeft: 30
+  },
+  // Regular Events
   {
     id: 1,
+    type: 'event',
     title: "Ledarskapsutbildning - Grundkurs",
     date: "2025-09-15",
     time: "09:00 - 16:00",
@@ -13,6 +69,7 @@ export const events = [
   },
   {
     id: 2,
+    type: 'event',
     title: "Visionärt Ledarskap Workshop",
     date: "2025-09-28",
     time: "10:00 - 15:00",
@@ -23,6 +80,7 @@ export const events = [
   },
   {
     id: 3,
+    type: 'event',
     title: "Haggai Höstkonferens 2025",
     date: "2025-10-12",
     time: "09:00 - 18:00",
@@ -33,6 +91,7 @@ export const events = [
   },
   {
     id: 4,
+    type: 'event',
     title: "Mentorskap & Coaching",
     date: "2025-10-25",
     time: "13:00 - 17:00",
