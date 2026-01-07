@@ -55,6 +55,19 @@ export const events = [
     spots: 30,
     spotsLeft: 30
   },
+  {
+    id: 105,
+    type: 'leader-experience',
+    programType: 'national',
+    title: "Nationellt Ungdomsledarprogram - September 2026",
+    date: "2026-09-11",
+    endDate: "2026-09-20",
+    time: "2 helger (11-13 & 18-20 september)",
+    location: "Stockholm, Sverige",
+    description: "Ledarprogram för unga ledare (18-30 år). Utveckla ditt ledarskap tillsammans med andra unga visionärer. Svenska/Engelska.",
+    spots: 25,
+    spotsLeft: 25
+  },
   // Regular Events
   {
     id: 1,
