@@ -680,7 +680,11 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
           {/* Core Subjects Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {coreSubjects.map((subject) => (
-              <Card key={subject.id} className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden group">
+              <Card 
+                key={subject.id} 
+                className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+                onClick={() => setSelectedSubject(subject)}
+              >
                 <div className={`h-2 ${subject.color}`} />
                 <CardContent className="p-6">
                   <div className={`flex items-start justify-between mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
@@ -701,6 +705,10 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
                   <p className={`text-sm text-stone-600 leading-relaxed ${isRTL ? 'text-right' : ''}`}>
                     {subject.description[language]}
                   </p>
+                  <div className={`flex items-center gap-2 mt-4 text-haggai text-sm font-medium ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                    <Info className="h-4 w-4" />
+                    <span>{language === 'sv' ? 'Klicka för mer info' : language === 'ar' ? 'انقر لمزيد من المعلومات' : 'Click for more info'}</span>
+                  </div>
                 </CardContent>
               </Card>
             ))}
