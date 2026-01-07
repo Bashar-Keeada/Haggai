@@ -195,24 +195,94 @@ const MembersArea = () => {
   const coreSubjects = [
     {
       id: 1,
-      title: { sv: 'Bibliskt uppdrag', en: 'Biblical Mandate', ar: 'التكليف الكتابي' },
-      hours: 3,
+      title: { sv: 'Evangelisation', en: 'Evangelism', ar: 'التبشير' },
+      hours: 5,
       color: 'bg-blue-500',
       description: { 
-        sv: 'Grundläggande bibliska principer för ledarskap och tjänande.',
-        en: 'Fundamental biblical principles for leadership and service.',
-        ar: 'المبادئ الكتابية الأساسية للقيادة والخدمة.'
+        sv: 'Effektiva metoder för att dela tron och nå ut med evangeliet.',
+        en: 'Effective methods for sharing faith and reaching out with the Gospel.',
+        ar: 'طرق فعالة لمشاركة الإيمان والتواصل بالإنجيل.'
+      },
+      fullContent: {
+        sv: {
+          overview: 'Evangelisation handlar om att dela det kristna budskapet på ett relevant och respektfullt sätt.',
+          topics: [
+            'Personlig evangelisation och vittnesbörd',
+            'Kulturell relevans i evangelisation',
+            'Bygga relationer som grund för evangelisation',
+            'Digitala verktyg för spridning av evangeliet',
+            'Hantera invändningar och frågor'
+          ],
+          outcome: 'Efter kursen kommer du att ha praktiska verktyg för att dela din tro i olika sammanhang.'
+        },
+        en: {
+          overview: 'Evangelism is about sharing the Christian message in a relevant and respectful way.',
+          topics: [
+            'Personal evangelism and testimony',
+            'Cultural relevance in evangelism',
+            'Building relationships as a foundation for evangelism',
+            'Digital tools for spreading the Gospel',
+            'Handling objections and questions'
+          ],
+          outcome: 'After the course, you will have practical tools for sharing your faith in different contexts.'
+        },
+        ar: {
+          overview: 'التبشير يتعلق بمشاركة الرسالة المسيحية بطريقة ملائمة ومحترمة.',
+          topics: [
+            'التبشير الشخصي والشهادة',
+            'الملاءمة الثقافية في التبشير',
+            'بناء العلاقات كأساس للتبشير',
+            'الأدوات الرقمية لنشر الإنجيل',
+            'التعامل مع الاعتراضات والأسئلة'
+          ],
+          outcome: 'بعد الدورة، ستكون لديك أدوات عملية لمشاركة إيمانك في سياقات مختلفة.'
+        }
       }
     },
     {
       id: 2,
-      title: { sv: 'Förvaltarskap', en: 'Stewardship', ar: 'الوكالة' },
-      hours: 3,
-      color: 'bg-emerald-500',
+      title: { sv: 'Förvaltarskap', en: 'Stewardship', ar: 'الإشراف' },
+      hours: 4,
+      color: 'bg-green-500',
       description: { 
         sv: 'Hur man förvaltar resurser, tid och talanger på ett ansvarigt sätt.',
         en: 'How to manage resources, time and talents responsibly.',
         ar: 'كيفية إدارة الموارد والوقت والمواهب بمسؤولية.'
+      },
+      fullContent: {
+        sv: {
+          overview: 'Förvaltarskap innebär att ansvarsfullt hantera de resurser Gud har gett oss.',
+          topics: [
+            'Bibliska principer för förvaltarskap',
+            'Ekonomisk planering och budget',
+            'Tidshantering för ledare',
+            'Att utveckla och använda sina gåvor',
+            'Miljöansvar och hållbarhet'
+          ],
+          outcome: 'Du kommer att kunna tillämpa förvaltarskapsprinciper i ditt dagliga liv och ledarskap.'
+        },
+        en: {
+          overview: 'Stewardship means responsibly managing the resources God has given us.',
+          topics: [
+            'Biblical principles of stewardship',
+            'Financial planning and budgeting',
+            'Time management for leaders',
+            'Developing and using your gifts',
+            'Environmental responsibility and sustainability'
+          ],
+          outcome: 'You will be able to apply stewardship principles in your daily life and leadership.'
+        },
+        ar: {
+          overview: 'الإشراف يعني إدارة الموارد التي أعطانا الله إياها بمسؤولية.',
+          topics: [
+            'المبادئ الكتابية للإشراف',
+            'التخطيط المالي والميزانية',
+            'إدارة الوقت للقادة',
+            'تطوير واستخدام مواهبك',
+            'المسؤولية البيئية والاستدامة'
+          ],
+          outcome: 'ستكون قادرًا على تطبيق مبادئ الإشراف في حياتك اليومية وقيادتك.'
+        }
       }
     },
     {
@@ -224,6 +294,41 @@ const MembersArea = () => {
         sv: 'Förståelse för kulturella och samhälleliga sammanhang i ledarskap.',
         en: 'Understanding cultural and societal contexts in leadership.',
         ar: 'فهم السياقات الثقافية والاجتماعية في القيادة.'
+      },
+      fullContent: {
+        sv: {
+          overview: 'Att förstå kontext är avgörande för effektivt ledarskap i en mångkulturell värld.',
+          topics: [
+            'Kulturell intelligens och anpassning',
+            'Analysera lokala och globala sammanhang',
+            'Leda i multikulturella miljöer',
+            'Sociala och politiska utmaningar',
+            'Kontextualisering av evangeliet'
+          ],
+          outcome: 'Du kommer att utveckla förmågan att anpassa ditt ledarskap till olika kulturella sammanhang.'
+        },
+        en: {
+          overview: 'Understanding context is crucial for effective leadership in a multicultural world.',
+          topics: [
+            'Cultural intelligence and adaptation',
+            'Analyzing local and global contexts',
+            'Leading in multicultural environments',
+            'Social and political challenges',
+            'Contextualization of the Gospel'
+          ],
+          outcome: 'You will develop the ability to adapt your leadership to different cultural contexts.'
+        },
+        ar: {
+          overview: 'فهم السياق أمر حاسم للقيادة الفعالة في عالم متعدد الثقافات.',
+          topics: [
+            'الذكاء الثقافي والتكيف',
+            'تحليل السياقات المحلية والعالمية',
+            'القيادة في البيئات متعددة الثقافات',
+            'التحديات الاجتماعية والسياسية',
+            'تكييف الإنجيل للسياق'
+          ],
+          outcome: 'ستطور القدرة على تكييف قيادتك مع السياقات الثقافية المختلفة.'
+        }
       }
     },
     {
@@ -235,6 +340,41 @@ const MembersArea = () => {
         sv: 'Strategier för att utveckla och utrusta framtida ledare.',
         en: 'Strategies for developing and equipping future leaders.',
         ar: 'استراتيجيات تطوير وتجهيز القادة المستقبليين.'
+      },
+      fullContent: {
+        sv: {
+          overview: 'Att investera i nästa generation är nyckeln till långsiktig framgång.',
+          topics: [
+            'Mentorskap och coaching',
+            'Identifiera och utveckla talanger',
+            'Skapa ledarutvecklingsprogram',
+            'Generationsöverskridande ledarskap',
+            'Succession och övergångsplanering'
+          ],
+          outcome: 'Du kommer att kunna bygga system för att utveckla framtida ledare i din organisation.'
+        },
+        en: {
+          overview: 'Investing in the next generation is key to long-term success.',
+          topics: [
+            'Mentorship and coaching',
+            'Identifying and developing talents',
+            'Creating leadership development programs',
+            'Cross-generational leadership',
+            'Succession and transition planning'
+          ],
+          outcome: 'You will be able to build systems for developing future leaders in your organization.'
+        },
+        ar: {
+          overview: 'الاستثمار في الجيل القادم هو مفتاح النجاح على المدى الطويل.',
+          topics: [
+            'التوجيه والتدريب',
+            'تحديد وتطوير المواهب',
+            'إنشاء برامج تطوير القيادة',
+            'القيادة عبر الأجيال',
+            'التخطيط للخلافة والانتقال'
+          ],
+          outcome: 'ستكون قادرًا على بناء أنظمة لتطوير القادة المستقبليين في منظمتك.'
+        }
       }
     },
     {
@@ -246,6 +386,41 @@ const MembersArea = () => {
         sv: 'Praktiska verktyg och principer för effektivt ledarskap.',
         en: 'Practical tools and principles for effective leadership.',
         ar: 'أدوات ومبادئ عملية للقيادة الفعالة.'
+      },
+      fullContent: {
+        sv: {
+          overview: 'Ledarskap handlar om att påverka och inspirera andra mot gemensamma mål.',
+          topics: [
+            'Ledarskapsstilar och deras tillämpning',
+            'Beslutsfattande under osäkerhet',
+            'Kommunikation och vision',
+            'Teambyggande och delegering',
+            'Konflikthantering och problemlösning'
+          ],
+          outcome: 'Du kommer att ha en verktygslåda för att leda effektivt i olika situationer.'
+        },
+        en: {
+          overview: 'Leadership is about influencing and inspiring others toward common goals.',
+          topics: [
+            'Leadership styles and their application',
+            'Decision-making under uncertainty',
+            'Communication and vision',
+            'Team building and delegation',
+            'Conflict management and problem-solving'
+          ],
+          outcome: 'You will have a toolbox for leading effectively in different situations.'
+        },
+        ar: {
+          overview: 'القيادة تتعلق بالتأثير على الآخرين وإلهامهم نحو أهداف مشتركة.',
+          topics: [
+            'أنماط القيادة وتطبيقها',
+            'اتخاذ القرارات في ظل عدم اليقين',
+            'التواصل والرؤية',
+            'بناء الفريق والتفويض',
+            'إدارة الصراعات وحل المشكلات'
+          ],
+          outcome: 'ستكون لديك مجموعة أدوات للقيادة بفعالية في مواقف مختلفة.'
+        }
       }
     },
     {
@@ -257,6 +432,41 @@ const MembersArea = () => {
         sv: 'Hur man sätter och uppnår meningsfulla mål.',
         en: 'How to set and achieve meaningful goals.',
         ar: 'كيفية وضع وتحقيق أهداف ذات معنى.'
+      },
+      fullContent: {
+        sv: {
+          overview: 'Effektiv målsättning är grunden för personlig och organisatorisk tillväxt.',
+          topics: [
+            'SMART-mål och andra ramverk',
+            'Visionsutveckling och strategisk planering',
+            'Mätning och uppföljning av framsteg',
+            'Övervinna hinder och motgångar',
+            'Fira framgångar och lära av misslyckanden'
+          ],
+          outcome: 'Du kommer att kunna sätta och nå mål som driver verklig förändring.'
+        },
+        en: {
+          overview: 'Effective goal setting is the foundation for personal and organizational growth.',
+          topics: [
+            'SMART goals and other frameworks',
+            'Vision development and strategic planning',
+            'Measuring and tracking progress',
+            'Overcoming obstacles and setbacks',
+            'Celebrating successes and learning from failures'
+          ],
+          outcome: 'You will be able to set and achieve goals that drive real change.'
+        },
+        ar: {
+          overview: 'وضع الأهداف الفعال هو أساس النمو الشخصي والتنظيمي.',
+          topics: [
+            'أهداف SMART وأطر أخرى',
+            'تطوير الرؤية والتخطيط الاستراتيجي',
+            'قياس ومتابعة التقدم',
+            'التغلب على العقبات والانتكاسات',
+            'الاحتفال بالنجاحات والتعلم من الإخفاقات'
+          ],
+          outcome: 'ستكون قادرًا على وضع وتحقيق أهداف تدفع التغيير الحقيقي.'
+        }
       }
     }
   ];
