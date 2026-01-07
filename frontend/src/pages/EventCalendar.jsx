@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar as CalendarIcon, MapPin, Clock, Users } from 'lucide-react';
+import { Calendar as CalendarIcon, MapPin, Clock, Users, Star, Globe, Home } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Calendar } from '../components/ui/calendar';
@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
+import { Badge } from '../components/ui/badge';
 import { toast } from 'sonner';
 import { useLanguage } from '../context/LanguageContext';
 import { eventsTranslations } from '../data/translations';
