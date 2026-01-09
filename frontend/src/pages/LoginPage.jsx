@@ -167,8 +167,8 @@ const LoginPage = () => {
           {/* Contact Info */}
           <div className={`mt-8 pt-6 border-t border-stone-200 text-center ${isRTL ? 'text-right' : ''}`}>
             <p className="text-sm text-stone-500">{txt.contactInfo}</p>
-            <a href="mailto:info@haggai.se" className="text-haggai hover:text-haggai-light text-sm font-medium">
-              info@haggai.se
+            <a href="tel:+46707825082" className="text-haggai hover:text-haggai-light text-sm font-medium">
+              +46 70 782 50 82
             </a>
           </div>
         </CardContent>
