@@ -622,8 +622,8 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
 
               <div className="text-center pt-4 border-t border-stone-200">
                 <p className="text-sm text-stone-500">{txt.contactForAccess}</p>
-                <a href="mailto:info@haggai.se" className="text-haggai hover:underline text-sm">
-                  info@haggai.se
+                <a href="tel:+46707825082" className="text-haggai hover:underline text-sm">
+                  +46 70 782 50 82
                 </a>
               </div>
             </form>
