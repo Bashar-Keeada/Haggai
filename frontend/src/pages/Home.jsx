@@ -1,15 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Users, BookOpen, Heart, Globe } from 'lucide-react';
+import { ArrowRight, Users, BookOpen, Heart, Globe, User } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { useLanguage } from '../context/LanguageContext';
 import { testimonialsTranslations, eventsTranslations } from '../data/translations';
 import { events } from '../data/mock';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const Home = () => {
   const { t, language, isRTL } = useLanguage();
-  const testimonials = testimonialsTranslations[language] || testimonialsTranslations.sv;
+  const fallbackTestimonials = testimonialsTranslations[language] || testimonialsTranslations.sv;
+  const translatedEvents = eventsTranslations[language] || eventsTranslations.sv;
+  const [testimonials, setTestimonials] = useState([]);
+  const [loadingTestimonials, setLoadingTestimonials] = useState(true);
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
+
+  const fetchTestimonials = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/testimonials?active_only=true`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.length > 0) {
+          // Transform API data to match expected format
+          const transformed = data.map(t => ({
+            id: t.id,
+            name: t.name,
+            role: t.role,
+            church: t.church,
+            quote: language === 'ar' && t.quote_ar ? t.quote_ar : 
+                   language === 'en' && t.quote_en ? t.quote_en : t.quote_sv,
+            image_url: t.image_url
+          }));
+          setTestimonials(transformed);
+        } else {
+          // Use fallback if no testimonials in DB
+          setTestimonials(fallbackTestimonials);
+        }
+      } else {
+        setTestimonials(fallbackTestimonials);
+      }
+    } catch (error) {
+      console.error('Error fetching testimonials:', error);
+      setTestimonials(fallbackTestimonials);
+    } finally {
+      setLoadingTestimonials(false);
+    }
+  };
   const translatedEvents = eventsTranslations[language] || eventsTranslations.sv;
 
   // Merge translated content with event data
