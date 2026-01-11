@@ -585,8 +585,8 @@ I am confident that your participation in this program will give you personal an
                 value={nominationData.motivation}
                 onChange={(e) => setNominationData({ ...nominationData, motivation: e.target.value })}
                 placeholder={nomTxt.motivationPlaceholder}
-                rows={3}
-                className="rounded-lg"
+                rows={8}
+                className="rounded-lg text-sm"
               />
             </div>
 
