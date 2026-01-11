@@ -11,7 +11,6 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Home = () => {
   const { t, language, isRTL } = useLanguage();
-  const fallbackTestimonials = testimonialsTranslations[language] || testimonialsTranslations.sv;
   const translatedEvents = eventsTranslations[language] || eventsTranslations.sv;
   const [testimonials, setTestimonials] = useState([]);
   const [loadingTestimonials, setLoadingTestimonials] = useState(true);
