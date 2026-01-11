@@ -686,6 +686,138 @@ async def delete_testimonial(testimonial_id: str):
     return {"message": "Testimonial deleted successfully"}
 
 
+# ==================== NOMINATION ENDPOINTS ====================
+
+class Nomination(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    # Event/Program info
+    event_id: str
+    event_title: str
+    event_date: Optional[str] = None
+    # Nominator info (the person nominating)
+    nominator_name: str
+    nominator_email: str
+    nominator_phone: Optional[str] = None
+    # Nominee info (the person being nominated)
+    nominee_name: str
+    nominee_email: str
+    nominee_phone: Optional[str] = None
+    # Additional info
+    motivation: Optional[str] = None
+    status: str = "pending"  # pending, approved, rejected, contacted
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class NominationCreate(BaseModel):
+    event_id: str
+    event_title: str
+    event_date: Optional[str] = None
+    nominator_name: str
+    nominator_email: str
+    nominator_phone: Optional[str] = None
+    nominee_name: str
+    nominee_email: str
+    nominee_phone: Optional[str] = None
+    motivation: Optional[str] = None
+
+
+class NominationUpdate(BaseModel):
+    status: Optional[str] = None
+    motivation: Optional[str] = None
+
+
+@api_router.post("/nominations", response_model=Nomination)
+async def create_nomination(input: NominationCreate):
+    """Create a new nomination"""
+    nomination = Nomination(**input.model_dump())
+    doc = nomination.model_dump()
+    await db.nominations.insert_one(doc)
+    return nomination
+
+
+@api_router.get("/nominations", response_model=List[Nomination])
+async def get_nominations(status: Optional[str] = None, event_id: Optional[str] = None):
+    """Get all nominations with optional filtering"""
+    query = {}
+    if status:
+        query["status"] = status
+    if event_id:
+        query["event_id"] = event_id
+    nominations = await db.nominations.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return nominations
+
+
+@api_router.get("/nominations/stats")
+async def get_nomination_stats():
+    """Get nomination statistics"""
+    total = await db.nominations.count_documents({})
+    pending = await db.nominations.count_documents({"status": "pending"})
+    approved = await db.nominations.count_documents({"status": "approved"})
+    rejected = await db.nominations.count_documents({"status": "rejected"})
+    contacted = await db.nominations.count_documents({"status": "contacted"})
+    
+    # Get top nominators
+    pipeline = [
+        {"$group": {"_id": "$nominator_email", "count": {"$sum": 1}, "name": {"$first": "$nominator_name"}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 10}
+    ]
+    top_nominators = await db.nominations.aggregate(pipeline).to_list(10)
+    
+    # Get nominations by event
+    event_pipeline = [
+        {"$group": {"_id": "$event_title", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}}
+    ]
+    by_event = await db.nominations.aggregate(event_pipeline).to_list(100)
+    
+    return {
+        "total": total,
+        "pending": pending,
+        "approved": approved,
+        "rejected": rejected,
+        "contacted": contacted,
+        "top_nominators": top_nominators,
+        "by_event": by_event
+    }
+
+
+@api_router.get("/nominations/{nomination_id}", response_model=Nomination)
+async def get_nomination(nomination_id: str):
+    """Get a specific nomination"""
+    nomination = await db.nominations.find_one({"id": nomination_id}, {"_id": 0})
+    if not nomination:
+        raise HTTPException(status_code=404, detail="Nomination not found")
+    return nomination
+
+
+@api_router.put("/nominations/{nomination_id}", response_model=Nomination)
+async def update_nomination(nomination_id: str, input: NominationUpdate):
+    """Update a nomination status"""
+    existing = await db.nominations.find_one({"id": nomination_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Nomination not found")
+    
+    update_data = {k: v for k, v in input.model_dump().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.nominations.update_one({"id": nomination_id}, {"$set": update_data})
+    updated = await db.nominations.find_one({"id": nomination_id}, {"_id": 0})
+    return updated
+
+
+@api_router.delete("/nominations/{nomination_id}")
+async def delete_nomination(nomination_id: str):
+    """Delete a nomination"""
+    result = await db.nominations.delete_one({"id": nomination_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Nomination not found")
+    return {"message": "Nomination deleted successfully"}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
