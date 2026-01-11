@@ -154,6 +154,11 @@ I am confident that your participation in this program will give you personal an
   const handleNominateClick = (event, e) => {
     e.stopPropagation(); // Prevent event card click
     setNominationEvent(event);
+    // Set default motivation text
+    setNominationData(prev => ({
+      ...prev,
+      motivation: nomTxt.defaultMotivation || ''
+    }));
     setIsNominationDialogOpen(true);
   };
 
