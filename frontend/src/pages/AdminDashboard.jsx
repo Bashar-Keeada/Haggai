@@ -366,6 +366,26 @@ const AdminDashboard = () => {
               </CardContent>
             </Card>
           </Link>
+          
+          <Link to="/admin/vittnesmal">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all cursor-pointer hover:bg-pink-50">
+              <CardContent className="p-6">
+                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-14 h-14 bg-pink-500 rounded-2xl flex items-center justify-center">
+                    <Quote className="h-7 w-7 text-white" />
+                  </div>
+                  <div className={isRTL ? 'text-right' : ''}>
+                    <h3 className="text-lg font-bold text-stone-800">
+                      {language === 'sv' ? 'Hantera Vittnesmål' : language === 'ar' ? 'إدارة الشهادات' : 'Manage Testimonials'}
+                    </h3>
+                    <p className="text-sm text-stone-500">
+                      {language === 'sv' ? 'Citat från deltagare' : language === 'ar' ? 'اقتباسات من المشاركين' : 'Quotes from participants'}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Stats Cards */}
