@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar as CalendarIcon, MapPin, Clock, Users, Star, Globe, Home } from 'lucide-react';
+import { Calendar as CalendarIcon, MapPin, Clock, Users, Star, Globe, Home, UserPlus } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Calendar } from '../components/ui/calendar';
@@ -13,11 +13,17 @@ import { useLanguage } from '../context/LanguageContext';
 import { eventsTranslations } from '../data/translations';
 import { events } from '../data/mock';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const EventCalendar = () => {
   const { t, language, isRTL } = useLanguage();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isNominationDialogOpen, setIsNominationDialogOpen] = useState(false);
+  const [nominationEvent, setNominationEvent] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const [registrationData, setRegistrationData] = useState({
     name: '',
     email: '',
@@ -25,6 +31,87 @@ const EventCalendar = () => {
     organization: '',
     message: ''
   });
+
+  const [nominationData, setNominationData] = useState({
+    nominator_name: '',
+    nominator_email: '',
+    nominator_phone: '',
+    nominee_name: '',
+    nominee_email: '',
+    nominee_phone: '',
+    motivation: ''
+  });
+
+  const nominationTranslations = {
+    sv: {
+      nominateButton: 'Nominera',
+      nominateTitle: 'Nominera en person',
+      nominateSubtitle: 'Rekommendera någon till denna utbildning',
+      nominatorSection: 'Dina uppgifter (du som nominerar)',
+      nomineeSection: 'Den du nominerar',
+      yourName: 'Ditt namn',
+      yourEmail: 'Din e-post',
+      yourPhone: 'Ditt telefonnummer',
+      nomineeName: 'Personens namn',
+      nomineeEmail: 'Personens e-post',
+      nomineePhone: 'Personens telefonnummer',
+      motivation: 'Motivering',
+      motivationPlaceholder: 'Varför rekommenderar du denna person? (valfritt)',
+      submit: 'Skicka nominering',
+      submitting: 'Skickar...',
+      cancel: 'Avbryt',
+      successTitle: 'Nominering skickad!',
+      successDesc: 'Tack för din nominering till',
+      errorTitle: 'Något gick fel',
+      errorDesc: 'Kunde inte skicka nomineringen. Försök igen.'
+    },
+    en: {
+      nominateButton: 'Nominate',
+      nominateTitle: 'Nominate a person',
+      nominateSubtitle: 'Recommend someone for this training',
+      nominatorSection: 'Your details (nominator)',
+      nomineeSection: 'Person you are nominating',
+      yourName: 'Your name',
+      yourEmail: 'Your email',
+      yourPhone: 'Your phone',
+      nomineeName: 'Person\'s name',
+      nomineeEmail: 'Person\'s email',
+      nomineePhone: 'Person\'s phone',
+      motivation: 'Motivation',
+      motivationPlaceholder: 'Why do you recommend this person? (optional)',
+      submit: 'Submit nomination',
+      submitting: 'Submitting...',
+      cancel: 'Cancel',
+      successTitle: 'Nomination submitted!',
+      successDesc: 'Thank you for your nomination to',
+      errorTitle: 'Something went wrong',
+      errorDesc: 'Could not submit the nomination. Please try again.'
+    },
+    ar: {
+      nominateButton: 'رشّح',
+      nominateTitle: 'رشّح شخصًا',
+      nominateSubtitle: 'وصي بشخص لهذا التدريب',
+      nominatorSection: 'بياناتك (المُرشِّح)',
+      nomineeSection: 'الشخص الذي ترشحه',
+      yourName: 'اسمك',
+      yourEmail: 'بريدك الإلكتروني',
+      yourPhone: 'رقم هاتفك',
+      nomineeName: 'اسم الشخص',
+      nomineeEmail: 'بريد الشخص الإلكتروني',
+      nomineePhone: 'رقم هاتف الشخص',
+      motivation: 'السبب',
+      motivationPlaceholder: 'لماذا توصي بهذا الشخص؟ (اختياري)',
+      submit: 'إرسال الترشيح',
+      submitting: 'جاري الإرسال...',
+      cancel: 'إلغاء',
+      successTitle: 'تم إرسال الترشيح!',
+      successDesc: 'شكرًا لترشيحك إلى',
+      errorTitle: 'حدث خطأ',
+      errorDesc: 'تعذر إرسال الترشيح. حاول مرة أخرى.'
+    }
+  };
+
+  const nomTxt = nominationTranslations[language] || nominationTranslations.sv;
 
   const translatedEvents = eventsTranslations[language] || eventsTranslations.sv;
   
@@ -45,6 +132,12 @@ const EventCalendar = () => {
     setIsDialogOpen(true);
   };
 
+  const handleNominateClick = (event, e) => {
+    e.stopPropagation(); // Prevent event card click
+    setNominationEvent(event);
+    setIsNominationDialogOpen(true);
+  };
+
   const handleRegistration = (e) => {
     e.preventDefault();
     // Mock registration - store in localStorage
@@ -62,6 +155,50 @@ const EventCalendar = () => {
     });
     setIsDialogOpen(false);
     setRegistrationData({ name: '', email: '', phone: '', organization: '', message: '' });
+  };
+
+  const handleNominationSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/nominations`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          event_id: nominationEvent.id.toString(),
+          event_title: nominationEvent.title,
+          event_date: nominationEvent.date,
+          ...nominationData
+        }),
+      });
+
+      if (response.ok) {
+        toast.success(nomTxt.successTitle, {
+          description: `${nomTxt.successDesc} ${nominationEvent.title}`
+        });
+        setIsNominationDialogOpen(false);
+        setNominationData({
+          nominator_name: '',
+          nominator_email: '',
+          nominator_phone: '',
+          nominee_name: '',
+          nominee_email: '',
+          nominee_phone: '',
+          motivation: ''
+        });
+      } else {
+        throw new Error('Failed to submit');
+      }
+    } catch (error) {
+      toast.error(nomTxt.errorTitle, {
+        description: nomTxt.errorDesc
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getLocaleDateString = (dateStr) => {
@@ -199,11 +336,28 @@ const EventCalendar = () => {
                             </div>
                           </div>
                           
-                          {/* Action */}
-                          <div className="md:w-40 p-6 flex items-center justify-center bg-cream-50">
-                            <Button className="bg-haggai hover:bg-haggai-dark text-cream-50 rounded-xl">
+                          {/* Actions */}
+                          <div className="md:w-48 p-6 flex flex-col items-center justify-center gap-3 bg-cream-50">
+                            <Button 
+                              className="w-full bg-haggai hover:bg-haggai-dark text-cream-50 rounded-xl"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEventClick(event);
+                              }}
+                            >
                               {t('calendar.signUp')}
                             </Button>
+                            {isLeaderExperience && (
+                              <Button 
+                                variant="outline"
+                                className="w-full border-haggai text-haggai hover:bg-haggai hover:text-white rounded-xl"
+                                onClick={(e) => handleNominateClick(event, e)}
+                                data-testid={`nominate-btn-${event.id}`}
+                              >
+                                <UserPlus className="h-4 w-4 mr-2" />
+                                {nomTxt.nominateButton}
+                              </Button>
+                            )}
                           </div>
                         </div>
                       </CardContent>
@@ -296,6 +450,139 @@ const EventCalendar = () => {
                 className="flex-1 bg-haggai hover:bg-haggai-dark text-cream-50 rounded-xl"
               >
                 {t('calendar.submit')}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Nomination Dialog */}
+      <Dialog open={isNominationDialogOpen} onOpenChange={setIsNominationDialogOpen}>
+        <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className={isRTL ? 'text-right' : ''}>
+            <DialogTitle className="text-2xl text-stone-800 flex items-center gap-2">
+              <UserPlus className="h-6 w-6 text-haggai" />
+              {nomTxt.nominateTitle}
+            </DialogTitle>
+            <DialogDescription className="text-stone-600">
+              {nomTxt.nominateSubtitle}
+            </DialogDescription>
+            {nominationEvent && (
+              <Badge className="w-fit mt-2 bg-haggai text-white">
+                {nominationEvent.title}
+              </Badge>
+            )}
+          </DialogHeader>
+          
+          <form onSubmit={handleNominationSubmit} className={`space-y-6 mt-4 ${isRTL ? 'text-right' : ''}`}>
+            {/* Nominator Section */}
+            <div className="space-y-4">
+              <h4 className="font-semibold text-stone-700 border-b pb-2">{nomTxt.nominatorSection}</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="nominator-name">{nomTxt.yourName} *</Label>
+                  <Input
+                    id="nominator-name"
+                    value={nominationData.nominator_name}
+                    onChange={(e) => setNominationData({ ...nominationData, nominator_name: e.target.value })}
+                    required
+                    className="rounded-lg"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="nominator-email">{nomTxt.yourEmail} *</Label>
+                  <Input
+                    id="nominator-email"
+                    type="email"
+                    value={nominationData.nominator_email}
+                    onChange={(e) => setNominationData({ ...nominationData, nominator_email: e.target.value })}
+                    required
+                    className="rounded-lg"
+                    dir="ltr"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="nominator-phone">{nomTxt.yourPhone}</Label>
+                <Input
+                  id="nominator-phone"
+                  value={nominationData.nominator_phone}
+                  onChange={(e) => setNominationData({ ...nominationData, nominator_phone: e.target.value })}
+                  className="rounded-lg"
+                  dir="ltr"
+                />
+              </div>
+            </div>
+
+            {/* Nominee Section */}
+            <div className="space-y-4">
+              <h4 className="font-semibold text-stone-700 border-b pb-2">{nomTxt.nomineeSection}</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="nominee-name">{nomTxt.nomineeName} *</Label>
+                  <Input
+                    id="nominee-name"
+                    value={nominationData.nominee_name}
+                    onChange={(e) => setNominationData({ ...nominationData, nominee_name: e.target.value })}
+                    required
+                    className="rounded-lg"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="nominee-email">{nomTxt.nomineeEmail} *</Label>
+                  <Input
+                    id="nominee-email"
+                    type="email"
+                    value={nominationData.nominee_email}
+                    onChange={(e) => setNominationData({ ...nominationData, nominee_email: e.target.value })}
+                    required
+                    className="rounded-lg"
+                    dir="ltr"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="nominee-phone">{nomTxt.nomineePhone}</Label>
+                <Input
+                  id="nominee-phone"
+                  value={nominationData.nominee_phone}
+                  onChange={(e) => setNominationData({ ...nominationData, nominee_phone: e.target.value })}
+                  className="rounded-lg"
+                  dir="ltr"
+                />
+              </div>
+            </div>
+
+            {/* Motivation */}
+            <div className="space-y-2">
+              <Label htmlFor="motivation">{nomTxt.motivation}</Label>
+              <Textarea
+                id="motivation"
+                value={nominationData.motivation}
+                onChange={(e) => setNominationData({ ...nominationData, motivation: e.target.value })}
+                placeholder={nomTxt.motivationPlaceholder}
+                rows={3}
+                className="rounded-lg"
+              />
+            </div>
+
+            {/* Actions */}
+            <div className={`flex gap-3 pt-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsNominationDialogOpen(false)}
+                className="flex-1 rounded-xl"
+                disabled={isSubmitting}
+              >
+                {nomTxt.cancel}
+              </Button>
+              <Button
+                type="submit"
+                className="flex-1 bg-haggai hover:bg-haggai-dark text-cream-50 rounded-xl"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? nomTxt.submitting : nomTxt.submit}
               </Button>
             </div>
           </form>
