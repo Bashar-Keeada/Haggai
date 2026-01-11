@@ -4,7 +4,7 @@ import { ArrowRight, Users, BookOpen, Heart, Globe, User } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { useLanguage } from '../context/LanguageContext';
-import { testimonialsTranslations, eventsTranslations } from '../data/translations';
+import { eventsTranslations } from '../data/translations';
 import { events } from '../data/mock';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
