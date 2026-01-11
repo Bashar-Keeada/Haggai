@@ -266,6 +266,34 @@ class PartnerCreate(BaseModel):
     partnership_type: str = "standard"
 
 
+# Testimonial Model
+class Testimonial(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    role: Optional[str] = None  # e.g., "Pastor", "Ledare"
+    church: Optional[str] = None  # Church or organization name
+    quote_sv: str  # Swedish quote
+    quote_en: Optional[str] = None  # English quote
+    quote_ar: Optional[str] = None  # Arabic quote
+    image_url: Optional[str] = None
+    is_active: bool = True
+    order: int = 0  # For sorting
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class TestimonialCreate(BaseModel):
+    name: str
+    role: Optional[str] = None
+    church: Optional[str] = None
+    quote_sv: str
+    quote_en: Optional[str] = None
+    quote_ar: Optional[str] = None
+    image_url: Optional[str] = None
+    order: int = 0
+
+
 class StatusCheckCreate(BaseModel):
     client_name: str
 
