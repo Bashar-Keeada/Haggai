@@ -51,7 +51,6 @@ const Home = () => {
       setLoadingTestimonials(false);
     }
   };
-  const translatedEvents = eventsTranslations[language] || eventsTranslations.sv;
 
   // Merge translated content with event data
   const localizedEvents = events.map(event => {
