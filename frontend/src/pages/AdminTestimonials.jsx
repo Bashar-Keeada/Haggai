@@ -146,8 +146,7 @@ const AdminTestimonials = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm(txt.confirmDelete)) return;
-    
+    // Skip confirmation for now - just delete directly
     try {
       const response = await fetch(`${BACKEND_URL}/api/testimonials/${id}`, {
         method: 'DELETE'
@@ -155,6 +154,8 @@ const AdminTestimonials = () => {
       if (response.ok) {
         toast.success('Vittnesmål borttaget!');
         fetchTestimonials();
+      } else {
+        toast.error('Kunde inte ta bort vittnesmål');
       }
     } catch (error) {
       console.error('Error deleting testimonial:', error);
