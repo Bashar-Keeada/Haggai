@@ -635,6 +635,57 @@ async def delete_partner(partner_id: str):
     return {"message": "Partner deleted successfully"}
 
 
+# ==================== TESTIMONIAL ENDPOINTS ====================
+
+@api_router.post("/testimonials", response_model=Testimonial)
+async def create_testimonial(input: TestimonialCreate):
+    """Create a new testimonial"""
+    testimonial = Testimonial(**input.model_dump())
+    doc = testimonial.model_dump()
+    await db.testimonials.insert_one(doc)
+    return testimonial
+
+
+@api_router.get("/testimonials", response_model=List[Testimonial])
+async def get_testimonials(active_only: bool = True):
+    """Get all testimonials"""
+    query = {"is_active": True} if active_only else {}
+    testimonials = await db.testimonials.find(query, {"_id": 0}).sort("order", 1).to_list(100)
+    return testimonials
+
+
+@api_router.get("/testimonials/{testimonial_id}", response_model=Testimonial)
+async def get_testimonial(testimonial_id: str):
+    """Get a specific testimonial"""
+    testimonial = await db.testimonials.find_one({"id": testimonial_id}, {"_id": 0})
+    if not testimonial:
+        raise HTTPException(status_code=404, detail="Testimonial not found")
+    return testimonial
+
+
+@api_router.put("/testimonials/{testimonial_id}", response_model=Testimonial)
+async def update_testimonial(testimonial_id: str, update_data: dict):
+    """Update a testimonial"""
+    result = await db.testimonials.update_one(
+        {"id": testimonial_id},
+        {"$set": update_data}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Testimonial not found")
+    
+    updated = await db.testimonials.find_one({"id": testimonial_id}, {"_id": 0})
+    return updated
+
+
+@api_router.delete("/testimonials/{testimonial_id}")
+async def delete_testimonial(testimonial_id: str):
+    """Delete a testimonial"""
+    result = await db.testimonials.delete_one({"id": testimonial_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Testimonial not found")
+    return {"message": "Testimonial deleted successfully"}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
