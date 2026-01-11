@@ -451,16 +451,16 @@ const Donations = () => {
       </section>
 
       {/* Thank You Section */}
-      <section className="py-24 bg-haggai-dark text-white">
+      <section className="py-24 text-white" style={{ backgroundColor: '#0f403a' }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Heart className="h-16 w-16 text-haggai-200 mx-auto mb-6" />
-          <h2 className="text-3xl font-bold mb-4">{txt.thankYou}</h2>
-          <p className="text-haggai-200 text-lg mb-8">
+          <Heart className="h-16 w-16 text-white/60 mx-auto mb-6" />
+          <h2 className="text-3xl font-bold mb-4 text-white">{txt.thankYou}</h2>
+          <p className="text-white/80 text-lg mb-8">
             {txt.thankYouDesc}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="/kontakt">
-              <Button variant="outline" className="border-white text-white hover:bg-white hover:text-haggai-dark">
+              <Button variant="outline" className="border-white text-white hover:bg-white hover:text-stone-800">
                 {txt.questions} {txt.contactUs}
               </Button>
             </a>
