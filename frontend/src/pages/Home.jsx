@@ -25,28 +25,23 @@ const Home = () => {
       const response = await fetch(`${BACKEND_URL}/api/testimonials?active_only=true`);
       if (response.ok) {
         const data = await response.json();
-        if (data.length > 0) {
-          // Transform API data to match expected format
-          const transformed = data.map(t => ({
-            id: t.id,
-            name: t.name,
-            role: t.role,
-            church: t.church,
-            quote: language === 'ar' && t.quote_ar ? t.quote_ar : 
-                   language === 'en' && t.quote_en ? t.quote_en : t.quote_sv,
-            image_url: t.image_url
-          }));
-          setTestimonials(transformed);
-        } else {
-          // Use fallback if no testimonials in DB
-          setTestimonials(fallbackTestimonials);
-        }
+        // Transform API data to match expected format
+        const transformed = data.map(t => ({
+          id: t.id,
+          name: t.name,
+          role: t.role,
+          church: t.church,
+          quote: language === 'ar' && t.quote_ar ? t.quote_ar : 
+                 language === 'en' && t.quote_en ? t.quote_en : t.quote_sv,
+          image_url: t.image_url
+        }));
+        setTestimonials(transformed);
       } else {
-        setTestimonials(fallbackTestimonials);
+        setTestimonials([]);
       }
     } catch (error) {
       console.error('Error fetching testimonials:', error);
-      setTestimonials(fallbackTestimonials);
+      setTestimonials([]);
     } finally {
       setLoadingTestimonials(false);
     }
