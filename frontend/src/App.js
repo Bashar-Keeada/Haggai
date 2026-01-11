@@ -18,6 +18,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminBoardMembers from "./pages/AdminBoardMembers";
 import AdminOrganizationMembers from "./pages/AdminOrganizationMembers";
 import AdminPartners from "./pages/AdminPartners";
+import AdminTestimonials from "./pages/AdminTestimonials";
 import MembersArea from "./pages/MembersArea";
 import Partners from "./pages/Partners";
 import LoginPage from "./pages/LoginPage";
