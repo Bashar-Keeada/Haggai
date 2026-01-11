@@ -21,6 +21,7 @@ import AdminPartners from "./pages/AdminPartners";
 import AdminTestimonials from "./pages/AdminTestimonials";
 import MembersArea from "./pages/MembersArea";
 import Partners from "./pages/Partners";
+import Donations from "./pages/Donations";
 import LoginPage from "./pages/LoginPage";
 
 // Protected App content - only shown when authenticated
@@ -55,6 +56,7 @@ const ProtectedApp = () => {
           <Route path="/kontakt" element={<Contact />} />
           <Route path="/ledare" element={<Leaders />} />
           <Route path="/partners" element={<Partners />} />
+          <Route path="/donera" element={<Donations />} />
           <Route path="/medlemmar" element={<MembersArea />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/ledare" element={<AdminLeaders />} />

@@ -30,6 +30,12 @@ const Header = () => {
     ar: 'القادة'
   };
 
+  const donationsLabel = {
+    sv: 'Ge en Gåva',
+    en: 'Donate',
+    ar: 'تبرع'
+  };
+
   const navLinks = [
     { path: '/', label: t('nav.home') },
     { path: '/om-oss', label: t('nav.about') },
@@ -38,6 +44,7 @@ const Header = () => {
     { path: '/partners', label: language === 'sv' ? 'Partners' : language === 'ar' ? 'الشركاء' : 'Partners' },
     { path: '/kalender', label: t('nav.calendar') },
     { path: '/bli-medlem', label: t('nav.membership') },
+    { path: '/donera', label: donationsLabel[language] || 'Ge en Gåva' },
     { path: '/kontakt', label: t('nav.contact') },
   ];
 
