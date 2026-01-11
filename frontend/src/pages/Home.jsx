@@ -220,19 +220,15 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-24 bg-haggai-dark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
-            <h2 className="text-4xl font-bold text-cream-50 mb-4">{t('home.testimonials')}</h2>
-            <p className="text-haggai-200">{t('home.testimonialsSubtitle')}</p>
-          </div>
-          
-          {loadingTestimonials ? (
-            <div className="flex justify-center">
-              <div className="w-10 h-10 border-4 border-cream-50 border-t-transparent rounded-full animate-spin" />
+      {/* Testimonials - Only show if there are testimonials */}
+      {!loadingTestimonials && testimonials.length > 0 && (
+        <section className="py-24 bg-haggai-dark">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
+              <h2 className="text-4xl font-bold text-cream-50 mb-4">{t('home.testimonials')}</h2>
+              <p className="text-haggai-200">{t('home.testimonialsSubtitle')}</p>
             </div>
-          ) : (
+            
             <div className="grid md:grid-cols-3 gap-8">
               {testimonials.slice(0, 3).map((testimonial) => (
                 <Card key={testimonial.id} className="bg-haggai-700/50 border-haggai-700 backdrop-blur">
@@ -262,9 +258,9 @@ const Home = () => {
                 </Card>
               ))}
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-24 bg-haggai-50">
