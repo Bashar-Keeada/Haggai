@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Users, FileText, Mail, Calendar, ChevronDown, ChevronUp, 
-  Eye, Check, X, Clock, Filter, Search, Download, RefreshCw, UserCog, Shield, Building2, Handshake, Quote
+  Eye, Check, X, Clock, Filter, Search, Download, RefreshCw, UserCog, Shield, Building2, Handshake, Quote, UserPlus
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
