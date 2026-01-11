@@ -234,20 +234,41 @@ const Home = () => {
             <p className="text-haggai-200">{t('home.testimonialsSubtitle')}</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial) => (
-              <Card key={testimonial.id} className="bg-haggai-700/50 border-haggai-700 backdrop-blur">
-                <CardContent className={`p-8 ${isRTL ? 'text-right' : ''}`}>
-                  <div className={`text-haggai-200 text-4xl mb-4 ${isRTL ? 'text-right' : ''}`}>"</div>
-                  <p className="text-cream-100 mb-6 leading-relaxed italic">{testimonial.quote}</p>
-                  <div className="border-t border-haggai-700 pt-4">
-                    <p className="text-cream-50 font-semibold">{testimonial.name}</p>
-                    <p className="text-haggai-300 text-sm">{testimonial.church}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {loadingTestimonials ? (
+            <div className="flex justify-center">
+              <div className="w-10 h-10 border-4 border-cream-50 border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-8">
+              {testimonials.slice(0, 3).map((testimonial) => (
+                <Card key={testimonial.id} className="bg-haggai-700/50 border-haggai-700 backdrop-blur">
+                  <CardContent className={`p-8 ${isRTL ? 'text-right' : ''}`}>
+                    <div className={`text-haggai-200 text-4xl mb-4 ${isRTL ? 'text-right' : ''}`}>"</div>
+                    <p className="text-cream-100 mb-6 leading-relaxed italic">{testimonial.quote}</p>
+                    <div className={`border-t border-haggai-700 pt-4 flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      {testimonial.image_url ? (
+                        <img 
+                          src={testimonial.image_url} 
+                          alt={testimonial.name}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-haggai-600 flex items-center justify-center">
+                          <User className="h-6 w-6 text-haggai-200" />
+                        </div>
+                      )}
+                      <div className={isRTL ? 'text-right' : ''}>
+                        <p className="text-cream-50 font-semibold">{testimonial.name}</p>
+                        <p className="text-haggai-300 text-sm">
+                          {testimonial.role}{testimonial.role && testimonial.church && ' – '}{testimonial.church}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
