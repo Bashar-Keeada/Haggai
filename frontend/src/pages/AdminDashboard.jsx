@@ -386,6 +386,26 @@ const AdminDashboard = () => {
               </CardContent>
             </Card>
           </Link>
+          
+          <Link to="/admin/nomineringar">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all cursor-pointer hover:bg-teal-50">
+              <CardContent className="p-6">
+                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-14 h-14 bg-teal-500 rounded-2xl flex items-center justify-center">
+                    <UserPlus className="h-7 w-7 text-white" />
+                  </div>
+                  <div className={isRTL ? 'text-right' : ''}>
+                    <h3 className="text-lg font-bold text-stone-800">
+                      {language === 'sv' ? 'Hantera Nomineringar' : language === 'ar' ? 'إدارة الترشيحات' : 'Manage Nominations'}
+                    </h3>
+                    <p className="text-sm text-stone-500">
+                      {language === 'sv' ? 'Nominerade till utbildningar' : language === 'ar' ? 'المرشحون للتدريبات' : 'Nominated for trainings'}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Stats Cards */}
