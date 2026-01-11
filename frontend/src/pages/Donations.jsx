@@ -242,22 +242,22 @@ const Donations = () => {
   return (
     <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-haggai via-haggai-dark to-haggai-dark text-white">
+      <section className="py-24 text-white" style={{ background: 'linear-gradient(to bottom right, #15564e, #0f403a, #0f403a)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`max-w-3xl ${isRTL ? 'mr-auto text-right' : ''}`}>
             <div className={`flex items-center gap-3 mb-6 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
               <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
                 <Heart className="h-7 w-7 text-white" />
               </div>
-              <span className="text-haggai-200 font-medium text-sm tracking-wider uppercase">{language === 'sv' ? 'Ge en gåva' : language === 'ar' ? 'قدم هدية' : 'Make a Gift'}</span>
+              <span className="text-white/70 font-medium text-sm tracking-wider uppercase">{language === 'sv' ? 'Ge en gåva' : language === 'ar' ? 'قدم هدية' : 'Make a Gift'}</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
               {txt.pageTitle}
             </h1>
-            <p className="text-xl text-haggai-100 mb-4">
+            <p className="text-xl text-white/90 mb-4">
               {txt.pageSubtitle}
             </p>
-            <p className="text-lg text-haggai-200 leading-relaxed">
+            <p className="text-lg text-white/80 leading-relaxed">
               {txt.pageDescription}
             </p>
           </div>
