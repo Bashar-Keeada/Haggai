@@ -16,12 +16,12 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 3. **Leader Experience** - Programs and application forms
 4. **Leaders** - Directory of leaders/facilitators
 5. **Partners** - Strategic partners page
-6. **Event Calendar** - Upcoming events with registration
+6. **Event Calendar** - Upcoming events with registration + **NOMINATION FEATURE** ✅
 7. **Membership** - Application forms for individuals, churches, organizations
 8. **Contact** - Contact form and info
 9. **Members Area** - Protected area with additional resources
-10. **Donations** - Support page with Swish and bank transfer options ✅ NEW
-11. **Admin Panels** - Manage all dynamic content
+10. **Donations** - Support page with Swish and bank transfer options ✅
+11. **Admin Panels** - Manage all dynamic content including nominations
 
 ### Admin Panels
 - Leaders/Facilitators management
@@ -30,6 +30,7 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - Organization/Church members
 - Partners
 - Testimonials
+- **Nominations** ✅ NEW - View and manage nominations with statistics
 
 ### Technical Stack
 - **Frontend:** React, React Router, TailwindCSS, Shadcn/UI
@@ -43,34 +44,44 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 
 ### January 2026
 
-#### Donations Page ✅ (Latest)
+#### Nomination System ✅ (Latest)
+- **Nominate Button** on Leader Experience events in Calendar
+- **Nomination Form** with:
+  - Nominator info (name, email, phone)
+  - Nominee info (name, email, phone)
+  - Auto-selected training/event
+  - Motivation text field
+- **Backend API:** Full CRUD for nominations (`/api/nominations`)
+- **Statistics API:** Get nomination stats (`/api/nominations/stats`)
+- **Admin Panel** (`/admin/nomineringar`) with:
+  - Statistics dashboard (total, pending, approved, rejected, contacted)
+  - Top nominators list
+  - Nominations by event
+  - Filter by status
+  - Search functionality
+  - Approve/Reject/Contact actions
+- Multi-language support (SV/EN/AR)
+
+#### Donations Page ✅
 - Created `/donera` route with full UI
 - Swish payment with test number display
-- Bank transfer details (Swedbank, IBAN, BIC/SWIFT)
-- One-time gift ("Engångsgåva") options: 100, 250, 500, 1000 kr
-- Recurring gift ("Regelbunden gåva") options: 100, 250, 500 kr/month
-- Impact section explaining donation purpose
-- Copy-to-clipboard functionality for payment details
-- Full i18n support (Swedish, English, Arabic)
-- Added "Ge en Gåva" link to main navigation
+- Bank transfer details
+- One-time and recurring gift options
+- Full i18n support
 
 #### Previous Work (From Handoff)
 - Board Member Management (CRUD, active/archived)
 - Partner & Organization Management
 - Testimonial Management with admin panel
 - Approve/Reject Application functionality
-- Event Calendar with Leader Experience programs
 - Dual Password System (site + members area)
-- Environment variable configuration for passwords
 - Core Subjects modal in Members Area
-- UI/Layout adjustments throughout
 
 ---
 
 ## Credentials
-- **Website Password:** Stored in backend `.env` as `SITE_PASSWORD`
-- **Members Area Password:** Stored in backend `.env` as `MEMBERS_PASSWORD`
-- **Test values:** `Keeada2030` (site), `Haggai2030!` (members)
+- **Website Password:** `Keeada2030`
+- **Members Area Password:** `Haggai2030!`
 
 ---
 
@@ -80,12 +91,11 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 
 ### P1 (High Priority)
 - Update Swish/bank details when user provides real numbers
-- QR code integration for Swish (currently placeholder)
+- QR code integration for Swish
 
 ### P2 (Medium Priority)
-- Email notifications for form submissions
+- Email notifications for form submissions and nominations
 - Migrate Leader Experience programs from mock.js to database
-- Add Admin panel for Leader Experience programs
 
 ### P3 (Low Priority/Future)
 - Online payment integration (Stripe/PayPal)
@@ -95,12 +105,11 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 ---
 
 ## Key Files Reference
+- `/app/frontend/src/pages/EventCalendar.jsx` - Calendar with nomination button
+- `/app/frontend/src/pages/AdminNominations.jsx` - Admin panel for nominations
 - `/app/frontend/src/pages/Donations.jsx` - Donations page
-- `/app/frontend/src/components/layout/Header.jsx` - Navigation
-- `/app/frontend/src/App.js` - Routing
-- `/app/backend/server.py` - All API endpoints
-- `/app/frontend/src/data/translations.js` - i18n strings
-- `/app/frontend/src/data/mock.js` - Mock data for programs
+- `/app/frontend/src/pages/AdminDashboard.jsx` - Main admin hub
+- `/app/backend/server.py` - All API endpoints including nominations
 
 ---
 
@@ -110,6 +119,8 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - `GET/POST/PUT/DELETE /api/organization-members`
 - `GET/POST/PUT/DELETE /api/partners`
 - `GET/POST/PUT/DELETE /api/testimonials`
+- `GET/POST/PUT/DELETE /api/nominations` ✅ NEW
+- `GET /api/nominations/stats` ✅ NEW
 - `GET/POST/PUT /api/applications/leader-experience`
 - `GET/POST /api/applications/membership`
 - `GET/POST /api/applications/contact`
@@ -122,6 +133,7 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - `organization_members`
 - `partners`
 - `testimonials`
+- `nominations` ✅ NEW
 - `leader_experience_applications`
 - `membership_applications`
 - `contact_submissions`
