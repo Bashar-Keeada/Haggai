@@ -55,15 +55,22 @@ const EventCalendar = () => {
       nomineeName: 'Personens namn',
       nomineeEmail: 'Personens e-post',
       nomineePhone: 'Personens telefonnummer',
-      motivation: 'Motivering',
-      motivationPlaceholder: 'Varför rekommenderar du denna person? (valfritt)',
+      motivation: 'Motivering (kan redigeras)',
+      motivationPlaceholder: 'Varför rekommenderar du denna person?',
       submit: 'Skicka nominering',
       submitting: 'Skickar...',
       cancel: 'Avbryt',
       successTitle: 'Nominering skickad!',
       successDesc: 'Tack för din nominering till',
       errorTitle: 'Något gick fel',
-      errorDesc: 'Kunde inte skicka nomineringen. Försök igen.'
+      errorDesc: 'Kunde inte skicka nomineringen. Försök igen.',
+      defaultMotivation: `Jag vill med full övertygelse uttrycka min starka önskan att nominera dig till detta ledarprogram, eftersom jag ser verklig potential och ett tydligt inflytande hos dig på dem omkring dig.
+
+Detta program utmärker sig genom sin ekumeniska karaktär, där det samlar kristna ledare från olika kyrkor och samfund, utan att tillhöra någon specifik kyrka. Detta ger deltagarna en rik och balanserad upplevelse baserad på ömsesidig respekt och gemensamt lärande.
+
+Det mest utmärkande med denna upplevelse är att den inte syftar till att ändra din kyrkotillhörighet eller identitet. Tvärtom, målet är att utrusta dig att återvända till din kyrka med ny erfarenhet, en bredare vision och praktiska verktyg som hjälper dig att leda din grupp djupare, mer effektivt och snabbare i mötet med utmaningar.
+
+Jag är övertygad om att ditt deltagande i detta program kommer att ge dig personlig och andlig tillväxt, och stärka din förmåga att påverka, tjäna och leda andra med visdom och ansvar – till gagn för den kyrka du tjänar och för hela Kristi kropp.`
     },
     en: {
       nominateButton: 'Nominate',
@@ -77,15 +84,22 @@ const EventCalendar = () => {
       nomineeName: 'Person\'s name',
       nomineeEmail: 'Person\'s email',
       nomineePhone: 'Person\'s phone',
-      motivation: 'Motivation',
-      motivationPlaceholder: 'Why do you recommend this person? (optional)',
+      motivation: 'Motivation (editable)',
+      motivationPlaceholder: 'Why do you recommend this person?',
       submit: 'Submit nomination',
       submitting: 'Submitting...',
       cancel: 'Cancel',
       successTitle: 'Nomination submitted!',
       successDesc: 'Thank you for your nomination to',
       errorTitle: 'Something went wrong',
-      errorDesc: 'Could not submit the nomination. Please try again.'
+      errorDesc: 'Could not submit the nomination. Please try again.',
+      defaultMotivation: `I want to express with full conviction my strong desire to nominate you for this leadership program, because I see real potential and a clear influence in you on those around you.
+
+This program is distinguished by its ecumenical character, bringing together Christian leaders from various churches and denominations, without belonging to any specific church. This gives participants a rich and balanced experience based on mutual respect and shared learning.
+
+What distinguishes this experience most is that it does not seek to change your church affiliation or identity. On the contrary, the goal is to equip you to return to your church with new experience, a broader vision, and practical tools that help you lead your group more deeply, effectively, and quickly in facing challenges.
+
+I am confident that your participation in this program will give you personal and spiritual growth, and will strengthen your ability to influence, serve, and lead others with wisdom and responsibility – for the benefit of the church you serve and for the entire body of Christ.`
     },
     ar: {
       nominateButton: 'رشّح',
@@ -99,15 +113,20 @@ const EventCalendar = () => {
       nomineeName: 'اسم الشخص',
       nomineeEmail: 'بريد الشخص الإلكتروني',
       nomineePhone: 'رقم هاتف الشخص',
-      motivation: 'السبب',
-      motivationPlaceholder: 'لماذا توصي بهذا الشخص؟ (اختياري)',
+      motivation: 'السبب (يمكن تعديله)',
+      motivationPlaceholder: 'لماذا توصي بهذا الشخص؟',
       submit: 'إرسال الترشيح',
       submitting: 'جاري الإرسال...',
       cancel: 'إلغاء',
       successTitle: 'تم إرسال الترشيح!',
       successDesc: 'شكرًا لترشيحك إلى',
       errorTitle: 'حدث خطأ',
-      errorDesc: 'تعذر إرسال الترشيح. حاول مرة أخرى.'
+      errorDesc: 'تعذر إرسال الترشيح. حاول مرة أخرى.',
+      defaultMotivation: `أود أن أعبّر لك بكل قناعة عن رغبتي القوية في ترشيحك لهذا البرنامج القيادي، لأنني أرى فيك إمكانيات حقيقية وتأثيرًا واضحًا فيمن حولك. هذا البرنامج يتميّز بطابعه المسكوني، إذ يجمع قادة مسيحيين من مختلف الكنائس والطوائف، دون أن يكون تابعًا لكنيسة بعينها، مما يمنح المشاركين خبرة غنية ومتوازنة قائمة على الاحترام والتعلّم المشترك.
+
+أكثر ما يميّز هذه التجربة هو أنها لا تسعى إلى تغيير انتمائك الكنسي أو هويتك، بل على العكس، تهدف إلى تأهيلك للعودة إلى كنيستك بخبرة جديدة، ورؤية أوسع، وأدوات عملية تساعدك على قيادة مجموعتك بشكل أعمق، وأكثر فاعلية، وبوتيرة أسرع في مواجهة التحديات.
+
+أنا على ثقة بأن مشاركتك في هذا البرنامج ستمنحك نموًا شخصيًا وروحيًا، وستعزّز قدرتك على التأثير، والخدمة، وقيادة الآخرين بحكمة ومسؤولية، لما فيه خير الكنيسة التي تخدمها، ولخير الجسد المسيحي بأكمله.`
     }
   };
 
