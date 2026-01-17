@@ -880,10 +880,15 @@ class NominationUpdate(BaseModel):
 
 @api_router.post("/nominations", response_model=Nomination)
 async def create_nomination(input: NominationCreate):
-    """Create a new nomination"""
+    """Create a new nomination and send emails"""
     nomination = Nomination(**input.model_dump())
     doc = nomination.model_dump()
     await db.nominations.insert_one(doc)
+    
+    # Send emails asynchronously (don't wait for them to complete)
+    asyncio.create_task(send_nomination_email_to_nominee(nomination))
+    asyncio.create_task(send_nomination_email_to_admin(nomination))
+    
     return nomination
 
 
