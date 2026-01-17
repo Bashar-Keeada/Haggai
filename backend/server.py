@@ -693,6 +693,148 @@ async def delete_testimonial(testimonial_id: str):
     return {"message": "Testimonial deleted successfully"}
 
 
+# ==================== EMAIL FUNCTIONS ====================
+
+async def send_nomination_email_to_nominee(nomination: Nomination):
+    """Send email to the nominated person"""
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #15564e 0%, #0f403a 100%); padding: 30px; border-radius: 10px 10px 0 0;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">Du har blivit nominerad!</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Haggai Sweden Leadership Program</p>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none;">
+            <p style="font-size: 16px;">Hej <strong>{nomination.nominee_name}</strong>,</p>
+            
+            <p>Vi vill informera dig om att <strong>{nomination.nominator_name}</strong> har nominerat dig till följande ledarprogram:</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #15564e; margin: 20px 0;">
+                <h3 style="color: #15564e; margin: 0 0 10px 0;">{nomination.event_title}</h3>
+                {f'<p style="color: #666; margin: 0;"><strong>Datum:</strong> {nomination.event_date}</p>' if nomination.event_date else ''}
+            </div>
+            
+            <h3 style="color: #15564e;">Motivering från {nomination.nominator_name}:</h3>
+            <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #eee; white-space: pre-wrap;">
+{nomination.motivation if nomination.motivation else 'Ingen motivering angavs.'}
+            </div>
+            
+            <p style="margin-top: 30px;">Om du är intresserad av att delta i programmet, vänligen kontakta oss för mer information.</p>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+                <p style="color: #666; font-size: 14px; margin: 0;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+                <p style="color: #999; font-size: 12px; margin-top: 10px;">
+                    <a href="https://peoplepotential.se" style="color: #15564e;">peoplepotential.se</a> | 
+                    <a href="mailto:info@haggai.se" style="color: #15564e;">info@haggai.se</a>
+                </p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    
+    params = {
+        "from": SENDER_EMAIL,
+        "to": [nomination.nominee_email],
+        "subject": f"Du har blivit nominerad till {nomination.event_title}",
+        "html": html_content
+    }
+    
+    try:
+        email = await asyncio.to_thread(resend.Emails.send, params)
+        logging.info(f"Nomination email sent to nominee {nomination.nominee_email}, id: {email.get('id')}")
+        return True
+    except Exception as e:
+        logging.error(f"Failed to send email to nominee: {str(e)}")
+        return False
+
+
+async def send_nomination_email_to_admin(nomination: Nomination):
+    """Send notification email to admin about new nomination"""
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: #15564e; padding: 20px; border-radius: 10px 10px 0 0;">
+            <h1 style="color: white; margin: 0; font-size: 20px;">🔔 Ny nominering mottagen</h1>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 25px; border: 1px solid #ddd; border-top: none;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 10px; background: #e8f5e9; border-radius: 8px;">
+                        <strong style="color: #2e7d32;">Nominerad person:</strong><br>
+                        <span style="font-size: 18px;">{nomination.nominee_name}</span><br>
+                        <a href="mailto:{nomination.nominee_email}" style="color: #15564e;">{nomination.nominee_email}</a>
+                        {f'<br><span style="color: #666;">{nomination.nominee_phone}</span>' if nomination.nominee_phone else ''}
+                    </td>
+                </tr>
+                <tr><td style="height: 15px;"></td></tr>
+                <tr>
+                    <td style="padding: 10px; background: #e3f2fd; border-radius: 8px;">
+                        <strong style="color: #1565c0;">Nominerad av:</strong><br>
+                        <span style="font-size: 16px;">{nomination.nominator_name}</span><br>
+                        <a href="mailto:{nomination.nominator_email}" style="color: #15564e;">{nomination.nominator_email}</a>
+                        {f'<br><span style="color: #666;">{nomination.nominator_phone}</span>' if nomination.nominator_phone else ''}
+                    </td>
+                </tr>
+                <tr><td style="height: 15px;"></td></tr>
+                <tr>
+                    <td style="padding: 10px; background: #fff3e0; border-radius: 8px;">
+                        <strong style="color: #e65100;">Utbildning:</strong><br>
+                        <span style="font-size: 16px;">{nomination.event_title}</span>
+                        {f'<br><span style="color: #666;">Datum: {nomination.event_date}</span>' if nomination.event_date else ''}
+                    </td>
+                </tr>
+            </table>
+            
+            {f'''
+            <div style="margin-top: 20px;">
+                <strong>Motivering:</strong>
+                <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-top: 10px; white-space: pre-wrap; font-size: 14px;">
+{nomination.motivation}
+                </div>
+            </div>
+            ''' if nomination.motivation else ''}
+            
+            <div style="margin-top: 25px; text-align: center;">
+                <a href="https://peoplepotential.se/admin/nomineringar" style="display: inline-block; background: #15564e; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                    Visa i Admin-panelen →
+                </a>
+            </div>
+        </div>
+        
+        <div style="text-align: center; padding: 15px; color: #999; font-size: 12px;">
+            Detta är ett automatiskt meddelande från Haggai Sweden nomineringssystem
+        </div>
+    </body>
+    </html>
+    """
+    
+    params = {
+        "from": SENDER_EMAIL,
+        "to": [ADMIN_EMAIL],
+        "subject": f"Ny nominering: {nomination.nominee_name} → {nomination.event_title}",
+        "html": html_content
+    }
+    
+    try:
+        email = await asyncio.to_thread(resend.Emails.send, params)
+        logging.info(f"Nomination notification sent to admin {ADMIN_EMAIL}, id: {email.get('id')}")
+        return True
+    except Exception as e:
+        logging.error(f"Failed to send email to admin: {str(e)}")
+        return False
+
+
 # ==================== NOMINATION ENDPOINTS ====================
 
 class Nomination(BaseModel):
