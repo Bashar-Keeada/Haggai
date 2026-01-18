@@ -1324,7 +1324,7 @@ class Workshop(BaseModel):
     spots_left: Optional[int] = None
     age_min: Optional[int] = None
     age_max: Optional[int] = None
-    price: float = 500  # Default price 500 kr
+    price: Optional[float] = 500  # Default price 500 kr
     currency: str = "SEK"  # SEK or USD
     is_online: bool = False
     is_tot: bool = False  # Training of Trainers (FDS)
