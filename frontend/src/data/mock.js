@@ -7,12 +7,29 @@ export const events = [
     id: 101,
     type: 'leader-experience',
     programType: 'international',
-    title: "Workshop – Kvinnor internationell",
+    targetGroup: 'women',
+    title: {
+      sv: "Workshop – Kvinnor internationell",
+      en: "Workshop – Women International",
+      ar: "ورشة عمل - نساء دولية"
+    },
     date: "2026-07-13",
     endDate: "2026-07-26",
-    time: "13-26 juli 2026",
-    location: "Internationell plats",
-    description: "Internationell workshop för kvinnor. Ålder: 23-55 år. 2 platser från Sverige.",
+    time: {
+      sv: "13-26 juli 2026",
+      en: "July 13-26, 2026",
+      ar: "13-26 يوليو 2026"
+    },
+    location: {
+      sv: "Internationell plats",
+      en: "International Location",
+      ar: "موقع دولي"
+    },
+    description: {
+      sv: "Internationell workshop för kvinnor. Ålder: 23-55 år. 2 platser från Sverige.",
+      en: "International workshop for women. Age: 23-55 years. 2 spots from Sweden.",
+      ar: "ورشة عمل دولية للنساء. العمر: 23-55 سنة. مقعدان من السويد."
+    },
     spots: 2,
     spotsLeft: 2,
     price: 500,
@@ -22,12 +39,29 @@ export const events = [
     id: 102,
     type: 'leader-experience',
     programType: 'international',
-    title: "Workshop – Män internationell",
+    targetGroup: 'men',
+    title: {
+      sv: "Workshop – Män internationell",
+      en: "Workshop – Men International",
+      ar: "ورشة عمل - رجال دولية"
+    },
     date: "2026-11-30",
     endDate: "2026-12-11",
-    time: "30 nov - 11 dec 2026",
-    location: "Internationell plats",
-    description: "Internationell workshop för män. Ålder: 23-55 år. 2 platser från Sverige.",
+    time: {
+      sv: "30 nov - 11 dec 2026",
+      en: "Nov 30 - Dec 11, 2026",
+      ar: "30 نوفمبر - 11 ديسمبر 2026"
+    },
+    location: {
+      sv: "Internationell plats",
+      en: "International Location",
+      ar: "موقع دولي"
+    },
+    description: {
+      sv: "Internationell workshop för män. Ålder: 23-55 år. 2 platser från Sverige.",
+      en: "International workshop for men. Age: 23-55 years. 2 spots from Sweden.",
+      ar: "ورشة عمل دولية للرجال. العمر: 23-55 سنة. مقعدان من السويد."
+    },
     spots: 2,
     spotsLeft: 2,
     price: 500,
@@ -37,12 +71,25 @@ export const events = [
     id: 103,
     type: 'leader-experience',
     programType: 'international',
-    title: "Workshop – Online engelskspråkig internationell",
+    targetGroup: 'all',
+    title: {
+      sv: "Workshop – Online engelskspråkig internationell",
+      en: "Workshop – Online English-speaking International",
+      ar: "ورشة عمل - أونلاين دولية باللغة الإنجليزية"
+    },
     date: "2026-02-05",
     endDate: "2026-02-07",
-    time: "5-7 februari 2026",
+    time: {
+      sv: "5-7 februari 2026",
+      en: "February 5-7, 2026",
+      ar: "5-7 فبراير 2026"
+    },
     location: "Online",
-    description: "Online workshop på engelska. Ålder: 29-60 år.",
+    description: {
+      sv: "Online workshop på engelska. Ålder: 29-60 år.",
+      en: "Online workshop in English. Age: 29-60 years.",
+      ar: "ورشة عمل أونلاين باللغة الإنجليزية. العمر: 29-60 سنة."
+    },
     spots: 20,
     spotsLeft: 20,
     price: 500,
@@ -53,12 +100,29 @@ export const events = [
     id: 104,
     type: 'leader-experience',
     programType: 'national',
-    title: "Workshop – Nationell mars 2026",
+    targetGroup: 'all',
+    title: {
+      sv: "Workshop – Nationell mars 2026",
+      en: "Workshop – National March 2026",
+      ar: "ورشة عمل - وطنية مارس 2026"
+    },
     date: "2026-03-13",
     endDate: "2026-03-22",
-    time: "Mars 2026",
-    location: "Stockholm, Sverige",
-    description: "Nationell workshop. Ingen åldersgräns.",
+    time: {
+      sv: "Mars 2026",
+      en: "March 2026",
+      ar: "مارس 2026"
+    },
+    location: {
+      sv: "Stockholm, Sverige",
+      en: "Stockholm, Sweden",
+      ar: "ستوكهولم، السويد"
+    },
+    description: {
+      sv: "Nationell workshop. Ingen åldersgräns.",
+      en: "National workshop. No age limit.",
+      ar: "ورشة عمل وطنية. لا يوجد حد للعمر."
+    },
     spots: 30,
     spotsLeft: 30,
     price: 500,
