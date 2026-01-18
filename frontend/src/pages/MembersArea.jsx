@@ -681,7 +681,7 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
       <section className="py-12 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
           
-          {/* Section 1: Knowledge Support */}
+          {/* Section 1: Core Subjects (Kärnämnen) */}
           <Card className="border-0 shadow-xl overflow-hidden">
             <Collapsible open={openSections.knowledge} onOpenChange={() => toggleSection('knowledge')}>
               <CollapsibleTrigger asChild>
@@ -692,8 +692,8 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
                         <GraduationCap className="h-6 w-6" />
                       </div>
                       <div className={isRTL ? 'text-right' : ''}>
-                        <CardTitle className="text-xl text-white">{txt.knowledgeSupport}</CardTitle>
-                        <p className="text-white/80 text-sm">{txt.knowledgeSupportDesc}</p>
+                        <CardTitle className="text-xl text-white">{txt.coreSubjectsTitle}</CardTitle>
+                        <p className="text-white/80 text-sm">{txt.coreSubjectsDesc}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
