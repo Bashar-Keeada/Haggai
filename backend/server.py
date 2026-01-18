@@ -1946,7 +1946,7 @@ async def update_training_participant_attendance(participant_id: str, input: Tra
 
 
 def generate_diploma_pdf(participant_name: str, event_title: str, event_date: str = None, chairman_name: str = "Bashar Yousif") -> BytesIO:
-    """Generate a PDF diploma certificate"""
+    """Generate a PDF diploma certificate with Haggai logo"""
     buffer = BytesIO()
     
     # Create PDF with landscape A4
@@ -1959,8 +1959,8 @@ def generate_diploma_pdf(participant_name: str, event_title: str, event_date: st
         bottomMargin=1*cm
     )
     
-    # Define colors
-    haggai_green = colors.HexColor('#15564e')
+    # Define colors - Haggai blue from logo
+    haggai_blue = colors.HexColor('#014D73')
     gold = colors.HexColor('#c9a227')
     
     # Create styles
@@ -1969,19 +1969,19 @@ def generate_diploma_pdf(participant_name: str, event_title: str, event_date: st
     title_style = ParagraphStyle(
         'Title',
         parent=styles['Heading1'],
-        fontSize=28,
-        textColor=haggai_green,
+        fontSize=26,
+        textColor=haggai_blue,
         alignment=TA_CENTER,
         spaceAfter=10,
         fontName='Helvetica-Bold',
-        letterSpacing=8
+        letterSpacing=6
     )
     
     subtitle_style = ParagraphStyle(
         'Subtitle',
         parent=styles['Heading2'],
         fontSize=16,
-        textColor=haggai_green,
+        textColor=haggai_blue,
         alignment=TA_CENTER,
         spaceAfter=20,
         fontName='Helvetica'
@@ -1991,10 +1991,10 @@ def generate_diploma_pdf(participant_name: str, event_title: str, event_date: st
         'Name',
         parent=styles['Heading1'],
         fontSize=36,
-        textColor=haggai_green,
+        textColor=haggai_blue,
         alignment=TA_CENTER,
-        spaceBefore=30,
-        spaceAfter=30,
+        spaceBefore=20,
+        spaceAfter=20,
         fontName='Helvetica-Bold'
     )
     
@@ -2004,8 +2004,8 @@ def generate_diploma_pdf(participant_name: str, event_title: str, event_date: st
         fontSize=14,
         textColor=colors.black,
         alignment=TA_CENTER,
-        spaceBefore=20,
-        spaceAfter=20,
+        spaceBefore=15,
+        spaceAfter=15,
         leading=20
     )
     
