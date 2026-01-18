@@ -78,9 +78,9 @@ const MembersArea = () => {
 
   const translations = {
     sv: {
-      pageTitle: 'Medlemsområde',
+      pageTitle: 'Kunskapsstöd',
       pageSubtitle: 'Exklusivt för Haggai Sweden medlemmar',
-      welcome: 'Välkommen till medlemsområdet',
+      welcome: 'Välkommen till kunskapsstöd',
       welcomeDesc: 'Här hittar du information som är exklusiv för våra medlemmar.',
       bylaws: 'Föreningens Stadgar',
       bylawsDesc: 'Läs om föreningens regler och riktlinjer',
@@ -88,8 +88,8 @@ const MembersArea = () => {
       downloadPdf: 'Ladda ner PDF',
       showBylaws: 'Visa stadgar',
       hideBylaws: 'Dölj stadgar',
-      knowledgeSupport: 'Kunskapsstöd',
-      knowledgeSupportDesc: 'Kärnämnen i våra nationella utbildningar',
+      coreSubjectsTitle: 'Kärnämnen',
+      coreSubjectsDesc: 'Kärnämnen i våra nationella utbildningar',
       coreSubjects: 'Kärnämnen',
       hours: 'timmar',
       totalHours: 'Totalt',
@@ -106,7 +106,7 @@ const MembersArea = () => {
       loginButton: 'Logga in',
       loginError: 'Felaktigt lösenord. Försök igen.',
       contactForAccess: 'Kontakta oss för att få tillgång',
-      logout: 'Logga ut från medlemsområdet',
+      logout: 'Logga ut från kunskapsstöd',
       sections: {
         name: 'Föreningens namn',
         purpose: 'Syfte',
@@ -120,9 +120,9 @@ const MembersArea = () => {
       }
     },
     en: {
-      pageTitle: 'Members Area',
+      pageTitle: 'Knowledge Support',
       pageSubtitle: 'Exclusive for Haggai Sweden members',
-      welcome: 'Welcome to the Members Area',
+      welcome: 'Welcome to the Knowledge Support',
       welcomeDesc: 'Here you will find information exclusive to our members.',
       bylaws: 'Association Bylaws',
       bylawsDesc: 'Read about the association\'s rules and guidelines',
