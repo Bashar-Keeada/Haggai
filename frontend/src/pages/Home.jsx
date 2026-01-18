@@ -46,13 +46,22 @@ const Home = () => {
     }
   };
 
+  // Helper to get localized text from object or string
+  const getLocalizedText = (field) => {
+    if (!field) return '';
+    if (typeof field === 'string') return field;
+    return field[language] || field.sv || field.en || '';
+  };
+
   // Merge translated content with event data
   const localizedEvents = events.map(event => {
     const translation = translatedEvents.find(te => te.id === event.id);
+    const title = typeof event.title === 'object' ? getLocalizedText(event.title) : (translation?.title || event.title);
+    const description = typeof event.description === 'object' ? getLocalizedText(event.description) : (translation?.description || event.description);
     return {
       ...event,
-      title: translation?.title || event.title,
-      description: translation?.description || event.description
+      title: title,
+      description: description
     };
   });
 
