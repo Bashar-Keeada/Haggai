@@ -141,8 +141,11 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - `GET/POST/PUT/DELETE /api/organization-members`
 - `GET/POST/PUT/DELETE /api/partners`
 - `GET/POST/PUT/DELETE /api/testimonials`
-- `GET/POST/PUT/DELETE /api/nominations` ✅ NEW
-- `GET /api/nominations/stats` ✅ NEW
+- `GET/POST/PUT/DELETE /api/nominations` ✅
+- `GET /api/nominations/stats` ✅
+- `GET/POST/PUT/DELETE /api/board-meetings` ✅ NEW
+- `GET /api/board-meetings/archived` ✅ NEW
+- `PUT /api/board-meetings/{id}/archive` ✅ NEW
 - `GET/POST/PUT /api/applications/leader-experience`
 - `GET/POST /api/applications/membership`
 - `GET/POST /api/applications/contact`
