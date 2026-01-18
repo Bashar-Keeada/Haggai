@@ -344,6 +344,17 @@ I am confident that your participation in this program will give you personal an
                                   )}
                                 </Badge>
                               )}
+                              {/* Target group badge */}
+                              {event.targetGroup === 'women' && (
+                                <Badge className="bg-pink-100 text-pink-700">
+                                  ♀ {language === 'sv' ? 'Kvinnor' : language === 'ar' ? 'نساء' : 'Women'}
+                                </Badge>
+                              )}
+                              {event.targetGroup === 'men' && (
+                                <Badge className="bg-blue-100 text-blue-700">
+                                  ♂ {language === 'sv' ? 'Män' : language === 'ar' ? 'رجال' : 'Men'}
+                                </Badge>
+                              )}
                               {isLeaderExperience && (
                                 <Badge className="bg-haggai-100 text-haggai-dark">
                                   Leader Experience
