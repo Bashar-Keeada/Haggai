@@ -812,7 +812,7 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
                             <div className="flex-1">
                               <div className={`flex items-center gap-2 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                                 <h4 className="font-semibold text-stone-800">
-                                  {workshop.title?.[language] || workshop.title?.sv || workshop.title}
+                                  {getLocalizedText(workshop.title)}
                                 </h4>
                                 {workshop.is_online && (
                                   <Badge className="bg-blue-100 text-blue-700 text-xs">Online</Badge>
