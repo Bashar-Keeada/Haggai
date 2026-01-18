@@ -144,10 +144,14 @@ I am confident that your participation in this program will give you personal an
   // Merge translated content with event data
   const localizedEvents = events.map(event => {
     const translation = translatedEvents.find(te => te.id === event.id);
+    // Use getLocalizedText for multilingual objects, fallback to translation for legacy events
+    const title = typeof event.title === 'object' ? getLocalizedText(event.title) : (translation?.title || event.title);
+    const description = typeof event.description === 'object' ? getLocalizedText(event.description) : (translation?.description || event.description);
+    
     return {
       ...event,
-      title: translation?.title || getLocalizedText(event.title),
-      description: translation?.description || getLocalizedText(event.description),
+      title: title,
+      description: description,
       time: getLocalizedText(event.time),
       location: getLocalizedText(event.location)
     };
