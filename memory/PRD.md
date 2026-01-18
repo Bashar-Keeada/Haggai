@@ -47,7 +47,34 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 
 ### January 2026
 
-#### Nominee Registration System ✅ (Latest - Jan 18)
+#### Training Participants Admin Panel ✅ (Latest - Jan 18)
+- **Location:** `/admin/utbildning`
+- **Features:**
+  - Dashboard showing all people who registered via nomination link
+  - Statistics cards: Total registered, Pending, Accepted, Rejected, Completed
+  - Filter buttons for each status
+  - View full registration form for each participant
+  - Accept/reject registrations
+  - Log attendance hours (0-21)
+  - Automatic status change to "Completed" at 21 hours
+  - PDF diploma generation (based on certificate template)
+  - Automatic email sending of diploma with PDF attachment
+- **API Endpoints:**
+  - `GET /api/training-participants` - List all registered participants
+  - `GET /api/training-participants/{id}` - Get specific participant
+  - `PUT /api/training-participants/{id}/status` - Accept/reject
+  - `PUT /api/training-participants/{id}/attendance` - Update hours
+  - `POST /api/training-participants/{id}/generate-diploma` - Download PDF
+  - `POST /api/training-participants/{id}/send-diploma` - Email diploma
+- **Diploma Design:**
+  - "ADVANCED LEADERSHIP SEMINAR" header
+  - Event title and date
+  - Participant name (large, centered)
+  - Haggai International completion text
+  - Two signatures: CEO + Association President
+- **Tests:** 13 backend tests passing (100%)
+
+#### Nominee Registration System ✅ (Jan 18)
 - **Location:** `/registrering/:nominationId` (public, no login required)
 - **Features:**
   - Motivating intro text about the training purpose (trilingual: SV/EN/AR)
