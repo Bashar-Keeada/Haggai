@@ -130,8 +130,8 @@ const MembersArea = () => {
       downloadPdf: 'Download PDF',
       showBylaws: 'Show bylaws',
       hideBylaws: 'Hide bylaws',
-      knowledgeSupport: 'Knowledge Support',
-      knowledgeSupportDesc: 'Core subjects in our national trainings',
+      coreSubjectsTitle: 'Core Subjects',
+      coreSubjectsDesc: 'Core subjects in our national trainings',
       coreSubjects: 'Core Subjects',
       hours: 'hours',
       totalHours: 'Total',
@@ -148,7 +148,7 @@ const MembersArea = () => {
       loginButton: 'Log in',
       loginError: 'Incorrect password. Please try again.',
       contactForAccess: 'Contact us for access',
-      logout: 'Log out from members area',
+      logout: 'Log out from knowledge support',
       sections: {
         name: 'Association Name',
         purpose: 'Purpose',
@@ -162,7 +162,7 @@ const MembersArea = () => {
       }
     },
     ar: {
-      pageTitle: 'منطقة الأعضاء',
+      pageTitle: 'دعم المعرفة',
       pageSubtitle: 'حصرياً لأعضاء حجاي السويد',
       welcome: 'مرحباً بكم في منطقة الأعضاء',
       welcomeDesc: 'هنا ستجد معلومات حصرية لأعضائنا.',
