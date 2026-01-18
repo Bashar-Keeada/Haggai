@@ -436,7 +436,8 @@ const MembersArea = () => {
     }
   ];
 
-  const totalHours = coreSubjects.reduce((sum, subject) => sum + subject.hours, 0);
+  // Total hours fixed at 21
+  const totalHours = 21;
 
   // Bylaws content
   const bylawsContent = [
