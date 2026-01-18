@@ -315,13 +315,24 @@ const AdminTrainingParticipants = () => {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
+        a.style.display = 'none';
         a.href = url;
-        a.download = `Diploma_${selectedParticipant.registration_data?.full_name || 'participant'}.pdf`;
+        a.download = `Diploma_${selectedParticipant.registration_data?.full_name?.replace(/\s+/g, '_') || 'participant'}.pdf`;
+        document.body.appendChild(a);
         a.click();
+        // Cleanup
+        setTimeout(() => {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, 100);
         toast.success(txt.diplomaGenerated);
+      } else {
+        const error = await response.json();
+        toast.error(error.detail || 'Kunde inte generera diplom');
       }
     } catch (error) {
       console.error('Error generating diploma:', error);
+      toast.error('Ett fel uppstod vid generering av diplom');
     } finally {
       setGeneratingDiploma(false);
     }
