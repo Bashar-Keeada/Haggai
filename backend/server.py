@@ -1404,6 +1404,36 @@ async def delete_board_meeting(meeting_id: str):
     return {"message": "Board meeting deleted successfully"}
 
 
+@api_router.post("/board-meetings/{meeting_id}/send-invitation")
+async def send_meeting_invitation(meeting_id: str):
+    """Send invitation emails for a specific meeting"""
+    meeting = await db.board_meetings.find_one({"id": meeting_id}, {"_id": 0})
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Board meeting not found")
+    
+    board_emails = await get_board_member_emails()
+    if not board_emails:
+        return {"message": "Inga styrelsemedlemmar med e-post hittades", "sent_to": 0}
+    
+    await send_meeting_invitation_email(meeting, board_emails)
+    return {"message": f"Kallelse skickad till {len(board_emails)} styrelsemedlemmar", "sent_to": len(board_emails)}
+
+
+@api_router.post("/board-meetings/{meeting_id}/send-reminder")
+async def send_meeting_reminder(meeting_id: str, days_until: int = 1):
+    """Send reminder emails for a specific meeting"""
+    meeting = await db.board_meetings.find_one({"id": meeting_id}, {"_id": 0})
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Board meeting not found")
+    
+    board_emails = await get_board_member_emails()
+    if not board_emails:
+        return {"message": "Inga styrelsemedlemmar med e-post hittades", "sent_to": 0}
+    
+    await send_meeting_reminder_email(meeting, board_emails, days_until)
+    return {"message": f"Påminnelse skickad till {len(board_emails)} styrelsemedlemmar", "sent_to": len(board_emails)}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
