@@ -356,7 +356,7 @@ I am confident that your participation in this program will give you personal an
                               </span>
                               <span className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
                                 <MapPin className={`h-4 w-4 text-haggai ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                                {event.location}
+                                {getLocalizedText(event.location)}
                               </span>
                               {event.spots && (
                                 <span className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
