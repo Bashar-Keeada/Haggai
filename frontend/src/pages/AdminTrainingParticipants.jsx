@@ -799,7 +799,7 @@ const AdminTrainingParticipants = () => {
                   <div className="flex justify-center">
                     <Button
                       variant="outline"
-                      onClick={() => window.open(diplomaPreviewUrl, '_blank')}
+                      onClick={handleOpenInNewTab}
                       className="gap-2"
                     >
                       <Eye className="h-4 w-4" />
