@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ArrowLeft, Plus, Edit2, Trash2, Save, X, Calendar, MapPin, 
-  Users, DollarSign, Globe, Home, Monitor, GraduationCap, RefreshCw
+  Users, Globe, Home, Monitor, GraduationCap
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
