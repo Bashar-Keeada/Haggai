@@ -46,7 +46,17 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 
 ### January 2026
 
-#### Workshop Management ✅ (Latest - Jan 18)
+#### UI Improvements ✅ (Latest - Jan 18)
+- **Event Calendar:** Price now displayed as green badge on workshop cards (500 USD/SEK)
+- **Members Area:** Completely redesigned with categorized collapsible sections:
+  - 🟢 Kunskapsstöd (Knowledge Support) - Core subjects with hours
+  - 🔵 Stadgar (Bylaws) - Association rules
+  - 🟣 Styrelse (Board) - Current board members
+  - 🟠 Styrelsemöten (Board Meetings) - Meeting management
+- Uses Radix UI Collapsible component for smooth expand/collapse
+- Color-coded headers for easy identification
+
+#### Workshop Management ✅ (Jan 18)
 - **Location:** `/admin/workshops`
 - **Features:**
   - View all workshops with type badges (ToT, Online, National, International)
@@ -65,8 +75,8 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
   - `POST /api/workshops/seed-initial` - Seed initial data
 - **Bug Fixed:** Price field validation allowing null values from database
 
-#### Board Meeting System ✅ (Latest)
-- **Location:** Members Area → under "Stadgar" section
+#### Board Meeting System ✅
+- **Location:** Members Area → Styrelsemöten section
 - **Features:**
   - Create new board meetings with title, date, time, location
   - Add attendees and agenda items
@@ -77,7 +87,7 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
   - Add decisions and notes per agenda item
   - Archive completed meetings
   - View archived meetings separately
-- **Board Member Authentication:** ✅ NEW
+- **Board Member Authentication:** ✅
   - Login with email + password
   - First-time account setup (set password)
   - JWT-based authentication
