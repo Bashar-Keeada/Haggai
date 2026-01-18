@@ -847,6 +847,7 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
           </Card>
 
           {/* Section 4: Board Meetings */}
+          {/* Section 4: Board Work (Styrelsearbete) */}
           <Card className="border-0 shadow-xl overflow-hidden">
             <Collapsible open={openSections.meetings} onOpenChange={() => toggleSection('meetings')}>
               <CollapsibleTrigger asChild>
@@ -858,10 +859,10 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
                       </div>
                       <div className={isRTL ? 'text-right' : ''}>
                         <CardTitle className="text-xl text-white">
-                          {language === 'sv' ? 'Styrelsemöten' : language === 'ar' ? 'اجتماعات مجلس الإدارة' : 'Board Meetings'}
+                          {language === 'sv' ? 'Styrelsearbete' : language === 'ar' ? 'عمل مجلس الإدارة' : 'Board Work'}
                         </CardTitle>
                         <p className="text-white/80 text-sm">
-                          {language === 'sv' ? 'Planera och dokumentera möten' : 'Plan and document meetings'}
+                          {language === 'sv' ? 'Planera och dokumentera styrelsearbetet' : 'Plan and document board work'}
                         </p>
                       </div>
                     </div>
