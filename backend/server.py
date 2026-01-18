@@ -1870,6 +1870,395 @@ async def seed_initial_workshops():
     return {"message": f"Seeded {len(initial_workshops)} workshops", "count": len(initial_workshops)}
 
 
+# ==================== TRAINING PARTICIPANTS ENDPOINTS ====================
+
+class TrainingParticipantStatusUpdate(BaseModel):
+    status: str  # pending, accepted, rejected, completed
+
+
+class TrainingParticipantAttendanceUpdate(BaseModel):
+    attendance_hours: float
+
+
+@api_router.get("/training-participants")
+async def get_training_participants():
+    """Get all nominations that have completed registration (training participants)"""
+    # Find all nominations where registration has been completed
+    participants = await db.nominations.find(
+        {"registration_completed": True},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(1000)
+    return participants
+
+
+@api_router.get("/training-participants/{participant_id}")
+async def get_training_participant(participant_id: str):
+    """Get a specific training participant by nomination ID"""
+    participant = await db.nominations.find_one(
+        {"id": participant_id, "registration_completed": True},
+        {"_id": 0}
+    )
+    if not participant:
+        raise HTTPException(status_code=404, detail="Training participant not found")
+    return participant
+
+
+@api_router.put("/training-participants/{participant_id}/status")
+async def update_training_participant_status(participant_id: str, input: TrainingParticipantStatusUpdate):
+    """Update a training participant's status (accept/reject)"""
+    existing = await db.nominations.find_one({"id": participant_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Training participant not found")
+    
+    update_data = {
+        "status": input.status,
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.nominations.update_one({"id": participant_id}, {"$set": update_data})
+    
+    updated = await db.nominations.find_one({"id": participant_id}, {"_id": 0})
+    return updated
+
+
+@api_router.put("/training-participants/{participant_id}/attendance")
+async def update_training_participant_attendance(participant_id: str, input: TrainingParticipantAttendanceUpdate):
+    """Update a training participant's attendance hours"""
+    existing = await db.nominations.find_one({"id": participant_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Training participant not found")
+    
+    # If attendance reaches 21 hours, mark as completed
+    new_status = existing.get("status", "pending")
+    if input.attendance_hours >= 21:
+        new_status = "completed"
+    
+    update_data = {
+        "attendance_hours": input.attendance_hours,
+        "status": new_status,
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.nominations.update_one({"id": participant_id}, {"$set": update_data})
+    
+    updated = await db.nominations.find_one({"id": participant_id}, {"_id": 0})
+    return updated
+
+
+def generate_diploma_pdf(participant_name: str, event_title: str, event_date: str = None, chairman_name: str = "Bashar Yousif") -> BytesIO:
+    """Generate a PDF diploma certificate"""
+    buffer = BytesIO()
+    
+    # Create PDF with landscape A4
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=landscape(A4),
+        leftMargin=1.5*cm,
+        rightMargin=1.5*cm,
+        topMargin=1*cm,
+        bottomMargin=1*cm
+    )
+    
+    # Define colors
+    haggai_green = colors.HexColor('#15564e')
+    gold = colors.HexColor('#c9a227')
+    
+    # Create styles
+    styles = getSampleStyleSheet()
+    
+    title_style = ParagraphStyle(
+        'Title',
+        parent=styles['Heading1'],
+        fontSize=28,
+        textColor=haggai_green,
+        alignment=TA_CENTER,
+        spaceAfter=10,
+        fontName='Helvetica-Bold',
+        letterSpacing=8
+    )
+    
+    subtitle_style = ParagraphStyle(
+        'Subtitle',
+        parent=styles['Heading2'],
+        fontSize=16,
+        textColor=haggai_green,
+        alignment=TA_CENTER,
+        spaceAfter=20,
+        fontName='Helvetica'
+    )
+    
+    name_style = ParagraphStyle(
+        'Name',
+        parent=styles['Heading1'],
+        fontSize=36,
+        textColor=haggai_green,
+        alignment=TA_CENTER,
+        spaceBefore=30,
+        spaceAfter=30,
+        fontName='Helvetica-Bold'
+    )
+    
+    body_style = ParagraphStyle(
+        'Body',
+        parent=styles['Normal'],
+        fontSize=14,
+        textColor=colors.black,
+        alignment=TA_CENTER,
+        spaceBefore=20,
+        spaceAfter=20,
+        leading=20
+    )
+    
+    signature_style = ParagraphStyle(
+        'Signature',
+        parent=styles['Normal'],
+        fontSize=12,
+        textColor=colors.black,
+        alignment=TA_CENTER,
+        fontName='Helvetica'
+    )
+    
+    role_style = ParagraphStyle(
+        'Role',
+        parent=styles['Normal'],
+        fontSize=10,
+        textColor=colors.gray,
+        alignment=TA_CENTER,
+        fontName='Helvetica'
+    )
+    
+    # Build content
+    story = []
+    
+    # Add spacing at top
+    story.append(Spacer(1, 1*cm))
+    
+    # Main title
+    story.append(Paragraph("A D V A N C E D   L E A D E R S H I P   S E M I N A R", title_style))
+    
+    # Event subtitle
+    event_subtitle = event_title
+    if event_date:
+        event_subtitle += f" – {event_date}"
+    story.append(Paragraph(event_subtitle, subtitle_style))
+    
+    story.append(Spacer(1, 0.5*cm))
+    
+    # Decorative line
+    line_table = Table([['']], colWidths=[400])
+    line_table.setStyle(TableStyle([
+        ('LINEABOVE', (0, 0), (-1, -1), 2, gold),
+    ]))
+    story.append(line_table)
+    
+    # Participant name
+    story.append(Paragraph(participant_name, name_style))
+    
+    # Decorative line
+    story.append(line_table)
+    
+    story.append(Spacer(1, 0.5*cm))
+    
+    # Body text
+    body_text = """Having successfully completed the specialized studies in Advanced Leadership 
+    as prescribed by Haggai International, is hereby awarded this Certificate of Completion."""
+    story.append(Paragraph(body_text, body_style))
+    
+    story.append(Spacer(1, 1*cm))
+    
+    # Date
+    completion_date = event_date if event_date else datetime.now().strftime("%B %Y")
+    story.append(Paragraph(f"<b>D A T E:</b>  {completion_date}", signature_style))
+    
+    story.append(Spacer(1, 1.5*cm))
+    
+    # Signatures table
+    signature_data = [
+        [
+            Paragraph("Dr. Bev Upton Williams", signature_style),
+            "",
+            Paragraph(chairman_name, signature_style)
+        ],
+        [
+            Paragraph("CEO, Haggai International", role_style),
+            "",
+            Paragraph("President of the Association", role_style)
+        ]
+    ]
+    
+    sig_table = Table(signature_data, colWidths=[200, 150, 200])
+    sig_table.setStyle(TableStyle([
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LINEABOVE', (0, 0), (0, 0), 1, colors.black),
+        ('LINEABOVE', (2, 0), (2, 0), 1, colors.black),
+    ]))
+    story.append(sig_table)
+    
+    # Build PDF
+    doc.build(story)
+    buffer.seek(0)
+    return buffer
+
+
+@api_router.post("/training-participants/{participant_id}/generate-diploma")
+async def generate_training_participant_diploma(participant_id: str):
+    """Generate a PDF diploma for a training participant"""
+    participant = await db.nominations.find_one(
+        {"id": participant_id, "registration_completed": True},
+        {"_id": 0}
+    )
+    if not participant:
+        raise HTTPException(status_code=404, detail="Training participant not found")
+    
+    # Check if participant has completed 21 hours
+    attendance_hours = participant.get("attendance_hours", 0)
+    if attendance_hours < 21:
+        raise HTTPException(status_code=400, detail=f"Participant has only {attendance_hours} hours. 21 hours required for diploma.")
+    
+    # Get participant name from registration data
+    registration_data = participant.get("registration_data", {})
+    participant_name = registration_data.get("full_name", participant.get("nominee_name", "Unknown"))
+    event_title = participant.get("event_title", "Haggai Leadership Seminar")
+    event_date = participant.get("event_date", "")
+    
+    # Generate PDF
+    pdf_buffer = generate_diploma_pdf(
+        participant_name=participant_name,
+        event_title=event_title,
+        event_date=event_date
+    )
+    
+    # Return PDF as download
+    return StreamingResponse(
+        pdf_buffer,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="Diploma_{participant_name.replace(" ", "_")}.pdf"'
+        }
+    )
+
+
+async def send_diploma_email(participant: dict, pdf_buffer: BytesIO):
+    """Send diploma PDF via email to participant"""
+    registration_data = participant.get("registration_data", {})
+    participant_name = registration_data.get("full_name", participant.get("nominee_name", "Unknown"))
+    participant_email = registration_data.get("email", participant.get("nominee_email"))
+    event_title = participant.get("event_title", "Haggai Leadership Seminar")
+    
+    if not participant_email:
+        raise HTTPException(status_code=400, detail="Participant email not found")
+    
+    # Read PDF content and encode as base64
+    pdf_content = pdf_buffer.read()
+    pdf_base64 = base64.b64encode(pdf_content).decode('utf-8')
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #15564e 0%, #0f403a 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">🎓 Grattis!</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Du har klarat utbildningen!</p>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Hej <strong>{participant_name}</strong>,</p>
+            
+            <p>Grattis till att ha slutfört <strong>{event_title}</strong>!</p>
+            
+            <p>Vi är stolta över ditt engagemang och din dedikation. Bifogat till detta e-postmeddelande hittar du ditt diplom som bekräftar att du har genomfört alla 21 timmars utbildning.</p>
+            
+            <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border-left: 4px solid #15564e; margin: 20px 0;">
+                <p style="margin: 0; color: #2e7d32;">
+                    <strong>📄 Ditt diplom är bifogat som PDF-fil</strong>
+                </p>
+            </div>
+            
+            <p>Vi hoppas att denna utbildning har gett dig värdefulla kunskaper och verktyg för ditt ledarskap.</p>
+            
+            <p style="margin-top: 30px;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+            
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center;">
+                <p style="color: #999; font-size: 12px;">
+                    <a href="https://peoplepotential.se" style="color: #15564e;">peoplepotential.se</a> | 
+                    <a href="mailto:info@haggai.se" style="color: #15564e;">info@haggai.se</a>
+                </p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    
+    params = {
+        "from": SENDER_EMAIL,
+        "to": [participant_email],
+        "subject": f"🎓 Ditt diplom från {event_title}",
+        "html": html_content,
+        "attachments": [
+            {
+                "filename": f"Diploma_{participant_name.replace(' ', '_')}.pdf",
+                "content": pdf_base64
+            }
+        ]
+    }
+    
+    try:
+        email = await asyncio.to_thread(resend.Emails.send, params)
+        logging.info(f"Diploma email sent to {participant_email}, id: {email.get('id')}")
+        return True
+    except Exception as e:
+        logging.error(f"Failed to send diploma email: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
+
+
+@api_router.post("/training-participants/{participant_id}/send-diploma")
+async def send_training_participant_diploma(participant_id: str):
+    """Generate and send diploma via email to a training participant"""
+    participant = await db.nominations.find_one(
+        {"id": participant_id, "registration_completed": True},
+        {"_id": 0}
+    )
+    if not participant:
+        raise HTTPException(status_code=404, detail="Training participant not found")
+    
+    # Check if participant has completed 21 hours
+    attendance_hours = participant.get("attendance_hours", 0)
+    if attendance_hours < 21:
+        raise HTTPException(status_code=400, detail=f"Participant has only {attendance_hours} hours. 21 hours required for diploma.")
+    
+    # Get participant details
+    registration_data = participant.get("registration_data", {})
+    participant_name = registration_data.get("full_name", participant.get("nominee_name", "Unknown"))
+    event_title = participant.get("event_title", "Haggai Leadership Seminar")
+    event_date = participant.get("event_date", "")
+    
+    # Generate PDF
+    pdf_buffer = generate_diploma_pdf(
+        participant_name=participant_name,
+        event_title=event_title,
+        event_date=event_date
+    )
+    
+    # Send email
+    await send_diploma_email(participant, pdf_buffer)
+    
+    # Update participant record to mark diploma as sent
+    await db.nominations.update_one(
+        {"id": participant_id},
+        {"$set": {
+            "diploma_sent": True,
+            "diploma_sent_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {"success": True, "message": "Diploma sent successfully"}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
