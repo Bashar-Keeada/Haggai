@@ -306,7 +306,45 @@ const AdminTrainingParticipants = () => {
     }
   };
 
+  const handlePreviewDiploma = async () => {
+    setGeneratingDiploma(true);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/training-participants/${selectedParticipant.id}/generate-diploma`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        setDiplomaPreviewUrl(url);
+      } else {
+        const error = await response.json();
+        toast.error(error.detail || 'Kunde inte generera förhandsvisning');
+      }
+    } catch (error) {
+      console.error('Error previewing diploma:', error);
+      toast.error('Ett fel uppstod vid förhandsvisning');
+    } finally {
+      setGeneratingDiploma(false);
+    }
+  };
+
   const handleGenerateDiploma = async () => {
+    // If we already have a preview, use it for download
+    if (diplomaPreviewUrl) {
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = diplomaPreviewUrl;
+      a.download = `Diploma_${selectedParticipant.registration_data?.full_name?.replace(/\s+/g, '_') || 'participant'}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+      }, 100);
+      toast.success(txt.diplomaGenerated);
+      return;
+    }
+
+    // Otherwise generate and download
     setGeneratingDiploma(true);
     try {
       const response = await fetch(`${BACKEND_URL}/api/training-participants/${selectedParticipant.id}/generate-diploma`, {
