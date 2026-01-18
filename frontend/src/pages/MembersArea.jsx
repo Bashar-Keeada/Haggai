@@ -677,77 +677,269 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
         </div>
       </section>
 
-      {/* Knowledge Support Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-12 ${isRTL ? 'text-right' : ''}`}>
-            <div className={`flex items-center justify-center gap-3 mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-              <GraduationCap className="h-8 w-8 text-haggai" />
-              <h2 className="text-3xl font-bold text-stone-800">{txt.knowledgeSupport}</h2>
-            </div>
-            <p className="text-lg text-stone-600">{txt.knowledgeSupportDesc}</p>
-          </div>
-
-          {/* Core Subjects Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {coreSubjects.map((subject) => (
-              <Card 
-                key={subject.id} 
-                className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
-                onClick={() => setSelectedSubject(subject)}
-              >
-                <div className={`h-2 ${subject.color}`} />
-                <CardContent className="p-6">
-                  <div className={`flex items-start justify-between mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <div className={`w-10 h-10 ${subject.color} rounded-xl flex items-center justify-center`}>
-                        <BookOpen className="h-5 w-5 text-white" />
+      {/* Categorized Sections */}
+      <section className="py-12 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+          
+          {/* Section 1: Knowledge Support */}
+          <Card className="border-0 shadow-xl overflow-hidden">
+            <Collapsible open={openSections.knowledge} onOpenChange={() => toggleSection('knowledge')}>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white cursor-pointer hover:from-emerald-600 hover:to-emerald-700 transition-all">
+                  <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                        <GraduationCap className="h-6 w-6" />
                       </div>
                       <div className={isRTL ? 'text-right' : ''}>
-                        <h3 className="font-bold text-stone-800">{subject.title[language]}</h3>
-                        <p className="text-sm text-stone-500">{subject.title.ar}</p>
+                        <CardTitle className="text-xl text-white">{txt.knowledgeSupport}</CardTitle>
+                        <p className="text-white/80 text-sm">{txt.knowledgeSupportDesc}</p>
                       </div>
                     </div>
-                    <Badge className="bg-stone-100 text-stone-700">
-                      <Clock className="h-3 w-3 mr-1" />
-                      {subject.hours} {txt.hours}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge className="bg-white/20 text-white">{totalHours} {txt.hours}</Badge>
+                      {openSections.knowledge ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+                    </div>
                   </div>
-                  <p className={`text-sm text-stone-600 leading-relaxed ${isRTL ? 'text-right' : ''}`}>
-                    {subject.description[language]}
-                  </p>
-                  <div className={`flex items-center gap-2 mt-4 text-haggai text-sm font-medium ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                    <Info className="h-4 w-4" />
-                    <span>{language === 'sv' ? 'Klicka för mer info' : language === 'ar' ? 'انقر لمزيد من المعلومات' : 'Click for more info'}</span>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="p-6">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {coreSubjects.map((subject) => (
+                      <div 
+                        key={subject.id} 
+                        className="p-4 bg-stone-50 rounded-xl hover:bg-stone-100 cursor-pointer transition-colors group"
+                        onClick={() => setSelectedSubject(subject)}
+                      >
+                        <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                          <div className={`w-10 h-10 ${subject.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                            <BookOpen className="h-5 w-5 text-white" />
+                          </div>
+                          <div className={`flex-1 ${isRTL ? 'text-right' : ''}`}>
+                            <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                              <h4 className="font-semibold text-stone-800">{subject.title[language]}</h4>
+                              <Badge variant="outline" className="text-xs">{subject.hours}h</Badge>
+                            </div>
+                            <p className="text-sm text-stone-500 mt-1">{subject.description[language]}</p>
+                            <p className="text-xs text-haggai mt-2 group-hover:underline">
+                              {language === 'sv' ? 'Klicka för mer info →' : 'Click for more →'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
-              </Card>
-            ))}
-          </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </Card>
 
-          {/* Total Hours Summary */}
-          <Card className="border-0 shadow-lg bg-haggai overflow-hidden">
+          {/* Section 2: Bylaws */}
+          <Card className="border-0 shadow-xl overflow-hidden">
+            <Collapsible open={openSections.bylaws} onOpenChange={() => toggleSection('bylaws')}>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="bg-gradient-to-r from-haggai to-haggai-dark text-white cursor-pointer hover:from-haggai-dark hover:to-haggai transition-all">
+                  <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                        <FileText className="h-6 w-6" />
+                      </div>
+                      <div className={isRTL ? 'text-right' : ''}>
+                        <CardTitle className="text-xl text-white">{txt.bylaws}</CardTitle>
+                        <p className="text-white/80 text-sm">{txt.adoptedDate}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge className="bg-white/20 text-white">9 §</Badge>
+                      {openSections.bylaws ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+                    </div>
+                  </div>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    {bylawsContent.map((item, index) => (
+                      <div key={index} className={`p-4 bg-stone-50 rounded-xl ${isRTL ? 'text-right' : ''}`}>
+                        <div className={`flex items-center gap-2 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                          <Badge className="bg-haggai text-white">{item.section}</Badge>
+                          <h4 className="font-semibold text-stone-800">{item.title}</h4>
+                        </div>
+                        <p className="text-sm text-stone-600 whitespace-pre-line leading-relaxed">
+                          {item.content}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className={`mt-6 p-4 bg-haggai-50 rounded-xl ${isRTL ? 'text-right' : ''}`}>
+                    <p className="text-sm text-haggai-dark font-medium">
+                      {language === 'sv' 
+                        ? 'Dessa stadgar har antagits vid föreningens konstituerande möte den 16 april 2025.'
+                        : 'These bylaws were adopted at the association\'s constituent meeting on April 16, 2025.'}
+                    </p>
+                  </div>
+                </CardContent>
+              </CollapsibleContent>
+            </Collapsible>
+          </Card>
+
+          {/* Section 3: Board Members */}
+          <Card className="border-0 shadow-xl overflow-hidden">
+            <Collapsible open={openSections.board} onOpenChange={() => toggleSection('board')}>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="bg-gradient-to-r from-violet-500 to-violet-600 text-white cursor-pointer hover:from-violet-600 hover:to-violet-700 transition-all">
+                  <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                        <Users className="h-6 w-6" />
+                      </div>
+                      <div className={isRTL ? 'text-right' : ''}>
+                        <CardTitle className="text-xl text-white">{txt.currentBoard}</CardTitle>
+                        <p className="text-white/80 text-sm">{language === 'sv' ? 'Nuvarande styrelsemedlemmar' : 'Current board members'}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge className="bg-white/20 text-white">{displayBoard.length} {language === 'sv' ? 'ledamöter' : 'members'}</Badge>
+                      {openSections.board ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+                    </div>
+                  </div>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="p-6">
+                  {loadingBoard ? (
+                    <div className="flex justify-center py-8">
+                      <div className="w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full animate-spin" />
+                    </div>
+                  ) : (
+                    <>
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {displayBoard.map((member, idx) => (
+                          <div key={member.id || idx} className={`p-4 bg-stone-50 rounded-xl ${isRTL ? 'text-right' : ''}`}>
+                            <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                              {member.image_url ? (
+                                <img 
+                                  src={member.image_url} 
+                                  alt={member.name}
+                                  className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                                />
+                              ) : (
+                                <div className="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
+                                  <User className="h-6 w-6 text-violet-600" />
+                                </div>
+                              )}
+                              <div className={isRTL ? 'text-right' : ''}>
+                                <p className="font-semibold text-stone-800">{member.name}</p>
+                                <p className="text-sm text-violet-600">{member.role}</p>
+                                {member.term_start && (
+                                  <p className="text-xs text-stone-500">{txt.term}: {member.term_start} →</p>
+                                )}
+                              </div>
+                            </div>
+                            {member.email && (
+                              <div className={`flex items-center gap-2 mt-3 text-xs text-stone-500 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                                <Mail className="h-3 w-3" />
+                                {member.email}
+                              </div>
+                            )}
+                            {member.phone && (
+                              <div className={`flex items-center gap-2 mt-1 text-xs text-stone-500 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                                <Phone className="h-3 w-3" />
+                                {member.phone}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {previousBoard.length > 0 && (
+                        <div className="mt-6 pt-6 border-t border-stone-200">
+                          <Button
+                            variant="outline"
+                            onClick={() => setShowPreviousBoard(!showPreviousBoard)}
+                            className={`w-full justify-between ${isRTL ? 'flex-row-reverse' : ''}`}
+                          >
+                            <span>{showPreviousBoard ? txt.hidePrevious : txt.showPrevious}</span>
+                            {showPreviousBoard ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                          </Button>
+                          
+                          {showPreviousBoard && (
+                            <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                              {previousBoard.map((member) => (
+                                <div key={member.id} className={`p-3 bg-stone-100 rounded-lg ${isRTL ? 'text-right' : ''}`}>
+                                  <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                    <div className="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center flex-shrink-0">
+                                      <User className="h-5 w-5 text-stone-400" />
+                                    </div>
+                                    <div className={isRTL ? 'text-right' : ''}>
+                                      <p className="font-medium text-stone-700">{member.name}</p>
+                                      <p className="text-xs text-stone-500">{member.role}</p>
+                                      <p className="text-xs text-stone-400">{member.term_start} - {member.term_end}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </CardContent>
+              </CollapsibleContent>
+            </Collapsible>
+          </Card>
+
+          {/* Section 4: Board Meetings */}
+          <Card className="border-0 shadow-xl overflow-hidden">
+            <Collapsible open={openSections.meetings} onOpenChange={() => toggleSection('meetings')}>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="bg-gradient-to-r from-amber-500 to-amber-600 text-white cursor-pointer hover:from-amber-600 hover:to-amber-700 transition-all">
+                  <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                        <Briefcase className="h-6 w-6" />
+                      </div>
+                      <div className={isRTL ? 'text-right' : ''}>
+                        <CardTitle className="text-xl text-white">
+                          {language === 'sv' ? 'Styrelsemöten' : language === 'ar' ? 'اجتماعات مجلس الإدارة' : 'Board Meetings'}
+                        </CardTitle>
+                        <p className="text-white/80 text-sm">
+                          {language === 'sv' ? 'Planera och dokumentera möten' : 'Plan and document meetings'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {openSections.meetings ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+                    </div>
+                  </div>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="p-6">
+                  <BoardMeetings language={language} isRTL={isRTL} />
+                </CardContent>
+              </CollapsibleContent>
+            </Collapsible>
+          </Card>
+
+          {/* Contact Info */}
+          <Card className="border-0 shadow-lg bg-stone-50">
             <CardContent className="p-6">
-              <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                  <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
-                    <Clock className="h-7 w-7 text-white" />
-                  </div>
-                  <div className={isRTL ? 'text-right' : ''}>
-                    <p className="text-white/80 text-sm">{txt.totalHours}</p>
-                    <p className="text-3xl font-bold text-white">{totalHours} {txt.hours}</p>
-                  </div>
+              <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <div className="w-12 h-12 bg-haggai-100 rounded-xl flex items-center justify-center">
+                  <Building2 className="h-6 w-6 text-haggai" />
                 </div>
-                <div className={`text-sm ${isRTL ? 'text-left' : 'text-right'}`}>
-                  <p className="text-white/80">6 {txt.coreSubjects}</p>
-                  <p className="font-semibold text-white">
-                    {language === 'sv' ? 'Fullständig utbildning' : language === 'ar' ? 'التدريب الكامل' : 'Complete training'}
-                  </p>
+                <div className={isRTL ? 'text-right' : ''}>
+                  <p className="font-semibold text-stone-800">Haggai Sweden</p>
+                  <p className="text-stone-600">Modulvägen 6, 141 75 Kungens Kurva</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
+      </section>
       </section>
 
       {/* Bylaws Section - Collapsible */}
