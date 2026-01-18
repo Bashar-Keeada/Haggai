@@ -467,15 +467,7 @@ const AdminWorkshops = () => {
                       </div>
                     </div>
                     
-                    <div className={`flex flex-col items-end gap-2 ${isRTL ? 'items-start' : ''}`}>
-                      <div className="text-right">
-                        <div className="flex items-center gap-1 text-lg font-bold text-haggai">
-                          <DollarSign className="h-5 w-5" />
-                          {formatPrice(workshop.price, workshop.currency)}
-                        </div>
-                        <p className="text-xs text-stone-400">{txt.price}</p>
-                      </div>
-                      
+                    <div className={`flex flex-col items-end gap-3 ${isRTL ? 'items-start' : ''}`}>
                       <div className={`flex gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                         <Button 
                           size="sm" 
