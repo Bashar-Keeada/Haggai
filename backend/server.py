@@ -2144,6 +2144,44 @@ async def generate_training_participant_diploma(participant_id: str):
     )
 
 
+@api_router.post("/training-participants/{participant_id}/preview-diploma")
+async def preview_training_participant_diploma(participant_id: str):
+    """Generate a PDF diploma and return as base64 for preview"""
+    participant = await db.nominations.find_one(
+        {"id": participant_id, "registration_completed": True},
+        {"_id": 0}
+    )
+    if not participant:
+        raise HTTPException(status_code=404, detail="Training participant not found")
+    
+    # Check if participant has completed 21 hours
+    attendance_hours = participant.get("attendance_hours", 0)
+    if attendance_hours < 21:
+        raise HTTPException(status_code=400, detail=f"Participant has only {attendance_hours} hours. 21 hours required for diploma.")
+    
+    # Get participant name from registration data
+    registration_data = participant.get("registration_data", {})
+    participant_name = registration_data.get("full_name", participant.get("nominee_name", "Unknown"))
+    event_title = participant.get("event_title", "Haggai Leadership Seminar")
+    event_date = participant.get("event_date", "")
+    
+    # Generate PDF
+    pdf_buffer = generate_diploma_pdf(
+        participant_name=participant_name,
+        event_title=event_title,
+        event_date=event_date
+    )
+    
+    # Return as base64
+    pdf_content = pdf_buffer.read()
+    pdf_base64 = base64.b64encode(pdf_content).decode('utf-8')
+    
+    return {
+        "pdf_base64": pdf_base64,
+        "filename": f"Diploma_{participant_name.replace(' ', '_')}.pdf"
+    }
+
+
 async def send_diploma_email(participant: dict, pdf_buffer: BytesIO):
     """Send diploma PDF via email to participant"""
     registration_data = participant.get("registration_data", {})
