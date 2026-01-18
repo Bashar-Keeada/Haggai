@@ -439,10 +439,10 @@ const AdminWorkshops = () => {
                         )}
                       </div>
                       
-                      <h3 className="text-xl font-semibold text-stone-800 mb-2">{workshop.title}</h3>
+                      <h3 className="text-xl font-semibold text-stone-800 mb-2">{getLocalizedText(workshop.title)}</h3>
                       
                       {workshop.description && (
-                        <p className="text-stone-600 mb-4">{workshop.description}</p>
+                        <p className="text-stone-600 mb-4">{getLocalizedText(workshop.description)}</p>
                       )}
                       
                       <div className={`flex flex-wrap gap-4 text-sm text-stone-500 ${isRTL ? 'flex-row-reverse' : ''}`}>
