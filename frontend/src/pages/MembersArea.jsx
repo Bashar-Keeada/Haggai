@@ -64,6 +64,13 @@ const MembersArea = () => {
     }
   };
 
+  // Helper to get localized text from object or string
+  const getLocalizedText = (field) => {
+    if (!field) return '';
+    if (typeof field === 'string') return field;
+    return field[language] || field.sv || field.en || '';
+  };
+
   const fetchBoardMembers = async () => {
     try {
       const [currentRes, archivedRes] = await Promise.all([
