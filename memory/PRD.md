@@ -57,6 +57,16 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
   - Add decisions and notes per agenda item
   - Archive completed meetings
   - View archived meetings separately
+- **Board Member Authentication:** ✅ NEW
+  - Login with email + password
+  - First-time account setup (set password)
+  - JWT-based authentication
+  - Only logged-in board members can edit meetings
+- **Email Notifications:** ✅ NEW
+  - Auto-send meeting invitation when new meeting created
+  - Manual "Skicka kallelse" button to re-send invitations
+  - "Skicka påminnelse" button for reminders
+  - Emails include: meeting details, agenda, link to members area
 - Full i18n support (Swedish, English, Arabic)
 
 #### Email Notifications ✅
