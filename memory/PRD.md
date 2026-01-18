@@ -46,7 +46,43 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 
 ### January 2026
 
-#### UI Improvements ✅ (Latest - Jan 18)
+#### Nominee Registration System ✅ (Latest - Jan 18)
+- **Location:** `/registrering/:nominationId` (public, no login required)
+- **Features:**
+  - Motivating intro text about the training purpose (trilingual: SV/EN/AR)
+  - Pre-filled nominee name and email from nomination
+  - Comprehensive registration form with:
+    - Personal info (name, gender, DOB, phone, email, address, marital status, birthplace)
+    - Work info (field, profession, employer)
+    - Church info (church name, role)
+    - Commitments (attendance, active participation)
+    - Fee info (1200 SEK) with detailed breakdown
+    - Financial support request option
+    - Additional notes
+  - Email notification to admin when registration is submitted
+  - Registration link included in nomination email to nominee
+- **API Endpoints:**
+  - `GET /api/nominations/{id}` - Get nomination details
+  - `POST /api/nominations/{id}/register` - Submit registration
+
+#### Members Area Redesign ✅ (Jan 18)
+- New collapsible sections with color-coded headers:
+  - 🔴 **Vår Enhet** (Our Unity) - Motivating text about engagement and responsibility
+  - 🔵 **Kommande Utbildningar** (Upcoming Trainings) - Workshop list with nominate buttons
+  - 🟢 **Kärnämnen** (Core Subjects) - 21 hours, certified workshop with diploma
+  - 🔵 **Föreningens Stadgar** (Bylaws) - 9 sections
+  - 🟣 **Nuvarande Styrelse** (Current Board) - Board members
+  - 🟠 **Styrelsearbete** (Board Work) - Meeting management
+- Haggai International global vision shown less prominently
+- Removed "Evangelisation" from core subjects
+
+#### Multilingual Workshop Support ✅ (Jan 18)
+- All workshops now support Swedish, English, and Arabic titles
+- Target groups added: Men, Women, All
+- Workshop types: International, National, Online, ToT
+- Calendar displays correct language based on user selection
+
+#### UI Improvements ✅ (Jan 18)
 - **Event Calendar:** Price now displayed as green badge on workshop cards (500 USD/SEK)
 - **Members Area:** Completely redesigned with categorized collapsible sections:
   - 🟢 Kunskapsstöd (Knowledge Support) - Core subjects with hours
