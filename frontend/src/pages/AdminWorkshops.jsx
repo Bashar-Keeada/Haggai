@@ -464,6 +464,11 @@ const AdminWorkshops = () => {
                             {workshop.age_min || '?'}-{workshop.age_max || '?'} {language === 'sv' ? 'år' : 'years'}
                           </span>
                         )}
+                        {workshop.price && (
+                          <span className="text-stone-400">
+                            {formatPrice(workshop.price, workshop.currency)}
+                          </span>
+                        )}
                       </div>
                     </div>
                     
