@@ -972,6 +972,151 @@ async def delete_nomination(nomination_id: str):
     return {"message": "Nomination deleted successfully"}
 
 
+# ==================== BOARD MEETING ENDPOINTS ====================
+
+class AgendaItem(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    description: Optional[str] = None
+    responsible: Optional[str] = None
+    status: str = "pending"  # pending, discussed, decided, postponed
+    notes: Optional[str] = None
+    decision: Optional[str] = None
+
+
+class BoardMeeting(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    date: str  # ISO format date
+    time: Optional[str] = None
+    location: Optional[str] = None
+    agenda_items: List[AgendaItem] = []
+    attendees: List[str] = []
+    minutes: Optional[str] = None  # Meeting minutes/notes
+    status: str = "scheduled"  # scheduled, in_progress, completed, archived
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class BoardMeetingCreate(BaseModel):
+    title: str
+    date: str
+    time: Optional[str] = None
+    location: Optional[str] = None
+    agenda_items: List[dict] = []
+    attendees: List[str] = []
+
+
+class BoardMeetingUpdate(BaseModel):
+    title: Optional[str] = None
+    date: Optional[str] = None
+    time: Optional[str] = None
+    location: Optional[str] = None
+    agenda_items: Optional[List[dict]] = None
+    attendees: Optional[List[str]] = None
+    minutes: Optional[str] = None
+    status: Optional[str] = None
+
+
+@api_router.post("/board-meetings", response_model=BoardMeeting)
+async def create_board_meeting(input: BoardMeetingCreate):
+    """Create a new board meeting"""
+    # Convert agenda items to AgendaItem objects
+    agenda_items = [AgendaItem(**item) if isinstance(item, dict) else item for item in input.agenda_items]
+    
+    meeting = BoardMeeting(
+        title=input.title,
+        date=input.date,
+        time=input.time,
+        location=input.location,
+        agenda_items=agenda_items,
+        attendees=input.attendees
+    )
+    doc = meeting.model_dump()
+    await db.board_meetings.insert_one(doc)
+    return meeting
+
+
+@api_router.get("/board-meetings", response_model=List[BoardMeeting])
+async def get_board_meetings(status: Optional[str] = None, archived: bool = False):
+    """Get all board meetings"""
+    query = {}
+    if status:
+        query["status"] = status
+    elif archived:
+        query["status"] = "archived"
+    else:
+        query["status"] = {"$ne": "archived"}
+    
+    meetings = await db.board_meetings.find(query, {"_id": 0}).sort("date", -1).to_list(100)
+    return meetings
+
+
+@api_router.get("/board-meetings/archived", response_model=List[BoardMeeting])
+async def get_archived_meetings():
+    """Get all archived board meetings"""
+    meetings = await db.board_meetings.find({"status": "archived"}, {"_id": 0}).sort("date", -1).to_list(100)
+    return meetings
+
+
+@api_router.get("/board-meetings/{meeting_id}", response_model=BoardMeeting)
+async def get_board_meeting(meeting_id: str):
+    """Get a specific board meeting"""
+    meeting = await db.board_meetings.find_one({"id": meeting_id}, {"_id": 0})
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Board meeting not found")
+    return meeting
+
+
+@api_router.put("/board-meetings/{meeting_id}", response_model=BoardMeeting)
+async def update_board_meeting(meeting_id: str, input: BoardMeetingUpdate):
+    """Update a board meeting"""
+    existing = await db.board_meetings.find_one({"id": meeting_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Board meeting not found")
+    
+    update_data = {k: v for k, v in input.model_dump().items() if v is not None}
+    
+    # Handle agenda items conversion
+    if "agenda_items" in update_data and update_data["agenda_items"]:
+        update_data["agenda_items"] = [
+            AgendaItem(**item).model_dump() if isinstance(item, dict) and "id" not in item 
+            else (AgendaItem(**item).model_dump() if isinstance(item, dict) else item)
+            for item in update_data["agenda_items"]
+        ]
+    
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.board_meetings.update_one({"id": meeting_id}, {"$set": update_data})
+    updated = await db.board_meetings.find_one({"id": meeting_id}, {"_id": 0})
+    return updated
+
+
+@api_router.put("/board-meetings/{meeting_id}/archive")
+async def archive_board_meeting(meeting_id: str):
+    """Archive a board meeting"""
+    existing = await db.board_meetings.find_one({"id": meeting_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Board meeting not found")
+    
+    await db.board_meetings.update_one(
+        {"id": meeting_id}, 
+        {"$set": {"status": "archived", "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    return {"message": "Board meeting archived successfully"}
+
+
+@api_router.delete("/board-meetings/{meeting_id}")
+async def delete_board_meeting(meeting_id: str):
+    """Delete a board meeting"""
+    result = await db.board_meetings.delete_one({"id": meeting_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Board meeting not found")
+    return {"message": "Board meeting deleted successfully"}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
