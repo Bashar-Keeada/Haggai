@@ -24,6 +24,7 @@ const AdminTrainingParticipants = () => {
   const [attendanceHours, setAttendanceHours] = useState(0);
   const [sendingDiploma, setSendingDiploma] = useState(false);
   const [generatingDiploma, setGeneratingDiploma] = useState(false);
+  const [diplomaPreviewUrl, setDiplomaPreviewUrl] = useState(null);
   const [filter, setFilter] = useState('all'); // all, pending, accepted, rejected, completed
 
   const translations = {
