@@ -21,6 +21,7 @@ import AdminPartners from "./pages/AdminPartners";
 import AdminTestimonials from "./pages/AdminTestimonials";
 import AdminNominations from "./pages/AdminNominations";
 import AdminWorkshops from "./pages/AdminWorkshops";
+import AdminTrainingParticipants from "./pages/AdminTrainingParticipants";
 import MembersArea from "./pages/MembersArea";
 import Partners from "./pages/Partners";
 import Donations from "./pages/Donations";
