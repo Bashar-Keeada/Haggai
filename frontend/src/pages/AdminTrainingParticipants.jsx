@@ -796,24 +796,14 @@ const AdminTrainingParticipants = () => {
           
           <DialogFooter className="flex-col sm:flex-row gap-2">
             {diplomaPreviewUrl && (
-              <>
-                <Button
-                  variant="outline"
-                  onClick={handleGenerateDiploma}
-                  disabled={generatingDiploma}
-                >
-                  {generatingDiploma ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Download className="h-4 w-4 mr-2" />}
-                  {txt.download}
-                </Button>
-                <Button
-                  onClick={handleSendDiploma}
-                  disabled={sendingDiploma}
-                  className="bg-haggai hover:bg-haggai-dark"
-                >
-                  {sendingDiploma ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Send className="h-4 w-4 mr-2" />}
-                  {txt.sendEmail}
-                </Button>
-              </>
+              <Button
+                onClick={handleSendDiploma}
+                disabled={sendingDiploma}
+                className="bg-haggai hover:bg-haggai-dark"
+              >
+                {sendingDiploma ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Send className="h-4 w-4 mr-2" />}
+                {txt.sendEmail}
+              </Button>
             )}
           </DialogFooter>
         </DialogContent>
