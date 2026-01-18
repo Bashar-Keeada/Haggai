@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap, ChevronDown, ChevronUp, User, Phone, Eye, EyeOff, LogIn, Info, X } from 'lucide-react';
+import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap, ChevronDown, ChevronUp, User, Phone, Eye, EyeOff, LogIn, Info, X, Briefcase } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../components/ui/collapsible';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
@@ -15,7 +16,12 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const MembersArea = () => {
   const { language, isRTL } = useLanguage();
   const { isMembersAuthenticated, loginMembers, logoutMembers } = useAuth();
-  const [isBylawsOpen, setIsBylawsOpen] = useState(false);
+  const [openSections, setOpenSections] = useState({
+    bylaws: false,
+    knowledge: true,
+    board: false,
+    meetings: false
+  });
   const [showPreviousBoard, setShowPreviousBoard] = useState(false);
   const [currentBoard, setCurrentBoard] = useState([]);
   const [previousBoard, setPreviousBoard] = useState([]);
@@ -26,6 +32,10 @@ const MembersArea = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [selectedSubject, setSelectedSubject] = useState(null);
+
+  const toggleSection = (section) => {
+    setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
 
   useEffect(() => {
     if (isMembersAuthenticated) {
