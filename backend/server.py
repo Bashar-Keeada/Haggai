@@ -2030,8 +2030,13 @@ def generate_diploma_pdf(participant_name: str, event_title: str, event_date: st
     # Build content
     story = []
     
-    # Add spacing at top
-    story.append(Spacer(1, 1*cm))
+    # Add Haggai logo at top
+    logo_path = ROOT_DIR / 'haggai_logo.png'
+    if logo_path.exists():
+        logo = Image(str(logo_path), width=4*cm, height=2.8*cm)
+        logo.hAlign = 'CENTER'
+        story.append(logo)
+        story.append(Spacer(1, 0.5*cm))
     
     # Main title
     story.append(Paragraph("A D V A N C E D   L E A D E R S H I P   S E M I N A R", title_style))
