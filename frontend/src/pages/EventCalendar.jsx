@@ -509,7 +509,7 @@ I am confident that your participation in this program will give you personal an
             </DialogDescription>
             {nominationEvent && (
               <Badge className="w-fit mt-2 bg-haggai text-white">
-                {nominationEvent.title}
+                {getLocalizedText(nominationEvent.title)}
               </Badge>
             )}
           </DialogHeader>
