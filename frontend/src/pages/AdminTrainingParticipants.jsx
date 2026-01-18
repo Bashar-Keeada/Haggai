@@ -725,8 +725,11 @@ const AdminTrainingParticipants = () => {
       </Dialog>
 
       {/* Diploma Dialog */}
-      <Dialog open={showDiplomaDialog} onOpenChange={setShowDiplomaDialog}>
-        <DialogContent className={isRTL ? 'rtl' : 'ltr'}>
+      <Dialog open={showDiplomaDialog} onOpenChange={(open) => {
+        setShowDiplomaDialog(open);
+        if (!open) setDiplomaPreviewUrl(null);
+      }}>
+        <DialogContent className={`max-w-4xl ${isRTL ? 'rtl' : 'ltr'}`}>
           <DialogHeader>
             <DialogTitle className={isRTL ? 'text-right' : ''}>{txt.diplomaTitle}</DialogTitle>
           </DialogHeader>
@@ -739,24 +742,59 @@ const AdminTrainingParticipants = () => {
                 <p><strong>{txt.email}:</strong> {selectedParticipant.registration_data?.email}</p>
                 <p><strong>{txt.attendance}:</strong> {selectedParticipant.attendance_hours || 0} {txt.hours}</p>
               </div>
+              
+              {/* PDF Preview */}
+              {diplomaPreviewUrl ? (
+                <div className="border rounded-xl overflow-hidden bg-gray-100">
+                  <iframe 
+                    src={diplomaPreviewUrl} 
+                    className="w-full h-[400px]"
+                    title="Diploma Preview"
+                  />
+                </div>
+              ) : (
+                <div className="border rounded-xl p-8 bg-gray-50 text-center">
+                  <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-stone-500 mb-4">
+                    {language === 'sv' ? 'Klicka på "Förhandsgranska" för att se diplomet' : 
+                     language === 'ar' ? 'انقر على "معاينة" لعرض الشهادة' : 
+                     'Click "Preview" to view the diploma'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    onClick={handlePreviewDiploma}
+                    disabled={generatingDiploma}
+                  >
+                    {generatingDiploma ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Eye className="h-4 w-4 mr-2" />}
+                    {language === 'sv' ? 'Förhandsgranska' : language === 'ar' ? 'معاينة' : 'Preview'}
+                  </Button>
+                </div>
+              )}
             </div>
           )}
           
           <DialogFooter className="flex-col sm:flex-row gap-2">
-            <Button
-              variant="outline"
-              onClick={handleGenerateDiploma}
-              disabled={generatingDiploma}
-            >
-              {generatingDiploma ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Download className="h-4 w-4 mr-2" />}
-              {txt.download}
-            </Button>
-            <Button
-              onClick={handleSendDiploma}
-              disabled={sendingDiploma}
-              className="bg-haggai hover:bg-haggai-dark"
-            >
-              {sendingDiploma ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Send className="h-4 w-4 mr-2" />}
+            {diplomaPreviewUrl && (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={handleGenerateDiploma}
+                  disabled={generatingDiploma}
+                >
+                  {generatingDiploma ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Download className="h-4 w-4 mr-2" />}
+                  {txt.download}
+                </Button>
+                <Button
+                  onClick={handleSendDiploma}
+                  disabled={sendingDiploma}
+                  className="bg-haggai hover:bg-haggai-dark"
+                >
+                  {sendingDiploma ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Send className="h-4 w-4 mr-2" />}
+                  {txt.sendEmail}
+                </Button>
+              </>
+            )}
+          </DialogFooter>
               {txt.sendEmail}
             </Button>
           </DialogFooter>
