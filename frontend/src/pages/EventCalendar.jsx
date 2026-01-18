@@ -345,14 +345,14 @@ I am confident that your participation in this program will give you personal an
                               )}
                             </div>
                             <h3 className="text-xl font-semibold text-stone-800 mb-3 group-hover:text-haggai transition-colors">
-                              {event.title}
+                              {getLocalizedText(event.title)}
                             </h3>
-                            <p className="text-stone-600 mb-4">{event.description}</p>
+                            <p className="text-stone-600 mb-4">{getLocalizedText(event.description)}</p>
                             
                             <div className={`flex flex-wrap gap-4 text-sm text-stone-500 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                               <span className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
                                 <Clock className={`h-4 w-4 text-haggai ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                                {event.time}
+                                {getLocalizedText(event.time)}
                               </span>
                               <span className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
                                 <MapPin className={`h-4 w-4 text-haggai ${isRTL ? 'ml-1' : 'mr-1'}`} />
