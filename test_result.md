@@ -376,7 +376,7 @@ agent_communication:
       • Leader Experience Applications API: All endpoints including program-specific queries working
       
       📊 RESULTS: 15/15 API tests passed (100% success rate)
-      🔗 Backend URL: https://haggai-donations.preview.emergentagent.com/api
+      🔗 Backend URL: https://haggai-sweden-1.preview.emergentagent.com/api
       📝 Test file created: /app/backend_test.py
       
       All backend APIs are production-ready. The main agent can now focus on frontend testing or summarize completion.
