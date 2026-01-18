@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { 
   Calendar, Plus, Edit2, Archive, Trash2, Save, X, Clock, MapPin, 
   Users, FileText, ChevronDown, ChevronUp, CheckCircle, AlertCircle,
-  RefreshCw, ClipboardList
+  RefreshCw, ClipboardList, LogIn, LogOut, Mail, Lock, Bell, Send, Eye, EyeOff
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { Badge } from '../components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../components/ui/dialog';
 import { Label } from '../components/ui/label';
 import { toast } from 'sonner';
 
@@ -23,6 +23,17 @@ const BoardMeetings = ({ language, isRTL }) => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [editingMeeting, setEditingMeeting] = useState(null);
   const [expandedMeeting, setExpandedMeeting] = useState(null);
+  
+  // Auth states
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentMember, setCurrentMember] = useState(null);
+  const [loginMode, setLoginMode] = useState('login'); // 'login' or 'setup'
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -83,7 +94,31 @@ const BoardMeetings = ({ language, isRTL }) => {
         postponed: 'Uppskjutet'
       },
       decision: 'Beslut',
-      notes: 'Anteckningar'
+      notes: 'Anteckningar',
+      // Auth translations
+      login: 'Logga in',
+      logout: 'Logga ut',
+      loginTitle: 'Logga in som styrelsemedlem',
+      loginSubtitle: 'Logga in för att redigera möten och se fullständig information',
+      setupTitle: 'Skapa konto',
+      setupSubtitle: 'Skapa ett lösenord för ditt styrelsemedlemskonto',
+      email: 'E-postadress',
+      password: 'Lösenord',
+      confirmPassword: 'Bekräfta lösenord',
+      noAccount: 'Inget konto? Skapa ett',
+      hasAccount: 'Har du redan ett konto? Logga in',
+      loginButton: 'Logga in',
+      setupButton: 'Skapa konto',
+      loggedInAs: 'Inloggad som',
+      loginRequired: 'Logga in för att redigera',
+      sendInvitation: 'Skicka kallelse',
+      sendReminder: 'Skicka påminnelse',
+      invitationSent: 'Kallelse skickad!',
+      reminderSent: 'Påminnelse skickad!',
+      passwordMismatch: 'Lösenorden matchar inte',
+      emailNotFound: 'E-postadressen tillhör inte en styrelsemedlem',
+      welcomeBack: 'Välkommen tillbaka',
+      accountCreated: 'Konto skapat! Du kan nu logga in.'
     },
     en: {
       title: 'Board Meetings',
@@ -131,7 +166,30 @@ const BoardMeetings = ({ language, isRTL }) => {
         postponed: 'Postponed'
       },
       decision: 'Decision',
-      notes: 'Notes'
+      notes: 'Notes',
+      login: 'Log in',
+      logout: 'Log out',
+      loginTitle: 'Log in as board member',
+      loginSubtitle: 'Log in to edit meetings and see full information',
+      setupTitle: 'Create account',
+      setupSubtitle: 'Create a password for your board member account',
+      email: 'Email address',
+      password: 'Password',
+      confirmPassword: 'Confirm password',
+      noAccount: 'No account? Create one',
+      hasAccount: 'Already have an account? Log in',
+      loginButton: 'Log in',
+      setupButton: 'Create account',
+      loggedInAs: 'Logged in as',
+      loginRequired: 'Log in to edit',
+      sendInvitation: 'Send invitation',
+      sendReminder: 'Send reminder',
+      invitationSent: 'Invitation sent!',
+      reminderSent: 'Reminder sent!',
+      passwordMismatch: 'Passwords do not match',
+      emailNotFound: 'Email does not belong to a board member',
+      welcomeBack: 'Welcome back',
+      accountCreated: 'Account created! You can now log in.'
     },
     ar: {
       title: 'اجتماعات مجلس الإدارة',
@@ -179,11 +237,41 @@ const BoardMeetings = ({ language, isRTL }) => {
         postponed: 'مؤجل'
       },
       decision: 'القرار',
-      notes: 'ملاحظات'
+      notes: 'ملاحظات',
+      login: 'تسجيل الدخول',
+      logout: 'تسجيل الخروج',
+      loginTitle: 'تسجيل الدخول كعضو مجلس إدارة',
+      loginSubtitle: 'سجل الدخول لتعديل الاجتماعات',
+      setupTitle: 'إنشاء حساب',
+      setupSubtitle: 'أنشئ كلمة مرور لحساب عضو مجلس الإدارة',
+      email: 'البريد الإلكتروني',
+      password: 'كلمة المرور',
+      confirmPassword: 'تأكيد كلمة المرور',
+      noAccount: 'ليس لديك حساب؟ أنشئ واحدًا',
+      hasAccount: 'لديك حساب بالفعل؟ سجل الدخول',
+      loginButton: 'تسجيل الدخول',
+      setupButton: 'إنشاء حساب',
+      loggedInAs: 'مسجل الدخول كـ',
+      loginRequired: 'سجل الدخول للتعديل',
+      sendInvitation: 'إرسال دعوة',
+      sendReminder: 'إرسال تذكير',
+      invitationSent: 'تم إرسال الدعوة!',
+      reminderSent: 'تم إرسال التذكير!',
+      passwordMismatch: 'كلمات المرور غير متطابقة',
+      emailNotFound: 'البريد الإلكتروني لا ينتمي لعضو مجلس إدارة',
+      welcomeBack: 'مرحبًا بعودتك',
+      accountCreated: 'تم إنشاء الحساب! يمكنك الآن تسجيل الدخول.'
     }
   }[language] || {};
 
+  // Check for existing login on mount
   useEffect(() => {
+    const token = localStorage.getItem('boardMemberToken');
+    const member = localStorage.getItem('boardMemberData');
+    if (token && member) {
+      setIsLoggedIn(true);
+      setCurrentMember(JSON.parse(member));
+    }
     fetchMeetings();
   }, []);
 
@@ -209,6 +297,114 @@ const BoardMeetings = ({ language, isRTL }) => {
     }
   };
 
+  // Auth functions
+  const handleCheckEmail = async () => {
+    if (!loginEmail) return;
+    
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/board-auth/check-email/${encodeURIComponent(loginEmail.toLowerCase())}`);
+      const data = await res.json();
+      
+      if (!data.exists) {
+        toast.error(txt.emailNotFound);
+        return false;
+      }
+      
+      if (!data.has_account) {
+        setLoginMode('setup');
+        toast.info(`${txt.setupSubtitle} (${data.name})`);
+      }
+      return true;
+    } catch (error) {
+      console.error('Error checking email:', error);
+      return false;
+    }
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setAuthLoading(true);
+    
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/board-auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: loginEmail.toLowerCase(), password: loginPassword })
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem('boardMemberToken', data.token);
+        localStorage.setItem('boardMemberData', JSON.stringify(data.member));
+        setIsLoggedIn(true);
+        setCurrentMember(data.member);
+        setShowLoginDialog(false);
+        toast.success(`${txt.welcomeBack}, ${data.member.name}!`);
+        resetLoginForm();
+      } else {
+        const error = await res.json();
+        toast.error(error.detail || 'Login failed');
+      }
+    } catch (error) {
+      toast.error('Network error');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleSetupAccount = async (e) => {
+    e.preventDefault();
+    
+    if (loginPassword !== confirmPassword) {
+      toast.error(txt.passwordMismatch);
+      return;
+    }
+    
+    if (loginPassword.length < 6) {
+      toast.error(language === 'sv' ? 'Lösenordet måste vara minst 6 tecken' : 'Password must be at least 6 characters');
+      return;
+    }
+    
+    setAuthLoading(true);
+    
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/board-auth/set-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: loginEmail.toLowerCase(), password: loginPassword })
+      });
+      
+      if (res.ok) {
+        toast.success(txt.accountCreated);
+        setLoginMode('login');
+        setConfirmPassword('');
+      } else {
+        const error = await res.json();
+        toast.error(error.detail || 'Setup failed');
+      }
+    } catch (error) {
+      toast.error('Network error');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('boardMemberToken');
+    localStorage.removeItem('boardMemberData');
+    setIsLoggedIn(false);
+    setCurrentMember(null);
+    toast.info(language === 'sv' ? 'Du har loggat ut' : 'You have been logged out');
+  };
+
+  const resetLoginForm = () => {
+    setLoginEmail('');
+    setLoginPassword('');
+    setConfirmPassword('');
+    setLoginMode('login');
+    setShowPassword(false);
+  };
+
   const resetForm = () => {
     setFormData({
       title: '',
@@ -223,12 +419,20 @@ const BoardMeetings = ({ language, isRTL }) => {
   };
 
   const openCreateDialog = () => {
+    if (!isLoggedIn) {
+      setShowLoginDialog(true);
+      return;
+    }
     resetForm();
     setEditingMeeting(null);
     setShowCreateDialog(true);
   };
 
   const openEditDialog = (meeting) => {
+    if (!isLoggedIn) {
+      setShowLoginDialog(true);
+      return;
+    }
     setFormData({
       title: meeting.title,
       date: meeting.date,
@@ -312,7 +516,7 @@ const BoardMeetings = ({ language, isRTL }) => {
       if (response.ok) {
         toast.success(editingMeeting 
           ? (language === 'sv' ? 'Möte uppdaterat' : 'Meeting updated')
-          : (language === 'sv' ? 'Möte skapat' : 'Meeting created')
+          : (language === 'sv' ? 'Möte skapat - Kallelse skickas till styrelsen' : 'Meeting created - Invitation sent to board')
         );
         setShowCreateDialog(false);
         fetchMeetings();
@@ -354,6 +558,34 @@ const BoardMeetings = ({ language, isRTL }) => {
     }
   };
 
+  const handleSendInvitation = async (meetingId) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/board-meetings/${meetingId}/send-invitation`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        toast.success(`${txt.invitationSent} (${data.sent_to} ${language === 'sv' ? 'mottagare' : 'recipients'})`);
+      }
+    } catch (error) {
+      toast.error(language === 'sv' ? 'Kunde inte skicka kallelse' : 'Could not send invitation');
+    }
+  };
+
+  const handleSendReminder = async (meetingId) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/board-meetings/${meetingId}/send-reminder?days_until=1`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        toast.success(`${txt.reminderSent} (${data.sent_to} ${language === 'sv' ? 'mottagare' : 'recipients'})`);
+      }
+    } catch (error) {
+      toast.error(language === 'sv' ? 'Kunde inte skicka påminnelse' : 'Could not send reminder');
+    }
+  };
+
   const getStatusBadge = (status) => {
     const styles = {
       scheduled: 'bg-blue-100 text-blue-800',
@@ -377,7 +609,7 @@ const BoardMeetings = ({ language, isRTL }) => {
     };
     return (
       <Badge className={`text-xs ${styles[status] || 'bg-stone-100'}`}>
-        {txt.itemStatus[status] || status}
+        {txt.itemStatus?.[status] || status}
       </Badge>
     );
   };
@@ -507,31 +739,60 @@ const BoardMeetings = ({ language, isRTL }) => {
 
             {/* Actions */}
             {!isArchived && (
-              <div className={`flex gap-2 pt-4 border-t ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <Button 
-                  size="sm" 
-                  onClick={() => openEditDialog(meeting)}
-                  className="bg-haggai hover:bg-haggai-dark"
-                >
-                  <Edit2 className="h-4 w-4 mr-1" />
-                  {txt.edit}
-                </Button>
-                <Button 
-                  size="sm" 
-                  variant="outline"
-                  onClick={() => handleArchive(meeting.id)}
-                >
-                  <Archive className="h-4 w-4 mr-1" />
-                  {txt.archive}
-                </Button>
-                <Button 
-                  size="sm" 
-                  variant="ghost"
-                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                  onClick={() => handleDelete(meeting.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+              <div className={`flex flex-wrap gap-2 pt-4 border-t ${isRTL ? 'flex-row-reverse' : ''}`}>
+                {isLoggedIn ? (
+                  <>
+                    <Button 
+                      size="sm" 
+                      onClick={() => openEditDialog(meeting)}
+                      className="bg-haggai hover:bg-haggai-dark"
+                    >
+                      <Edit2 className="h-4 w-4 mr-1" />
+                      {txt.edit}
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => handleSendInvitation(meeting.id)}
+                    >
+                      <Send className="h-4 w-4 mr-1" />
+                      {txt.sendInvitation}
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => handleSendReminder(meeting.id)}
+                    >
+                      <Bell className="h-4 w-4 mr-1" />
+                      {txt.sendReminder}
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => handleArchive(meeting.id)}
+                    >
+                      <Archive className="h-4 w-4 mr-1" />
+                      {txt.archive}
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="ghost"
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                      onClick={() => handleDelete(meeting.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </>
+                ) : (
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setShowLoginDialog(true)}
+                  >
+                    <LogIn className="h-4 w-4 mr-1" />
+                    {txt.loginRequired}
+                  </Button>
+                )}
               </div>
             )}
           </CardContent>
@@ -551,15 +812,41 @@ const BoardMeetings = ({ language, isRTL }) => {
   return (
     <div className={`space-y-8 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
-      <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+      <div className={`flex items-center justify-between flex-wrap gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
         <div className={isRTL ? 'text-right' : ''}>
           <h2 className="text-2xl font-bold text-stone-800">{txt.title}</h2>
           <p className="text-stone-600">{txt.subtitle}</p>
         </div>
-        <Button onClick={openCreateDialog} className="bg-haggai hover:bg-haggai-dark">
-          <Plus className="h-4 w-4 mr-2" />
-          {txt.newMeeting}
-        </Button>
+        
+        <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          {isLoggedIn ? (
+            <>
+              <div className="flex items-center gap-2 px-3 py-2 bg-green-50 rounded-lg">
+                <div className="w-8 h-8 bg-haggai rounded-full flex items-center justify-center text-white text-sm font-bold">
+                  {currentMember?.name?.charAt(0) || 'S'}
+                </div>
+                <div className="text-sm">
+                  <p className="text-stone-500 text-xs">{txt.loggedInAs}</p>
+                  <p className="font-medium text-stone-800">{currentMember?.name}</p>
+                </div>
+              </div>
+              <Button variant="ghost" size="sm" onClick={handleLogout}>
+                <LogOut className="h-4 w-4 mr-1" />
+                {txt.logout}
+              </Button>
+            </>
+          ) : (
+            <Button variant="outline" onClick={() => setShowLoginDialog(true)}>
+              <LogIn className="h-4 w-4 mr-2" />
+              {txt.login}
+            </Button>
+          )}
+          
+          <Button onClick={openCreateDialog} className="bg-haggai hover:bg-haggai-dark">
+            <Plus className="h-4 w-4 mr-2" />
+            {txt.newMeeting}
+          </Button>
+        </div>
       </div>
 
       {/* Active Meetings */}
@@ -611,6 +898,104 @@ const BoardMeetings = ({ language, isRTL }) => {
           )}
         </div>
       )}
+
+      {/* Login Dialog */}
+      <Dialog open={showLoginDialog} onOpenChange={(open) => { setShowLoginDialog(open); if (!open) resetLoginForm(); }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader className={isRTL ? 'text-right' : ''}>
+            <DialogTitle className="flex items-center gap-2">
+              <LogIn className="h-5 w-5 text-haggai" />
+              {loginMode === 'login' ? txt.loginTitle : txt.setupTitle}
+            </DialogTitle>
+            <DialogDescription>
+              {loginMode === 'login' ? txt.loginSubtitle : txt.setupSubtitle}
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={loginMode === 'login' ? handleLogin : handleSetupAccount} className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">{txt.email}</Label>
+              <div className="relative">
+                <Mail className={`absolute top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 ${isRTL ? 'right-3' : 'left-3'}`} />
+                <Input
+                  id="email"
+                  type="email"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  onBlur={handleCheckEmail}
+                  className={`${isRTL ? 'pr-10' : 'pl-10'}`}
+                  placeholder="din.email@example.com"
+                  required
+                  dir="ltr"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">{txt.password}</Label>
+              <div className="relative">
+                <Lock className={`absolute top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 ${isRTL ? 'right-3' : 'left-3'}`} />
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  className={`${isRTL ? 'pr-10' : 'pl-10'} pr-10`}
+                  placeholder="••••••••"
+                  required
+                  minLength={6}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+
+            {loginMode === 'setup' && (
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">{txt.confirmPassword}</Label>
+                <div className="relative">
+                  <Lock className={`absolute top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 ${isRTL ? 'right-3' : 'left-3'}`} />
+                  <Input
+                    id="confirmPassword"
+                    type={showPassword ? 'text' : 'password'}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className={`${isRTL ? 'pr-10' : 'pl-10'}`}
+                    placeholder="••••••••"
+                    required
+                    minLength={6}
+                  />
+                </div>
+              </div>
+            )}
+
+            <Button 
+              type="submit" 
+              className="w-full bg-haggai hover:bg-haggai-dark"
+              disabled={authLoading}
+            >
+              {authLoading ? (
+                <RefreshCw className="h-4 w-4 animate-spin" />
+              ) : (
+                loginMode === 'login' ? txt.loginButton : txt.setupButton
+              )}
+            </Button>
+
+            <button
+              type="button"
+              onClick={() => setLoginMode(loginMode === 'login' ? 'setup' : 'login')}
+              className="w-full text-sm text-haggai hover:underline"
+            >
+              {loginMode === 'login' ? txt.noAccount : txt.hasAccount}
+            </button>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Create/Edit Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
@@ -748,10 +1133,10 @@ const BoardMeetings = ({ language, isRTL }) => {
                               onChange={(e) => handleUpdateAgendaItem(idx, 'status', e.target.value)}
                               className="text-xs p-1 border rounded"
                             >
-                              <option value="pending">{txt.itemStatus.pending}</option>
-                              <option value="discussed">{txt.itemStatus.discussed}</option>
-                              <option value="decided">{txt.itemStatus.decided}</option>
-                              <option value="postponed">{txt.itemStatus.postponed}</option>
+                              <option value="pending">{txt.itemStatus?.pending}</option>
+                              <option value="discussed">{txt.itemStatus?.discussed}</option>
+                              <option value="decided">{txt.itemStatus?.decided}</option>
+                              <option value="postponed">{txt.itemStatus?.postponed}</option>
                             </select>
                           )}
                           <Button 
