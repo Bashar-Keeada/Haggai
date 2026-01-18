@@ -834,9 +834,6 @@ const AdminTrainingParticipants = () => {
               </>
             )}
           </DialogFooter>
-              {txt.sendEmail}
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
