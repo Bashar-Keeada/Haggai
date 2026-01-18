@@ -739,7 +739,7 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
           <Card className="border-0 shadow-xl overflow-hidden">
             <Collapsible open={openSections.bylaws} onOpenChange={() => toggleSection('bylaws')}>
               <CollapsibleTrigger asChild>
-                <CardHeader className="bg-gradient-to-r from-haggai to-haggai-dark text-white cursor-pointer hover:from-haggai-dark hover:to-haggai transition-all">
+                <CardHeader className="bg-gradient-to-r from-teal-600 to-teal-700 text-white cursor-pointer hover:from-teal-700 hover:to-teal-800 transition-all">
                   <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
                     <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
                       <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
