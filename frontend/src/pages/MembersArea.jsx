@@ -164,6 +164,25 @@ const MembersArea = () => {
       pageSubtitle: 'Exclusive for Haggai Sweden members',
       welcome: 'Welcome to the Knowledge Support',
       welcomeDesc: 'Here you will find information exclusive to our members.',
+      // Our Unity section
+      ourUnity: 'Our Unity',
+      ourUnityDesc: 'Together we make a difference in Sweden',
+      unityTitle: 'Be part of changing Sweden',
+      unityText: 'As a member of Haggai Sweden, you have the opportunity to be part of something greater than yourself. Your commitment, your time, and your responsibility are crucial for us to make a positive impact on our society together. Every leadership training, every mentoring relationship, and every step we take together contributes to building a stronger Sweden – and ultimately a better world.',
+      unityCall: 'Take responsibility. Get involved. Give your time. Together we can change the world – one leader at a time.',
+      // Workshops section
+      upcomingWorkshops: 'Upcoming Trainings',
+      upcomingWorkshopsDesc: 'View planned workshops and nominate participants',
+      nominateBtn: 'Nominate someone',
+      viewCalendar: 'View full calendar',
+      noWorkshops: 'No upcoming trainings at the moment',
+      spotsLeft: 'spots left',
+      // Haggai global
+      haggaiGlobal: 'Haggai International',
+      haggaiGlobalDesc: 'Our global vision',
+      haggaiVision: 'Haggai International\'s vision is to equip Christian leaders worldwide to make disciples of all nations.',
+      haggaiMission: 'By training leaders who multiply themselves, we strive to reach every nation with the Gospel.',
+      // Rest of translations
       bylaws: 'Association Bylaws',
       bylawsDesc: 'Read about the association\'s rules and guidelines',
       adoptedDate: 'Adopted on April 16, 2025',
