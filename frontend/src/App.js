@@ -25,6 +25,7 @@ import MembersArea from "./pages/MembersArea";
 import Partners from "./pages/Partners";
 import Donations from "./pages/Donations";
 import LoginPage from "./pages/LoginPage";
+import NomineeRegistration from "./pages/NomineeRegistration";
 
 // Protected App content - only shown when authenticated
 const ProtectedApp = () => {
