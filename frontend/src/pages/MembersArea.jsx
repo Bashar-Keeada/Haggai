@@ -103,6 +103,25 @@ const MembersArea = () => {
       pageSubtitle: 'Exklusivt för Haggai Sweden medlemmar',
       welcome: 'Välkommen till kunskapsstöd',
       welcomeDesc: 'Här hittar du information som är exklusiv för våra medlemmar.',
+      // Our Unity section
+      ourUnity: 'Vår Enhet',
+      ourUnityDesc: 'Tillsammans gör vi skillnad i Sverige',
+      unityTitle: 'Var med och förändra Sverige',
+      unityText: 'Som medlem i Haggai Sweden har du möjlighet att vara en del av något större än dig själv. Ditt engagemang, din tid och ditt ansvar är avgörande för att vi tillsammans ska kunna göra en positiv påverkan i vårt samhälle. Varje ledarskapsutbildning, varje mentorsrelation och varje steg vi tar tillsammans bidrar till att bygga ett starkare Sverige – och i förlängningen en bättre värld.',
+      unityCall: 'Ta ansvar. Engagera dig. Ge av din tid. Tillsammans kan vi förändra världen – en ledare i taget.',
+      // Workshops section
+      upcomingWorkshops: 'Kommande Utbildningar',
+      upcomingWorkshopsDesc: 'Se planerade workshops och nominera deltagare',
+      nominateBtn: 'Nominera någon',
+      viewCalendar: 'Se hela kalendern',
+      noWorkshops: 'Inga kommande utbildningar just nu',
+      spotsLeft: 'platser kvar',
+      // Haggai global
+      haggaiGlobal: 'Haggai International',
+      haggaiGlobalDesc: 'Vår globala vision',
+      haggaiVision: 'Haggai Internationals vision är att utrusta kristna ledare världen över att göra lärjungar av alla folk.',
+      haggaiMission: 'Genom att utbilda ledare som multiplicerar sig själva, strävar vi efter att nå varje nation med evangeliet.',
+      // Rest of translations
       bylaws: 'Föreningens Stadgar',
       bylawsDesc: 'Läs om föreningens regler och riktlinjer',
       adoptedDate: 'Antagna den 16 april 2025',
