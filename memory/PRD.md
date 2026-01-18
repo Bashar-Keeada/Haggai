@@ -217,6 +217,7 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 
 ### P1 (High Priority)
 - ✅ COMPLETED: Workshop Management Admin Panel
+- ✅ COMPLETED: Training Participants Admin Panel with Diploma Generation
 - Migrate EventCalendar.jsx to use /api/workshops instead of mock.js
 - Migrate LeaderExperience.jsx to use /api/workshops instead of mock.js
 
