@@ -307,62 +307,32 @@ const AdminTrainingParticipants = () => {
     }
   };
 
-  const handlePreviewDiploma = async () => {
-    setGeneratingDiploma(true);
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/training-participants/${selectedParticipant.id}/preview-diploma`, {
-        method: 'POST'
-      });
-      if (response.ok) {
-        const data = await response.json();
-        // Create data URL from base64
-        const dataUrl = `data:application/pdf;base64,${data.pdf_base64}`;
-        setDiplomaPreviewUrl(dataUrl);
-        setDiplomaFilename(data.filename);
-      } else {
-        const error = await response.json();
-        toast.error(error.detail || 'Kunde inte generera förhandsvisning');
-      }
-    } catch (error) {
-      console.error('Error previewing diploma:', error);
-      toast.error('Ett fel uppstod vid förhandsvisning');
-    } finally {
-      setGeneratingDiploma(false);
-    }
-  };
-
-  const handleGenerateDiploma = async () => {
-    // If we already have a preview, use it for download
-    if (diplomaPreviewUrl) {
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = diplomaPreviewUrl;
-      a.download = diplomaFilename || `Diploma_${selectedParticipant.registration_data?.full_name?.replace(/\s+/g, '_') || 'participant'}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => {
-        document.body.removeChild(a);
-      }, 100);
-      toast.success(txt.diplomaGenerated);
-      return;
-    }
-
-    // Otherwise generate and download via preview first
-    await handlePreviewDiploma();
-  };
-
+  // Simple direct download - opens PDF in new tab from backend
   const handleOpenInNewTab = () => {
-    if (diplomaPreviewUrl) {
-      // Open base64 PDF in new tab
-      const newWindow = window.open();
-      if (newWindow) {
-        newWindow.document.write(`
-          <html>
-            <head><title>Diplom - ${selectedParticipant?.registration_data?.full_name || 'Participant'}</title></head>
-            <body style="margin:0;padding:0;">
-              <embed src="${diplomaPreviewUrl}" type="application/pdf" width="100%" height="100%" />
-            </body>
-          </html>
+    if (selectedParticipant) {
+      window.open(`${BACKEND_URL}/api/training-participants/${selectedParticipant.id}/view-diploma`, '_blank');
+    }
+  };
+
+  const handleGenerateDiploma = () => {
+    if (selectedParticipant) {
+      // Create a hidden link to trigger download
+      const link = document.createElement('a');
+      link.href = `${BACKEND_URL}/api/training-participants/${selectedParticipant.id}/download-diploma`;
+      link.download = `Diploma_${selectedParticipant.registration_data?.full_name?.replace(/\s+/g, '_') || 'participant'}.pdf`;
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast.success(txt.diplomaGenerated);
+    }
+  };
+
+  const handlePreviewDiploma = () => {
+    // Just mark as previewed to show buttons
+    setDiplomaPreviewUrl('ready');
+    setGeneratingDiploma(false);
+  };
         `);
       }
     }
