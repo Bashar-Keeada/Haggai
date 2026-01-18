@@ -416,7 +416,7 @@ I am confident that your participation in this program will give you personal an
           <DialogHeader className={isRTL ? 'text-right' : ''}>
             <DialogTitle className="text-2xl text-stone-800">{t('calendar.registerTitle')}</DialogTitle>
             <DialogDescription className="text-stone-600">
-              {selectedEvent?.title} - {selectedEvent && new Date(selectedEvent.date).toLocaleDateString(language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'sv-SE')}
+              {getLocalizedText(selectedEvent?.title)} - {selectedEvent && new Date(selectedEvent.date).toLocaleDateString(language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'sv-SE')}
             </DialogDescription>
           </DialogHeader>
           
