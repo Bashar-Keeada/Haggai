@@ -1517,6 +1517,205 @@ async def send_meeting_reminder(meeting_id: str, days_until: int = 1):
     return {"message": f"Påminnelse skickad till {len(board_emails)} styrelsemedlemmar", "sent_to": len(board_emails)}
 
 
+# ==================== WORKSHOP ENDPOINTS ====================
+
+@api_router.post("/workshops", response_model=Workshop)
+async def create_workshop(input: WorkshopCreate):
+    """Create a new workshop"""
+    workshop = Workshop(**input.model_dump())
+    workshop.spots_left = input.spots  # Initialize spots_left
+    doc = workshop.model_dump()
+    await db.workshops.insert_one(doc)
+    return workshop
+
+
+@api_router.get("/workshops", response_model=List[Workshop])
+async def get_workshops(active_only: bool = True, workshop_type: Optional[str] = None):
+    """Get all workshops"""
+    query = {}
+    if active_only:
+        query["is_active"] = True
+    if workshop_type:
+        query["workshop_type"] = workshop_type
+    
+    workshops = await db.workshops.find(query, {"_id": 0}).sort("date", 1).to_list(100)
+    return workshops
+
+
+@api_router.get("/workshops/{workshop_id}", response_model=Workshop)
+async def get_workshop(workshop_id: str):
+    """Get a specific workshop"""
+    workshop = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
+    if not workshop:
+        raise HTTPException(status_code=404, detail="Workshop not found")
+    return workshop
+
+
+@api_router.put("/workshops/{workshop_id}", response_model=Workshop)
+async def update_workshop(workshop_id: str, input: WorkshopUpdate):
+    """Update a workshop (including price)"""
+    existing = await db.workshops.find_one({"id": workshop_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Workshop not found")
+    
+    update_data = {k: v for k, v in input.model_dump().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.workshops.update_one({"id": workshop_id}, {"$set": update_data})
+    updated = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
+    return updated
+
+
+@api_router.delete("/workshops/{workshop_id}")
+async def delete_workshop(workshop_id: str):
+    """Delete a workshop"""
+    result = await db.workshops.delete_one({"id": workshop_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Workshop not found")
+    return {"message": "Workshop deleted successfully"}
+
+
+@api_router.post("/workshops/seed-initial")
+async def seed_initial_workshops():
+    """Seed initial workshops from the specification"""
+    # Check if workshops already exist
+    count = await db.workshops.count_documents({})
+    if count > 0:
+        return {"message": "Workshops already exist", "count": count}
+    
+    initial_workshops = [
+        {
+            "id": str(uuid.uuid4()),
+            "title": "Workshop – Kvinnor internationell",
+            "title_en": "Workshop – Women International",
+            "title_ar": "ورشة عمل – نساء دولية",
+            "description": "Internationell workshop för kvinnor i ledande positioner. 2 platser från Sverige.",
+            "description_en": "International workshop for women in leadership positions. 2 spots from Sweden.",
+            "description_ar": "ورشة عمل دولية للنساء في المناصب القيادية. مقعدان من السويد.",
+            "workshop_type": "international",
+            "target_gender": "women",
+            "date": "2026-07-13",
+            "end_date": "2026-07-26",
+            "location": "Internationell plats",
+            "location_en": "International location",
+            "location_ar": "موقع دولي",
+            "spots": 2,
+            "spots_left": 2,
+            "age_min": 23,
+            "age_max": 55,
+            "price": 500,
+            "currency": "USD",
+            "is_active": True,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "title": "Workshop – Män internationell",
+            "title_en": "Workshop – Men International",
+            "title_ar": "ورشة عمل – رجال دولية",
+            "description": "Internationell workshop för män i ledande positioner. 2 platser från Sverige.",
+            "description_en": "International workshop for men in leadership positions. 2 spots from Sweden.",
+            "description_ar": "ورشة عمل دولية للرجال في المناصب القيادية. مقعدان من السويد.",
+            "workshop_type": "international",
+            "target_gender": "men",
+            "date": "2026-11-30",
+            "end_date": "2026-12-11",
+            "location": "Internationell plats",
+            "location_en": "International location",
+            "location_ar": "موقع دولي",
+            "spots": 2,
+            "spots_left": 2,
+            "age_min": 23,
+            "age_max": 55,
+            "price": 500,
+            "currency": "USD",
+            "is_active": True,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "title": "Workshop – Online engelskspråkig internationell",
+            "title_en": "Workshop – Online English International",
+            "title_ar": "ورشة عمل – عبر الإنترنت بالإنجليزية دولية",
+            "description": "Online workshop på engelska. Ålder: 29-60 år.",
+            "description_en": "Online workshop in English. Age: 29-60 years.",
+            "description_ar": "ورشة عمل عبر الإنترنت بالإنجليزية. العمر: 29-60 سنة.",
+            "workshop_type": "online",
+            "target_gender": "all",
+            "language": "english",
+            "date": "2026-02-05",
+            "end_date": "2026-02-07",
+            "location": "Online",
+            "location_en": "Online",
+            "location_ar": "عبر الإنترنت",
+            "spots": None,
+            "spots_left": None,
+            "age_min": 29,
+            "age_max": 60,
+            "price": 500,
+            "currency": "SEK",
+            "is_online": True,
+            "is_active": True,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "title": "Workshop – Nationell mars 2026",
+            "title_en": "Workshop – National March 2026",
+            "title_ar": "ورشة عمل – وطنية مارس 2026",
+            "description": "Nationell workshop. Ingen åldersgräns.",
+            "description_en": "National workshop. No age limit.",
+            "description_ar": "ورشة عمل وطنية. لا يوجد حد للعمر.",
+            "workshop_type": "national",
+            "target_gender": "all",
+            "date": "2026-03-13",
+            "location": "Stockholm, Sverige",
+            "location_en": "Stockholm, Sweden",
+            "location_ar": "ستوكهولم، السويد",
+            "spots": 30,
+            "spots_left": 30,
+            "age_min": None,
+            "age_max": None,
+            "price": 500,
+            "currency": "SEK",
+            "is_active": True,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "title": "ToT – Training of Trainers (FDS)",
+            "title_en": "ToT – Training of Trainers (FDS)",
+            "title_ar": "تدريب المدربين (FDS)",
+            "description": "FDS-utbildning (Training of Trainers). För dig som vill bli certifierad Haggai-tränare och leda workshops.",
+            "description_en": "FDS training (Training of Trainers). For those who want to become certified Haggai trainers and lead workshops.",
+            "description_ar": "تدريب FDS (تدريب المدربين). لمن يريد أن يصبح مدرب حجاي معتمد ويقود ورش العمل.",
+            "workshop_type": "tot",
+            "target_gender": "all",
+            "date": None,
+            "location": "På plats eller online",
+            "location_en": "On-site or online",
+            "location_ar": "في الموقع أو عبر الإنترنت",
+            "spots": None,
+            "spots_left": None,
+            "age_min": None,
+            "age_max": None,
+            "price": None,
+            "currency": "SEK",
+            "is_tot": True,
+            "is_active": True,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+    ]
+    
+    await db.workshops.insert_many(initial_workshops)
+    return {"message": f"Seeded {len(initial_workshops)} workshops", "count": len(initial_workshops)}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
