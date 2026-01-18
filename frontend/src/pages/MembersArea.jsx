@@ -685,6 +685,27 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
                       </div>
                     ))}
                   </div>
+                  
+                  {/* Certification notice */}
+                  <div className={`mt-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200 ${isRTL ? 'text-right' : ''}`}>
+                    <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <GraduationCap className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-emerald-800">
+                          {language === 'sv' ? 'Certifierad Workshop med Diplom' : language === 'ar' ? 'ورشة عمل معتمدة مع شهادة' : 'Certified Workshop with Diploma'}
+                        </p>
+                        <p className="text-sm text-emerald-600">
+                          {language === 'sv' 
+                            ? 'Efter genomförd utbildning erhåller du ett officiellt diplom från Haggai International.' 
+                            : language === 'ar'
+                            ? 'بعد إتمام التدريب، ستحصل على شهادة رسمية من حجاي الدولية.'
+                            : 'Upon completion, you will receive an official diploma from Haggai International.'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </CardContent>
               </CollapsibleContent>
             </Collapsible>
