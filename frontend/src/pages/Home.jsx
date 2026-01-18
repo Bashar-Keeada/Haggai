@@ -58,10 +58,14 @@ const Home = () => {
     const translation = translatedEvents.find(te => te.id === event.id);
     const title = typeof event.title === 'object' ? getLocalizedText(event.title) : (translation?.title || event.title);
     const description = typeof event.description === 'object' ? getLocalizedText(event.description) : (translation?.description || event.description);
+    const time = typeof event.time === 'object' ? getLocalizedText(event.time) : event.time;
+    const location = typeof event.location === 'object' ? getLocalizedText(event.location) : event.location;
     return {
       ...event,
       title: title,
-      description: description
+      description: description,
+      time: time,
+      location: location
     };
   });
 
