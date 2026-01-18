@@ -46,6 +46,25 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 
 ### January 2026
 
+#### Workshop Management ✅ (Latest - Jan 18)
+- **Location:** `/admin/workshops`
+- **Features:**
+  - View all workshops with type badges (ToT, Online, National, International)
+  - Full CRUD operations (Create, Read, Update, Delete)
+  - Price and currency management (SEK, USD, EUR)
+  - Multi-language titles (Swedish, English, Arabic)
+  - Workshop types: ToT (Training of Trainers), Online, National, International
+  - Target groups: All, Women, Men
+  - Date ranges, locations, spots, age limits
+  - Active/inactive status toggle
+- **API Endpoints:**
+  - `GET /api/workshops` - List all workshops
+  - `POST /api/workshops` - Create workshop
+  - `PUT /api/workshops/{id}` - Update workshop
+  - `DELETE /api/workshops/{id}` - Delete workshop
+  - `POST /api/workshops/seed-initial` - Seed initial data
+- **Bug Fixed:** Price field validation allowing null values from database
+
 #### Board Meeting System ✅ (Latest)
 - **Location:** Members Area → under "Stadgar" section
 - **Features:**
