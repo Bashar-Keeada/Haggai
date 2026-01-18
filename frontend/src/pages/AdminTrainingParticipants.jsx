@@ -333,10 +333,6 @@ const AdminTrainingParticipants = () => {
     setDiplomaPreviewUrl('ready');
     setGeneratingDiploma(false);
   };
-        `);
-      }
-    }
-  };
 
   const handleSendDiploma = async () => {
     setSendingDiploma(true);
