@@ -426,6 +426,26 @@ const AdminDashboard = () => {
               </CardContent>
             </Card>
           </Link>
+          
+          <Link to="/admin/utbildning">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all cursor-pointer hover:bg-emerald-50">
+              <CardContent className="p-6">
+                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-14 h-14 bg-emerald-500 rounded-2xl flex items-center justify-center">
+                    <Calendar className="h-7 w-7 text-white" />
+                  </div>
+                  <div className={isRTL ? 'text-right' : ''}>
+                    <h3 className="text-lg font-bold text-stone-800">
+                      {language === 'sv' ? 'Utbildningsdeltagare' : language === 'ar' ? 'المشاركون في التدريب' : 'Training Participants'}
+                    </h3>
+                    <p className="text-sm text-stone-500">
+                      {language === 'sv' ? 'Närvaro, godkännande & diplom' : language === 'ar' ? 'الحضور والموافقة والشهادات' : 'Attendance, approval & diplomas'}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Stats Cards */}
