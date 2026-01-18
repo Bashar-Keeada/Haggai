@@ -309,13 +309,15 @@ const AdminTrainingParticipants = () => {
   const handlePreviewDiploma = async () => {
     setGeneratingDiploma(true);
     try {
-      const response = await fetch(`${BACKEND_URL}/api/training-participants/${selectedParticipant.id}/generate-diploma`, {
+      const response = await fetch(`${BACKEND_URL}/api/training-participants/${selectedParticipant.id}/preview-diploma`, {
         method: 'POST'
       });
       if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        setDiplomaPreviewUrl(url);
+        const data = await response.json();
+        // Create data URL from base64
+        const dataUrl = `data:application/pdf;base64,${data.pdf_base64}`;
+        setDiplomaPreviewUrl(dataUrl);
+        setDiplomaFilename(data.filename);
       } else {
         const error = await response.json();
         toast.error(error.detail || 'Kunde inte generera förhandsvisning');
@@ -334,7 +336,7 @@ const AdminTrainingParticipants = () => {
       const a = document.createElement('a');
       a.style.display = 'none';
       a.href = diplomaPreviewUrl;
-      a.download = `Diploma_${selectedParticipant.registration_data?.full_name?.replace(/\s+/g, '_') || 'participant'}.pdf`;
+      a.download = diplomaFilename || `Diploma_${selectedParticipant.registration_data?.full_name?.replace(/\s+/g, '_') || 'participant'}.pdf`;
       document.body.appendChild(a);
       a.click();
       setTimeout(() => {
@@ -344,36 +346,24 @@ const AdminTrainingParticipants = () => {
       return;
     }
 
-    // Otherwise generate and download
-    setGeneratingDiploma(true);
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/training-participants/${selectedParticipant.id}/generate-diploma`, {
-        method: 'POST'
-      });
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = `Diploma_${selectedParticipant.registration_data?.full_name?.replace(/\s+/g, '_') || 'participant'}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        // Cleanup
-        setTimeout(() => {
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-        }, 100);
-        toast.success(txt.diplomaGenerated);
-      } else {
-        const error = await response.json();
-        toast.error(error.detail || 'Kunde inte generera diplom');
+    // Otherwise generate and download via preview first
+    await handlePreviewDiploma();
+  };
+
+  const handleOpenInNewTab = () => {
+    if (diplomaPreviewUrl) {
+      // Open base64 PDF in new tab
+      const newWindow = window.open();
+      if (newWindow) {
+        newWindow.document.write(`
+          <html>
+            <head><title>Diplom - ${selectedParticipant?.registration_data?.full_name || 'Participant'}</title></head>
+            <body style="margin:0;padding:0;">
+              <embed src="${diplomaPreviewUrl}" type="application/pdf" width="100%" height="100%" />
+            </body>
+          </html>
+        `);
       }
-    } catch (error) {
-      console.error('Error generating diploma:', error);
-      toast.error('Ett fel uppstod vid generering av diplom');
-    } finally {
-      setGeneratingDiploma(false);
     }
   };
 
