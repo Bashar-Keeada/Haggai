@@ -2182,6 +2182,74 @@ async def preview_training_participant_diploma(participant_id: str):
     }
 
 
+@api_router.get("/training-participants/{participant_id}/view-diploma")
+async def view_training_participant_diploma(participant_id: str):
+    """View diploma PDF in browser (inline)"""
+    participant = await db.nominations.find_one(
+        {"id": participant_id, "registration_completed": True},
+        {"_id": 0}
+    )
+    if not participant:
+        raise HTTPException(status_code=404, detail="Training participant not found")
+    
+    attendance_hours = participant.get("attendance_hours", 0)
+    if attendance_hours < 21:
+        raise HTTPException(status_code=400, detail=f"Participant has only {attendance_hours} hours. 21 hours required for diploma.")
+    
+    registration_data = participant.get("registration_data", {})
+    participant_name = registration_data.get("full_name", participant.get("nominee_name", "Unknown"))
+    event_title = participant.get("event_title", "Haggai Leadership Seminar")
+    event_date = participant.get("event_date", "")
+    
+    pdf_buffer = generate_diploma_pdf(
+        participant_name=participant_name,
+        event_title=event_title,
+        event_date=event_date
+    )
+    
+    return StreamingResponse(
+        pdf_buffer,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'inline; filename="Diploma_{participant_name.replace(" ", "_")}.pdf"'
+        }
+    )
+
+
+@api_router.get("/training-participants/{participant_id}/download-diploma")
+async def download_training_participant_diploma(participant_id: str):
+    """Download diploma PDF as attachment"""
+    participant = await db.nominations.find_one(
+        {"id": participant_id, "registration_completed": True},
+        {"_id": 0}
+    )
+    if not participant:
+        raise HTTPException(status_code=404, detail="Training participant not found")
+    
+    attendance_hours = participant.get("attendance_hours", 0)
+    if attendance_hours < 21:
+        raise HTTPException(status_code=400, detail=f"Participant has only {attendance_hours} hours. 21 hours required for diploma.")
+    
+    registration_data = participant.get("registration_data", {})
+    participant_name = registration_data.get("full_name", participant.get("nominee_name", "Unknown"))
+    event_title = participant.get("event_title", "Haggai Leadership Seminar")
+    event_date = participant.get("event_date", "")
+    
+    pdf_buffer = generate_diploma_pdf(
+        participant_name=participant_name,
+        event_title=event_title,
+        event_date=event_date
+    )
+    
+    return StreamingResponse(
+        pdf_buffer,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="Diploma_{participant_name.replace(" ", "_")}.pdf"'
+        }
+    )
+
+
 async def send_diploma_email(participant: dict, pdf_buffer: BytesIO):
     """Send diploma PDF via email to participant"""
     registration_data = participant.get("registration_data", {})
