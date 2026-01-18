@@ -456,7 +456,7 @@ const AdminWorkshops = () => {
                         {workshop.location && (
                           <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                             <MapPin className="h-4 w-4" />
-                            {workshop.location}
+                            {getLocalizedText(workshop.location)}
                           </span>
                         )}
                         {workshop.spots && (
