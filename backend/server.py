@@ -1300,6 +1300,89 @@ class BoardMeetingUpdate(BaseModel):
     status: Optional[str] = None
 
 
+# ==================== WORKSHOP MODELS ====================
+
+class Workshop(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    title_en: Optional[str] = None
+    title_ar: Optional[str] = None
+    description: Optional[str] = None
+    description_en: Optional[str] = None
+    description_ar: Optional[str] = None
+    workshop_type: str  # 'international', 'national', 'online', 'tot'
+    target_gender: str = "all"  # 'all', 'women', 'men'
+    language: Optional[str] = None
+    date: Optional[str] = None
+    end_date: Optional[str] = None
+    location: Optional[str] = None
+    location_en: Optional[str] = None
+    location_ar: Optional[str] = None
+    spots: Optional[int] = None
+    spots_left: Optional[int] = None
+    age_min: Optional[int] = None
+    age_max: Optional[int] = None
+    price: float = 500  # Default price 500 kr
+    currency: str = "SEK"  # SEK or USD
+    is_online: bool = False
+    is_tot: bool = False  # Training of Trainers (FDS)
+    is_active: bool = True
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class WorkshopCreate(BaseModel):
+    title: str
+    title_en: Optional[str] = None
+    title_ar: Optional[str] = None
+    description: Optional[str] = None
+    description_en: Optional[str] = None
+    description_ar: Optional[str] = None
+    workshop_type: str
+    target_gender: str = "all"
+    language: Optional[str] = None
+    date: Optional[str] = None
+    end_date: Optional[str] = None
+    location: Optional[str] = None
+    location_en: Optional[str] = None
+    location_ar: Optional[str] = None
+    spots: Optional[int] = None
+    age_min: Optional[int] = None
+    age_max: Optional[int] = None
+    price: float = 500
+    currency: str = "SEK"
+    is_online: bool = False
+    is_tot: bool = False
+
+
+class WorkshopUpdate(BaseModel):
+    title: Optional[str] = None
+    title_en: Optional[str] = None
+    title_ar: Optional[str] = None
+    description: Optional[str] = None
+    description_en: Optional[str] = None
+    description_ar: Optional[str] = None
+    workshop_type: Optional[str] = None
+    target_gender: Optional[str] = None
+    language: Optional[str] = None
+    date: Optional[str] = None
+    end_date: Optional[str] = None
+    location: Optional[str] = None
+    location_en: Optional[str] = None
+    location_ar: Optional[str] = None
+    spots: Optional[int] = None
+    spots_left: Optional[int] = None
+    age_min: Optional[int] = None
+    age_max: Optional[int] = None
+    price: Optional[float] = None
+    currency: Optional[str] = None
+    is_online: Optional[bool] = None
+    is_tot: Optional[bool] = None
+    is_active: Optional[bool] = None
+
+
 @api_router.post("/board-meetings", response_model=BoardMeeting)
 async def create_board_meeting(input: BoardMeetingCreate, send_invitation: bool = True):
     """Create a new board meeting and optionally send invitations"""
