@@ -193,7 +193,7 @@ I am confident that your participation in this program will give you personal an
         },
         body: JSON.stringify({
           event_id: nominationEvent.id.toString(),
-          event_title: nominationEvent.title,
+          event_title: getLocalizedText(nominationEvent.title),
           event_date: nominationEvent.date,
           ...nominationData
         }),
