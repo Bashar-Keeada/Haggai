@@ -719,7 +719,169 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
       <section className="py-12 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
           
-          {/* Section 1: Core Subjects (Kärnämnen) */}
+          {/* Section 0: Vår Enhet - Motiverande sektion */}
+          <Card className="border-0 shadow-xl overflow-hidden">
+            <Collapsible open={openSections.unity} onOpenChange={() => toggleSection('unity')}>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="bg-gradient-to-r from-rose-500 to-rose-600 text-white cursor-pointer hover:from-rose-600 hover:to-rose-700 transition-all">
+                  <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                        <Heart className="h-6 w-6" />
+                      </div>
+                      <div className={isRTL ? 'text-right' : ''}>
+                        <CardTitle className="text-xl text-white">{txt.ourUnity}</CardTitle>
+                        <p className="text-white/80 text-sm">{txt.ourUnityDesc}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-white/80" />
+                      {openSections.unity ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+                    </div>
+                  </div>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="p-6">
+                  <div className={`space-y-6 ${isRTL ? 'text-right' : ''}`}>
+                    <div className="p-6 bg-rose-50 rounded-xl border border-rose-100">
+                      <h3 className="text-xl font-bold text-rose-800 mb-4">{txt.unityTitle}</h3>
+                      <p className="text-stone-700 leading-relaxed mb-4">
+                        {txt.unityText}
+                      </p>
+                      <p className="text-rose-700 font-semibold italic text-lg">
+                        "{txt.unityCall}"
+                      </p>
+                    </div>
+                    
+                    {/* Haggai International - Global vision (less prominent) */}
+                    <div className="p-4 bg-stone-50 rounded-xl border border-stone-200">
+                      <div className={`flex items-center gap-3 mb-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                        <Globe className="h-5 w-5 text-stone-400" />
+                        <h4 className="font-medium text-stone-600">{txt.haggaiGlobal}</h4>
+                      </div>
+                      <p className="text-sm text-stone-500 mb-2">{txt.haggaiVision}</p>
+                      <p className="text-sm text-stone-400">{txt.haggaiMission}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </CollapsibleContent>
+            </Collapsible>
+          </Card>
+
+          {/* Section 1: Kommande Utbildningar */}
+          <Card className="border-0 shadow-xl overflow-hidden">
+            <Collapsible open={openSections.workshops} onOpenChange={() => toggleSection('workshops')}>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white cursor-pointer hover:from-blue-600 hover:to-blue-700 transition-all">
+                  <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                        <Calendar className="h-6 w-6" />
+                      </div>
+                      <div className={isRTL ? 'text-right' : ''}>
+                        <CardTitle className="text-xl text-white">{txt.upcomingWorkshops}</CardTitle>
+                        <p className="text-white/80 text-sm">{txt.upcomingWorkshopsDesc}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge className="bg-white/20 text-white">{workshops.length}</Badge>
+                      {openSections.workshops ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+                    </div>
+                  </div>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="p-6">
+                  {loadingWorkshops ? (
+                    <div className="flex justify-center py-8">
+                      <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                    </div>
+                  ) : workshops.length > 0 ? (
+                    <div className="space-y-4">
+                      {workshops.map((workshop) => (
+                        <div key={workshop.id} className={`p-4 bg-stone-50 rounded-xl hover:bg-stone-100 transition-colors ${isRTL ? 'text-right' : ''}`}>
+                          <div className={`flex items-start justify-between gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                            <div className="flex-1">
+                              <div className={`flex items-center gap-2 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                                <h4 className="font-semibold text-stone-800">
+                                  {workshop.title?.[language] || workshop.title?.sv || workshop.title}
+                                </h4>
+                                {workshop.is_online && (
+                                  <Badge className="bg-blue-100 text-blue-700 text-xs">Online</Badge>
+                                )}
+                                {workshop.type === 'tot' && (
+                                  <Badge className="bg-purple-100 text-purple-700 text-xs">ToT</Badge>
+                                )}
+                              </div>
+                              <div className={`flex flex-wrap gap-3 text-sm text-stone-500 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                                {workshop.date && (
+                                  <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                    <Calendar className="h-4 w-4" />
+                                    {new Date(workshop.date).toLocaleDateString('sv-SE')}
+                                    {workshop.end_date && ` - ${new Date(workshop.end_date).toLocaleDateString('sv-SE')}`}
+                                  </span>
+                                )}
+                                {workshop.location && (
+                                  <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                    <MapPin className="h-4 w-4" />
+                                    {workshop.location}
+                                  </span>
+                                )}
+                                {workshop.spots && (
+                                  <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                    <Users className="h-4 w-4" />
+                                    {workshop.spots} {txt.spotsLeft}
+                                  </span>
+                                )}
+                              </div>
+                              {workshop.price && (
+                                <Badge className="mt-2 bg-emerald-100 text-emerald-700">
+                                  {workshop.price} {workshop.currency || 'SEK'}
+                                </Badge>
+                              )}
+                            </div>
+                            <Button
+                              size="sm"
+                              onClick={() => navigate('/kalender')}
+                              className="bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2"
+                            >
+                              <UserPlus className="h-4 w-4" />
+                              {txt.nominateBtn}
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="pt-4 border-t border-stone-200">
+                        <Button
+                          variant="outline"
+                          onClick={() => navigate('/kalender')}
+                          className="w-full"
+                        >
+                          <Calendar className="h-4 w-4 mr-2" />
+                          {txt.viewCalendar}
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className={`text-center py-8 ${isRTL ? 'text-right' : ''}`}>
+                      <Calendar className="h-12 w-12 text-stone-300 mx-auto mb-4" />
+                      <p className="text-stone-500">{txt.noWorkshops}</p>
+                      <Button
+                        variant="outline"
+                        onClick={() => navigate('/kalender')}
+                        className="mt-4"
+                      >
+                        {txt.viewCalendar}
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </CollapsibleContent>
+            </Collapsible>
+          </Card>
+
+          {/* Section 2: Core Subjects (Kärnämnen) */}
           <Card className="border-0 shadow-xl overflow-hidden">
             <Collapsible open={openSections.knowledge} onOpenChange={() => toggleSection('knowledge')}>
               <CollapsibleTrigger asChild>
