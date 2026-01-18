@@ -358,6 +358,15 @@ I am confident that your participation in this program will give you personal an
                                 </span>
                               )}
                             </div>
+                            
+                            {/* Price display */}
+                            {event.price && (
+                              <div className="mt-3">
+                                <Badge className="bg-emerald-100 text-emerald-800 text-sm px-3 py-1">
+                                  {event.price} {event.currency || 'SEK'}
+                                </Badge>
+                              </div>
+                            )}
                           </div>
                           
                           {/* Actions */}
