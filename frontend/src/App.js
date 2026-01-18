@@ -80,12 +80,62 @@ function App() {
     <div className="App">
       <LanguageProvider>
         <AuthProvider>
-          <ProtectedApp />
+          <BrowserRouter>
+            <Routes>
+              {/* Public route - no auth required */}
+              <Route path="/registrering/:nominationId" element={<NomineeRegistration />} />
+              {/* All other routes handled by ProtectedApp */}
+              <Route path="/*" element={<ProtectedAppContent />} />
+            </Routes>
+          </BrowserRouter>
           <Toaster position="top-right" richColors />
         </AuthProvider>
       </LanguageProvider>
     </div>
   );
 }
+
+// Protected content component
+const ProtectedAppContent = () => {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-cream-50">
+        <div className="w-12 h-12 border-4 border-haggai border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
+
+  return (
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/om-oss" element={<AboutUs />} />
+        <Route path="/leader-experience" element={<LeaderExperience />} />
+        <Route path="/leader-experience/:programId" element={<LeaderExperienceApplication />} />
+        <Route path="/kalender" element={<EventCalendar />} />
+        <Route path="/bli-medlem" element={<Membership />} />
+        <Route path="/kontakt" element={<Contact />} />
+        <Route path="/ledare" element={<Leaders />} />
+        <Route path="/partners" element={<Partners />} />
+        <Route path="/donera" element={<Donations />} />
+        <Route path="/medlemmar" element={<MembersArea />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/ledare" element={<AdminLeaders />} />
+        <Route path="/admin/styrelse" element={<AdminBoardMembers />} />
+        <Route path="/admin/medlemmar" element={<AdminOrganizationMembers />} />
+        <Route path="/admin/partners" element={<AdminPartners />} />
+        <Route path="/admin/vittnesmal" element={<AdminTestimonials />} />
+        <Route path="/admin/nomineringar" element={<AdminNominations />} />
+        <Route path="/admin/workshops" element={<AdminWorkshops />} />
+      </Routes>
+    </Layout>
+  );
+};
 
 export default App;
