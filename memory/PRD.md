@@ -30,9 +30,10 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - Organization/Church members
 - Partners
 - Testimonials
-- **Nominations** ✅ NEW - View and manage nominations with statistics
-- **Board Meetings** ✅ NEW - Plan and document board meetings with agenda
-- **Workshops** ✅ NEW - Manage workshops with pricing (`/admin/workshops`)
+- **Nominations** ✅ - View and manage nominations with statistics
+- **Board Meetings** ✅ - Plan and document board meetings with agenda
+- **Workshops** ✅ - Manage workshops with pricing (`/admin/workshops`)
+- **Training Participants** ✅ NEW - Manage registrations, attendance & diplomas (`/admin/utbildning`)
 
 ### Technical Stack
 - **Frontend:** React, React Router, TailwindCSS, Shadcn/UI
