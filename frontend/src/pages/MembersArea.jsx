@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap, ChevronDown, ChevronUp, User, Phone, Eye, EyeOff, LogIn, Info, X, Briefcase } from 'lucide-react';
+import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap, ChevronDown, ChevronUp, User, Phone, Eye, EyeOff, LogIn, Info, X, Briefcase, Heart, Globe, MapPin, UserPlus, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
@@ -10,15 +10,19 @@ import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
 import BoardMeetings from '../components/BoardMeetings';
+import { useNavigate } from 'react-router-dom';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const MembersArea = () => {
   const { language, isRTL } = useLanguage();
   const { isMembersAuthenticated, loginMembers, logoutMembers } = useAuth();
+  const navigate = useNavigate();
   const [openSections, setOpenSections] = useState({
+    unity: true,
+    workshops: false,
     bylaws: false,
-    knowledge: true,
+    knowledge: false,
     board: false,
     meetings: false
   });
@@ -26,6 +30,8 @@ const MembersArea = () => {
   const [currentBoard, setCurrentBoard] = useState([]);
   const [previousBoard, setPreviousBoard] = useState([]);
   const [loadingBoard, setLoadingBoard] = useState(true);
+  const [workshops, setWorkshops] = useState([]);
+  const [loadingWorkshops, setLoadingWorkshops] = useState(true);
   
   // Members login state
   const [membersPassword, setMembersPassword] = useState('');
@@ -40,8 +46,23 @@ const MembersArea = () => {
   useEffect(() => {
     if (isMembersAuthenticated) {
       fetchBoardMembers();
+      fetchWorkshops();
     }
   }, [isMembersAuthenticated]);
+
+  const fetchWorkshops = async () => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/workshops?active_only=true`);
+      if (res.ok) {
+        const data = await res.json();
+        setWorkshops(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch workshops:', error);
+    } finally {
+      setLoadingWorkshops(false);
+    }
+  };
 
   const fetchBoardMembers = async () => {
     try {
