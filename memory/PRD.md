@@ -160,11 +160,12 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 ---
 
 ## Key Files Reference
+- `/app/frontend/src/pages/AdminWorkshops.jsx` - Workshop management admin panel ✅ NEW
 - `/app/frontend/src/pages/EventCalendar.jsx` - Calendar with nomination button
 - `/app/frontend/src/pages/AdminNominations.jsx` - Admin panel for nominations
 - `/app/frontend/src/pages/Donations.jsx` - Donations page
 - `/app/frontend/src/pages/AdminDashboard.jsx` - Main admin hub
-- `/app/backend/server.py` - All API endpoints including nominations
+- `/app/backend/server.py` - All API endpoints including workshops
 
 ---
 
