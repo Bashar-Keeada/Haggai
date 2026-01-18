@@ -164,7 +164,7 @@ const MembersArea = () => {
     ar: {
       pageTitle: 'دعم المعرفة',
       pageSubtitle: 'حصرياً لأعضاء حجاي السويد',
-      welcome: 'مرحباً بكم في منطقة الأعضاء',
+      welcome: 'مرحباً بكم في دعم المعرفة',
       welcomeDesc: 'هنا ستجد معلومات حصرية لأعضائنا.',
       bylaws: 'النظام الأساسي للجمعية',
       bylawsDesc: 'اقرأ عن قواعد وإرشادات الجمعية',
@@ -172,8 +172,8 @@ const MembersArea = () => {
       downloadPdf: 'تحميل PDF',
       showBylaws: 'عرض النظام الأساسي',
       hideBylaws: 'إخفاء النظام الأساسي',
-      knowledgeSupport: 'دعم المعرفة',
-      knowledgeSupportDesc: 'المواضيع الأساسية في تدريباتنا الوطنية',
+      coreSubjectsTitle: 'المواضيع الأساسية',
+      coreSubjectsDesc: 'المواضيع الأساسية في تدريباتنا الوطنية',
       coreSubjects: 'المواضيع الأساسية',
       hours: 'ساعات',
       totalHours: 'المجموع',
@@ -185,7 +185,7 @@ const MembersArea = () => {
       loginButton: 'تسجيل الدخول',
       loginError: 'كلمة المرور غير صحيحة. حاول مرة أخرى.',
       contactForAccess: 'اتصل بنا للحصول على الوصول',
-      logout: 'تسجيل الخروج من منطقة الأعضاء',
+      logout: 'تسجيل الخروج من دعم المعرفة',
       sections: {
         name: 'اسم الجمعية',
         purpose: 'الغرض',
