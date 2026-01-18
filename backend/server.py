@@ -1301,8 +1301,8 @@ class BoardMeetingUpdate(BaseModel):
 
 
 @api_router.post("/board-meetings", response_model=BoardMeeting)
-async def create_board_meeting(input: BoardMeetingCreate):
-    """Create a new board meeting"""
+async def create_board_meeting(input: BoardMeetingCreate, send_invitation: bool = True):
+    """Create a new board meeting and optionally send invitations"""
     # Convert agenda items to AgendaItem objects
     agenda_items = [AgendaItem(**item) if isinstance(item, dict) else item for item in input.agenda_items]
     
@@ -1316,6 +1316,13 @@ async def create_board_meeting(input: BoardMeetingCreate):
     )
     doc = meeting.model_dump()
     await db.board_meetings.insert_one(doc)
+    
+    # Send invitation emails to all board members
+    if send_invitation:
+        board_emails = await get_board_member_emails()
+        if board_emails:
+            asyncio.create_task(send_meeting_invitation_email(doc, board_emails))
+    
     return meeting
 
 
