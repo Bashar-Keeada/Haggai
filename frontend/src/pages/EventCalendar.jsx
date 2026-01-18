@@ -169,13 +169,13 @@ I am confident that your participation in this program will give you personal an
     registrations.push({
       ...registrationData,
       eventId: selectedEvent.id,
-      eventTitle: selectedEvent.title,
+      eventTitle: getLocalizedText(selectedEvent.title),
       registeredAt: new Date().toISOString()
     });
     localStorage.setItem('eventRegistrations', JSON.stringify(registrations));
     
     toast.success(t('calendar.successTitle'), {
-      description: `${t('calendar.successDesc')} ${selectedEvent.title}`
+      description: `${t('calendar.successDesc')} ${getLocalizedText(selectedEvent.title)}`
     });
     setIsDialogOpen(false);
     setRegistrationData({ name: '', email: '', phone: '', organization: '', message: '' });
