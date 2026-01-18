@@ -399,7 +399,27 @@ const AdminDashboard = () => {
                       {language === 'sv' ? 'Hantera Nomineringar' : language === 'ar' ? 'إدارة الترشيحات' : 'Manage Nominations'}
                     </h3>
                     <p className="text-sm text-stone-500">
-                      {language === 'sv' ? 'Nominerade till utbildningar' : language === 'ar' ? 'المرشحون للتدريبات' : 'Nominated for trainings'}
+                      {language === 'sv' ? 'Nominerade till workshops' : language === 'ar' ? 'المرشحون للورش' : 'Nominated for workshops'}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+          
+          <Link to="/admin/workshops">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all cursor-pointer hover:bg-indigo-50">
+              <CardContent className="p-6">
+                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-14 h-14 bg-indigo-500 rounded-2xl flex items-center justify-center">
+                    <GraduationCap className="h-7 w-7 text-white" />
+                  </div>
+                  <div className={isRTL ? 'text-right' : ''}>
+                    <h3 className="text-lg font-bold text-stone-800">
+                      {language === 'sv' ? 'Hantera Workshops' : language === 'ar' ? 'إدارة ورش العمل' : 'Manage Workshops'}
+                    </h3>
+                    <p className="text-sm text-stone-500">
+                      {language === 'sv' ? 'Justera priser och detaljer' : language === 'ar' ? 'تعديل الأسعار والتفاصيل' : 'Adjust prices and details'}
                     </p>
                   </div>
                 </div>
