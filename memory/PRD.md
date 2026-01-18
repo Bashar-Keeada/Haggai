@@ -148,14 +148,20 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 ## API Endpoints
 - `GET/POST/PUT/DELETE /api/leaders`
 - `GET/POST/PUT/DELETE /api/board-members`
+- `POST /api/board-auth/login` ✅ NEW - Board member login
+- `POST /api/board-auth/set-password` ✅ NEW - Set password for board member
+- `GET /api/board-auth/check-email/{email}` ✅ NEW - Check if email is board member
+- `GET /api/board-auth/me` ✅ NEW - Get current logged in board member
 - `GET/POST/PUT/DELETE /api/organization-members`
 - `GET/POST/PUT/DELETE /api/partners`
 - `GET/POST/PUT/DELETE /api/testimonials`
-- `GET/POST/PUT/DELETE /api/nominations` ✅
-- `GET /api/nominations/stats` ✅
-- `GET/POST/PUT/DELETE /api/board-meetings` ✅ NEW
-- `GET /api/board-meetings/archived` ✅ NEW
-- `PUT /api/board-meetings/{id}/archive` ✅ NEW
+- `GET/POST/PUT/DELETE /api/nominations`
+- `GET /api/nominations/stats`
+- `GET/POST/PUT/DELETE /api/board-meetings`
+- `GET /api/board-meetings/archived`
+- `PUT /api/board-meetings/{id}/archive`
+- `POST /api/board-meetings/{id}/send-invitation` ✅ NEW - Send meeting invitation
+- `POST /api/board-meetings/{id}/send-reminder` ✅ NEW - Send meeting reminder
 - `GET/POST/PUT /api/applications/leader-experience`
 - `GET/POST /api/applications/membership`
 - `GET/POST /api/applications/contact`
