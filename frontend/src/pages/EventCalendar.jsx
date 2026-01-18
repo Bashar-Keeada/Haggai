@@ -201,7 +201,7 @@ I am confident that your participation in this program will give you personal an
 
       if (response.ok) {
         toast.success(nomTxt.successTitle, {
-          description: `${nomTxt.successDesc} ${nominationEvent.title}`
+          description: `${nomTxt.successDesc} ${getLocalizedText(nominationEvent.title)}`
         });
         setIsNominationDialogOpen(false);
         setNominationData({
