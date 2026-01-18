@@ -159,6 +159,7 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - `partners`
 - `testimonials`
 - `nominations` ✅ NEW
+- `board_meetings` ✅ NEW
 - `leader_experience_applications`
 - `membership_applications`
 - `contact_submissions`
