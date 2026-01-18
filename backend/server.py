@@ -1041,7 +1041,11 @@ class NominationUpdate(BaseModel):
 # ==================== EMAIL FUNCTIONS ====================
 
 async def send_nomination_email_to_nominee(nomination: Nomination):
-    """Send email to the nominated person"""
+    """Send email to the nominated person with registration link"""
+    # Get the frontend URL from env or use default
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://haggai-sweden-1.preview.emergentagent.com')
+    registration_link = f"{frontend_url}/registrering/{nomination.id}"
+    
     html_content = f"""
     <!DOCTYPE html>
     <html>
@@ -1069,7 +1073,17 @@ async def send_nomination_email_to_nominee(nomination: Nomination):
 {nomination.motivation if nomination.motivation else 'Ingen motivering angavs.'}
             </div>
             
-            <p style="margin-top: 30px;">Om du är intresserad av att delta i programmet, vänligen kontakta oss för mer information.</p>
+            <div style="margin-top: 30px; text-align: center;">
+                <p style="font-size: 18px; font-weight: bold; color: #15564e;">Registrera dig för programmet</p>
+                <p>Klicka på knappen nedan för att fylla i registreringsformuläret:</p>
+                <a href="{registration_link}" style="display: inline-block; background: linear-gradient(135deg, #15564e 0%, #0f403a 100%); color: white; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: bold; margin: 20px 0;">
+                    Registrera dig nu →
+                </a>
+                <p style="font-size: 12px; color: #999; margin-top: 10px;">
+                    Eller kopiera denna länk:<br>
+                    <a href="{registration_link}" style="color: #15564e; word-break: break-all;">{registration_link}</a>
+                </p>
+            </div>
             
             <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
                 <p style="color: #666; font-size: 14px; margin: 0;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
