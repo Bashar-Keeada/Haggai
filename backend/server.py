@@ -1043,7 +1043,7 @@ class NominationUpdate(BaseModel):
 async def send_nomination_email_to_nominee(nomination: Nomination):
     """Send email to the nominated person with registration link"""
     # Get the frontend URL from env or use default
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://haggai-sweden-1.preview.emergentagent.com')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://training-admin-1.preview.emergentagent.com')
     registration_link = f"{frontend_url}/registrering/{nomination.id}"
     
     html_content = f"""
