@@ -244,13 +244,6 @@ I am confident that your participation in this program will give you personal an
     };
   };
 
-  // Helper to get localized text from object or string
-  const getLocalizedText = (field) => {
-    if (!field) return '';
-    if (typeof field === 'string') return field;
-    return field[language] || field.sv || field.en || '';
-  };
-
   return (
     <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Hero */}
