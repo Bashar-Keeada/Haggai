@@ -122,17 +122,20 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 ### P0 (Critical) - None currently
 
 ### P1 (High Priority)
-- Update Swish/bank details when user provides real numbers
-- QR code integration for Swish
+- ✅ COMPLETED: Workshop Management Admin Panel
+- Migrate EventCalendar.jsx to use /api/workshops instead of mock.js
+- Migrate LeaderExperience.jsx to use /api/workshops instead of mock.js
 
 ### P2 (Medium Priority)
-- Email notifications for form submissions and nominations
-- Migrate Leader Experience programs from mock.js to database
+- Update Swish/bank details when user provides real numbers
+- QR code integration for Swish
+- Email notifications for form submissions
 
 ### P3 (Low Priority/Future)
 - Online payment integration (Stripe/PayPal)
 - User accounts and login
 - Newsletter subscription system
+- PDF export for board meetings
 
 ---
 
