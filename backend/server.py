@@ -472,6 +472,275 @@ async def delete_board_member(member_id: str):
     return {"message": "Board member deleted successfully"}
 
 
+# ==================== BOARD MEMBER AUTHENTICATION ====================
+
+class BoardMemberLogin(BaseModel):
+    email: str
+    password: str
+
+
+class BoardMemberSetPassword(BaseModel):
+    email: str
+    password: str
+
+
+class BoardMemberResponse(BaseModel):
+    id: str
+    name: str
+    role: str
+    email: Optional[str]
+    image_url: Optional[str]
+    is_account_active: bool
+
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+
+def verify_password(password: str, password_hash: str) -> bool:
+    return bcrypt.checkpw(password.encode('utf-8'), password_hash.encode('utf-8'))
+
+
+def create_board_token(member_id: str, email: str, name: str, role: str) -> str:
+    payload = {
+        "sub": member_id,
+        "email": email,
+        "name": name,
+        "role": role,
+        "type": "board_member",
+        "exp": datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRATION_HOURS)
+    }
+    return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+
+
+def verify_board_token(token: str) -> dict:
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        if payload.get("type") != "board_member":
+            raise HTTPException(status_code=401, detail="Invalid token type")
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+@api_router.post("/board-auth/set-password")
+async def set_board_member_password(input: BoardMemberSetPassword):
+    """Set password for a board member (first time setup)"""
+    member = await db.board_members.find_one({"email": input.email.lower()})
+    if not member:
+        raise HTTPException(status_code=404, detail="Ingen styrelsemedlem hittades med denna e-post")
+    
+    password_hash = hash_password(input.password)
+    await db.board_members.update_one(
+        {"email": input.email.lower()},
+        {"$set": {"password_hash": password_hash, "is_account_active": True}}
+    )
+    
+    return {"message": "Lösenord satt framgångsrikt", "success": True}
+
+
+@api_router.post("/board-auth/login")
+async def login_board_member(input: BoardMemberLogin):
+    """Login for board members"""
+    member = await db.board_members.find_one({"email": input.email.lower()}, {"_id": 0})
+    if not member:
+        raise HTTPException(status_code=401, detail="Felaktig e-post eller lösenord")
+    
+    if not member.get("password_hash"):
+        raise HTTPException(status_code=400, detail="Inget lösenord är satt. Vänligen skapa ett konto först.")
+    
+    if not verify_password(input.password, member["password_hash"]):
+        raise HTTPException(status_code=401, detail="Felaktig e-post eller lösenord")
+    
+    # Update last login
+    await db.board_members.update_one(
+        {"id": member["id"]},
+        {"$set": {"last_login": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    token = create_board_token(member["id"], member["email"], member["name"], member["role"])
+    
+    return {
+        "token": token,
+        "member": {
+            "id": member["id"],
+            "name": member["name"],
+            "role": member["role"],
+            "email": member["email"],
+            "image_url": member.get("image_url")
+        }
+    }
+
+
+@api_router.get("/board-auth/me")
+async def get_current_board_member(token: str):
+    """Get current logged in board member info"""
+    payload = verify_board_token(token)
+    member = await db.board_members.find_one({"id": payload["sub"]}, {"_id": 0, "password_hash": 0})
+    if not member:
+        raise HTTPException(status_code=404, detail="Board member not found")
+    return member
+
+
+@api_router.get("/board-auth/check-email/{email}")
+async def check_board_member_email(email: str):
+    """Check if an email belongs to a board member and if they have an account"""
+    member = await db.board_members.find_one({"email": email.lower()}, {"_id": 0})
+    if not member:
+        return {"exists": False, "has_account": False}
+    
+    return {
+        "exists": True,
+        "has_account": bool(member.get("password_hash")),
+        "name": member.get("name")
+    }
+
+
+# ==================== BOARD MEETING EMAIL NOTIFICATIONS ====================
+
+async def send_meeting_invitation_email(meeting: dict, recipients: List[str]):
+    """Send meeting invitation to all board members"""
+    agenda_html = ""
+    if meeting.get("agenda_items"):
+        agenda_items = "".join([
+            f'<tr><td style="padding: 8px; border-bottom: 1px solid #eee;">{i+1}. {item.get("title", "")}</td>'
+            f'<td style="padding: 8px; border-bottom: 1px solid #eee;">{item.get("responsible", "-")}</td></tr>'
+            for i, item in enumerate(meeting["agenda_items"])
+        ])
+        agenda_html = f'''
+        <h3 style="color: #15564e; margin-top: 25px;">Dagordning:</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <tr style="background: #f5f5f5;">
+                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #15564e;">Punkt</th>
+                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #15564e;">Ansvarig</th>
+            </tr>
+            {agenda_items}
+        </table>
+        '''
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: #15564e; padding: 25px; border-radius: 10px 10px 0 0;">
+            <h1 style="color: white; margin: 0;">📅 Kallelse till Styrelsemöte</h1>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 25px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+            <h2 style="color: #15564e; margin-top: 0;">{meeting.get("title", "Styrelsemöte")}</h2>
+            
+            <table style="width: 100%; margin: 20px 0;">
+                <tr>
+                    <td style="padding: 8px 0;"><strong>📅 Datum:</strong></td>
+                    <td style="padding: 8px 0;">{meeting.get("date", "")}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0;"><strong>🕐 Tid:</strong></td>
+                    <td style="padding: 8px 0;">{meeting.get("time", "Ej angiven")}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0;"><strong>📍 Plats:</strong></td>
+                    <td style="padding: 8px 0;">{meeting.get("location", "Ej angiven")}</td>
+                </tr>
+            </table>
+            
+            {agenda_html}
+            
+            <div style="margin-top: 30px; padding: 15px; background: #e8f5e9; border-radius: 8px;">
+                <p style="margin: 0; color: #2e7d32;">
+                    <strong>Logga in på medlemsområdet</strong> för att se fullständig information och delta i mötet.
+                </p>
+            </div>
+            
+            <div style="margin-top: 25px; text-align: center;">
+                <a href="https://peoplepotential.se/medlemmar" style="display: inline-block; background: #15564e; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                    Gå till Medlemsområdet →
+                </a>
+            </div>
+        </div>
+        
+        <div style="text-align: center; padding: 15px; color: #999; font-size: 12px;">
+            Haggai Sweden | info@haggai.se
+        </div>
+    </body>
+    </html>
+    """
+    
+    for email in recipients:
+        params = {
+            "from": SENDER_EMAIL,
+            "to": [email],
+            "subject": f"📅 Kallelse: {meeting.get('title', 'Styrelsemöte')} - {meeting.get('date', '')}",
+            "html": html_content
+        }
+        try:
+            await asyncio.to_thread(resend.Emails.send, params)
+            logging.info(f"Meeting invitation sent to {email}")
+        except Exception as e:
+            logging.error(f"Failed to send meeting invitation to {email}: {str(e)}")
+
+
+async def send_meeting_reminder_email(meeting: dict, recipients: List[str], days_until: int):
+    """Send meeting reminder to all board members"""
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); padding: 25px; border-radius: 10px 10px 0 0;">
+            <h1 style="color: white; margin: 0;">⏰ Påminnelse: Styrelsemöte om {days_until} dag{"ar" if days_until > 1 else ""}</h1>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 25px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+            <h2 style="color: #15564e; margin-top: 0;">{meeting.get("title", "Styrelsemöte")}</h2>
+            
+            <div style="background: #fff3e0; padding: 15px; border-radius: 8px; border-left: 4px solid #ff9800; margin: 20px 0;">
+                <p style="margin: 0; font-size: 18px;">
+                    <strong>📅 {meeting.get("date", "")}</strong> kl. <strong>{meeting.get("time", "")}</strong>
+                </p>
+                <p style="margin: 5px 0 0 0; color: #666;">
+                    📍 {meeting.get("location", "Plats ej angiven")}
+                </p>
+            </div>
+            
+            <p>Glöm inte att förbereda dig inför mötet genom att gå igenom dagordningen.</p>
+            
+            <div style="margin-top: 25px; text-align: center;">
+                <a href="https://peoplepotential.se/medlemmar" style="display: inline-block; background: #15564e; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                    Se Dagordning →
+                </a>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    
+    for email in recipients:
+        params = {
+            "from": SENDER_EMAIL,
+            "to": [email],
+            "subject": f"⏰ Påminnelse: {meeting.get('title', 'Styrelsemöte')} om {days_until} dag{'ar' if days_until > 1 else ''}",
+            "html": html_content
+        }
+        try:
+            await asyncio.to_thread(resend.Emails.send, params)
+            logging.info(f"Meeting reminder sent to {email}")
+        except Exception as e:
+            logging.error(f"Failed to send meeting reminder to {email}: {str(e)}")
+
+
+async def get_board_member_emails() -> List[str]:
+    """Get all active board member emails"""
+    members = await db.board_members.find(
+        {"is_current": True, "email": {"$ne": None}}, 
+        {"email": 1, "_id": 0}
+    ).to_list(100)
+    return [m["email"] for m in members if m.get("email")]
+
+
 # ==================== CONTACT FORM ENDPOINTS ====================
 
 @api_router.post("/contact", response_model=ContactSubmission)
