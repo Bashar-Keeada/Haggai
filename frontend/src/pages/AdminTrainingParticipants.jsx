@@ -757,7 +757,10 @@ const AdminTrainingParticipants = () => {
       {/* Diploma Dialog */}
       <Dialog open={showDiplomaDialog} onOpenChange={(open) => {
         setShowDiplomaDialog(open);
-        if (!open) setDiplomaPreviewUrl(null);
+        if (!open) {
+          setDiplomaPreviewUrl(null);
+          setDiplomaFilename(null);
+        }
       }}>
         <DialogContent className={`max-w-4xl ${isRTL ? 'rtl' : 'ltr'}`}>
           <DialogHeader>
