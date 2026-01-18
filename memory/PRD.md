@@ -45,7 +45,28 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 
 ### January 2026
 
-#### Nomination System ✅ (Latest)
+#### Board Meeting System ✅ (Latest)
+- **Location:** Members Area → under "Stadgar" section
+- **Features:**
+  - Create new board meetings with title, date, time, location
+  - Add attendees and agenda items
+  - Each agenda item has: title, description, responsible person, status
+  - Status tracking: Scheduled → In Progress → Completed → Archived
+  - Expand/collapse meeting details
+  - Edit meeting and update agenda item statuses
+  - Add decisions and notes per agenda item
+  - Archive completed meetings
+  - View archived meetings separately
+- Full i18n support (Swedish, English, Arabic)
+
+#### Email Notifications ✅
+- Integrated Resend email service
+- Automatic emails sent when nominations are submitted:
+  - To nominee: Full nomination details with motivering
+  - To admin (info@haggai.se): Notification with link to admin panel
+- Sender: noreply@haggai.se
+
+#### Nomination System ✅
 - **Nominate Button** on Leader Experience events in Calendar
 - **Nomination Form** with:
   - Nominator info (name, email, phone)
