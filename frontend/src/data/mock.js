@@ -9,9 +9,9 @@ export const events = [
     programType: 'international',
     targetGroup: 'women',
     title: {
-      sv: "Workshop – Kvinnor internationell",
-      en: "Workshop – Women International",
-      ar: "ورشة عمل - نساء دولية"
+      sv: "Workshop – Internationell",
+      en: "Workshop – International",
+      ar: "ورشة عمل - دولية"
     },
     date: "2026-07-13",
     endDate: "2026-07-26",
@@ -26,9 +26,9 @@ export const events = [
       ar: "موقع دولي"
     },
     description: {
-      sv: "Internationell workshop för kvinnor. Ålder: 23-55 år. 2 platser från Sverige.",
-      en: "International workshop for women. Age: 23-55 years. 2 spots from Sweden.",
-      ar: "ورشة عمل دولية للنساء. العمر: 23-55 سنة. مقعدان من السويد."
+      sv: "Internationell workshop. Ålder: 23-55 år. 2 platser från Sverige.",
+      en: "International workshop. Age: 23-55 years. 2 spots from Sweden.",
+      ar: "ورشة عمل دولية. العمر: 23-55 سنة. مقعدان من السويد."
     },
     spots: 2,
     spotsLeft: 2,
@@ -41,9 +41,9 @@ export const events = [
     programType: 'international',
     targetGroup: 'men',
     title: {
-      sv: "Workshop – Män internationell",
-      en: "Workshop – Men International",
-      ar: "ورشة عمل - رجال دولية"
+      sv: "Workshop – Internationell",
+      en: "Workshop – International",
+      ar: "ورشة عمل - دولية"
     },
     date: "2026-11-30",
     endDate: "2026-12-11",
@@ -58,9 +58,9 @@ export const events = [
       ar: "موقع دولي"
     },
     description: {
-      sv: "Internationell workshop för män. Ålder: 23-55 år. 2 platser från Sverige.",
-      en: "International workshop for men. Age: 23-55 years. 2 spots from Sweden.",
-      ar: "ورشة عمل دولية للرجال. العمر: 23-55 سنة. مقعدان من السويد."
+      sv: "Internationell workshop. Ålder: 23-55 år. 2 platser från Sverige.",
+      en: "International workshop. Age: 23-55 years. 2 spots from Sweden.",
+      ar: "ورشة عمل دولية. العمر: 23-55 سنة. مقعدان من السويد."
     },
     spots: 2,
     spotsLeft: 2,
@@ -73,9 +73,9 @@ export const events = [
     programType: 'international',
     targetGroup: 'all',
     title: {
-      sv: "Workshop – Online engelskspråkig internationell",
-      en: "Workshop – Online English-speaking International",
-      ar: "ورشة عمل - أونلاين دولية باللغة الإنجليزية"
+      sv: "Workshop – Online engelskspråkig",
+      en: "Workshop – Online English-speaking",
+      ar: "ورشة عمل - أونلاين باللغة الإنجليزية"
     },
     date: "2026-02-05",
     endDate: "2026-02-07",
