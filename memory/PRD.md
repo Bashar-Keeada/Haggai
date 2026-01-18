@@ -248,10 +248,10 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 ## API Endpoints
 - `GET/POST/PUT/DELETE /api/leaders`
 - `GET/POST/PUT/DELETE /api/board-members`
-- `POST /api/board-auth/login` ✅ NEW - Board member login
-- `POST /api/board-auth/set-password` ✅ NEW - Set password for board member
-- `GET /api/board-auth/check-email/{email}` ✅ NEW - Check if email is board member
-- `GET /api/board-auth/me` ✅ NEW - Get current logged in board member
+- `POST /api/board-auth/login` - Board member login
+- `POST /api/board-auth/set-password` - Set password for board member
+- `GET /api/board-auth/check-email/{email}` - Check if email is board member
+- `GET /api/board-auth/me` - Get current logged in board member
 - `GET/POST/PUT/DELETE /api/organization-members`
 - `GET/POST/PUT/DELETE /api/partners`
 - `GET/POST/PUT/DELETE /api/testimonials`
@@ -260,8 +260,14 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - `GET/POST/PUT/DELETE /api/board-meetings`
 - `GET /api/board-meetings/archived`
 - `PUT /api/board-meetings/{id}/archive`
-- `POST /api/board-meetings/{id}/send-invitation` ✅ NEW - Send meeting invitation
-- `POST /api/board-meetings/{id}/send-reminder` ✅ NEW - Send meeting reminder
+- `POST /api/board-meetings/{id}/send-invitation` - Send meeting invitation
+- `POST /api/board-meetings/{id}/send-reminder` - Send meeting reminder
+- `GET /api/training-participants` ✅ NEW - List registered participants
+- `GET /api/training-participants/{id}` ✅ NEW - Get specific participant
+- `PUT /api/training-participants/{id}/status` ✅ NEW - Update status
+- `PUT /api/training-participants/{id}/attendance` ✅ NEW - Update attendance
+- `POST /api/training-participants/{id}/generate-diploma` ✅ NEW - Generate PDF
+- `POST /api/training-participants/{id}/send-diploma` ✅ NEW - Email diploma
 - `GET/POST/PUT /api/applications/leader-experience`
 - `GET/POST /api/applications/membership`
 - `GET/POST /api/applications/contact`
