@@ -134,13 +134,22 @@ I am confident that your participation in this program will give you personal an
 
   const translatedEvents = eventsTranslations[language] || eventsTranslations.sv;
   
+  // Helper to get localized text from object or string
+  const getLocalizedText = (field) => {
+    if (!field) return '';
+    if (typeof field === 'string') return field;
+    return field[language] || field.sv || field.en || '';
+  };
+
   // Merge translated content with event data
   const localizedEvents = events.map(event => {
     const translation = translatedEvents.find(te => te.id === event.id);
     return {
       ...event,
-      title: translation?.title || event.title,
-      description: translation?.description || event.description
+      title: translation?.title || getLocalizedText(event.title),
+      description: translation?.description || getLocalizedText(event.description),
+      time: getLocalizedText(event.time),
+      location: getLocalizedText(event.location)
     };
   });
 
