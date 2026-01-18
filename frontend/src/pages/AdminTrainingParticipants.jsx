@@ -387,7 +387,7 @@ const AdminTrainingParticipants = () => {
   return (
     <div className={`min-h-screen bg-cream-50 pt-16 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-haggai to-haggai-dark text-white py-12">
+      <div className="bg-haggai text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Button
             variant="ghost"
