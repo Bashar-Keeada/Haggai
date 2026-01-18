@@ -812,6 +812,14 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
 
           {/* Board Members Section - Dynamic from API */}
           <Card className="border-0 shadow-xl mt-8">
+
+          {/* Board Meetings Section */}
+          <div className="mt-12">
+            <BoardMeetings language={language} isRTL={isRTL} />
+          </div>
+
+          {/* Current Board Members Section - Dynamic from API */}
+          <Card className="border-0 shadow-xl mt-8">
             <CardHeader className={isRTL ? 'text-right' : ''}>
               <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
