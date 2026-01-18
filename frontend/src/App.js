@@ -27,54 +27,6 @@ import Donations from "./pages/Donations";
 import LoginPage from "./pages/LoginPage";
 import NomineeRegistration from "./pages/NomineeRegistration";
 
-// Protected App content - only shown when authenticated
-const ProtectedApp = () => {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  // Show loading spinner while checking auth
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-cream-50">
-        <div className="w-12 h-12 border-4 border-haggai border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-
-  // Show login page if not authenticated
-  if (!isAuthenticated) {
-    return <LoginPage />;
-  }
-
-  // Show main app if authenticated
-  return (
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/om-oss" element={<AboutUs />} />
-          <Route path="/leader-experience" element={<LeaderExperience />} />
-          <Route path="/leader-experience/:programId" element={<LeaderExperienceApplication />} />
-          <Route path="/kalender" element={<EventCalendar />} />
-          <Route path="/bli-medlem" element={<Membership />} />
-          <Route path="/kontakt" element={<Contact />} />
-          <Route path="/ledare" element={<Leaders />} />
-          <Route path="/partners" element={<Partners />} />
-          <Route path="/donera" element={<Donations />} />
-          <Route path="/medlemmar" element={<MembersArea />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/ledare" element={<AdminLeaders />} />
-          <Route path="/admin/styrelse" element={<AdminBoardMembers />} />
-          <Route path="/admin/medlemmar" element={<AdminOrganizationMembers />} />
-          <Route path="/admin/partners" element={<AdminPartners />} />
-          <Route path="/admin/vittnesmal" element={<AdminTestimonials />} />
-          <Route path="/admin/nomineringar" element={<AdminNominations />} />
-          <Route path="/admin/workshops" element={<AdminWorkshops />} />
-        </Routes>
-      </Layout>
-    </BrowserRouter>
-  );
-};
-
 function App() {
   return (
     <div className="App">
