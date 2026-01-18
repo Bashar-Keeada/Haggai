@@ -1288,6 +1288,114 @@ async def delete_nomination(nomination_id: str):
     return {"message": "Nomination deleted successfully"}
 
 
+@api_router.post("/nominations/{nomination_id}/register")
+async def register_nominee(nomination_id: str, registration: NomineeRegistrationData):
+    """Register a nominee with their full registration data"""
+    # Find the nomination
+    nomination = await db.nominations.find_one({"id": nomination_id})
+    if not nomination:
+        raise HTTPException(status_code=404, detail="Nomination not found")
+    
+    # Check if already registered
+    if nomination.get("registration_completed"):
+        raise HTTPException(status_code=400, detail="Already registered")
+    
+    # Update nomination with registration data
+    update_data = {
+        "registration_completed": True,
+        "registration_data": registration.model_dump(),
+        "status": "registered",
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.nominations.update_one({"id": nomination_id}, {"$set": update_data})
+    
+    # Send notification email to admin about the registration
+    try:
+        await send_registration_email_to_admin(nomination, registration)
+    except Exception as e:
+        logging.error(f"Failed to send registration email: {e}")
+    
+    return {"message": "Registration completed successfully", "nomination_id": nomination_id}
+
+
+async def send_registration_email_to_admin(nomination: dict, registration: NomineeRegistrationData):
+    """Send notification email to admin when nominee registers"""
+    if not resend.api_key:
+        logging.warning("Resend API key not configured, skipping email")
+        return
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); padding: 30px; border-radius: 10px 10px 0 0;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">✅ Ny registrering mottagen!</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">En nominerad person har registrerat sig</p>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none;">
+            <h3 style="color: #15564e; margin-top: 0;">Program</h3>
+            <p><strong>{nomination.get('event_title', 'N/A')}</strong></p>
+            
+            <h3 style="color: #15564e;">Personuppgifter</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Namn:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.full_name}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Kön:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.gender}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Födelsedatum:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.date_of_birth}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Telefon:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.phone}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>E-post:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.email}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Adress:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.full_address}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Civilstånd:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.marital_status}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Födelseort:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.place_of_birth}</td></tr>
+            </table>
+            
+            <h3 style="color: #15564e;">Arbetsinformation</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Arbetsområde:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.work_field}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Yrke:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.current_profession}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Arbetsgivare:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.employer_name}</td></tr>
+            </table>
+            
+            <h3 style="color: #15564e;">Kyrkoinformation</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Kyrka:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.church_name}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Roll i kyrkan:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.church_role}</td></tr>
+            </table>
+            
+            <h3 style="color: #15564e;">Åtaganden</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Närvaroåtagande:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{'✅ Åtar sig' if registration.commitment_attendance == 'yes' else '❌ Åtar sig inte'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Aktivt deltagande:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{'✅ Ja' if registration.commitment_active_role == 'yes' else '❌ Nej'}</td></tr>
+            </table>
+            
+            {f'<h3 style="color: #15564e;">Ekonomiskt stöd</h3><p>{registration.fee_support_request}</p>' if registration.fee_support_request else ''}
+            
+            {f'<h3 style="color: #15564e;">Övriga kommentarer</h3><p>{registration.notes}</p>' if registration.notes else ''}
+            
+            <div style="margin-top: 30px; padding: 15px; background: #e8f5e9; border-radius: 8px;">
+                <p style="margin: 0; color: #2e7d32;"><strong>Nominerad av:</strong> {nomination.get('nominator_name', 'N/A')} ({nomination.get('nominator_email', 'N/A')})</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        email = resend.Emails.send({
+            "from": SENDER_EMAIL,
+            "to": [ADMIN_EMAIL],
+            "subject": f"✅ Ny registrering: {registration.full_name} - {nomination.get('event_title', 'N/A')}",
+            "html": html_content
+        })
+        logging.info(f"Registration email sent to admin, id: {email.get('id')}")
+    except Exception as e:
+        logging.error(f"Failed to send registration email to admin: {e}")
+
+
 # ==================== BOARD MEETING ENDPOINTS ====================
 
 class AgendaItem(BaseModel):
