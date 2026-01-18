@@ -67,6 +67,7 @@ const ProtectedApp = () => {
           <Route path="/admin/partners" element={<AdminPartners />} />
           <Route path="/admin/vittnesmal" element={<AdminTestimonials />} />
           <Route path="/admin/nomineringar" element={<AdminNominations />} />
+          <Route path="/admin/workshops" element={<AdminWorkshops />} />
         </Routes>
       </Layout>
     </BrowserRouter>
