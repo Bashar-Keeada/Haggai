@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
+import BoardMeetings from '../components/BoardMeetings';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
