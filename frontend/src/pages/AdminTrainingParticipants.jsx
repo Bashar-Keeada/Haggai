@@ -784,12 +784,34 @@ const AdminTrainingParticipants = () => {
               
               {/* PDF Preview */}
               {diplomaPreviewUrl ? (
-                <div className="border rounded-xl overflow-hidden bg-gray-100">
-                  <iframe 
-                    src={diplomaPreviewUrl} 
-                    className="w-full h-[400px]"
-                    title="Diploma Preview"
-                  />
+                <div className="border rounded-xl overflow-hidden bg-gray-50 p-4">
+                  <div className="flex items-center justify-center gap-4 mb-4">
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                      <Check className="h-8 w-8 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-lg font-medium text-green-700">
+                        {language === 'sv' ? 'Diplom genererat!' : 
+                         language === 'ar' ? 'تم إنشاء الشهادة!' : 
+                         'Diploma generated!'}
+                      </p>
+                      <p className="text-sm text-stone-500">
+                        {language === 'sv' ? 'Du kan nu förhandsgranska, ladda ner eller skicka diplomet.' : 
+                         language === 'ar' ? 'يمكنك الآن معاينة الشهادة أو تنزيلها أو إرسالها.' : 
+                         'You can now preview, download or send the diploma.'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex justify-center">
+                    <Button
+                      variant="outline"
+                      onClick={() => window.open(diplomaPreviewUrl, '_blank')}
+                      className="gap-2"
+                    >
+                      <Eye className="h-4 w-4" />
+                      {language === 'sv' ? 'Öppna i ny flik' : language === 'ar' ? 'فتح في علامة تبويب جديدة' : 'Open in new tab'}
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <div className="border rounded-xl p-8 bg-gray-50 text-center">
