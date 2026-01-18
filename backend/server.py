@@ -993,9 +993,31 @@ class Nomination(BaseModel):
     nominee_phone: Optional[str] = None
     # Additional info
     motivation: Optional[str] = None
-    status: str = "pending"  # pending, approved, rejected, contacted
+    status: str = "pending"  # pending, approved, rejected, contacted, registered
+    registration_completed: bool = False
+    registration_data: Optional[dict] = None
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class NomineeRegistrationData(BaseModel):
+    full_name: str
+    gender: str
+    date_of_birth: str
+    phone: str
+    email: str
+    full_address: str
+    marital_status: str
+    place_of_birth: str
+    work_field: str
+    current_profession: str
+    employer_name: str
+    church_name: str
+    church_role: str
+    commitment_attendance: str
+    commitment_active_role: str
+    fee_support_request: Optional[str] = None
+    notes: Optional[str] = None
 
 
 class NominationCreate(BaseModel):
