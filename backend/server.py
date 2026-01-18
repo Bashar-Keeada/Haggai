@@ -102,6 +102,10 @@ class BoardMember(BaseModel):
     term_start: str  # Start year of term, e.g., "2025"
     term_end: Optional[str] = None  # End year of term, None if current
     is_current: bool = True
+    # Authentication fields
+    password_hash: Optional[str] = None
+    is_account_active: bool = False  # True when they've set a password
+    last_login: Optional[str] = None
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
