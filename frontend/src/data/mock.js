@@ -1,78 +1,74 @@
 // Mock data for Haggai Sweden website
+// Note: Workshops can be managed from admin panel - this is fallback/initial data
 
 export const events = [
-  // Leader Experience Programs - International
+  // Haggai Workshops - International
   {
     id: 101,
     type: 'leader-experience',
     programType: 'international',
-    title: "Haggai Leader Experience - Kvinnor (Arabiska)",
+    title: "Workshop – Kvinnor internationell",
     date: "2026-07-13",
-    endDate: "2026-07-23",
-    time: "10 dagar",
+    endDate: "2026-07-26",
+    time: "13-26 juli 2026",
     location: "Internationell plats",
-    description: "Internationellt ledarprogram för kvinnor. Genomförs på arabiska. 1-3 platser från Sverige. Ålder: 29-60 år.",
-    spots: 3,
-    spotsLeft: 3
+    description: "Internationell workshop för kvinnor. Ålder: 23-55 år. 2 platser från Sverige.",
+    spots: 2,
+    spotsLeft: 2,
+    price: 500,
+    currency: 'USD'
   },
   {
     id: 102,
     type: 'leader-experience',
     programType: 'international',
-    title: "Haggai Leader Experience - Män (Arabiska)",
-    date: "2026-12-01",
-    endDate: "2026-12-10",
-    time: "10 dagar",
+    title: "Workshop – Män internationell",
+    date: "2026-11-30",
+    endDate: "2026-12-11",
+    time: "30 nov - 11 dec 2026",
     location: "Internationell plats",
-    description: "Internationellt ledarprogram för män. Genomförs på arabiska. 1-3 platser från Sverige. Ålder: 29-60 år.",
-    spots: 3,
-    spotsLeft: 3
+    description: "Internationell workshop för män. Ålder: 23-55 år. 2 platser från Sverige.",
+    spots: 2,
+    spotsLeft: 2,
+    price: 500,
+    currency: 'USD'
   },
   {
     id: 103,
     type: 'leader-experience',
     programType: 'international',
-    title: "VFDS2602 - EUR/ME Online",
-    date: "2026-02-09",
-    endDate: "2026-03-08",
-    time: "8 sessioner",
-    location: "Online (Zoom)",
-    description: "Online ledarprogram med 6 sessioner plus öppnings- och avslutningssession. Ålder: 25-55 år.",
+    title: "Workshop – Online engelskspråkig internationell",
+    date: "2026-02-05",
+    endDate: "2026-02-07",
+    time: "5-7 februari 2026",
+    location: "Online",
+    description: "Online workshop på engelska. Ålder: 29-60 år.",
     spots: 20,
-    spotsLeft: 20
+    spotsLeft: 20,
+    price: 500,
+    currency: 'SEK',
+    isOnline: true
   },
-  // Leader Experience Programs - National
   {
     id: 104,
     type: 'leader-experience',
     programType: 'national',
-    title: "Nationellt Ledarprogram - Mars 2026",
+    title: "Workshop – Nationell mars 2026",
     date: "2026-03-13",
     endDate: "2026-03-22",
-    time: "2 helger (13-15 & 20-22 mars)",
+    time: "Mars 2026",
     location: "Stockholm, Sverige",
-    description: "Intensivt ledarprogram över två helger. Perfekt för dig som vill utveckla ditt ledarskap. Ålder: 25-55 år.",
+    description: "Nationell workshop. Ingen åldersgräns.",
     spots: 30,
-    spotsLeft: 30
-  },
-  {
-    id: 105,
-    type: 'leader-experience',
-    programType: 'national',
-    title: "Nationellt Ungdomsledarprogram - September 2026",
-    date: "2026-09-11",
-    endDate: "2026-09-20",
-    time: "2 helger (11-13 & 18-20 september)",
-    location: "Stockholm, Sverige",
-    description: "Ledarprogram för unga ledare (18-30 år). Utveckla ditt ledarskap tillsammans med andra unga visionärer. Svenska/Engelska.",
-    spots: 25,
-    spotsLeft: 25
+    spotsLeft: 30,
+    price: 500,
+    currency: 'SEK'
   },
   // Regular Events
   {
     id: 1,
     type: 'event',
-    title: "Ledarskapsutbildning - Grundkurs",
+    title: "Ledarskapsworkshop - Grundkurs",
     date: "2025-09-15",
     time: "09:00 - 16:00",
     location: "Skärholmen Centrum, Stockholm",
@@ -115,133 +111,129 @@ export const events = [
   }
 ];
 
-// Haggai Leader Experience Programs - International
+// Haggai Workshops (formerly Leader Experience Programs)
 export const leaderExperiences = [
-  // INTERNATIONAL PROGRAMS
+  // INTERNATIONAL WORKSHOPS
   {
-    id: 'women-arabic-2026',
+    id: 'women-international-2026',
     type: 'international',
     targetGender: 'women',
-    language: 'arabic',
+    language: 'mixed',
     title: {
-      sv: 'خبرة قادة حجاي - سيدات',
-      en: 'Haggai Leader Experience - Women',
-      ar: 'خبرة قادة حجاي - سيدات'
+      sv: 'Workshop – Kvinnor internationell',
+      en: 'Workshop – Women International',
+      ar: 'ورشة عمل – نساء دولية'
     },
     description: {
-      sv: 'Internationellt ledarprogram för kvinnor i ledande positioner. Programmet genomförs på arabiska. 1-3 platser från Sverige.',
-      en: 'International leadership program for women in leadership positions. The program is conducted in Arabic. 1-3 spots from Sweden.',
-      ar: 'برنامج قيادي دولي للنساء في المناصب القيادية. يُقدَّم البرنامج باللغة العربية. 1-3 مقاعد من السويد.'
+      sv: 'Internationell workshop för kvinnor i ledande positioner. 2 platser från Sverige.',
+      en: 'International workshop for women in leadership positions. 2 spots from Sweden.',
+      ar: 'ورشة عمل دولية للنساء في المناصب القيادية. مقعدان من السويد.'
     },
     duration: {
-      sv: '10 dagar (13-23 juli 2026)',
-      en: '10 days (July 13-23, 2026)',
-      ar: '10 أيام (13-23 يوليو 2026)'
+      sv: '13-26 juli 2026',
+      en: 'July 13-26, 2026',
+      ar: '13-26 يوليو 2026'
     },
     period: {
-      sv: '13-23 juli 2026',
-      en: 'July 13-23, 2026',
-      ar: '13-23 يوليو 2026'
+      sv: '13-26 juli 2026',
+      en: 'July 13-26, 2026',
+      ar: '13-26 يوليو 2026'
     },
     nextDate: '2026-07-13',
-    endDate: '2026-07-23',
+    endDate: '2026-07-26',
     location: {
       sv: 'Internationell plats (meddelas vid antagning)',
       en: 'International location (announced upon acceptance)',
       ar: 'موقع دولي (يُعلن عند القبول)'
     },
-    spots: 3,
-    spotsLeft: 3,
+    spots: 2,
+    spotsLeft: 2,
     spotsLabel: {
-      sv: '1-3 platser från Sverige',
-      en: '1-3 spots from Sweden',
-      ar: '1-3 مقاعد من السويد'
+      sv: '2 platser från Sverige',
+      en: '2 spots from Sweden',
+      ar: 'مقعدان من السويد'
     },
-    ageRange: '29-60',
+    ageRange: '23-55',
+    price: 500,
+    currency: 'USD',
     color: 'rose'
   },
   {
-    id: 'men-arabic-2026',
+    id: 'men-international-2026',
     type: 'international',
     targetGender: 'men',
-    language: 'arabic',
+    language: 'mixed',
     title: {
-      sv: 'خبرة قادة حجاي - رجال',
-      en: 'Haggai Leader Experience - Men',
-      ar: 'خبرة قادة حجاي - رجال'
+      sv: 'Workshop – Män internationell',
+      en: 'Workshop – Men International',
+      ar: 'ورشة عمل – رجال دولية'
     },
     description: {
-      sv: 'Internationellt ledarprogram för män i ledande positioner. Programmet genomförs på arabiska. 1-3 platser från Sverige.',
-      en: 'International leadership program for men in leadership positions. The program is conducted in Arabic. 1-3 spots from Sweden.',
-      ar: 'برنامج قيادي دولي للرجال في المناصب القيادية. يُقدَّم البرنامج باللغة العربية. 1-3 مقاعد من السويد.'
+      sv: 'Internationell workshop för män i ledande positioner. 2 platser från Sverige.',
+      en: 'International workshop for men in leadership positions. 2 spots from Sweden.',
+      ar: 'ورشة عمل دولية للرجال في المناصب القيادية. مقعدان من السويد.'
     },
     duration: {
-      sv: '10 dagar (första veckan december 2026)',
-      en: '10 days (first week of December 2026)',
-      ar: '10 أيام (الأسبوع الأول من ديسمبر 2026)'
+      sv: '30 nov - 11 dec 2026',
+      en: 'Nov 30 - Dec 11, 2026',
+      ar: '30 نوفمبر - 11 ديسمبر 2026'
     },
     period: {
-      sv: 'Första veckan december 2026',
-      en: 'First week of December 2026',
-      ar: 'الأسبوع الأول من ديسمبر 2026'
+      sv: '30 nov - 11 dec 2026',
+      en: 'Nov 30 - Dec 11, 2026',
+      ar: '30 نوفمبر - 11 ديسمبر 2026'
     },
-    nextDate: '2026-12-01',
+    nextDate: '2026-11-30',
+    endDate: '2026-12-11',
     location: {
       sv: 'Internationell plats (meddelas vid antagning)',
       en: 'International location (announced upon acceptance)',
       ar: 'موقع دولي (يُعلن عند القبول)'
     },
-    spots: 3,
-    spotsLeft: 3,
+    spots: 2,
+    spotsLeft: 2,
     spotsLabel: {
-      sv: '1-3 platser från Sverige',
-      en: '1-3 spots from Sweden',
-      ar: '1-3 مقاعد من السويد'
+      sv: '2 platser från Sverige',
+      en: '2 spots from Sweden',
+      ar: 'مقعدان من السويد'
     },
-    ageRange: '29-60',
+    ageRange: '23-55',
+    price: 500,
+    currency: 'USD',
     color: 'blue'
   },
   {
-    id: 'vfds2602-online',
+    id: 'online-english-2026',
     type: 'international',
     targetGender: 'all',
-    language: 'arabic',
+    language: 'english',
     title: {
-      sv: 'VFDS2602 - EUR/ME Online',
-      en: 'VFDS2602 - EUR/ME Online',
-      ar: 'VFDS2602 - أوروبا/الشرق الأوسط'
+      sv: 'Workshop – Online engelskspråkig internationell',
+      en: 'Workshop – Online English International',
+      ar: 'ورشة عمل – عبر الإنترنت بالإنجليزية دولية'
     },
     description: {
-      sv: 'Online ledarprogram med 6 sessioner plus öppnings- och avslutningssession. Perfekt för dig som vill utvecklas utan att resa.',
-      en: 'Online leadership program with 6 sessions plus opening and closing sessions. Perfect for those who want to develop without traveling.',
-      ar: 'برنامج قيادي عبر الإنترنت مع 6 جلسات بالإضافة إلى جلسات الافتتاح والختام.'
+      sv: 'Online workshop på engelska. Perfekt för dig som vill utvecklas utan att resa.',
+      en: 'Online workshop in English. Perfect for those who want to develop without traveling.',
+      ar: 'ورشة عمل عبر الإنترنت بالإنجليزية. مثالية لمن يريد التطور دون السفر.'
     },
     duration: {
-      sv: '8 sessioner (9 feb - 8 mar 2026)',
-      en: '8 sessions (Feb 9 - Mar 8, 2026)',
-      ar: '8 جلسات (9 فبراير - 8 مارس 2026)'
+      sv: '5-7 februari 2026',
+      en: 'February 5-7, 2026',
+      ar: '5-7 فبراير 2026'
     },
     period: {
-      sv: 'Februari-Mars 2026',
-      en: 'February-March 2026',
-      ar: 'فبراير-مارس 2026'
+      sv: '5-7 februari 2026',
+      en: 'February 5-7, 2026',
+      ar: '5-7 فبراير 2026'
     },
-    nextDate: '2026-02-09',
+    nextDate: '2026-02-05',
+    endDate: '2026-02-07',
     location: {
-      sv: 'Online (Zoom)',
-      en: 'Online (Zoom)',
-      ar: 'عبر الإنترنت (زووم)'
+      sv: 'Online',
+      en: 'Online',
+      ar: 'عبر الإنترنت'
     },
-    sessions: [
-      { name: 'Opening Session', date: 'Mon 9 Feb' },
-      { name: '1st Session', date: 'Sat 14 Feb / 10am - 3pm' },
-      { name: '2nd Session', date: 'Mon 16 Feb / 7pm - 10pm' },
-      { name: '3rd Session', date: 'Sat 21 Feb / 10am - 3pm' },
-      { name: '4th Session', date: 'Mon 23 Feb / 7pm - 10pm' },
-      { name: '5th Session', date: 'Sat 28 Feb / 10am - 3pm' },
-      { name: '6th Session', date: 'Mon 2 Mar / 7pm - 10pm' },
-      { name: 'Closing Session', date: 'Mon 8 Mar / 7pm - 9pm' }
-    ],
     spots: null,
     spotsLeft: null,
     spotsLabel: {
@@ -249,35 +241,37 @@ export const leaderExperiences = [
       en: 'Limited spots',
       ar: 'عدد محدود'
     },
-    ageRange: '25-55',
+    ageRange: '29-60',
+    price: 500,
+    currency: 'SEK',
     color: 'emerald',
     isOnline: true
   },
-  // NATIONAL PROGRAMS
+  // NATIONAL WORKSHOPS
   {
     id: 'national-march-2026',
     type: 'national',
     targetGender: 'all',
-    language: 'arabic',
+    language: 'swedish',
     title: {
-      sv: 'البرنامج الوطني للقيادة - مارس 2026',
-      en: 'National Leadership Program - March 2026',
-      ar: 'البرنامج الوطني للقيادة - مارس 2026'
+      sv: 'Workshop – Nationell mars 2026',
+      en: 'Workshop – National March 2026',
+      ar: 'ورشة عمل – وطنية مارس 2026'
     },
     description: {
-      sv: 'Intensivt ledarprogram över två helger i mars. Perfekt för dig som vill utveckla ditt ledarskap.',
-      en: 'Intensive leadership program over two weekends in March. Perfect for those who want to develop their leadership.',
-      ar: 'برنامج قيادي مكثف على مدار عطلتين نهاية الأسبوع في مارس.'
+      sv: 'Nationell workshop. Ingen åldersgräns. Perfekt för dig som vill utveckla ditt ledarskap.',
+      en: 'National workshop. No age limit. Perfect for those who want to develop their leadership.',
+      ar: 'ورشة عمل وطنية. لا يوجد حد للعمر. مثالية لمن يريد تطوير قيادته.'
     },
     duration: {
-      sv: '2 helger (13-15 & 20-22 mars)',
-      en: '2 weekends (March 13-15 & 20-22)',
-      ar: 'عطلتان نهاية الأسبوع (13-15 و 20-22 مارس)'
+      sv: 'Mars 2026',
+      en: 'March 2026',
+      ar: 'مارس 2026'
     },
     period: {
-      sv: '13-15 & 20-22 mars 2026',
-      en: 'March 13-15 & 20-22, 2026',
-      ar: '13-15 و 20-22 مارس 2026'
+      sv: 'Mars 2026',
+      en: 'March 2026',
+      ar: 'مارس 2026'
     },
     nextDate: '2026-03-13',
     location: {
@@ -287,59 +281,31 @@ export const leaderExperiences = [
     },
     spots: 30,
     spotsLeft: 30,
-    ageRange: '25-55',
+    ageRange: null,
+    ageLabel: {
+      sv: 'Ingen åldersgräns',
+      en: 'No age limit',
+      ar: 'لا يوجد حد للعمر'
+    },
+    price: 500,
+    currency: 'SEK',
     color: 'violet'
   },
+  // ToT (Training of Trainers) - FDS
   {
-    id: 'national-youth-2026',
-    type: 'national',
-    targetGender: 'all',
-    language: 'swedish-english',
-    title: {
-      sv: 'Nationellt Ungdomsledarprogram - September 2026',
-      en: 'National Youth Leadership Program - September 2026',
-      ar: 'البرنامج الوطني لقيادة الشباب - سبتمبر 2026'
-    },
-    description: {
-      sv: 'Ledarprogram för unga ledare (18-30 år). Utveckla ditt ledarskap tillsammans med andra unga visionärer. Genomförs på svenska/engelska.',
-      en: 'Leadership program for young leaders (18-30 years). Develop your leadership together with other young visionaries. Conducted in Swedish/English.',
-      ar: 'برنامج قيادي للقادة الشباب (18-30 سنة). طور قيادتك مع رؤساء شباب آخرين. يُقدم بالسويدية/الإنجليزية.'
-    },
-    duration: {
-      sv: '2 helger (11-13 & 18-20 september)',
-      en: '2 weekends (September 11-13 & 18-20)',
-      ar: 'عطلتان نهاية الأسبوع (11-13 و 18-20 سبتمبر)'
-    },
-    period: {
-      sv: '11-13 & 18-20 september 2026',
-      en: 'September 11-13 & 18-20, 2026',
-      ar: '11-13 و 18-20 سبتمبر 2026'
-    },
-    nextDate: '2026-09-11',
-    location: {
-      sv: 'Stockholm, Sverige',
-      en: 'Stockholm, Sweden',
-      ar: 'ستوكهولم، السويد'
-    },
-    spots: 25,
-    spotsLeft: 25,
-    ageRange: '18-30',
-    color: 'sky'
-  },
-  {
-    id: 'custom-training',
-    type: 'national',
+    id: 'tot-fds-2026',
+    type: 'tot',
     targetGender: 'all',
     language: 'flexible',
     title: {
-      sv: 'برامج تدريبية مخصصة',
-      en: 'Custom Training Programs',
-      ar: 'برامج تدريبية مخصصة'
+      sv: 'ToT – Training of Trainers (FDS)',
+      en: 'ToT – Training of Trainers (FDS)',
+      ar: 'تدريب المدربين (FDS)'
     },
     description: {
-      sv: 'Skräddarsydda ledarutbildningar för kyrkor och organisationer. Vi anpassar innehåll och format efter era behov.',
-      en: 'Tailored leadership training for churches and organizations. We customize content and format to your needs.',
-      ar: 'تدريب قيادي مخصص للكنائس والمنظمات. نقوم بتخصيص المحتوى والشكل وفقًا لاحتياجاتكم.'
+      sv: 'FDS-utbildning (Training of Trainers). För dig som vill bli certifierad Haggai-tränare och leda workshops.',
+      en: 'FDS training (Training of Trainers). For those who want to become certified Haggai trainers and lead workshops.',
+      ar: 'تدريب FDS (تدريب المدربين). لمن يريد أن يصبح مدرب حجاي معتمد ويقود ورش العمل.'
     },
     duration: {
       sv: 'Enligt överenskommelse',
@@ -347,21 +313,23 @@ export const leaderExperiences = [
       ar: 'حسب الاتفاق'
     },
     period: {
-      sv: 'Flexibelt - kontakta oss',
-      en: 'Flexible - contact us',
-      ar: 'مرن - اتصل بنا'
+      sv: 'Kontakta oss för datum',
+      en: 'Contact us for dates',
+      ar: 'اتصل بنا للتواريخ'
     },
     nextDate: null,
     location: {
-      sv: 'På plats hos er eller online',
+      sv: 'På plats eller online',
       en: 'On-site or online',
-      ar: 'في موقعكم أو عبر الإنترنت'
+      ar: 'في الموقع أو عبر الإنترنت'
     },
     spots: null,
     spotsLeft: null,
     ageRange: null,
+    price: null,
+    currency: 'SEK',
     color: 'amber',
-    isCustom: true
+    isToT: true
   }
 ];
 
@@ -457,7 +425,7 @@ export const testimonials = [
     id: 1,
     name: "Pastor Johan Nilsson",
     church: "Livets Ord, Uppsala",
-    quote: "Haggai Leader Experience förändrade mitt sätt att se på tjänst och ledarskap. Jag rekommenderar det varmt till alla kyrkoledare."
+    quote: "Haggai Workshop förändrade mitt sätt att se på tjänst och ledarskap. Jag rekommenderar det varmt till alla kyrkoledare."
   },
   {
     id: 2,
