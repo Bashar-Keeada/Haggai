@@ -202,54 +202,8 @@ const MembersArea = () => {
 
   const txt = translations[language] || translations.sv;
 
-  // Core subjects for national trainings
+  // Core subjects for national trainings - Certified workshop with diploma
   const coreSubjects = [
-    {
-      id: 1,
-      title: { sv: 'Evangelisation', en: 'Evangelism', ar: 'التبشير' },
-      hours: 5,
-      color: 'bg-blue-500',
-      description: { 
-        sv: 'Effektiva metoder för att dela tron och nå ut med evangeliet.',
-        en: 'Effective methods for sharing faith and reaching out with the Gospel.',
-        ar: 'طرق فعالة لمشاركة الإيمان والتواصل بالإنجيل.'
-      },
-      fullContent: {
-        sv: {
-          overview: 'Evangelisation handlar om att dela det kristna budskapet på ett relevant och respektfullt sätt.',
-          topics: [
-            'Personlig evangelisation och vittnesbörd',
-            'Kulturell relevans i evangelisation',
-            'Bygga relationer som grund för evangelisation',
-            'Digitala verktyg för spridning av evangeliet',
-            'Hantera invändningar och frågor'
-          ],
-          outcome: 'Efter kursen kommer du att ha praktiska verktyg för att dela din tro i olika sammanhang.'
-        },
-        en: {
-          overview: 'Evangelism is about sharing the Christian message in a relevant and respectful way.',
-          topics: [
-            'Personal evangelism and testimony',
-            'Cultural relevance in evangelism',
-            'Building relationships as a foundation for evangelism',
-            'Digital tools for spreading the Gospel',
-            'Handling objections and questions'
-          ],
-          outcome: 'After the course, you will have practical tools for sharing your faith in different contexts.'
-        },
-        ar: {
-          overview: 'التبشير يتعلق بمشاركة الرسالة المسيحية بطريقة ملائمة ومحترمة.',
-          topics: [
-            'التبشير الشخصي والشهادة',
-            'الملاءمة الثقافية في التبشير',
-            'بناء العلاقات كأساس للتبشير',
-            'الأدوات الرقمية لنشر الإنجيل',
-            'التعامل مع الاعتراضات والأسئلة'
-          ],
-          outcome: 'بعد الدورة، ستكون لديك أدوات عملية لمشاركة إيمانك في سياقات مختلفة.'
-        }
-      }
-    },
     {
       id: 2,
       title: { sv: 'Förvaltarskap', en: 'Stewardship', ar: 'الإشراف' },
