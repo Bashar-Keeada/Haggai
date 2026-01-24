@@ -2379,9 +2379,6 @@ async def send_training_participant_diploma(participant_id: str):
 
 # ==================== MEMBER SYSTEM ====================
 
-import secrets
-import string
-
 def generate_password(length=12):
     """Generate a random password"""
     alphabet = string.ascii_letters + string.digits
