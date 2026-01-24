@@ -139,6 +139,16 @@ const AdminWorkshopAgenda = () => {
     fetchData();
   }, [workshopId]);
 
+  // Helper function to get localized text from multilingual objects
+  const getLocalizedText = (text) => {
+    if (!text) return '';
+    if (typeof text === 'string') return text;
+    if (typeof text === 'object') {
+      return text[language] || text.sv || text.en || Object.values(text)[0] || '';
+    }
+    return String(text);
+  };
+
   const fetchData = async () => {
     try {
       // Fetch workshop, agenda and leaders in parallel
