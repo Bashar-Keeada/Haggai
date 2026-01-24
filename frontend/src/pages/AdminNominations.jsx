@@ -519,10 +519,26 @@ const AdminNominations = () => {
                         </div>
                       </div>
 
+                      {/* New fields: Church, Role, Activities */}
+                      {(nomination.nominee_church || nomination.nominee_role || nomination.nominee_activities) && (
+                        <div className={`mt-3 p-3 bg-amber-50 rounded-lg ${isRTL ? 'text-right' : ''}`}>
+                          <p className="text-xs text-amber-600 font-medium mb-2">{txt.nomineeInfo || 'Om den nominerade'}</p>
+                          {nomination.nominee_church && (
+                            <p className="text-sm text-stone-700"><strong>{txt.nomineeChurch || 'Kyrka'}:</strong> {nomination.nominee_church}</p>
+                          )}
+                          {nomination.nominee_role && (
+                            <p className="text-sm text-stone-700"><strong>{txt.nomineeRole || 'Roll'}:</strong> {nomination.nominee_role}</p>
+                          )}
+                          {nomination.nominee_activities && (
+                            <p className="text-sm text-stone-700 mt-1"><strong>{txt.nomineeActivities || 'Aktiviteter'}:</strong> {nomination.nominee_activities}</p>
+                          )}
+                        </div>
+                      )}
+
                       {nomination.motivation && (
                         <div className={`mt-3 p-3 bg-stone-50 rounded-lg ${isRTL ? 'text-right' : ''}`}>
                           <p className="text-xs text-stone-500 mb-1">{txt.motivation}</p>
-                          <p className="text-sm text-stone-700">{nomination.motivation}</p>
+                          <p className="text-sm text-stone-700 whitespace-pre-wrap">{nomination.motivation}</p>
                         </div>
                       )}
 
@@ -538,7 +554,7 @@ const AdminNominations = () => {
                           <Button
                             size="sm"
                             className="bg-green-600 hover:bg-green-700 text-white"
-                            onClick={() => updateStatus(nomination.id, 'approved')}
+                            onClick={() => { setActionNomination(nomination); setShowApproveDialog(true); }}
                           >
                             <Check className="h-4 w-4 mr-1" />
                             {txt.approve}
@@ -547,22 +563,22 @@ const AdminNominations = () => {
                             size="sm"
                             variant="outline"
                             className="border-red-300 text-red-600 hover:bg-red-50"
-                            onClick={() => updateStatus(nomination.id, 'rejected')}
+                            onClick={() => { setActionNomination(nomination); setShowRejectDialog(true); }}
                           >
                             <X className="h-4 w-4 mr-1" />
                             {txt.reject}
                           </Button>
                         </>
                       )}
-                      {nomination.status === 'approved' && (
-                        <Button
-                          size="sm"
-                          className="bg-blue-600 hover:bg-blue-700 text-white"
-                          onClick={() => updateStatus(nomination.id, 'contacted')}
-                        >
-                          <Phone className="h-4 w-4 mr-1" />
-                          {txt.contact}
-                        </Button>
+                      {nomination.status === 'approved' && !nomination.registration_completed && (
+                        <Badge className="bg-blue-100 text-blue-700">
+                          Inbjudan skickad - väntar på registrering
+                        </Badge>
+                      )}
+                      {nomination.registration_completed && (
+                        <Badge className="bg-green-100 text-green-700">
+                          ✅ Registrerad
+                        </Badge>
                       )}
                       <Button
                         size="sm"
@@ -579,6 +595,68 @@ const AdminNominations = () => {
             ))}
           </div>
         )}
+
+        {/* Approve Dialog */}
+        <Dialog open={showApproveDialog} onOpenChange={setShowApproveDialog}>
+          <DialogContent className={isRTL ? 'rtl' : 'ltr'}>
+            <DialogHeader>
+              <DialogTitle>{txt.approveConfirm || 'Godkänn nominering?'}</DialogTitle>
+            </DialogHeader>
+            {actionNomination && (
+              <div className="py-4">
+                <p className="text-stone-600 mb-4">{txt.approveConfirmDesc || 'En inbjudan med registreringslänk skickas till den nominerade personen.'}</p>
+                <div className="p-4 bg-green-50 rounded-lg">
+                  <p><strong>Till:</strong> {actionNomination.nominee_name}</p>
+                  <p><strong>E-post:</strong> {actionNomination.nominee_email}</p>
+                  <p><strong>Utbildning:</strong> {actionNomination.event_title}</p>
+                </div>
+              </div>
+            )}
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setShowApproveDialog(false)}>
+                {txt.cancel || 'Avbryt'}
+              </Button>
+              <Button className="bg-green-600 hover:bg-green-700 text-white" onClick={approveNomination}>
+                <Check className="h-4 w-4 mr-2" />
+                {txt.confirm || 'Bekräfta'}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Reject Dialog */}
+        <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
+          <DialogContent className={isRTL ? 'rtl' : 'ltr'}>
+            <DialogHeader>
+              <DialogTitle>{txt.rejectConfirm || 'Avvisa nominering?'}</DialogTitle>
+            </DialogHeader>
+            {actionNomination && (
+              <div className="py-4">
+                <div className="p-4 bg-red-50 rounded-lg mb-4">
+                  <p><strong>Person:</strong> {actionNomination.nominee_name}</p>
+                  <p><strong>Nominerad av:</strong> {actionNomination.nominator_name}</p>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">{txt.rejectReason || 'Anledning (valfritt)'}</label>
+                  <Input
+                    value={rejectReason}
+                    onChange={(e) => setRejectReason(e.target.value)}
+                    placeholder="Ange anledning..."
+                  />
+                </div>
+              </div>
+            )}
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => { setShowRejectDialog(false); setRejectReason(''); }}>
+                {txt.cancel || 'Avbryt'}
+              </Button>
+              <Button variant="destructive" onClick={rejectNomination}>
+                <X className="h-4 w-4 mr-2" />
+                {txt.reject || 'Avvisa'}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
