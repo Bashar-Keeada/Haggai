@@ -1047,15 +1047,21 @@ class NominationCreate(BaseModel):
     nominator_name: str
     nominator_email: str
     nominator_phone: Optional[str] = None
+    nominator_church: Optional[str] = None
+    nominator_relation: Optional[str] = None
     nominee_name: str
     nominee_email: str
     nominee_phone: Optional[str] = None
+    nominee_church: Optional[str] = None
+    nominee_role: Optional[str] = None
+    nominee_activities: Optional[str] = None
     motivation: Optional[str] = None
 
 
 class NominationUpdate(BaseModel):
     status: Optional[str] = None
     motivation: Optional[str] = None
+    admin_notes: Optional[str] = None
 
 
 # ==================== EMAIL FUNCTIONS ====================
