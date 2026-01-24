@@ -66,6 +66,12 @@ const Header = () => {
     ar: 'منطقة الأعضاء'
   };
 
+  const myPagesLabel = {
+    sv: 'Mina Sidor',
+    en: 'My Pages',
+    ar: 'صفحاتي'
+  };
+
   const logoutLabel = {
     sv: 'Logga ut',
     en: 'Log out',
