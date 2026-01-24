@@ -16,6 +16,8 @@ import resend
 import bcrypt
 import jwt
 from io import BytesIO
+import secrets
+import string
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
