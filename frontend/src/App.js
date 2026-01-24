@@ -21,12 +21,15 @@ import AdminPartners from "./pages/AdminPartners";
 import AdminTestimonials from "./pages/AdminTestimonials";
 import AdminNominations from "./pages/AdminNominations";
 import AdminWorkshops from "./pages/AdminWorkshops";
+import AdminWorkshopAgenda from "./pages/AdminWorkshopAgenda";
 import AdminTrainingParticipants from "./pages/AdminTrainingParticipants";
 import MembersArea from "./pages/MembersArea";
 import Partners from "./pages/Partners";
 import Donations from "./pages/Donations";
 import LoginPage from "./pages/LoginPage";
 import NomineeRegistration from "./pages/NomineeRegistration";
+import PublicAgenda from "./pages/PublicAgenda";
+import LeaderSessions from "./pages/LeaderSessions";
 // Member Portal Pages
 import MemberLogin from "./pages/MemberLogin";
 import MinaSidor from "./pages/MinaSidor";
