@@ -1069,7 +1069,7 @@ class NominationUpdate(BaseModel):
 async def send_nomination_email_to_nominee(nomination: Nomination):
     """Send email to the nominated person with registration link"""
     # Get the frontend URL from env or use default
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://training-admin-1.preview.emergentagent.com')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://members-portal-10.preview.emergentagent.com')
     registration_link = f"{frontend_url}/registrering/{nomination.id}"
     
     html_content = f"""
@@ -1419,7 +1419,7 @@ async def reject_nomination(nomination_id: str, reason: Optional[str] = None):
 
 async def send_nomination_invitation_to_nominee(nomination: Nomination):
     """Send invitation email to the nominated person after admin approval"""
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://training-admin-1.preview.emergentagent.com')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://members-portal-10.preview.emergentagent.com')
     registration_link = f"{frontend_url}/registrering/{nomination.id}"
     
     html_content = f"""
