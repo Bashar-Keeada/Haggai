@@ -208,23 +208,39 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
   - To admin (info@haggai.se): Notification with link to admin panel
 - Sender: noreply@haggai.se
 
-#### Nomination System ✅
+#### Nomination System ✅ ENHANCED (Jan 24)
+- **Admin-Moderated Workflow** ✅ NEW
+  - Nominations now go to "pending" status first
+  - Admin reviews and approves/rejects before nominee receives invitation
+  - Approval triggers email invitation to nominee with registration link
+  - Rejection stores reason in admin_notes
 - **Nominate Button** on Leader Experience events in Calendar
-- **Nomination Form** with:
-  - Nominator info (name, email, phone)
-  - Nominee info (name, email, phone)
+- **Enhanced Nomination Form** with:
+  - **Nominator info:** name, email, phone, church/congregation, relation to nominee ✅ NEW
+  - **Nominee info:** name, email, phone, church/congregation ✅ NEW, role/responsibility ✅ NEW, activities/engagement ✅ NEW
   - Auto-selected training/event
-  - Motivation text field
+  - **Motivation text field** (detailed explanation of why nominating)
 - **Backend API:** Full CRUD for nominations (`/api/nominations`)
+  - `POST /api/nominations` - Creates with status "pending"
+  - `POST /api/nominations/{id}/approve` - Approves and sends invitation email ✅ NEW
+  - `POST /api/nominations/{id}/reject` - Rejects with optional reason ✅ NEW
 - **Statistics API:** Get nomination stats (`/api/nominations/stats`)
 - **Admin Panel** (`/admin/nomineringar`) with:
   - Statistics dashboard (total, pending, approved, rejected, contacted)
   - Top nominators list
-  - Nominations by event
-  - Filter by status
+  - Nominations by event breakdown
+  - Filter by status buttons
   - Search functionality
-  - Approve/Reject/Contact actions
+  - **New fields displayed:** Kyrka/församling, Roll/ansvar, Aktiviteter, Motivering ✅ NEW
+  - **Approve dialog** with confirmation and nominee details ✅ NEW
+  - **Reject dialog** with optional reason field ✅ NEW
+  - Delete nomination button
+- **Email Flow:**
+  1. Nomination created → Admin notified, Nominator receives confirmation
+  2. Admin approves → Nominee receives invitation email with registration link
+  3. Admin approves → Nominator notified of approval
 - Multi-language support (SV/EN/AR)
+- **Tests:** 12 backend API tests passing (100%), Frontend UI verified ✅
 
 #### Donations Page ✅
 - Created `/donera` route with full UI
