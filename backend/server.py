@@ -1765,6 +1765,78 @@ class WorkshopUpdate(BaseModel):
     is_active: Optional[bool] = None
 
 
+# ==================== WORKSHOP AGENDA MODELS ====================
+
+class AgendaSession(BaseModel):
+    """A single session in a workshop agenda"""
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    start_time: str  # "09:00"
+    end_time: str    # "10:00"
+    title: str
+    title_en: Optional[str] = None
+    title_ar: Optional[str] = None
+    description: Optional[str] = None
+    leader_id: Optional[str] = None  # Reference to leader
+    leader_name: Optional[str] = None  # Cached for display
+    session_type: str = "session"  # "session", "break", "lunch", "registration", "other"
+    order: int = 0
+
+
+class AgendaDay(BaseModel):
+    """A day in the workshop agenda"""
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    date: str  # "2026-03-15"
+    day_number: int  # 1, 2, 3...
+    title: Optional[str] = None  # "Dag 1 - Introduktion"
+    sessions: List[AgendaSession] = []
+
+
+class WorkshopAgenda(BaseModel):
+    """Complete agenda for a workshop"""
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    workshop_id: str
+    workshop_title: Optional[str] = None  # Cached
+    days: List[AgendaDay] = []
+    is_published: bool = False  # When true, participants can see it
+    notify_participants: bool = True  # Send notifications
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class AgendaSessionCreate(BaseModel):
+    start_time: str
+    end_time: str
+    title: str
+    title_en: Optional[str] = None
+    title_ar: Optional[str] = None
+    description: Optional[str] = None
+    leader_id: Optional[str] = None
+    session_type: str = "session"
+    order: int = 0
+
+
+class AgendaDayCreate(BaseModel):
+    date: str
+    day_number: int
+    title: Optional[str] = None
+    sessions: List[AgendaSessionCreate] = []
+
+
+class WorkshopAgendaCreate(BaseModel):
+    workshop_id: str
+    days: List[AgendaDayCreate] = []
+    is_published: bool = False
+    notify_participants: bool = True
+
+
+class WorkshopAgendaUpdate(BaseModel):
+    days: Optional[List[AgendaDayCreate]] = None
+    is_published: Optional[bool] = None
+    notify_participants: Optional[bool] = None
+
+
 @api_router.post("/board-meetings", response_model=BoardMeeting)
 async def create_board_meeting(input: BoardMeetingCreate, send_invitation: bool = True):
     """Create a new board meeting and optionally send invitations"""
