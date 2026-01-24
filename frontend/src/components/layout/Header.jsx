@@ -129,6 +129,12 @@ const Header = () => {
                 ))}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
+                  <Link to="/mina-sidor" className="cursor-pointer">
+                    <User className="h-4 w-4 mr-2" />
+                    {myPagesLabel[language]}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link to="/medlemmar" className="cursor-pointer">
                     <Users className="h-4 w-4 mr-2" />
                     {membersLabel[language]}
