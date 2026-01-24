@@ -36,9 +36,14 @@ const EventCalendar = () => {
     nominator_name: '',
     nominator_email: '',
     nominator_phone: '',
+    nominator_church: '',
+    nominator_relation: '',
     nominee_name: '',
     nominee_email: '',
     nominee_phone: '',
+    nominee_church: '',
+    nominee_role: '',
+    nominee_activities: '',
     motivation: ''
   });
 
@@ -46,31 +51,34 @@ const EventCalendar = () => {
     sv: {
       nominateButton: 'Nominera',
       nominateTitle: 'Nominera en person',
-      nominateSubtitle: 'Rekommendera någon till denna utbildning',
+      nominateSubtitle: 'Rekommendera någon till denna utbildning. Din nominering granskas av admin innan den skickas vidare.',
       nominatorSection: 'Dina uppgifter (du som nominerar)',
       nomineeSection: 'Den du nominerar',
       yourName: 'Ditt namn',
       yourEmail: 'Din e-post',
       yourPhone: 'Ditt telefonnummer',
+      yourChurch: 'Din kyrka/församling',
+      yourRelation: 'Din relation till den nominerade',
+      yourRelationPlaceholder: 'T.ex. pastor, vän, kollega, mentor...',
       nomineeName: 'Personens namn',
       nomineeEmail: 'Personens e-post',
       nomineePhone: 'Personens telefonnummer',
-      motivation: 'Motivering (kan redigeras)',
-      motivationPlaceholder: 'Varför rekommenderar du denna person?',
+      nomineeChurch: 'Personens kyrka/församling',
+      nomineeRole: 'Roll/ansvar i kyrkan',
+      nomineeRolePlaceholder: 'T.ex. ungdomsledare, diakon, söndagsskolelärare...',
+      nomineeActivities: 'Aktiviteter och engagemang',
+      nomineeActivitiesPlaceholder: 'Beskriv personens aktiviteter och engagemang i kyrkan och samhället...',
+      motivation: 'Motivering till nomineringen',
+      motivationPlaceholder: 'Varför rekommenderar du denna person? Vad gör personen lämplig för programmet?',
       submit: 'Skicka nominering',
       submitting: 'Skickar...',
       cancel: 'Avbryt',
       successTitle: 'Nominering skickad!',
-      successDesc: 'Tack för din nominering till',
+      successDesc: 'Tack! Din nominering har skickats till admin för granskning. Du får besked via e-post när nomineringen har behandlats.',
       errorTitle: 'Något gick fel',
       errorDesc: 'Kunde inte skicka nomineringen. Försök igen.',
-      defaultMotivation: `Jag vill med full övertygelse uttrycka min starka önskan att nominera dig till detta ledarprogram, eftersom jag ser verklig potential och ett tydligt inflytande hos dig på dem omkring dig.
-
-Detta program utmärker sig genom sin ekumeniska karaktär, där det samlar kristna ledare från olika kyrkor och samfund, utan att tillhöra någon specifik kyrka. Detta ger deltagarna en rik och balanserad upplevelse baserad på ömsesidig respekt och gemensamt lärande.
-
-Det mest utmärkande med denna upplevelse är att den inte syftar till att ändra din kyrkotillhörighet eller identitet. Tvärtom, målet är att utrusta dig att återvända till din kyrka med ny erfarenhet, en bredare vision och praktiska verktyg som hjälper dig att leda din grupp djupare, mer effektivt och snabbare i mötet med utmaningar.
-
-Jag är övertygad om att ditt deltagande i detta program kommer att ge dig personlig och andlig tillväxt, och stärka din förmåga att påverka, tjäna och leda andra med visdom och ansvar – till gagn för den kyrka du tjänar och för hela Kristi kropp.`
+      pendingNote: 'Nomineringen granskas av admin innan inbjudan skickas till den nominerade.',
+      defaultMotivation: ''
     },
     en: {
       nominateButton: 'Nominate',
