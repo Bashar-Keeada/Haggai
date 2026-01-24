@@ -33,10 +33,30 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - **Nominations** ✅ - View and manage nominations with statistics
 - **Board Meetings** ✅ - Plan and document board meetings with agenda
 - **Workshops** ✅ - Manage workshops with pricing (`/admin/workshops`)
+- **Workshop Agenda** ✅ NEW - Create program/schedule for workshops (`/admin/workshops/{id}/agenda`)
 - **Training Participants** ✅ - Manage registrations, attendance & diplomas (`/admin/utbildning`)
 - **Categories** ✅ NEW - Manage expertise & interest categories for member profiles
 
-### Member Portal ✅ NEW
+### Workshop Agenda System ✅ NEW (Jan 24)
+- **Admin Agenda Editor** (`/admin/workshops/{id}/agenda`)
+  - Create multi-day programs with sessions
+  - Each session: start time, end time, title, description, leader assignment
+  - Session types: Session, Break, Lunch, Registration, Other
+  - Color-coded session badges
+  - Save draft or publish & notify participants
+  - Send day reminders to participants
+- **Public Program View** (`/program/{workshop_id}`)
+  - Beautiful program display for participants
+  - Shows all days with sessions
+  - Print-friendly view
+  - Accessible via link in email notifications
+- **Email Notifications**
+  - Auto-notify participants when agenda is published
+  - Day reminders (day before + morning of)
+- **Leader Sessions View** (`/ledare/{id}/sessioner`)
+  - Leaders can see their assigned sessions
+
+### Member Portal ✅
 - **Member Login** (`/medlem-login`) - Automatic account creation when diploma is sent
 - **Mina Sidor** (`/mina-sidor`) - Member dashboard with profile, messages, diplomas
 - **Member Profile** (`/mina-sidor/profil`) - Edit profile, expertise, interests, profile image
