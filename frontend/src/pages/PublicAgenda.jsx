@@ -150,13 +150,13 @@ const PublicAgenda = () => {
   return (
     <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Hero Header */}
-      <section className="py-12 bg-gradient-to-br from-haggai via-haggai-dark to-stone-800 text-white">
+      <section className="py-12 text-white" style={{background: 'linear-gradient(135deg, #014D73 0%, #012d44 50%, #1c1917 100%)'}}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <Badge className="bg-white/20 text-white mb-4">
+            <Badge className="bg-white/20 text-white mb-4 border-white/30">
               {txt.program}
             </Badge>
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">
               {getText(workshop?.title)}
             </h1>
             
