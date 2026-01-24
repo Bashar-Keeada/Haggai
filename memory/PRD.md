@@ -33,7 +33,17 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - **Nominations** ✅ - View and manage nominations with statistics
 - **Board Meetings** ✅ - Plan and document board meetings with agenda
 - **Workshops** ✅ - Manage workshops with pricing (`/admin/workshops`)
-- **Training Participants** ✅ NEW - Manage registrations, attendance & diplomas (`/admin/utbildning`)
+- **Training Participants** ✅ - Manage registrations, attendance & diplomas (`/admin/utbildning`)
+- **Categories** ✅ NEW - Manage expertise & interest categories for member profiles
+
+### Member Portal ✅ NEW
+- **Member Login** (`/medlem-login`) - Automatic account creation when diploma is sent
+- **Mina Sidor** (`/mina-sidor`) - Member dashboard with profile, messages, diplomas
+- **Member Profile** (`/mina-sidor/profil`) - Edit profile, expertise, interests, profile image
+- **Member Directory** (`/mina-sidor/medlemmar`) - View all members
+- **Direct Messages** (`/mina-sidor/meddelanden`) - Chat with other members
+- **Discussion Forum** (`/mina-sidor/forum`) - Community forum for discussions
+- **My Diplomas** (`/mina-sidor/diplom`) - View earned diplomas
 
 ### Technical Stack
 - **Frontend:** React, React Router, TailwindCSS, Shadcn/UI
