@@ -24,6 +24,10 @@ const AdminNominations = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedNomination, setSelectedNomination] = useState(null);
   const [showStats, setShowStats] = useState(true);
+  const [showApproveDialog, setShowApproveDialog] = useState(false);
+  const [showRejectDialog, setShowRejectDialog] = useState(false);
+  const [actionNomination, setActionNomination] = useState(null);
+  const [rejectReason, setRejectReason] = useState('');
 
   const txt = {
     sv: {
