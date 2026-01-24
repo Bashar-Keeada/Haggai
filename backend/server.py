@@ -999,13 +999,21 @@ class Nomination(BaseModel):
     nominator_name: str
     nominator_email: str
     nominator_phone: Optional[str] = None
+    nominator_church: Optional[str] = None
+    nominator_relation: Optional[str] = None
     # Nominee info (the person being nominated)
     nominee_name: str
     nominee_email: str
     nominee_phone: Optional[str] = None
+    nominee_church: Optional[str] = None
+    nominee_role: Optional[str] = None
+    nominee_activities: Optional[str] = None
     # Additional info
     motivation: Optional[str] = None
     status: str = "pending"  # pending, approved, rejected, contacted, registered
+    admin_notes: Optional[str] = None
+    approved_at: Optional[str] = None
+    approved_by: Optional[str] = None
     registration_completed: bool = False
     registration_data: Optional[dict] = None
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
