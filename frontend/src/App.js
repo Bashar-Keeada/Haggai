@@ -49,6 +49,8 @@ function App() {
               {/* Public routes - no auth required */}
               <Route path="/registrering/:nominationId" element={<NomineeRegistration />} />
               <Route path="/medlem-login" element={<MemberLogin />} />
+              <Route path="/program/:workshopId" element={<PublicAgenda />} />
+              <Route path="/ledare/:leaderId/sessioner" element={<LeaderSessions />} />
               {/* Member Portal Routes */}
               <Route path="/mina-sidor" element={<MinaSidor />} />
               <Route path="/mina-sidor/profil" element={<MemberProfile />} />
