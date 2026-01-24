@@ -339,17 +339,25 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - `GET/POST/PUT/DELETE /api/testimonials`
 - `GET/POST/PUT/DELETE /api/nominations`
 - `GET /api/nominations/stats`
+- `POST /api/nominations/{id}/approve` ✅ - Approve nomination and send invitation
+- `POST /api/nominations/{id}/reject` ✅ - Reject nomination
 - `GET/POST/PUT/DELETE /api/board-meetings`
 - `GET /api/board-meetings/archived`
 - `PUT /api/board-meetings/{id}/archive`
 - `POST /api/board-meetings/{id}/send-invitation` - Send meeting invitation
 - `POST /api/board-meetings/{id}/send-reminder` - Send meeting reminder
-- `GET /api/training-participants` ✅ NEW - List registered participants
-- `GET /api/training-participants/{id}` ✅ NEW - Get specific participant
-- `PUT /api/training-participants/{id}/status` ✅ NEW - Update status
-- `PUT /api/training-participants/{id}/attendance` ✅ NEW - Update attendance
-- `POST /api/training-participants/{id}/generate-diploma` ✅ NEW - Generate PDF
-- `POST /api/training-participants/{id}/send-diploma` ✅ NEW - Email diploma
+- `GET /api/workshops` ✅ - List workshops
+- `GET/POST /api/workshops/{id}/agenda` ✅ NEW - Get/create agenda
+- `PUT /api/workshops/{id}/agenda/publish` ✅ NEW - Publish agenda
+- `GET /api/agenda/public/{id}` ✅ NEW - Public agenda view
+- `POST /api/workshops/{id}/agenda/send-reminder` ✅ NEW - Send day reminder
+- `GET /api/leaders/{id}/sessions` ✅ NEW - Leader's assigned sessions
+- `GET /api/training-participants` ✅ - List registered participants
+- `GET /api/training-participants/{id}` ✅ - Get specific participant
+- `PUT /api/training-participants/{id}/status` ✅ - Update status
+- `PUT /api/training-participants/{id}/attendance` ✅ - Update attendance
+- `POST /api/training-participants/{id}/generate-diploma` ✅ - Generate PDF
+- `POST /api/training-participants/{id}/send-diploma` ✅ - Email diploma
 - `GET/POST/PUT /api/applications/leader-experience`
 - `GET/POST /api/applications/membership`
 - `GET/POST /api/applications/contact`
