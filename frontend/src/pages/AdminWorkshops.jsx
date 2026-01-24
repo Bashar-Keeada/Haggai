@@ -481,6 +481,16 @@ const AdminWorkshops = () => {
                     
                     <div className={`flex flex-col items-end gap-3 ${isRTL ? 'items-start' : ''}`}>
                       <div className={`flex gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                        <Link to={`/admin/workshops/${workshop.id}/agenda`}>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="border-haggai text-haggai hover:bg-haggai hover:text-white"
+                          >
+                            <CalendarDays className="h-4 w-4 mr-1" />
+                            {language === 'sv' ? 'Agenda' : 'Agenda'}
+                          </Button>
+                        </Link>
                         <Button 
                           size="sm" 
                           onClick={() => openEditDialog(workshop)}
