@@ -519,10 +519,10 @@ const AdminWorkshopAgenda = () => {
                   <Badge className="bg-yellow-100 text-yellow-800">{txt.draft}</Badge>
                 )}
               </div>
-              <p className="text-lg text-stone-600">{workshop.title}</p>
+              <p className="text-lg text-stone-600">{getLocalizedText(workshop.title)}</p>
               {workshop.date && (
                 <p className="text-sm text-stone-500">
-                  {workshop.date} {workshop.end_date && `- ${workshop.end_date}`} | {workshop.location}
+                  {workshop.date} {workshop.end_date && `- ${workshop.end_date}`} | {getLocalizedText(workshop.location)}
                 </p>
               )}
             </div>
