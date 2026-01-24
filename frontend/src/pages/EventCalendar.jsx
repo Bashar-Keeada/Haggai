@@ -575,14 +575,35 @@ const EventCalendar = () => {
                   />
                 </div>
               </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="nominator-phone">{nomTxt.yourPhone}</Label>
+                  <Input
+                    id="nominator-phone"
+                    value={nominationData.nominator_phone}
+                    onChange={(e) => setNominationData({ ...nominationData, nominator_phone: e.target.value })}
+                    className="rounded-lg"
+                    dir="ltr"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="nominator-church">{nomTxt.yourChurch}</Label>
+                  <Input
+                    id="nominator-church"
+                    value={nominationData.nominator_church}
+                    onChange={(e) => setNominationData({ ...nominationData, nominator_church: e.target.value })}
+                    className="rounded-lg"
+                  />
+                </div>
+              </div>
               <div className="space-y-2">
-                <Label htmlFor="nominator-phone">{nomTxt.yourPhone}</Label>
+                <Label htmlFor="nominator-relation">{nomTxt.yourRelation}</Label>
                 <Input
-                  id="nominator-phone"
-                  value={nominationData.nominator_phone}
-                  onChange={(e) => setNominationData({ ...nominationData, nominator_phone: e.target.value })}
+                  id="nominator-relation"
+                  value={nominationData.nominator_relation}
+                  onChange={(e) => setNominationData({ ...nominationData, nominator_relation: e.target.value })}
+                  placeholder={nomTxt.yourRelationPlaceholder}
                   className="rounded-lg"
-                  dir="ltr"
                 />
               </div>
             </div>
@@ -614,14 +635,48 @@ const EventCalendar = () => {
                   />
                 </div>
               </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="nominee-phone">{nomTxt.nomineePhone}</Label>
+                  <Input
+                    id="nominee-phone"
+                    value={nominationData.nominee_phone}
+                    onChange={(e) => setNominationData({ ...nominationData, nominee_phone: e.target.value })}
+                    className="rounded-lg"
+                    dir="ltr"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="nominee-church">{nomTxt.nomineeChurch} *</Label>
+                  <Input
+                    id="nominee-church"
+                    value={nominationData.nominee_church}
+                    onChange={(e) => setNominationData({ ...nominationData, nominee_church: e.target.value })}
+                    required
+                    className="rounded-lg"
+                  />
+                </div>
+              </div>
               <div className="space-y-2">
-                <Label htmlFor="nominee-phone">{nomTxt.nomineePhone}</Label>
+                <Label htmlFor="nominee-role">{nomTxt.nomineeRole} *</Label>
                 <Input
-                  id="nominee-phone"
-                  value={nominationData.nominee_phone}
-                  onChange={(e) => setNominationData({ ...nominationData, nominee_phone: e.target.value })}
+                  id="nominee-role"
+                  value={nominationData.nominee_role}
+                  onChange={(e) => setNominationData({ ...nominationData, nominee_role: e.target.value })}
+                  placeholder={nomTxt.nomineeRolePlaceholder}
+                  required
                   className="rounded-lg"
-                  dir="ltr"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="nominee-activities">{nomTxt.nomineeActivities}</Label>
+                <Textarea
+                  id="nominee-activities"
+                  value={nominationData.nominee_activities}
+                  onChange={(e) => setNominationData({ ...nominationData, nominee_activities: e.target.value })}
+                  placeholder={nomTxt.nomineeActivitiesPlaceholder}
+                  rows={3}
+                  className="rounded-lg"
                 />
               </div>
             </div>
