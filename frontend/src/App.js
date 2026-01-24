@@ -27,6 +27,14 @@ import Partners from "./pages/Partners";
 import Donations from "./pages/Donations";
 import LoginPage from "./pages/LoginPage";
 import NomineeRegistration from "./pages/NomineeRegistration";
+// Member Portal Pages
+import MemberLogin from "./pages/MemberLogin";
+import MinaSidor from "./pages/MinaSidor";
+import MemberProfile from "./pages/MemberProfile";
+import MemberDirectory from "./pages/MemberDirectory";
+import MemberMessages from "./pages/MemberMessages";
+import MemberForum from "./pages/MemberForum";
+import MemberDiplomas from "./pages/MemberDiplomas";
 
 function App() {
   return (
@@ -35,8 +43,18 @@ function App() {
         <AuthProvider>
           <BrowserRouter>
             <Routes>
-              {/* Public route - no auth required */}
+              {/* Public routes - no auth required */}
               <Route path="/registrering/:nominationId" element={<NomineeRegistration />} />
+              <Route path="/medlem-login" element={<MemberLogin />} />
+              {/* Member Portal Routes */}
+              <Route path="/mina-sidor" element={<MinaSidor />} />
+              <Route path="/mina-sidor/profil" element={<MemberProfile />} />
+              <Route path="/mina-sidor/medlemmar" element={<MemberDirectory />} />
+              <Route path="/mina-sidor/meddelanden" element={<MemberMessages />} />
+              <Route path="/mina-sidor/meddelanden/:partnerId" element={<MemberMessages />} />
+              <Route path="/mina-sidor/forum" element={<MemberForum />} />
+              <Route path="/mina-sidor/forum/:postId" element={<MemberForum />} />
+              <Route path="/mina-sidor/diplom" element={<MemberDiplomas />} />
               {/* All other routes handled by ProtectedApp */}
               <Route path="/*" element={<ProtectedAppContent />} />
             </Routes>
