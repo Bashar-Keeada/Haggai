@@ -157,7 +157,7 @@ const PublicAgenda = () => {
               {txt.program}
             </Badge>
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              {getLocalizedText(workshop, 'title') || workshop?.title}
+              {getText(workshop?.title)}
             </h1>
             
             <div className="flex flex-wrap justify-center gap-4 text-white/90 mt-6">
