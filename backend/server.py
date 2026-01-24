@@ -2357,17 +2357,22 @@ async def send_training_participant_diploma(participant_id: str):
     # Send email
     await send_diploma_email(participant, pdf_buffer)
     
+    # Create member account automatically
+    member = await create_member_from_participant(participant)
+    
     # Update participant record to mark diploma as sent
     await db.nominations.update_one(
         {"id": participant_id},
         {"$set": {
             "diploma_sent": True,
             "diploma_sent_at": datetime.now(timezone.utc).isoformat(),
+            "member_created": member is not None,
+            "member_id": member['id'] if member else None,
             "updated_at": datetime.now(timezone.utc).isoformat()
         }}
     )
     
-    return {"success": True, "message": "Diploma sent successfully"}
+    return {"success": True, "message": "Diploma sent successfully", "member_created": member is not None}
 
 
 # ==================== MEMBER SYSTEM ====================
