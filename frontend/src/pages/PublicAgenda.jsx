@@ -76,8 +76,25 @@ const PublicAgenda = () => {
 
   const getLocalizedText = (item, field) => {
     if (!item) return '';
-    const langField = `${field}_${language === 'sv' ? '' : language}`.replace('_sv', '').replace('__', '_');
-    return item[langField] || item[field] || '';
+    // Handle direct text values (can be string or object with language keys)
+    const value = field ? item[field] : item;
+    if (!value) return '';
+    if (typeof value === 'string') return value;
+    if (typeof value === 'object') {
+      // If it's a multilingual object {sv: ..., en: ..., ar: ...}
+      return value[language] || value.sv || value.en || Object.values(value)[0] || '';
+    }
+    return String(value);
+  };
+
+  // Simplified helper for direct multilingual values
+  const getText = (value) => {
+    if (!value) return '';
+    if (typeof value === 'string') return value;
+    if (typeof value === 'object') {
+      return value[language] || value.sv || value.en || Object.values(value)[0] || '';
+    }
+    return String(value);
   };
 
   const getSessionStyle = (type) => {
