@@ -2370,6 +2370,616 @@ async def send_training_participant_diploma(participant_id: str):
     return {"success": True, "message": "Diploma sent successfully"}
 
 
+# ==================== MEMBER SYSTEM ====================
+
+import secrets
+import string
+
+def generate_password(length=12):
+    """Generate a random password"""
+    alphabet = string.ascii_letters + string.digits
+    return ''.join(secrets.choice(alphabet) for i in range(length))
+
+
+class MemberLogin(BaseModel):
+    email: str
+    password: str
+
+
+class MemberProfileUpdate(BaseModel):
+    phone: Optional[str] = None
+    city: Optional[str] = None
+    bio: Optional[str] = None
+    expertise: Optional[List[str]] = None
+    interests: Optional[List[str]] = None
+    profile_image: Optional[str] = None
+
+
+class DirectMessage(BaseModel):
+    recipient_id: str
+    content: str
+
+
+class ForumPost(BaseModel):
+    title: str
+    content: str
+
+
+class ForumReply(BaseModel):
+    content: str
+
+
+class CategoryCreate(BaseModel):
+    name: str
+    type: str  # 'expertise' or 'interest'
+
+
+async def create_member_from_participant(participant: dict):
+    """Create a new member account when diploma is sent"""
+    registration_data = participant.get("registration_data", {})
+    email = registration_data.get("email", participant.get("nominee_email"))
+    
+    if not email:
+        return None
+    
+    # Check if member already exists
+    existing = await db.members.find_one({"email": email})
+    if existing:
+        return existing
+    
+    # Generate password
+    password = generate_password()
+    password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    
+    member = {
+        "id": str(uuid.uuid4()),
+        "email": email,
+        "password_hash": password_hash,
+        "full_name": registration_data.get("full_name", participant.get("nominee_name", "")),
+        "phone": registration_data.get("phone", ""),
+        "city": registration_data.get("address", ""),
+        "bio": "",
+        "expertise": [],
+        "interests": [],
+        "profile_image": None,
+        "nomination_id": participant.get("id"),
+        "diplomas": [{
+            "event_title": participant.get("event_title", "Haggai Leadership Seminar"),
+            "event_date": participant.get("event_date", ""),
+            "completed_at": datetime.now(timezone.utc).isoformat()
+        }],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "last_login": None,
+        "is_active": True
+    }
+    
+    await db.members.insert_one(member)
+    
+    # Send welcome email with password
+    await send_member_welcome_email(email, registration_data.get("full_name", ""), password)
+    
+    return member
+
+
+async def send_member_welcome_email(email: str, name: str, password: str):
+    """Send welcome email to new member with login credentials"""
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">🎉 Välkommen till Haggai Sweden!</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Du är nu medlem i vår gemenskap</p>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Hej <strong>{name}</strong>,</p>
+            
+            <p>Grattis till ditt diplom och välkommen som medlem i Haggai Sweden!</p>
+            
+            <p>Som medlem kan du nu:</p>
+            <ul>
+                <li>🔐 Logga in på medlemsområdet</li>
+                <li>👥 Se och kontakta andra medlemmar</li>
+                <li>💬 Skicka direktmeddelanden</li>
+                <li>📝 Delta i diskussionsforumet</li>
+                <li>✏️ Skapa din profil med expertis och intressen</li>
+            </ul>
+            
+            <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; border-left: 4px solid #014D73; margin: 20px 0;">
+                <p style="margin: 0 0 10px 0; font-weight: bold;">Dina inloggningsuppgifter:</p>
+                <p style="margin: 5px 0;"><strong>E-post:</strong> {email}</p>
+                <p style="margin: 5px 0;"><strong>Lösenord:</strong> {password}</p>
+            </div>
+            
+            <p style="color: #666; font-size: 14px;">Vi rekommenderar att du ändrar ditt lösenord efter första inloggningen.</p>
+            
+            <p style="margin-top: 30px;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    params = {
+        "from": SENDER_EMAIL,
+        "to": [email],
+        "subject": "🎉 Välkommen till Haggai Sweden - Dina inloggningsuppgifter",
+        "html": html_content
+    }
+    
+    try:
+        email_response = await asyncio.to_thread(resend.Emails.send, params)
+        logging.info(f"Member welcome email sent to {email}, id: {email_response.get('id')}")
+    except Exception as e:
+        logging.error(f"Failed to send member welcome email: {str(e)}")
+
+
+# Member Authentication
+@api_router.post("/members/login")
+async def member_login(input: MemberLogin):
+    """Login for members"""
+    member = await db.members.find_one({"email": input.email.lower()})
+    if not member:
+        raise HTTPException(status_code=401, detail="Felaktig e-post eller lösenord")
+    
+    if not bcrypt.checkpw(input.password.encode('utf-8'), member['password_hash'].encode('utf-8')):
+        raise HTTPException(status_code=401, detail="Felaktig e-post eller lösenord")
+    
+    if not member.get('is_active', True):
+        raise HTTPException(status_code=401, detail="Ditt konto är inaktiverat")
+    
+    # Update last login
+    await db.members.update_one(
+        {"id": member['id']},
+        {"$set": {"last_login": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Generate JWT token
+    token_data = {
+        "member_id": member['id'],
+        "email": member['email'],
+        "type": "member",
+        "exp": datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRATION_HOURS)
+    }
+    token = jwt.encode(token_data, JWT_SECRET, algorithm=JWT_ALGORITHM)
+    
+    return {
+        "token": token,
+        "member": {
+            "id": member['id'],
+            "email": member['email'],
+            "full_name": member['full_name'],
+            "profile_image": member.get('profile_image')
+        }
+    }
+
+
+@api_router.get("/members/me")
+async def get_current_member(token: str = None):
+    """Get current logged in member"""
+    if not token:
+        raise HTTPException(status_code=401, detail="Token required")
+    
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        if payload.get('type') != 'member':
+            raise HTTPException(status_code=401, detail="Invalid token type")
+        
+        member = await db.members.find_one({"id": payload['member_id']}, {"_id": 0, "password_hash": 0})
+        if not member:
+            raise HTTPException(status_code=404, detail="Member not found")
+        
+        # Get unread message count
+        unread_count = await db.direct_messages.count_documents({
+            "recipient_id": member['id'],
+            "read": False
+        })
+        member['unread_messages'] = unread_count
+        
+        return member
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+@api_router.put("/members/me")
+async def update_member_profile(input: MemberProfileUpdate, token: str = None):
+    """Update current member's profile"""
+    if not token:
+        raise HTTPException(status_code=401, detail="Token required")
+    
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        member_id = payload['member_id']
+        
+        update_data = {"updated_at": datetime.now(timezone.utc).isoformat()}
+        if input.phone is not None:
+            update_data["phone"] = input.phone
+        if input.city is not None:
+            update_data["city"] = input.city
+        if input.bio is not None:
+            update_data["bio"] = input.bio
+        if input.expertise is not None:
+            update_data["expertise"] = input.expertise
+        if input.interests is not None:
+            update_data["interests"] = input.interests
+        if input.profile_image is not None:
+            update_data["profile_image"] = input.profile_image
+        
+        await db.members.update_one({"id": member_id}, {"$set": update_data})
+        
+        member = await db.members.find_one({"id": member_id}, {"_id": 0, "password_hash": 0})
+        return member
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+@api_router.put("/members/me/password")
+async def change_member_password(old_password: str, new_password: str, token: str = None):
+    """Change member password"""
+    if not token:
+        raise HTTPException(status_code=401, detail="Token required")
+    
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        member = await db.members.find_one({"id": payload['member_id']})
+        
+        if not bcrypt.checkpw(old_password.encode('utf-8'), member['password_hash'].encode('utf-8')):
+            raise HTTPException(status_code=400, detail="Felaktigt nuvarande lösenord")
+        
+        new_hash = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        await db.members.update_one(
+            {"id": payload['member_id']},
+            {"$set": {"password_hash": new_hash, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
+        
+        return {"success": True, "message": "Lösenord ändrat"}
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+# Member Directory
+@api_router.get("/members")
+async def get_all_members(token: str = None):
+    """Get all members (requires authentication)"""
+    if not token:
+        raise HTTPException(status_code=401, detail="Token required")
+    
+    try:
+        jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        
+        members = await db.members.find(
+            {"is_active": True},
+            {"_id": 0, "password_hash": 0}
+        ).sort("full_name", 1).to_list(1000)
+        
+        return members
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+@api_router.get("/members/{member_id}")
+async def get_member_profile(member_id: str, token: str = None):
+    """Get a specific member's profile"""
+    if not token:
+        raise HTTPException(status_code=401, detail="Token required")
+    
+    try:
+        jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        
+        member = await db.members.find_one(
+            {"id": member_id, "is_active": True},
+            {"_id": 0, "password_hash": 0}
+        )
+        if not member:
+            raise HTTPException(status_code=404, detail="Member not found")
+        
+        return member
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+# Direct Messages
+@api_router.post("/messages")
+async def send_direct_message(input: DirectMessage, token: str = None):
+    """Send a direct message to another member"""
+    if not token:
+        raise HTTPException(status_code=401, detail="Token required")
+    
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        sender_id = payload['member_id']
+        
+        # Verify recipient exists
+        recipient = await db.members.find_one({"id": input.recipient_id})
+        if not recipient:
+            raise HTTPException(status_code=404, detail="Recipient not found")
+        
+        sender = await db.members.find_one({"id": sender_id})
+        
+        message = {
+            "id": str(uuid.uuid4()),
+            "sender_id": sender_id,
+            "recipient_id": input.recipient_id,
+            "content": input.content,
+            "read": False,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.direct_messages.insert_one(message)
+        
+        # Send email notification
+        await send_message_notification_email(
+            recipient['email'],
+            recipient['full_name'],
+            sender['full_name'],
+            input.content[:100] + "..." if len(input.content) > 100 else input.content
+        )
+        
+        return {"success": True, "message_id": message['id']}
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+async def send_message_notification_email(recipient_email: str, recipient_name: str, sender_name: str, preview: str):
+    """Send email notification for new message"""
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: #014D73; padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h2 style="color: white; margin: 0;">💬 Nytt meddelande</h2>
+        </div>
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-radius: 0 0 10px 10px;">
+            <p>Hej <strong>{recipient_name}</strong>,</p>
+            <p><strong>{sender_name}</strong> har skickat dig ett meddelande:</p>
+            <div style="background: white; padding: 15px; border-left: 4px solid #014D73; margin: 15px 0;">
+                <p style="margin: 0; color: #666;">{preview}</p>
+            </div>
+            <p>Logga in på medlemsområdet för att läsa och svara.</p>
+            <p style="margin-top: 20px;">Hälsningar,<br><strong>Haggai Sweden</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        await asyncio.to_thread(resend.Emails.send, {
+            "from": SENDER_EMAIL,
+            "to": [recipient_email],
+            "subject": f"💬 Nytt meddelande från {sender_name}",
+            "html": html_content
+        })
+    except Exception as e:
+        logging.error(f"Failed to send message notification: {str(e)}")
+
+
+@api_router.get("/messages")
+async def get_messages(token: str = None):
+    """Get all messages for current member (inbox)"""
+    if not token:
+        raise HTTPException(status_code=401, detail="Token required")
+    
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        member_id = payload['member_id']
+        
+        # Get conversations (unique sender/recipient pairs)
+        messages = await db.direct_messages.find({
+            "$or": [
+                {"sender_id": member_id},
+                {"recipient_id": member_id}
+            ]
+        }, {"_id": 0}).sort("created_at", -1).to_list(1000)
+        
+        # Group by conversation partner
+        conversations = {}
+        for msg in messages:
+            partner_id = msg['recipient_id'] if msg['sender_id'] == member_id else msg['sender_id']
+            if partner_id not in conversations:
+                partner = await db.members.find_one({"id": partner_id}, {"_id": 0, "password_hash": 0})
+                conversations[partner_id] = {
+                    "partner": partner,
+                    "messages": [],
+                    "unread_count": 0,
+                    "last_message": msg
+                }
+            conversations[partner_id]['messages'].append(msg)
+            if msg['recipient_id'] == member_id and not msg['read']:
+                conversations[partner_id]['unread_count'] += 1
+        
+        return list(conversations.values())
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+@api_router.get("/messages/{partner_id}")
+async def get_conversation(partner_id: str, token: str = None):
+    """Get all messages with a specific member"""
+    if not token:
+        raise HTTPException(status_code=401, detail="Token required")
+    
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        member_id = payload['member_id']
+        
+        messages = await db.direct_messages.find({
+            "$or": [
+                {"sender_id": member_id, "recipient_id": partner_id},
+                {"sender_id": partner_id, "recipient_id": member_id}
+            ]
+        }, {"_id": 0}).sort("created_at", 1).to_list(1000)
+        
+        # Mark as read
+        await db.direct_messages.update_many(
+            {"sender_id": partner_id, "recipient_id": member_id, "read": False},
+            {"$set": {"read": True}}
+        )
+        
+        partner = await db.members.find_one({"id": partner_id}, {"_id": 0, "password_hash": 0})
+        
+        return {"messages": messages, "partner": partner}
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+# Forum
+@api_router.post("/forum")
+async def create_forum_post(input: ForumPost, token: str = None):
+    """Create a new forum post"""
+    if not token:
+        raise HTTPException(status_code=401, detail="Token required")
+    
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        author = await db.members.find_one({"id": payload['member_id']}, {"_id": 0, "password_hash": 0})
+        
+        post = {
+            "id": str(uuid.uuid4()),
+            "title": input.title,
+            "content": input.content,
+            "author_id": payload['member_id'],
+            "author_name": author['full_name'],
+            "author_image": author.get('profile_image'),
+            "replies": [],
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.forum_posts.insert_one(post)
+        return {"success": True, "post_id": post['id']}
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+@api_router.get("/forum")
+async def get_forum_posts(token: str = None):
+    """Get all forum posts"""
+    if not token:
+        raise HTTPException(status_code=401, detail="Token required")
+    
+    try:
+        jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        
+        posts = await db.forum_posts.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+        return posts
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+@api_router.get("/forum/{post_id}")
+async def get_forum_post(post_id: str, token: str = None):
+    """Get a specific forum post with replies"""
+    if not token:
+        raise HTTPException(status_code=401, detail="Token required")
+    
+    try:
+        jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        
+        post = await db.forum_posts.find_one({"id": post_id}, {"_id": 0})
+        if not post:
+            raise HTTPException(status_code=404, detail="Post not found")
+        
+        return post
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+@api_router.post("/forum/{post_id}/reply")
+async def reply_to_forum_post(post_id: str, input: ForumReply, token: str = None):
+    """Reply to a forum post"""
+    if not token:
+        raise HTTPException(status_code=401, detail="Token required")
+    
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        author = await db.members.find_one({"id": payload['member_id']}, {"_id": 0, "password_hash": 0})
+        
+        reply = {
+            "id": str(uuid.uuid4()),
+            "content": input.content,
+            "author_id": payload['member_id'],
+            "author_name": author['full_name'],
+            "author_image": author.get('profile_image'),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.forum_posts.update_one(
+            {"id": post_id},
+            {
+                "$push": {"replies": reply},
+                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+            }
+        )
+        
+        return {"success": True, "reply_id": reply['id']}
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+# Admin: Categories Management
+@api_router.get("/categories")
+async def get_categories():
+    """Get all expertise and interest categories"""
+    categories = await db.categories.find({}, {"_id": 0}).to_list(100)
+    return categories
+
+
+@api_router.post("/categories")
+async def create_category(input: CategoryCreate):
+    """Create a new category (admin only)"""
+    category = {
+        "id": str(uuid.uuid4()),
+        "name": input.name,
+        "type": input.type,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.categories.insert_one(category)
+    return category
+
+
+@api_router.delete("/categories/{category_id}")
+async def delete_category(category_id: str):
+    """Delete a category (admin only)"""
+    result = await db.categories.delete_one({"id": category_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return {"success": True}
+
+
+# Seed default categories
+@api_router.post("/categories/seed")
+async def seed_categories():
+    """Seed default expertise and interest categories"""
+    default_categories = [
+        {"id": str(uuid.uuid4()), "name": "Ledarskap", "type": "expertise", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "name": "Mentorskap", "type": "expertise", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "name": "Affärsutveckling", "type": "expertise", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "name": "Kyrkoarbete", "type": "expertise", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "name": "Utbildning", "type": "expertise", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "name": "Mission", "type": "expertise", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "name": "Nätverk", "type": "interest", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "name": "Ledarutveckling", "type": "interest", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "name": "Företagande", "type": "interest", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "name": "Samhällsengagemang", "type": "interest", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "name": "Internationellt arbete", "type": "interest", "created_at": datetime.now(timezone.utc).isoformat()},
+    ]
+    
+    # Only add if not exists
+    existing = await db.categories.count_documents({})
+    if existing == 0:
+        await db.categories.insert_many(default_categories)
+        return {"message": f"Seeded {len(default_categories)} categories"}
+    
+    return {"message": "Categories already exist"}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
