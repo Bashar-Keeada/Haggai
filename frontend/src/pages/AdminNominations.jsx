@@ -208,6 +208,45 @@ const AdminNominations = () => {
     }
   };
 
+  const approveNomination = async () => {
+    if (!actionNomination) return;
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/nominations/${actionNomination.id}/approve`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        toast.success(txt.invitationSent || 'Inbjudan skickad!');
+        setShowApproveDialog(false);
+        setActionNomination(null);
+        fetchNominations();
+        fetchStats();
+      }
+    } catch (error) {
+      toast.error(language === 'sv' ? 'Kunde inte godkänna' : 'Could not approve');
+    }
+  };
+
+  const rejectNomination = async () => {
+    if (!actionNomination) return;
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/nominations/${actionNomination.id}/reject?reason=${encodeURIComponent(rejectReason)}`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        toast.success(txt.nominationRejected || 'Nominering avvisad');
+        setShowRejectDialog(false);
+        setActionNomination(null);
+        setRejectReason('');
+        fetchNominations();
+        fetchStats();
+      }
+    } catch (error) {
+      toast.error(language === 'sv' ? 'Kunde inte avvisa' : 'Could not reject');
+    }
+  };
+
   const deleteNomination = async (id) => {
     if (!window.confirm(txt.confirmDelete)) return;
     
