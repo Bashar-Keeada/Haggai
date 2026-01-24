@@ -83,31 +83,34 @@ const EventCalendar = () => {
     en: {
       nominateButton: 'Nominate',
       nominateTitle: 'Nominate a person',
-      nominateSubtitle: 'Recommend someone for this training',
+      nominateSubtitle: 'Recommend someone for this training. Your nomination will be reviewed by admin before being sent.',
       nominatorSection: 'Your details (nominator)',
       nomineeSection: 'Person you are nominating',
       yourName: 'Your name',
       yourEmail: 'Your email',
       yourPhone: 'Your phone',
+      yourChurch: 'Your church/congregation',
+      yourRelation: 'Your relation to the nominee',
+      yourRelationPlaceholder: 'E.g. pastor, friend, colleague, mentor...',
       nomineeName: 'Person\'s name',
       nomineeEmail: 'Person\'s email',
       nomineePhone: 'Person\'s phone',
-      motivation: 'Motivation (editable)',
-      motivationPlaceholder: 'Why do you recommend this person?',
+      nomineeChurch: 'Person\'s church/congregation',
+      nomineeRole: 'Role/responsibility in church',
+      nomineeRolePlaceholder: 'E.g. youth leader, deacon, Sunday school teacher...',
+      nomineeActivities: 'Activities and engagement',
+      nomineeActivitiesPlaceholder: 'Describe the person\'s activities and engagement in church and community...',
+      motivation: 'Motivation for nomination',
+      motivationPlaceholder: 'Why do you recommend this person? What makes them suitable for the program?',
       submit: 'Submit nomination',
       submitting: 'Submitting...',
       cancel: 'Cancel',
       successTitle: 'Nomination submitted!',
-      successDesc: 'Thank you for your nomination to',
+      successDesc: 'Thank you! Your nomination has been sent to admin for review. You will be notified via email when the nomination has been processed.',
       errorTitle: 'Something went wrong',
       errorDesc: 'Could not submit the nomination. Please try again.',
-      defaultMotivation: `I want to express with full conviction my strong desire to nominate you for this leadership program, because I see real potential and a clear influence in you on those around you.
-
-This program is distinguished by its ecumenical character, bringing together Christian leaders from various churches and denominations, without belonging to any specific church. This gives participants a rich and balanced experience based on mutual respect and shared learning.
-
-What distinguishes this experience most is that it does not seek to change your church affiliation or identity. On the contrary, the goal is to equip you to return to your church with new experience, a broader vision, and practical tools that help you lead your group more deeply, effectively, and quickly in facing challenges.
-
-I am confident that your participation in this program will give you personal and spiritual growth, and will strengthen your ability to influence, serve, and lead others with wisdom and responsibility – for the benefit of the church you serve and for the entire body of Christ.`
+      pendingNote: 'The nomination is reviewed by admin before the invitation is sent to the nominee.',
+      defaultMotivation: ''
     },
     ar: {
       nominateButton: 'رشّح',
