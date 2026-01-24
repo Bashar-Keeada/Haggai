@@ -170,7 +170,7 @@ const PublicAgenda = () => {
               {workshop?.location && (
                 <span className="flex items-center gap-2">
                   <MapPin className="h-5 w-5" />
-                  {getLocalizedText(workshop, 'location') || workshop.location}
+                  {getText(workshop.location)}
                 </span>
               )}
             </div>
