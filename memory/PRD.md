@@ -314,12 +314,16 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 ## Key Files Reference
 - `/app/frontend/src/pages/AdminTrainingParticipants.jsx` - Training participant management ✅
 - `/app/frontend/src/pages/AdminWorkshops.jsx` - Workshop management admin panel
+- `/app/frontend/src/pages/AdminWorkshopAgenda.jsx` - Workshop agenda editor ✅ NEW
+- `/app/frontend/src/pages/PublicAgenda.jsx` - Public program view for participants ✅ NEW
+- `/app/frontend/src/pages/LeaderSessions.jsx` - Leader's assigned sessions ✅ NEW
 - `/app/frontend/src/pages/EventCalendar.jsx` - Calendar with nomination button & enhanced form ✅ UPDATED
 - `/app/frontend/src/pages/AdminNominations.jsx` - Admin panel for nominations with approve/reject ✅ UPDATED
 - `/app/frontend/src/pages/Donations.jsx` - Donations page
 - `/app/frontend/src/pages/AdminDashboard.jsx` - Main admin hub
-- `/app/backend/server.py` - All API endpoints including nominations approve/reject ✅ UPDATED
-- `/app/backend/tests/test_nominations.py` - Nomination API tests (12 tests) ✅ NEW
+- `/app/backend/server.py` - All API endpoints ✅ UPDATED
+- `/app/backend/tests/test_nominations.py` - Nomination API tests (12 tests) ✅
+- `/app/backend/tests/test_agenda.py` - Agenda API tests (16 tests) ✅ NEW
 
 ---
 
