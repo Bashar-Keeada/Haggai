@@ -1361,6 +1361,171 @@ async def delete_nomination(nomination_id: str):
     return {"message": "Nomination deleted successfully"}
 
 
+@api_router.post("/nominations/{nomination_id}/approve")
+async def approve_nomination(nomination_id: str, admin_notes: Optional[str] = None):
+    """Approve a nomination and send invitation to the nominee"""
+    nomination = await db.nominations.find_one({"id": nomination_id})
+    if not nomination:
+        raise HTTPException(status_code=404, detail="Nomination not found")
+    
+    if nomination.get("status") == "approved":
+        raise HTTPException(status_code=400, detail="Nomination already approved")
+    
+    # Update nomination status
+    update_data = {
+        "status": "approved",
+        "approved_at": datetime.now(timezone.utc).isoformat(),
+        "admin_notes": admin_notes,
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.nominations.update_one({"id": nomination_id}, {"$set": update_data})
+    
+    # Create nomination object for email
+    nomination_obj = Nomination(**{**nomination, **update_data})
+    
+    # Send invitation email to nominee
+    await send_nomination_invitation_to_nominee(nomination_obj)
+    
+    # Notify nominator that their nomination was approved
+    await send_nomination_approved_to_nominator(nomination_obj)
+    
+    updated = await db.nominations.find_one({"id": nomination_id}, {"_id": 0})
+    return updated
+
+
+@api_router.post("/nominations/{nomination_id}/reject")
+async def reject_nomination(nomination_id: str, reason: Optional[str] = None):
+    """Reject a nomination"""
+    nomination = await db.nominations.find_one({"id": nomination_id})
+    if not nomination:
+        raise HTTPException(status_code=404, detail="Nomination not found")
+    
+    # Update nomination status
+    update_data = {
+        "status": "rejected",
+        "admin_notes": reason,
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.nominations.update_one({"id": nomination_id}, {"$set": update_data})
+    
+    # Optionally notify nominator
+    # await send_nomination_rejected_to_nominator(nomination, reason)
+    
+    updated = await db.nominations.find_one({"id": nomination_id}, {"_id": 0})
+    return updated
+
+
+async def send_nomination_invitation_to_nominee(nomination: Nomination):
+    """Send invitation email to the nominated person after admin approval"""
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://training-admin-1.preview.emergentagent.com')
+    registration_link = f"{frontend_url}/registrering/{nomination.id}"
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">🎓 Du har blivit nominerad!</h1>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Hej <strong>{nomination.nominee_name}</strong>,</p>
+            
+            <p><strong>{nomination.nominator_name}</strong> har nominerat och rekommenderat dig att delta i ett värdefullt ledarprogram:</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 10px; border-left: 4px solid #014D73; margin: 20px 0;">
+                <h2 style="color: #014D73; margin: 0 0 10px 0; font-size: 20px;">{nomination.event_title}</h2>
+                {f'<p style="color: #666; margin: 0;"><strong>Datum:</strong> {nomination.event_date}</p>' if nomination.event_date else ''}
+            </div>
+            
+            <h3 style="color: #014D73;">Om Haggai International</h3>
+            <p>Haggai International är en global organisation som utbildar kristna ledare från hela världen. Programmet utmärker sig genom sin ekumeniska karaktär, där det samlar ledare från olika kyrkor och samfund utan att tillhöra någon specifik kyrka.</p>
+            
+            <p>Målet är att utrusta dig med:</p>
+            <ul>
+                <li>Praktiska ledarskapsverktyg</li>
+                <li>En bredare vision för din tjänst</li>
+                <li>Ett internationellt nätverk av kristna ledare</li>
+                <li>Personlig och andlig tillväxt</li>
+            </ul>
+            
+            {f'''<div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                <p style="margin: 0; font-weight: bold; color: #2e7d32;">Motivering från {nomination.nominator_name}:</p>
+                <p style="margin: 10px 0 0 0; font-style: italic; color: #555;">{nomination.motivation}</p>
+            </div>''' if nomination.motivation else ''}
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{registration_link}" style="display: inline-block; background: #014D73; color: white; padding: 15px 40px; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 16px;">
+                    Registrera dig nu
+                </a>
+            </div>
+            
+            <p style="color: #666; font-size: 14px;">Om du har frågor om programmet, kontakta oss gärna.</p>
+            
+            <p style="margin-top: 30px;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+            
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; font-size: 12px; color: #999;">
+                <p><a href="https://peoplepotential.se" style="color: #014D73;">peoplepotential.se</a> | <a href="mailto:info@haggai.se" style="color: #014D73;">info@haggai.se</a></p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        await asyncio.to_thread(resend.Emails.send, {
+            "from": SENDER_EMAIL,
+            "to": [nomination.nominee_email],
+            "subject": f"🎓 {nomination.nominator_name} har nominerat dig till {nomination.event_title}",
+            "html": html_content
+        })
+        logging.info(f"Invitation email sent to nominee: {nomination.nominee_email}")
+    except Exception as e:
+        logging.error(f"Failed to send invitation to nominee: {str(e)}")
+
+
+async def send_nomination_approved_to_nominator(nomination: Nomination):
+    """Notify nominator that their nomination was approved"""
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">✅ Nominering godkänd!</h1>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-radius: 0 0 10px 10px;">
+            <p>Hej <strong>{nomination.nominator_name}</strong>,</p>
+            
+            <p>Goda nyheter! Din nominering av <strong>{nomination.nominee_name}</strong> till <strong>{nomination.event_title}</strong> har godkänts.</p>
+            
+            <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border-left: 4px solid #2e7d32; margin: 20px 0;">
+                <p style="margin: 0;">Vi har nu skickat en inbjudan till {nomination.nominee_name} med information om programmet och en länk för att registrera sig.</p>
+            </div>
+            
+            <p>Tack för att du hjälper till att identifiera och uppmuntra framtida ledare!</p>
+            
+            <p style="margin-top: 30px;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        await asyncio.to_thread(resend.Emails.send, {
+            "from": SENDER_EMAIL,
+            "to": [nomination.nominator_email],
+            "subject": f"✅ Din nominering av {nomination.nominee_name} har godkänts!",
+            "html": html_content
+        })
+    except Exception as e:
+        logging.error(f"Failed to send approval notification to nominator: {str(e)}")
+
+
 @api_router.post("/nominations/{nomination_id}/register")
 async def register_nominee(nomination_id: str, registration: NomineeRegistrationData):
     """Register a nominee with their full registration data"""
