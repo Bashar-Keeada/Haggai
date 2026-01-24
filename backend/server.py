@@ -2170,6 +2170,326 @@ async def seed_initial_workshops():
     return {"message": f"Seeded {len(initial_workshops)} workshops", "count": len(initial_workshops)}
 
 
+# ==================== WORKSHOP AGENDA ENDPOINTS ====================
+
+@api_router.get("/workshops/{workshop_id}/agenda")
+async def get_workshop_agenda(workshop_id: str):
+    """Get the agenda for a specific workshop"""
+    agenda = await db.workshop_agendas.find_one({"workshop_id": workshop_id}, {"_id": 0})
+    if not agenda:
+        # Return empty agenda structure if none exists
+        return {"workshop_id": workshop_id, "days": [], "is_published": False}
+    return agenda
+
+
+@api_router.post("/workshops/{workshop_id}/agenda")
+async def create_or_update_workshop_agenda(workshop_id: str, input: WorkshopAgendaCreate):
+    """Create or update agenda for a workshop"""
+    # Get workshop info
+    workshop = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
+    if not workshop:
+        raise HTTPException(status_code=404, detail="Workshop not found")
+    
+    # Process days and sessions with leader names
+    processed_days = []
+    for day_data in input.days:
+        sessions = []
+        for session_data in day_data.sessions:
+            session_dict = session_data.model_dump()
+            session_dict["id"] = str(uuid.uuid4())
+            
+            # Get leader name if leader_id is provided
+            if session_data.leader_id:
+                leader = await db.leaders.find_one({"id": session_data.leader_id}, {"_id": 0, "name": 1})
+                session_dict["leader_name"] = leader["name"] if leader else None
+            
+            sessions.append(session_dict)
+        
+        day_dict = {
+            "id": str(uuid.uuid4()),
+            "date": day_data.date,
+            "day_number": day_data.day_number,
+            "title": day_data.title,
+            "sessions": sessions
+        }
+        processed_days.append(day_dict)
+    
+    # Check if agenda already exists
+    existing = await db.workshop_agendas.find_one({"workshop_id": workshop_id})
+    
+    agenda_data = {
+        "workshop_id": workshop_id,
+        "workshop_title": workshop.get("title"),
+        "days": processed_days,
+        "is_published": input.is_published,
+        "notify_participants": input.notify_participants,
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    if existing:
+        await db.workshop_agendas.update_one(
+            {"workshop_id": workshop_id},
+            {"$set": agenda_data}
+        )
+        agenda_data["id"] = existing["id"]
+        agenda_data["created_at"] = existing.get("created_at")
+    else:
+        agenda_data["id"] = str(uuid.uuid4())
+        agenda_data["created_at"] = datetime.now(timezone.utc).isoformat()
+        await db.workshop_agendas.insert_one(agenda_data)
+    
+    # If publishing, notify participants
+    if input.is_published and input.notify_participants:
+        asyncio.create_task(notify_participants_agenda_published(workshop_id, workshop))
+    
+    return agenda_data
+
+
+@api_router.put("/workshops/{workshop_id}/agenda/publish")
+async def publish_workshop_agenda(workshop_id: str, notify: bool = True):
+    """Publish a workshop agenda and optionally notify participants"""
+    agenda = await db.workshop_agendas.find_one({"workshop_id": workshop_id})
+    if not agenda:
+        raise HTTPException(status_code=404, detail="Agenda not found")
+    
+    await db.workshop_agendas.update_one(
+        {"workshop_id": workshop_id},
+        {"$set": {"is_published": True, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    if notify:
+        workshop = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
+        if workshop:
+            asyncio.create_task(notify_participants_agenda_published(workshop_id, workshop))
+    
+    return {"success": True, "message": "Agenda published"}
+
+
+@api_router.get("/agenda/public/{workshop_id}")
+async def get_public_agenda(workshop_id: str):
+    """Get published agenda (public view for participants)"""
+    agenda = await db.workshop_agendas.find_one(
+        {"workshop_id": workshop_id, "is_published": True}, 
+        {"_id": 0}
+    )
+    if not agenda:
+        raise HTTPException(status_code=404, detail="Agenda not found or not published")
+    
+    workshop = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
+    return {
+        **agenda,
+        "workshop": workshop
+    }
+
+
+@api_router.get("/leaders/{leader_id}/sessions")
+async def get_leader_sessions(leader_id: str):
+    """Get all sessions assigned to a specific leader"""
+    # Find all agendas containing this leader
+    agendas = await db.workshop_agendas.find({}, {"_id": 0}).to_list(100)
+    
+    leader_sessions = []
+    for agenda in agendas:
+        workshop_title = agenda.get("workshop_title", "")
+        for day in agenda.get("days", []):
+            for session in day.get("sessions", []):
+                if session.get("leader_id") == leader_id:
+                    leader_sessions.append({
+                        "workshop_id": agenda["workshop_id"],
+                        "workshop_title": workshop_title,
+                        "day_date": day["date"],
+                        "day_number": day["day_number"],
+                        "session": session
+                    })
+    
+    return leader_sessions
+
+
+async def notify_participants_agenda_published(workshop_id: str, workshop: dict):
+    """Send email to all accepted participants when agenda is published"""
+    # Get all accepted participants for this workshop
+    participants = await db.nominations.find({
+        "event_id": workshop_id,
+        "status": {"$in": ["approved", "registered", "completed"]}
+    }, {"_id": 0}).to_list(1000)
+    
+    if not participants:
+        logging.info(f"No participants to notify for workshop {workshop_id}")
+        return
+    
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://members-portal-10.preview.emergentagent.com')
+    agenda_link = f"{frontend_url}/program/{workshop_id}"
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">📋 Programmet är klart!</h1>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Hej!</p>
+            
+            <p>Programmet för <strong>{workshop.get('title', 'utbildningen')}</strong> är nu publicerat!</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 10px; border-left: 4px solid #014D73; margin: 20px 0;">
+                <p style="margin: 0;"><strong>📅 Datum:</strong> {workshop.get('date', 'Se programmet')}</p>
+                <p style="margin: 5px 0 0 0;"><strong>📍 Plats:</strong> {workshop.get('location', 'Se programmet')}</p>
+            </div>
+            
+            <p>Se hela dagsprogrammet med tider, ämnen och ledare genom att klicka på knappen nedan:</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{agenda_link}" style="display: inline-block; background: #014D73; color: white; padding: 15px 40px; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 16px;">
+                    Se programmet →
+                </a>
+            </div>
+            
+            <p style="color: #666; font-size: 14px;">Du kommer också få påminnelser innan varje utbildningsdag.</p>
+            
+            <p style="margin-top: 30px;">Vi ses snart!<br><strong>Haggai Sweden</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    for participant in participants:
+        email = participant.get("nominee_email") or participant.get("registration_data", {}).get("email")
+        if email:
+            try:
+                await asyncio.to_thread(resend.Emails.send, {
+                    "from": SENDER_EMAIL,
+                    "to": [email],
+                    "subject": f"📋 Programmet för {workshop.get('title', 'utbildningen')} är klart!",
+                    "html": html_content
+                })
+                logging.info(f"Agenda notification sent to {email}")
+            except Exception as e:
+                logging.error(f"Failed to send agenda notification to {email}: {str(e)}")
+
+
+async def send_daily_reminder(workshop_id: str, day_data: dict, workshop: dict):
+    """Send reminder for a specific day to all participants"""
+    participants = await db.nominations.find({
+        "event_id": workshop_id,
+        "status": {"$in": ["approved", "registered", "completed"]}
+    }, {"_id": 0}).to_list(1000)
+    
+    if not participants:
+        return
+    
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://members-portal-10.preview.emergentagent.com')
+    agenda_link = f"{frontend_url}/program/{workshop_id}"
+    
+    # Build session list HTML
+    sessions_html = ""
+    for session in day_data.get("sessions", []):
+        if session.get("session_type") == "break":
+            sessions_html += f'<tr style="background: #f5f5f5;"><td style="padding: 8px;">☕ {session.get("start_time")}</td><td style="padding: 8px;" colspan="2">{session.get("title", "Paus")}</td></tr>'
+        else:
+            sessions_html += f'<tr><td style="padding: 8px; border-bottom: 1px solid #eee;">{session.get("start_time")}-{session.get("end_time")}</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{session.get("title")}</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{session.get("leader_name", "-")}</td></tr>'
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">⏰ Påminnelse: Dag {day_data.get('day_number')}</h1>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-radius: 0 0 10px 10px;">
+            <h2 style="color: #014D73; margin-top: 0;">{workshop.get('title', 'Utbildning')}</h2>
+            <p><strong>📅 {day_data.get('date')}</strong> - {day_data.get('title', f"Dag {day_data.get('day_number')}")}</p>
+            
+            <h3 style="color: #014D73;">Dagens program:</h3>
+            <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                <tr style="background: #014D73; color: white;">
+                    <th style="padding: 10px; text-align: left;">Tid</th>
+                    <th style="padding: 10px; text-align: left;">Session</th>
+                    <th style="padding: 10px; text-align: left;">Ledare</th>
+                </tr>
+                {sessions_html}
+            </table>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{agenda_link}" style="display: inline-block; background: #014D73; color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px; font-weight: bold;">
+                    Se hela programmet →
+                </a>
+            </div>
+            
+            <p style="margin-top: 30px;">Vi ses!<br><strong>Haggai Sweden</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    for participant in participants:
+        email = participant.get("nominee_email") or participant.get("registration_data", {}).get("email")
+        if email:
+            try:
+                await asyncio.to_thread(resend.Emails.send, {
+                    "from": SENDER_EMAIL,
+                    "to": [email],
+                    "subject": f"⏰ Påminnelse: {workshop.get('title', 'Utbildning')} - Dag {day_data.get('day_number')}",
+                    "html": html_content
+                })
+            except Exception as e:
+                logging.error(f"Failed to send reminder to {email}: {str(e)}")
+
+
+@api_router.post("/workshops/{workshop_id}/agenda/send-reminder")
+async def send_agenda_reminder(workshop_id: str, day_number: int):
+    """Manually send reminder for a specific day"""
+    agenda = await db.workshop_agendas.find_one({"workshop_id": workshop_id}, {"_id": 0})
+    if not agenda:
+        raise HTTPException(status_code=404, detail="Agenda not found")
+    
+    workshop = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
+    if not workshop:
+        raise HTTPException(status_code=404, detail="Workshop not found")
+    
+    day_data = next((d for d in agenda.get("days", []) if d.get("day_number") == day_number), None)
+    if not day_data:
+        raise HTTPException(status_code=404, detail=f"Day {day_number} not found in agenda")
+    
+    asyncio.create_task(send_daily_reminder(workshop_id, day_data, workshop))
+    
+    return {"success": True, "message": f"Reminder sent for day {day_number}"}
+
+
+@api_router.get("/member/agenda/{workshop_id}")
+async def get_member_agenda(workshop_id: str, token: str):
+    """Get agenda for a member (checks if they are a participant)"""
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        member_id = payload.get("member_id")
+        
+        # Check if member is a participant in this workshop
+        member = await db.members.find_one({"id": member_id}, {"_id": 0})
+        if not member:
+            raise HTTPException(status_code=404, detail="Member not found")
+        
+        # Get agenda
+        agenda = await db.workshop_agendas.find_one(
+            {"workshop_id": workshop_id, "is_published": True}, 
+            {"_id": 0}
+        )
+        if not agenda:
+            raise HTTPException(status_code=404, detail="Agenda not found or not published")
+        
+        workshop = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
+        
+        return {
+            **agenda,
+            "workshop": workshop
+        }
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
 # ==================== TRAINING PARTICIPANTS ENDPOINTS ====================
 
 class TrainingParticipantStatusUpdate(BaseModel):
