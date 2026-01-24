@@ -1983,7 +1983,7 @@ async def create_workshop(input: WorkshopCreate):
     return workshop
 
 
-@api_router.get("/workshops", response_model=List[Workshop])
+@api_router.get("/workshops")
 async def get_workshops(active_only: bool = True, workshop_type: Optional[str] = None):
     """Get all workshops"""
     query = {}
@@ -1996,7 +1996,7 @@ async def get_workshops(active_only: bool = True, workshop_type: Optional[str] =
     return workshops
 
 
-@api_router.get("/workshops/{workshop_id}", response_model=Workshop)
+@api_router.get("/workshops/{workshop_id}")
 async def get_workshop(workshop_id: str):
     """Get a specific workshop"""
     workshop = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
@@ -2005,7 +2005,7 @@ async def get_workshop(workshop_id: str):
     return workshop
 
 
-@api_router.put("/workshops/{workshop_id}", response_model=Workshop)
+@api_router.put("/workshops/{workshop_id}")
 async def update_workshop(workshop_id: str, input: WorkshopUpdate):
     """Update a workshop (including price)"""
     existing = await db.workshops.find_one({"id": workshop_id})
