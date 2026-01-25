@@ -876,7 +876,7 @@ const AdminWorkshops = () => {
               <div className="flex gap-3">
                 <Button 
                   variant="outline" 
-                  onClick={() => copyNominationLink(qrWorkshop.id)}
+                  onClick={() => copyNominationLink(qrWorkshop)}
                   className="flex-1"
                   data-testid="copy-nomination-link-btn"
                 >
