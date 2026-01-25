@@ -84,7 +84,7 @@
       "Error handling for non-existent workshop shows 'Kunde inte ladda formuläret' ✓"
     ]
   },
-  "nomination_link_format": "https://haggai-portal.preview.emergentagent.com/nominera/{workshopId}",
+  "nomination_link_format": "https://community-manager-9.preview.emergentagent.com/nominera/{workshopId}",
   "qr_code_implementation": {
     "library": "qrcode.react (QRCodeSVG)",
     "size": "200x200",
