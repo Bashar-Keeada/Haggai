@@ -539,8 +539,17 @@ const LeaderRegistrationForm = () => {
                         className="mt-1 h-5 w-5 text-haggai"
                       />
                       <div className="flex-1">
-                        <span className="font-semibold text-stone-800">{getTopicName(topic)}</span>
-                        <p className="text-sm text-stone-500 mt-1">{topic.description_sv}</p>
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-stone-800">{getTopicName(topic)}</span>
+                          {topic.hours && (
+                            <span className="text-xs px-2 py-0.5 bg-stone-100 text-stone-600 rounded-full">
+                              {topic.hours}h
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-stone-500 mt-1">
+                          {language === 'en' ? (topic.description_en || topic.description_sv) : topic.description_sv}
+                        </p>
                       </div>
                       {formData.primary_topic === topic.id && (
                         <Badge className="bg-haggai text-white">Valt</Badge>
@@ -572,8 +581,13 @@ const LeaderRegistrationForm = () => {
                           className="data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
                         />
                         <span className="font-medium text-stone-700">{getTopicName(topic)}</span>
+                        {topic.hours && (
+                          <span className="text-xs px-2 py-0.5 bg-stone-100 text-stone-500 rounded-full ml-auto mr-2">
+                            {topic.hours}h
+                          </span>
+                        )}
                         {formData.backup_topics?.includes(topic.id) && (
-                          <CheckSquare className="h-4 w-4 text-emerald-500 ml-auto" />
+                          <CheckSquare className="h-4 w-4 text-emerald-500" />
                         )}
                       </label>
                     ))}
