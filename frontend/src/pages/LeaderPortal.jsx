@@ -729,30 +729,25 @@ const LeaderPortal = () => {
               <CardContent>
                 {leader.status === 'approved' ? (
                   <div className="max-w-md mx-auto">
-                    {/* Name Badge Preview - Business Card Format */}
-                    <div className="bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-stone-100 mb-6" style={{aspectRatio: '85/65'}}>
-                      {/* Lanyard Hole Indicator */}
-                      <div className="flex justify-center pt-2 pb-1">
-                        <div className="w-3 h-3 rounded-full border-2 border-stone-300 bg-white"></div>
-                      </div>
-                      
-                      {/* Header - Compact */}
-                      <div className="bg-gradient-to-br from-[#8B5CF6] to-[#7C3AED] text-white py-4 px-4 text-center">
-                        <div className="text-xl font-bold tracking-[0.2em] mb-2">HAGGAI</div>
-                        <div className="bg-[#A78BFA] text-white text-xs font-bold py-1 px-3 rounded-md inline-block">
+                    {/* Name Badge Preview - Vertical Format */}
+                    <div className="bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-stone-100 mb-6">
+                      {/* Header */}
+                      <div className="bg-gradient-to-br from-[#8B5CF6] to-[#7C3AED] text-white py-8 px-6 text-center">
+                        <div className="text-3xl font-bold tracking-[0.3em] mb-3">HAGGAI</div>
+                        <div className="bg-[#A78BFA] text-white text-sm font-bold py-2 px-4 rounded-lg inline-block">
                           {txt.badge.leader}
                         </div>
                       </div>
 
-                      {/* Body - Compact */}
-                      <div className="bg-white py-4 px-4 text-center">
-                        <div className="text-lg font-bold text-stone-800 mb-4">
+                      {/* Body */}
+                      <div className="bg-white py-10 px-6 text-center">
+                        <div className="text-2xl font-bold text-stone-800 mb-8">
                           {leader.name}
                         </div>
 
-                        <div className="border-t pt-3">
-                          <div className="text-[10px] text-stone-400 tracking-widest mb-1">{txt.badge.workshop}</div>
-                          <div className="text-sm font-bold text-stone-800">
+                        <div className="border-t pt-6">
+                          <div className="text-xs text-stone-400 tracking-widest mb-2">{txt.badge.workshop}</div>
+                          <div className="text-lg font-bold text-stone-800">
                             Haggai Workshop
                           </div>
                         </div>

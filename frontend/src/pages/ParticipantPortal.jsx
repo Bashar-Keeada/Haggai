@@ -244,30 +244,26 @@ const ParticipantPortal = () => {
               </CardHeader>
               <CardContent>
                 <div className="max-w-md mx-auto">
-                  {/* Badge Preview - Business Card Format */}
-                  <div className="bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-stone-100 mb-6" style={{aspectRatio: '85/65'}}>
-                    <div className="flex justify-center pt-2 pb-1">
-                      <div className="w-3 h-3 rounded-full border-2 border-stone-300 bg-white"></div>
-                    </div>
-                    
-                    <div className="bg-gradient-to-br from-[#0891B2] to-[#0e7490] text-white py-4 px-4 text-center">
-                      <div className="text-xl font-bold tracking-[0.2em] mb-2">HAGGAI</div>
-                      <div className="bg-[#22D3EE] text-white text-xs font-bold py-1 px-3 rounded-md inline-block">
+                  {/* Badge Preview - Vertical Format */}
+                  <div className="bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-stone-100 mb-6">
+                    <div className="bg-gradient-to-br from-[#0891B2] to-[#0e7490] text-white py-8 px-6 text-center">
+                      <div className="text-3xl font-bold tracking-[0.3em] mb-3">HAGGAI</div>
+                      <div className="bg-[#22D3EE] text-white text-sm font-bold py-2 px-4 rounded-lg inline-block">
                         {t.badge.participant}
                       </div>
                     </div>
 
-                    <div className="bg-white py-4 px-4 text-center">
-                      <div className="text-lg font-bold text-stone-800 mb-1">
+                    <div className="bg-white py-10 px-6 text-center">
+                      <div className="text-2xl font-bold text-stone-800 mb-2">
                         {participant.full_name}
                       </div>
-                      <div className="text-xs text-stone-500 mb-4">
+                      <div className="text-stone-500 mb-8">
                         {participant.church_name || ''}
                       </div>
 
-                      <div className="border-t pt-3">
-                        <div className="text-[10px] text-stone-400 tracking-widest mb-1">{t.badge.workshop}</div>
-                        <div className="text-sm font-bold text-stone-800">
+                      <div className="border-t pt-6">
+                        <div className="text-xs text-stone-400 tracking-widest mb-2">{t.badge.workshop}</div>
+                        <div className="text-lg font-bold text-stone-800">
                           {participant.workshop_title}
                         </div>
                       </div>
