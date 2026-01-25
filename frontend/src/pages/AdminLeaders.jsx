@@ -23,7 +23,7 @@ const AdminLeaders = () => {
   const [editingLeader, setEditingLeader] = useState(null);
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const [sendingInvite, setSendingInvite] = useState(false);
-  const [inviteData, setInviteData] = useState({ name: '', email: '', workshop_id: '', workshop_title: '' });
+  const [inviteData, setInviteData] = useState({ name: '', email: '', workshop_id: '', workshop_title: '', language: 'sv' });
   const [activeTab, setActiveTab] = useState('leaders');
   const [formData, setFormData] = useState({
     name: '',
