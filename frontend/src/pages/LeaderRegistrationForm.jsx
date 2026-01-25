@@ -622,11 +622,11 @@ const LeaderRegistrationForm = () => {
                           )}
                         </div>
                         <p className="text-sm text-stone-500 mt-1">
-                          {language === 'en' ? (topic.description_en || topic.description_sv) : topic.description_sv}
+                          {getTopicDescription(topic)}
                         </p>
                       </div>
                       {formData.primary_topic === topic.id && (
-                        <Badge className="bg-haggai text-white">Valt</Badge>
+                        <Badge className="bg-haggai text-white">{language === 'ar' ? 'مختار' : (language === 'en' ? 'Selected' : 'Valt')}</Badge>
                       )}
                     </label>
                   ))}
