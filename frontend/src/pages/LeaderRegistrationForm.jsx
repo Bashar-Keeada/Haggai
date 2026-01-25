@@ -138,6 +138,13 @@ const LeaderRegistrationForm = () => {
       password: 'Password',
       confirmPassword: 'Confirm password',
       passwordHint: 'At least 6 characters',
+      topicSection: 'Topic Selection',
+      topicSectionDesc: 'Choose which topic you will present at the workshop',
+      primaryTopic: 'Main Topic (choose one)',
+      primaryTopicDesc: 'This is the topic you will present',
+      backupTopics: 'Backup Topics',
+      backupTopicsDesc: 'Which other topics can you cover if needed?',
+      selectTopic: 'Select your main topic',
       profileSection: 'Profile & Background',
       bioLabel: 'About you (Swedish)',
       bioLabelEn: 'About you (English)',
@@ -187,7 +194,20 @@ const LeaderRegistrationForm = () => {
 
   useEffect(() => {
     fetchInvitation();
+    fetchWorkshopTopics();
   }, [token]);
+
+  const fetchWorkshopTopics = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/workshop-topics`);
+      if (response.ok) {
+        const data = await response.json();
+        setWorkshopTopics(data);
+      }
+    } catch (err) {
+      console.error('Error fetching workshop topics:', err);
+    }
+  };
 
   const fetchInvitation = async () => {
     try {
