@@ -408,7 +408,8 @@ const LeaderRegistrationForm = () => {
         bank_account: formData.bank_account,
         bank_clearing: formData.bank_clearing,
         bank_iban: formData.bank_iban,
-        bank_swift: formData.bank_swift
+        bank_swift: formData.bank_swift,
+        profile_image: formData.profile_image
       };
       
       const response = await fetch(`${BACKEND_URL}/api/leaders/register/${token}`, {
