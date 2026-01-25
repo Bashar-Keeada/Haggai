@@ -487,7 +487,7 @@ const AdminNominations = () => {
                 />
               </div>
               <div className={`flex gap-2 flex-wrap ${isRTL ? 'flex-row-reverse' : ''}`}>
-                {['all', 'pending', 'approved', 'rejected', 'contacted'].map((status) => (
+                {['all', 'pending', 'approved', 'rejected', 'contacted', 'pending_approval'].map((status) => (
                   <Button
                     key={status}
                     variant={statusFilter === status ? 'default' : 'outline'}
