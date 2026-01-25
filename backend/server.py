@@ -4607,7 +4607,7 @@ async def create_leader_invitation(input: LeaderInvitationCreate):
     """
     
     try:
-        resend.emails.send({
+        resend.Emails.send({
             "from": SENDER_EMAIL,
             "to": [input.email],
             "subject": "Inbjudan till ledarregistrering - Haggai Sweden",
@@ -4682,7 +4682,7 @@ async def resend_leader_invitation(invitation_id: str):
     """
     
     try:
-        resend.emails.send({
+        resend.Emails.send({
             "from": SENDER_EMAIL,
             "to": [invitation['email']],
             "subject": "Påminnelse: Ledarregistrering - Haggai Sweden",
@@ -4766,7 +4766,7 @@ async def register_leader(token: str, input: LeaderRegistrationCreate):
         </div>
         """
         
-        resend.emails.send({
+        resend.Emails.send({
             "from": SENDER_EMAIL,
             "to": [ADMIN_EMAIL],
             "subject": f"Ny ledarregistrering: {leader.name}",
@@ -4894,7 +4894,7 @@ async def approve_leader_registration(registration_id: str):
         </div>
         """
         
-        resend.emails.send({
+        resend.Emails.send({
             "from": SENDER_EMAIL,
             "to": [registration['email']],
             "subject": "Din registrering är godkänd - Haggai Sweden",
@@ -4948,7 +4948,7 @@ async def reject_leader_registration(registration_id: str, reason: Optional[str]
         </div>
         """
         
-        resend.emails.send({
+        resend.Emails.send({
             "from": SENDER_EMAIL,
             "to": [registration['email']],
             "subject": "Angående din registrering - Haggai Sweden",
