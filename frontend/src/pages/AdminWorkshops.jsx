@@ -96,7 +96,16 @@ const AdminWorkshops = () => {
       international: 'Internationell',
       national: 'Nationell',
       online: 'Online',
-      tot: 'ToT'
+      tot: 'ToT',
+      shareLink: 'Dela nomineringslänk',
+      showQR: 'Visa QR-kod',
+      nominationLink: 'Nomineringslänk',
+      qrCodeTitle: 'QR-kod för nominering',
+      qrCodeDescription: 'Skanna för att nominera en deltagare till denna workshop',
+      copyLink: 'Kopiera länk',
+      linkCopied: 'Länk kopierad!',
+      downloadQR: 'Ladda ner QR-kod',
+      close: 'Stäng'
     },
     en: {
       title: 'Manage Workshops',
@@ -142,7 +151,16 @@ const AdminWorkshops = () => {
       international: 'International',
       national: 'National',
       online: 'Online',
-      tot: 'ToT'
+      tot: 'ToT',
+      shareLink: 'Share nomination link',
+      showQR: 'Show QR code',
+      nominationLink: 'Nomination link',
+      qrCodeTitle: 'QR code for nomination',
+      qrCodeDescription: 'Scan to nominate a participant for this workshop',
+      copyLink: 'Copy link',
+      linkCopied: 'Link copied!',
+      downloadQR: 'Download QR code',
+      close: 'Close'
     },
     ar: {
       title: 'إدارة ورش العمل',
@@ -188,7 +206,16 @@ const AdminWorkshops = () => {
       international: 'دولي',
       national: 'وطني',
       online: 'عبر الإنترنت',
-      tot: 'تدريب المدربين'
+      tot: 'تدريب المدربين',
+      shareLink: 'مشاركة رابط الترشيح',
+      showQR: 'عرض رمز QR',
+      nominationLink: 'رابط الترشيح',
+      qrCodeTitle: 'رمز QR للترشيح',
+      qrCodeDescription: 'امسح لترشيح مشارك لهذه الورشة',
+      copyLink: 'نسخ الرابط',
+      linkCopied: 'تم نسخ الرابط!',
+      downloadQR: 'تحميل رمز QR',
+      close: 'إغلاق'
     }
   }[language] || {};
 
