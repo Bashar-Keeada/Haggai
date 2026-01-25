@@ -623,11 +623,11 @@ const LeaderRegistrationForm = () => {
                         className="mt-1 h-5 w-5 text-haggai"
                       />
                       <div className="flex-1">
-                        <div className="flex items-center gap-2">
+                        <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                           <span className="font-semibold text-stone-800">{getTopicName(topic)}</span>
                           {topic.hours && (
-                            <span className="text-xs px-2 py-0.5 bg-stone-100 text-stone-600 rounded-full">
-                              {topic.hours}h
+                            <span className="text-xs px-2 py-0.5 bg-stone-100 text-stone-600 rounded-full" dir="ltr">
+                              {topic.hours}{language === 'ar' ? 'س' : 'h'}
                             </span>
                           )}
                         </div>
@@ -647,7 +647,7 @@ const LeaderRegistrationForm = () => {
               <div className="space-y-3 pt-4 border-t">
                 <Label className="text-base font-semibold">{txt.backupTopics}</Label>
                 <p className="text-sm text-stone-500">{txt.backupTopicsDesc}</p>
-                <div className="grid md:grid-cols-2 gap-3">
+                <div className={`grid md:grid-cols-2 gap-3 ${isRTL ? 'text-right' : ''}`}>
                   {workshopTopics
                     .filter(topic => topic.id !== formData.primary_topic)
                     .map((topic) => (
@@ -657,7 +657,7 @@ const LeaderRegistrationForm = () => {
                           formData.backup_topics?.includes(topic.id)
                             ? 'border-emerald-400 bg-emerald-50'
                             : 'border-stone-200 hover:border-stone-300 hover:bg-stone-50'
-                        }`}
+                        } ${isRTL ? 'flex-row-reverse' : ''}`}
                       >
                         <Checkbox
                           checked={formData.backup_topics?.includes(topic.id)}
@@ -666,8 +666,8 @@ const LeaderRegistrationForm = () => {
                         />
                         <span className="font-medium text-stone-700">{getTopicName(topic)}</span>
                         {topic.hours && (
-                          <span className="text-xs px-2 py-0.5 bg-stone-100 text-stone-500 rounded-full ml-auto mr-2">
-                            {topic.hours}h
+                          <span className={`text-xs px-2 py-0.5 bg-stone-100 text-stone-500 rounded-full ${isRTL ? 'mr-auto ml-2' : 'ml-auto mr-2'}`} dir="ltr">
+                            {topic.hours}{language === 'ar' ? 'س' : 'h'}
                           </span>
                         )}
                         {formData.backup_topics?.includes(topic.id) && (
