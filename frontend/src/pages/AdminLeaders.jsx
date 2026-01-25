@@ -732,6 +732,30 @@ const AdminLeaders = () => {
                         </div>
                       </div>
                       
+                      {/* Topic Selection */}
+                      {(reg.primary_topic || (reg.backup_topics && reg.backup_topics.length > 0)) && (
+                        <div className="mt-4 pt-4 border-t">
+                          <div className="grid md:grid-cols-2 gap-4">
+                            {reg.primary_topic && (
+                              <div>
+                                <span className="text-xs text-stone-500">Huvudämne:</span>
+                                <p className="font-medium text-sm text-haggai">
+                                  📚 {getTopicName(reg.primary_topic)}
+                                </p>
+                              </div>
+                            )}
+                            {reg.backup_topics && reg.backup_topics.length > 0 && (
+                              <div>
+                                <span className="text-xs text-stone-500">Backup-ämnen:</span>
+                                <p className="font-medium text-sm text-emerald-600">
+                                  {reg.backup_topics.map(t => getTopicName(t)).join(', ')}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
                       {reg.bio_sv && (
                         <p className="text-sm text-stone-600 mt-3 line-clamp-2">{reg.bio_sv}</p>
                       )}
