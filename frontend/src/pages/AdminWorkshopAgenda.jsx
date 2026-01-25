@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, Plus, Save, Trash2, Clock, User, Coffee, 
   Calendar, Send, Eye, GripVertical, ChevronDown, ChevronUp,
-  Bell, CheckCircle2
+  Bell, CheckCircle2, Mail, QrCode, X
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/
 import { Label } from '../components/ui/label';
 import { useLanguage } from '../context/LanguageContext';
 import { toast } from 'sonner';
+import { QRCodeSVG } from 'qrcode.react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -28,6 +29,9 @@ const AdminWorkshopAgenda = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [expandedDays, setExpandedDays] = useState({});
+  const [showQRDialog, setShowQRDialog] = useState(false);
+  const [qrSession, setQrSession] = useState(null);
+  const [sendingEval, setSendingEval] = useState(null);
   const [showSessionDialog, setShowSessionDialog] = useState(false);
   const [currentDayIndex, setCurrentDayIndex] = useState(null);
   const [editingSession, setEditingSession] = useState(null);
