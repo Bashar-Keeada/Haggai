@@ -4010,7 +4010,6 @@ def generate_name_badge_pdf(
     buffer = BytesIO()
     
     # Create PDF with custom size (approximately 10cm x 15cm)
-    from reportlab.lib.pagesizes import cm
     badge_width = 10 * cm
     badge_height = 15 * cm
     
