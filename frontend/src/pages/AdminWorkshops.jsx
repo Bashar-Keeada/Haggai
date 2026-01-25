@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ArrowLeft, Plus, Edit2, Trash2, Save, X, Calendar, MapPin, 
-  Users, Globe, Home, Monitor, GraduationCap, CalendarDays
+  Users, Globe, Home, Monitor, GraduationCap, CalendarDays, QrCode, Share2
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/
 import { Label } from '../components/ui/label';
 import { useLanguage } from '../context/LanguageContext';
 import { toast } from 'sonner';
+import { QRCodeSVG } from 'qrcode.react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -22,6 +23,8 @@ const AdminWorkshops = () => {
   const [loading, setLoading] = useState(true);
   const [showDialog, setShowDialog] = useState(false);
   const [editingWorkshop, setEditingWorkshop] = useState(null);
+  const [showQRDialog, setShowQRDialog] = useState(false);
+  const [qrWorkshop, setQrWorkshop] = useState(null);
 
   const [formData, setFormData] = useState({
     title: '',
