@@ -535,6 +535,17 @@ const AdminNominations = () => {
                         {getStatusBadge(nomination.status)}
                       </div>
                       
+                      {/* Show profile image if registration completed */}
+                      {nomination.registration_data?.profile_image && (
+                        <div className="mb-4">
+                          <img 
+                            src={nomination.registration_data.profile_image} 
+                            alt={nomination.registration_data.full_name}
+                            className="w-20 h-20 rounded-full object-cover border-2 border-haggai"
+                          />
+                        </div>
+                      )}
+                      
                       <div className="grid md:grid-cols-2 gap-4 mt-4">
                         {/* Nominee */}
                         <div className={`p-3 bg-green-50 rounded-lg ${isRTL ? 'text-right' : ''}`}>
