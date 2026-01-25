@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   User, Mail, Phone, Calendar, CreditCard, Upload, FileText, 
   Plane, Building2, CheckCircle2, AlertCircle, Eye, EyeOff,
@@ -20,7 +20,13 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const LeaderRegistrationForm = () => {
   const { token } = useParams();
   const navigate = useNavigate();
-  const { language, isRTL } = useLanguage();
+  const [searchParams] = useSearchParams();
+  const { language: contextLanguage } = useLanguage();
+  
+  // Use URL param, invitation language, or context language
+  const [pageLanguage, setPageLanguage] = useState(searchParams.get('lang') || contextLanguage || 'sv');
+  const language = pageLanguage;
+  const isRTL = language === 'ar';
   
   const [invitation, setInvitation] = useState(null);
   const [workshopTopics, setWorkshopTopics] = useState([]);
