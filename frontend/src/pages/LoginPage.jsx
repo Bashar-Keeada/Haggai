@@ -22,7 +22,7 @@ const LoginPage = () => {
       passwordPlaceholder: 'Ange lösenord...',
       loginButton: 'Logga in',
       errorMessage: 'Fel lösenord. Försök igen.',
-      contactInfo: 'Kontakta oss för att få tillgång'
+      contactInfo: 'Lösenord: Haggai2030'
     },
     en: {
       title: 'Welcome to Haggai Sweden',
@@ -31,7 +31,7 @@ const LoginPage = () => {
       passwordPlaceholder: 'Enter password...',
       loginButton: 'Log in',
       errorMessage: 'Wrong password. Try again.',
-      contactInfo: 'Contact us to get access'
+      contactInfo: 'Password: Haggai2030'
     },
     ar: {
       title: 'مرحباً بكم في هجاي السويد',
@@ -40,7 +40,7 @@ const LoginPage = () => {
       passwordPlaceholder: 'أدخل كلمة المرور...',
       loginButton: 'تسجيل الدخول',
       errorMessage: 'كلمة المرور خاطئة. حاول مرة أخرى.',
-      contactInfo: 'اتصل بنا للحصول على حق الوصول'
+      contactInfo: 'كلمة المرور: Haggai2030'
     }
   };
 
