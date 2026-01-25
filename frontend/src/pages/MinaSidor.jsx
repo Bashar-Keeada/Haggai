@@ -8,7 +8,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { 
   User, MessageSquare, GraduationCap, Users, Settings, LogOut, 
   Bell, Edit, Mail, Phone, MapPin, Award, Heart, Briefcase,
-  MessageCircle, ArrowLeft, ClipboardCheck
+  MessageCircle, ArrowLeft, ClipboardCheck, IdCard
 } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -29,6 +29,7 @@ const MinaSidor = () => {
       messages: 'Meddelanden',
       newMessages: 'nya',
       diplomas: 'Mina Diplom',
+      nameBadge: 'Namnskylt',
       members: 'Medlemskatalog',
       forum: 'Diskussionsforum',
       settings: 'Inställningar',
@@ -52,6 +53,7 @@ const MinaSidor = () => {
       messages: 'Messages',
       newMessages: 'new',
       diplomas: 'My Diplomas',
+      nameBadge: 'Name Badge',
       members: 'Member Directory',
       forum: 'Discussion Forum',
       settings: 'Settings',
@@ -75,6 +77,7 @@ const MinaSidor = () => {
       messages: 'الرسائل',
       newMessages: 'جديد',
       diplomas: 'شهاداتي',
+      nameBadge: 'شارة الاسم',
       members: 'دليل الأعضاء',
       forum: 'منتدى النقاش',
       settings: 'الإعدادات',
