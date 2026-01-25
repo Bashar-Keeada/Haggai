@@ -15,9 +15,15 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const AdminLeaders = () => {
   const { language, isRTL } = useLanguage();
   const [leaders, setLeaders] = useState([]);
+  const [invitations, setInvitations] = useState([]);
+  const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingLeader, setEditingLeader] = useState(null);
+  const [showInviteDialog, setShowInviteDialog] = useState(false);
+  const [sendingInvite, setSendingInvite] = useState(false);
+  const [inviteData, setInviteData] = useState({ name: '', email: '', workshop_id: '', workshop_title: '' });
+  const [activeTab, setActiveTab] = useState('leaders');
   const [formData, setFormData] = useState({
     name: '',
     role: { sv: '', en: '', ar: '' },
