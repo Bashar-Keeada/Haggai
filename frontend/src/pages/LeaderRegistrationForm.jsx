@@ -286,6 +286,10 @@ const LeaderRegistrationForm = () => {
       if (response.ok) {
         const data = await response.json();
         setInvitation(data);
+        // Set page language from invitation if not already set via URL
+        if (data.language && !searchParams.get('lang')) {
+          setPageLanguage(data.language);
+        }
         setFormData(prev => ({
           ...prev,
           name: data.name || '',
