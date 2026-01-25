@@ -222,7 +222,26 @@ const AdminLeaders = () => {
     fetchLeaders();
     fetchInvitations();
     fetchRegistrations();
+    fetchWorkshopTopics();
   }, []);
+
+  const fetchWorkshopTopics = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/workshop-topics`);
+      if (response.ok) {
+        const data = await response.json();
+        setWorkshopTopics(data);
+      }
+    } catch (error) {
+      console.error('Error fetching workshop topics:', error);
+    }
+  };
+
+  const getTopicName = (topicId) => {
+    const topic = workshopTopics.find(t => t.id === topicId);
+    if (!topic) return topicId;
+    return language === 'en' ? topic.name_en : topic.name_sv;
+  };
 
   const fetchLeaders = async () => {
     try {
