@@ -488,10 +488,10 @@ const LeaderRegistrationForm = () => {
           <h1 className="text-3xl font-bold text-stone-800 mb-4">{txt.successTitle}</h1>
           <p className="text-stone-600 mb-8">{txt.successMessage}</p>
           <Button 
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/ledare/login')}
             className="bg-haggai hover:bg-haggai-dark"
           >
-            Tillbaka till startsidan
+            {language === 'sv' ? 'Gå till inloggning' : (language === 'en' ? 'Go to login' : 'الذهاب إلى تسجيل الدخول')}
           </Button>
         </div>
       </div>
