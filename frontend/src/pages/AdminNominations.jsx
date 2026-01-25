@@ -255,6 +255,42 @@ const AdminNominations = () => {
     }
   };
 
+
+  const approveRegistration = async (nominationId) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/nominations/${nominationId}/approve-registration`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'approve' })
+      });
+      if (response.ok) {
+        toast.success(txt.registrationApproved || 'Registrering godkänd!');
+        fetchNominations();
+        fetchStats();
+      }
+    } catch (error) {
+      toast.error('Kunde inte godkänna registreringen');
+    }
+  };
+
+  const rejectRegistration = async (nominationId, reason) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/nominations/${nominationId}/approve-registration`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reject', rejection_reason: reason })
+      });
+      if (response.ok) {
+        toast.success(txt.registrationRejected || 'Registrering nekad');
+        fetchNominations();
+        fetchStats();
+      }
+    } catch (error) {
+      toast.error('Kunde inte neka registreringen');
+    }
+  };
+
+
   const deleteNomination = async (id) => {
     if (!window.confirm(txt.confirmDelete)) return;
     
