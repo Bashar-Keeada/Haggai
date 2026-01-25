@@ -4228,6 +4228,81 @@ def generate_name_badge_pdf(
     workshop_title: str,
     badge_type: str = "participant"  # "participant" or "leader"
 ) -> BytesIO:
+
+
+# ==================== PARTICIPANT PORTAL ENDPOINTS ====================
+
+class ParticipantLogin(BaseModel):
+    email: str
+    password: str
+
+
+@api_router.post("/participants/login")
+async def participant_login(credentials: ParticipantLogin):
+    """Participant login endpoint"""
+    participant = await db.participants.find_one(
+        {"email": credentials.email.lower()},
+        {"_id": 0}
+    )
+    
+    if not participant:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # Verify password
+    if not bcrypt.checkpw(credentials.password.encode('utf-8'), participant['password_hash'].encode('utf-8')):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # Generate JWT token
+    token_data = {
+        "sub": participant['id'],
+        "email": participant['email'],
+        "type": "participant",
+        "exp": datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRATION_HOURS)
+    }
+    token = jwt.encode(token_data, JWT_SECRET, algorithm=JWT_ALGORITHM)
+    
+    # Update last login
+    await db.participants.update_one(
+        {"id": participant['id']},
+        {"$set": {"last_login": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Remove password hash from response
+    participant_data = {k: v for k, v in participant.items() if k != 'password_hash'}
+    
+    return {
+        "token": token,
+        "participant": participant_data
+    }
+
+
+@api_router.get("/participants/me")
+async def get_participant_me(authorization: str = Header(None)):
+    """Get current participant's data"""
+    if not authorization or not authorization.startswith('Bearer '):
+        raise HTTPException(status_code=401, detail="Missing or invalid token")
+    
+    token = authorization.split(' ')[1]
+    
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        participant_id = payload.get('sub')
+        
+        participant = await db.participants.find_one(
+            {"id": participant_id},
+            {"_id": 0, "password_hash": 0}
+        )
+        
+        if not participant:
+            raise HTTPException(status_code=404, detail="Participant not found")
+        
+        return participant
+        
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
     """Generate a PDF name badge for participants or leaders in business card format with lanyard hole"""
     buffer = BytesIO()
     
