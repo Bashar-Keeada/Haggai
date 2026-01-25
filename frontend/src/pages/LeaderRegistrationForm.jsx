@@ -659,10 +659,11 @@ const LeaderRegistrationForm = () => {
                             : 'border-stone-200 hover:border-stone-300 hover:bg-stone-50'
                         } ${isRTL ? 'flex-row-reverse' : ''}`}
                       >
-                        <Checkbox
-                          checked={formData.backup_topics?.includes(topic.id)}
-                          onCheckedChange={() => handleBackupTopicToggle(topic.id)}
-                          className="data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                        <input
+                          type="checkbox"
+                          checked={formData.backup_topics?.includes(topic.id) || false}
+                          onChange={() => handleBackupTopicToggle(topic.id)}
+                          className="h-5 w-5 rounded border-stone-300 text-emerald-500 focus:ring-emerald-500"
                         />
                         <span className="font-medium text-stone-700">{getTopicName(topic)}</span>
                         {topic.hours && (
@@ -678,7 +679,7 @@ const LeaderRegistrationForm = () => {
                 </div>
                 {formData.backup_topics?.length > 0 && (
                   <p className="text-sm text-emerald-600">
-                    ✓ {formData.backup_topics.length} backup-ämne{formData.backup_topics.length > 1 ? 'n' : ''} valt
+                    ✓ {formData.backup_topics.length} {language === 'ar' ? 'موضوع احتياطي مختار' : (language === 'en' ? 'backup topic(s) selected' : 'backup-ämne(n) valt')}
                   </p>
                 )}
               </div>
@@ -687,15 +688,15 @@ const LeaderRegistrationForm = () => {
 
           {/* Profile */}
           <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-haggai">
+            <CardHeader className={isRTL ? 'text-right' : ''}>
+              <CardTitle className={`flex items-center gap-2 text-haggai ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <FileText className="h-5 w-5" />
                 {txt.profileSection}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div className={`space-y-2 ${isRTL ? 'text-right' : ''}`}>
                   <Label>{txt.roleLabel}</Label>
                   <Input
                     value={formData.role_sv}
