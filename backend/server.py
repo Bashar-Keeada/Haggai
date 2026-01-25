@@ -376,6 +376,10 @@ class LeaderRegistration(BaseModel):
     topics_ar: Optional[List[str]] = []
     image_url: Optional[str] = None
     
+    # Workshop Topics Selection
+    primary_topic: Optional[str] = None  # Main topic they will present
+    backup_topics: Optional[List[str]] = []  # Other topics they can cover if needed
+    
     # Cost & Travel
     cost_preference: str = "self"  # "self" or "haggai_support"
     arrival_date: Optional[str] = None
@@ -423,6 +427,10 @@ class LeaderRegistrationCreate(BaseModel):
     role_en: Optional[str] = None
     topics_sv: Optional[List[str]] = []
     topics_en: Optional[List[str]] = []
+    
+    # Workshop Topics Selection
+    primary_topic: Optional[str] = None  # Main topic they will present
+    backup_topics: Optional[List[str]] = []  # Other topics they can cover if needed
     
     # Cost & Travel
     cost_preference: str = "self"
