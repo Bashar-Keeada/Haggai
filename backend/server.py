@@ -4148,9 +4148,9 @@ async def get_participant_name_badge(participant_id: str):
         raise HTTPException(status_code=404, detail="Approved participant not found")
     
     # Get participant info
-    registration_data = participant.get("registration_data", {})
-    participant_name = registration_data.get("full_name", participant.get("nominee_name", "Unknown"))
-    organization = registration_data.get("church_name", participant.get("nominee_church", ""))
+    registration_data = participant.get("registration_data") or {}
+    participant_name = registration_data.get("full_name") or participant.get("nominee_name", "Unknown")
+    organization = registration_data.get("church_name") or participant.get("nominee_church", "")
     workshop_title = participant.get("event_title", "Haggai Workshop")
     
     # Generate PDF
