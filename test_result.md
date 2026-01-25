@@ -320,6 +320,18 @@ frontend:
         agent: "main"
         comment: "Removed flags from language selector"
 
+  - task: "Share Nomination Link (Dela nomineringslänk)"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/pages/AdminWorkshops.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL BUG: 'Kopiera länk' button inside QR dialog passes qrWorkshop.id instead of qrWorkshop object to copyNominationLink function (line 879). This causes the copied link to be 'https://community-manager-9.preview.emergentagent.com/nominera/undefined' instead of the correct workshop ID. FIX: Change line 879 from onClick={() => copyNominationLink(qrWorkshop.id)} to onClick={() => copyNominationLink(qrWorkshop)}. The main 'Dela nomineringslänk' button (line 569) works correctly. QR dialog opens properly, QR code displays correctly, and link format is correct when using the main share button."
+
 metadata:
   created_by: "main_agent"
   version: "1.1"
