@@ -4302,7 +4302,58 @@ def generate_name_badge_pdf(
         alignment=TA_CENTER,
         fontName='Helvetica',
         letterSpacing=2
-
+    )
+    
+    workshop_style = ParagraphStyle(
+        'Workshop',
+        parent=styles['Normal'],
+        fontSize=16,
+        textColor=colors.black,
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold'
+    )
+    
+    # Build content
+    story = []
+    
+    # Header with logo and label
+    header_data = [
+        [Paragraph("HAGGAI", logo_style)],
+        [Paragraph(badge_label, label_style)]
+    ]
+    
+    header_table = Table(header_data, colWidths=[badge_width - 1*cm])
+    header_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), header_color),
+        ('BACKGROUND', (0, 1), (-1, 1), label_bg_color),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('TOPPADDING', (0, 0), (-1, 0), 20),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
+        ('TOPPADDING', (0, 1), (-1, 1), 8),
+        ('BOTTOMPADDING', (0, 1), (-1, 1), 8),
+    ]))
+    
+    story.append(header_table)
+    story.append(Spacer(1, 30))
+    
+    # Name
+    story.append(Paragraph(name, name_style))
+    story.append(Spacer(1, 8))
+    
+    # Organization
+    if organization:
+        story.append(Paragraph(organization, org_style))
+    story.append(Spacer(1, 40))
+    
+    # Workshop section
+    story.append(Paragraph("WORKSHOP", workshop_label_style))
+    story.append(Spacer(1, 5))
+    story.append(Paragraph(workshop_title, workshop_style))
+    
+    # Build PDF
+    doc.build(story)
+    buffer.seek(0)
+    return buffer
 
 
 class ForgotPasswordRequest(BaseModel):
