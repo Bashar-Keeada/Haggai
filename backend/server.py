@@ -3998,6 +3998,222 @@ async def send_training_participant_diploma(participant_id: str):
     return {"success": True, "message": "Diploma sent successfully", "member_created": member is not None}
 
 
+# ==================== NAME BADGE GENERATION ====================
+
+def generate_name_badge_pdf(
+    name: str,
+    organization: str,
+    workshop_title: str,
+    badge_type: str = "participant"  # "participant" or "leader"
+) -> BytesIO:
+    """Generate a PDF name badge for participants or leaders"""
+    buffer = BytesIO()
+    
+    # Create PDF with custom size (approximately 10cm x 15cm)
+    from reportlab.lib.pagesizes import cm
+    badge_width = 10 * cm
+    badge_height = 15 * cm
+    
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=(badge_width, badge_height),
+        leftMargin=0.5*cm,
+        rightMargin=0.5*cm,
+        topMargin=0.5*cm,
+        bottomMargin=0.5*cm
+    )
+    
+    # Define colors based on badge type
+    if badge_type == "leader":
+        header_color = colors.HexColor('#8B5CF6')  # Purple
+        label_bg_color = colors.HexColor('#A78BFA')  # Lighter purple
+        badge_label = "LEADER"
+    else:  # participant
+        header_color = colors.HexColor('#0891B2')  # Teal
+        label_bg_color = colors.HexColor('#22D3EE')  # Lighter teal
+        badge_label = "PARTICIPANT"
+    
+    # Create styles
+    styles = getSampleStyleSheet()
+    
+    logo_style = ParagraphStyle(
+        'Logo',
+        parent=styles['Heading1'],
+        fontSize=32,
+        textColor=colors.white,
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold',
+        letterSpacing=4
+    )
+    
+    label_style = ParagraphStyle(
+        'Label',
+        parent=styles['Normal'],
+        fontSize=14,
+        textColor=colors.white,
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold'
+    )
+    
+    name_style = ParagraphStyle(
+        'NameBadge',
+        parent=styles['Heading1'],
+        fontSize=24,
+        textColor=colors.black,
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold',
+        leading=28
+    )
+    
+    org_style = ParagraphStyle(
+        'Organization',
+        parent=styles['Normal'],
+        fontSize=14,
+        textColor=colors.grey,
+        alignment=TA_CENTER,
+        fontName='Helvetica'
+    )
+    
+    workshop_label_style = ParagraphStyle(
+        'WorkshopLabel',
+        parent=styles['Normal'],
+        fontSize=10,
+        textColor=colors.grey,
+        alignment=TA_CENTER,
+        fontName='Helvetica',
+        letterSpacing=2
+    )
+    
+    workshop_style = ParagraphStyle(
+        'Workshop',
+        parent=styles['Normal'],
+        fontSize=16,
+        textColor=colors.black,
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold'
+    )
+    
+    # Build content
+    story = []
+    
+    # Header with logo and label
+    header_data = [
+        [Paragraph("HAGGAI", logo_style)],
+        [Paragraph(badge_label, label_style)]
+    ]
+    
+    header_table = Table(header_data, colWidths=[badge_width - 1*cm])
+    header_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), header_color),
+        ('BACKGROUND', (0, 1), (-1, 1), label_bg_color),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('TOPPADDING', (0, 0), (-1, 0), 20),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
+        ('TOPPADDING', (0, 1), (-1, 1), 8),
+        ('BOTTOMPADDING', (0, 1), (-1, 1), 8),
+        ('ROUNDEDCORNERS', [10, 10, 0, 0]),
+    ]))
+    
+    story.append(header_table)
+    story.append(Spacer(1, 30))
+    
+    # Name
+    story.append(Paragraph(name, name_style))
+    story.append(Spacer(1, 8))
+    
+    # Organization
+    story.append(Paragraph(organization, org_style))
+    story.append(Spacer(1, 40))
+    
+    # Workshop section
+    story.append(Paragraph("WORKSHOP", workshop_label_style))
+    story.append(Spacer(1, 5))
+    story.append(Paragraph(workshop_title, workshop_style))
+    
+    # Build PDF
+    doc.build(story)
+    buffer.seek(0)
+    return buffer
+
+
+@api_router.get("/participants/{participant_id}/name-badge")
+async def get_participant_name_badge(participant_id: str):
+    """Generate and download name badge for an approved participant"""
+    participant = await db.nominations.find_one(
+        {"id": participant_id, "status": "approved"},
+        {"_id": 0}
+    )
+    
+    if not participant:
+        raise HTTPException(status_code=404, detail="Approved participant not found")
+    
+    # Get participant info
+    registration_data = participant.get("registration_data", {})
+    participant_name = registration_data.get("full_name", participant.get("nominee_name", "Unknown"))
+    organization = registration_data.get("church_name", participant.get("nominee_church", ""))
+    workshop_title = participant.get("event_title", "Haggai Workshop")
+    
+    # Generate PDF
+    pdf_buffer = generate_name_badge_pdf(
+        name=participant_name,
+        organization=organization,
+        workshop_title=workshop_title,
+        badge_type="participant"
+    )
+    
+    return StreamingResponse(
+        pdf_buffer,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="Name_Badge_{participant_name.replace(" ", "_")}.pdf"'
+        }
+    )
+
+
+@api_router.get("/leaders/{leader_id}/name-badge")
+async def get_leader_name_badge(leader_id: str):
+    """Generate and download name badge for an approved leader"""
+    leader = await db.leader_registrations.find_one(
+        {"id": leader_id, "status": "approved"},
+        {"_id": 0}
+    )
+    
+    if not leader:
+        raise HTTPException(status_code=404, detail="Approved leader not found")
+    
+    # Get leader info
+    leader_name = leader.get("name", "Unknown")
+    # For leader, we'll use their organization or leave blank
+    organization = leader.get("employer_name", leader.get("church_name", ""))
+    
+    # Try to get workshop info from invitation if available
+    invitation_id = leader.get("invitation_id")
+    workshop_title = "Haggai Workshop"
+    if invitation_id:
+        invitation = await db.leader_invitations.find_one(
+            {"id": invitation_id},
+            {"_id": 0}
+        )
+        if invitation and invitation.get("workshop_title"):
+            workshop_title = invitation.get("workshop_title")
+    
+    # Generate PDF
+    pdf_buffer = generate_name_badge_pdf(
+        name=leader_name,
+        organization=organization,
+        workshop_title=workshop_title,
+        badge_type="leader"
+    )
+    
+    return StreamingResponse(
+        pdf_buffer,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="Name_Badge_{leader_name.replace(" ", "_")}.pdf"'
+        }
+    )
+
+
 # ==================== MEMBER SYSTEM ====================
 
 def generate_password(length=12):
