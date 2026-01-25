@@ -176,6 +176,12 @@ const MinaSidor = () => {
       color: 'bg-purple-500'
     },
     { 
+      icon: IdCard, 
+      label: txt.nameBadge, 
+      link: '/mina-sidor/namnskylt',
+      color: 'bg-teal-500'
+    },
+    { 
       icon: Users, 
       label: txt.members, 
       link: '/mina-sidor/medlemmar',
