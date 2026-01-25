@@ -106,6 +106,44 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
   - Download format: PNG 300x300 pixels
 - **Tests:** 11 backend + full frontend UI tests passing (100%)
 
+### Leader Invitation & Registration System ✅ NEW (Jan 25)
+- **Admin Leaders Page** (`/admin/ledare`) - Enhanced with tabs:
+  - **Ledare tab** - View all leaders (manually added + registered)
+  - **Inbjudningar tab** - View sent invitations, resend reminders
+  - **Registreringar tab** - Approve/reject pending leader registrations
+  - "Skicka inbjudan" button opens dialog with name, email, optional workshop
+- **Leader Registration Form** (`/ledare/registrera/:token`)
+  - Public page accessed via invitation link
+  - Personal info: name, email, phone, password
+  - Profile: bio (SV/EN), role, topics/expertise
+  - Travel: cost preference (self/Haggai support), arrival/departure dates, dietary needs
+  - Bank details: bank name, account, clearing, IBAN, SWIFT
+  - Documents: upload profile image, topic material, receipts, travel tickets
+- **Leader Login** (`/ledare/login`)
+  - Email + password authentication
+  - JWT token with `type: 'leader'`
+  - Only approved leaders can log in
+- **Leader Portal** (`/ledare/portal`)
+  - Profile tab: view and edit all profile info
+  - Sessions tab: view assigned workshop sessions
+  - Documents tab: upload and manage documents
+- **API Endpoints:**
+  - `GET/POST/DELETE /api/leader-invitations` - Invitation CRUD
+  - `POST /api/leader-invitations/{id}/resend` - Resend invitation
+  - `GET /api/leader-invitations/{token}` - Get invitation by token (public)
+  - `POST /api/leaders/register/{token}` - Register via invitation
+  - `GET /api/leader-registrations` - List all registrations (admin)
+  - `POST /api/leader-registrations/{id}/approve` - Approve registration
+  - `POST /api/leader-registrations/{id}/reject` - Reject registration
+  - `POST /api/leaders/login` - Leader login
+  - `GET/PUT /api/leaders/me` - Leader profile
+  - `POST/DELETE /api/leaders/me/documents` - Document management
+  - `GET /api/leaders/me/sessions` - Get assigned sessions
+- **Database Collections:**
+  - `leader_invitations` - Invitation tokens with status
+  - `leader_registrations` - Full leader profiles with approval status
+- **Tests:** 22 backend + full frontend UI tests passing (100%)
+
 ### Member Portal ✅
 - **Member Login** (`/medlem-login`) - Automatic account creation when diploma is sent
 - **Mina Sidor** (`/mina-sidor`) - Member dashboard with profile, messages, diplomas
