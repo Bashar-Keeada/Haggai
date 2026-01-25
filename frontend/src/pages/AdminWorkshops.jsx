@@ -559,6 +559,30 @@ const AdminWorkshops = () => {
                     </div>
                     
                     <div className={`flex flex-col items-end gap-3 ${isRTL ? 'items-start' : ''}`}>
+                      {/* Share buttons row */}
+                      <div className={`flex gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => copyNominationLink(workshop.id)}
+                          className="border-emerald-500 text-emerald-600 hover:bg-emerald-50"
+                          data-testid={`share-link-btn-${workshop.id}`}
+                        >
+                          <Share2 className="h-4 w-4 mr-1" />
+                          {txt.shareLink}
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => openQRModal(workshop)}
+                          className="border-violet-500 text-violet-600 hover:bg-violet-50"
+                          data-testid={`show-qr-btn-${workshop.id}`}
+                        >
+                          <QrCode className="h-4 w-4 mr-1" />
+                          {txt.showQR}
+                        </Button>
+                      </div>
+                      {/* Action buttons row */}
                       <div className={`flex gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                         <Link to={`/admin/workshops/${workshop.id}/agenda`}>
                           <Button 
