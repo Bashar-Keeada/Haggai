@@ -73,10 +73,14 @@ const LeaderLogin = () => {
         toast.success(language === 'sv' ? 'Inloggning lyckades!' : 'Login successful!');
         navigate('/ledare/portal');
       } else {
-        const errorData = await response.json();
-        if (response.status === 403) {
-          setError(txt.errorPending);
-        } else {
+        try {
+          const errorData = await response.json();
+          if (response.status === 403) {
+            setError(txt.errorPending);
+          } else {
+            setError(txt.errorInvalid);
+          }
+        } catch {
           setError(txt.errorInvalid);
         }
       }
