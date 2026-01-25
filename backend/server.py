@@ -4611,40 +4611,50 @@ WORKSHOP_TOPICS = [
         "id": "stewardship",
         "name_sv": "Förvaltarskap",
         "name_en": "Stewardship",
+        "name_ar": "الوكالة",
         "description_sv": "Hur man förvaltar resurser, tid och talanger ansvarsfullt",
         "description_en": "How to manage resources, time and talents responsibly",
+        "description_ar": "كيفية إدارة الموارد والوقت والمواهب بمسؤولية",
         "hours": 4
     },
     {
         "id": "context",
         "name_sv": "Sammanhang",
         "name_en": "Context",
+        "name_ar": "السياق",
         "description_sv": "Förstå kulturella och samhälleliga sammanhang inom ledarskap",
         "description_en": "Understanding cultural and societal contexts in leadership",
+        "description_ar": "فهم السياقات الثقافية والاجتماعية في القيادة",
         "hours": 5
     },
     {
         "id": "next_generation",
         "name_sv": "Nästa Generation",
         "name_en": "Next Generation",
+        "name_ar": "الجيل القادم",
         "description_sv": "Strategier för att utveckla och utrusta framtida ledare",
         "description_en": "Strategies for developing and equipping future leaders",
+        "description_ar": "استراتيجيات لتطوير وتجهيز قادة المستقبل",
         "hours": 5
     },
     {
         "id": "leadership",
         "name_sv": "Ledarskap",
         "name_en": "Leadership",
+        "name_ar": "القيادة",
         "description_sv": "Praktiska verktyg och principer för effektivt ledarskap",
         "description_en": "Practical tools and principles for effective leadership",
+        "description_ar": "أدوات ومبادئ عملية للقيادة الفعالة",
         "hours": 4
     },
     {
         "id": "goal_setting",
         "name_sv": "Målsättning",
         "name_en": "Goal Setting",
+        "name_ar": "تحديد الأهداف",
         "description_sv": "Hur man sätter och uppnår meningsfulla mål",
         "description_en": "How to set and achieve meaningful goals",
+        "description_ar": "كيفية وضع وتحقيق أهداف ذات معنى",
         "hours": 5
     }
 ]
