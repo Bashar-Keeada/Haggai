@@ -1789,7 +1789,7 @@ async def register_nominee(nomination_id: str, registration: NomineeRegistration
     update_data = {
         "registration_completed": True,
         "registration_data": registration.model_dump(),
-        "status": "registered",
+        "status": "pending_approval",  # Changed from "registered" to "pending_approval"
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
