@@ -964,6 +964,18 @@ const AdminLeaders = () => {
                   placeholder="T.ex. Workshop mars 2026"
                 />
               </div>
+              <div className="space-y-2">
+                <Label>{language === 'sv' ? 'Språk för inbjudan' : 'Invitation language'}</Label>
+                <select
+                  value={inviteData.language}
+                  onChange={(e) => setInviteData({...inviteData, language: e.target.value})}
+                  className="w-full p-2 border rounded-lg"
+                >
+                  <option value="sv">🇸🇪 Svenska</option>
+                  <option value="en">🇬🇧 English</option>
+                  <option value="ar">🇸🇦 العربية</option>
+                </select>
+              </div>
             </div>
             
             <div className="flex gap-3">
