@@ -36,6 +36,7 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - **Workshop Agenda** ✅ NEW - Create program/schedule for workshops (`/admin/workshops/{id}/agenda`)
 - **Training Participants** ✅ - Manage registrations, attendance & diplomas (`/admin/utbildning`)
 - **Categories** ✅ NEW - Manage expertise & interest categories for member profiles
+- **Leader Invitations & Registrations** ✅ NEW (Jan 25) - Invite, register and approve leaders (`/admin/ledare`)
 
 ### Workshop Agenda System ✅ NEW (Jan 24)
 - **Admin Agenda Editor** (`/admin/workshops/{id}/agenda`)
