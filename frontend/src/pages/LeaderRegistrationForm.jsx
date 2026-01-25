@@ -419,7 +419,16 @@ const LeaderRegistrationForm = () => {
 
   // Get topic name based on language
   const getTopicName = (topic) => {
-    return language === 'en' ? topic.name_en : topic.name_sv;
+    if (language === 'ar') return topic.name_ar || topic.name_en;
+    if (language === 'en') return topic.name_en;
+    return topic.name_sv;
+  };
+
+  // Get topic description based on language
+  const getTopicDescription = (topic) => {
+    if (language === 'ar') return topic.description_ar || topic.description_en;
+    if (language === 'en') return topic.description_en;
+    return topic.description_sv;
   };
 
   if (loading) {
