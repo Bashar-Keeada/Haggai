@@ -17,6 +17,7 @@ const AdminLeaders = () => {
   const [leaders, setLeaders] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [registrations, setRegistrations] = useState([]);
+  const [workshopTopics, setWorkshopTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingLeader, setEditingLeader] = useState(null);
