@@ -4302,6 +4302,161 @@ def generate_name_badge_pdf(
         alignment=TA_CENTER,
         fontName='Helvetica',
         letterSpacing=2
+
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+
+@api_router.post("/participants/forgot-password")
+async def participant_forgot_password(request: ForgotPasswordRequest):
+    """Send password reset email to participant"""
+    participant = await db.participants.find_one(
+        {"email": request.email.lower()},
+        {"_id": 0}
+    )
+    
+    if not participant:
+        # Don't reveal if email exists or not for security
+        return {"success": True, "message": "If email exists, reset link sent"}
+    
+    # Generate reset token
+    reset_token = secrets.token_urlsafe(32)
+    expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
+    
+    # Store reset token
+    await db.password_resets.insert_one({
+        "id": str(uuid.uuid4()),
+        "user_id": participant['id'],
+        "user_type": "participant",
+        "token": reset_token,
+        "email": participant['email'],
+        "expires_at": expires_at.isoformat(),
+        "used": False,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    # Send email
+    await send_password_reset_email(
+        participant['email'],
+        participant['full_name'],
+        reset_token,
+        "participant"
+    )
+    
+    return {"success": True, "message": "Reset link sent"}
+
+
+@api_router.get("/participants/validate-reset-token/{token}")
+async def validate_reset_token(token: str):
+    """Validate if reset token is valid and not expired"""
+    reset_record = await db.password_resets.find_one(
+        {"token": token, "user_type": "participant", "used": False},
+        {"_id": 0}
+    )
+    
+    if not reset_record:
+        raise HTTPException(status_code=404, detail="Invalid token")
+    
+    expires_at = datetime.fromisoformat(reset_record['expires_at'].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=410, detail="Token expired")
+    
+    return {"valid": True}
+
+
+@api_router.post("/participants/reset-password")
+async def participant_reset_password(request: ResetPasswordRequest):
+    """Reset participant password using token"""
+    reset_record = await db.password_resets.find_one(
+        {"token": request.token, "user_type": "participant", "used": False},
+        {"_id": 0}
+    )
+    
+    if not reset_record:
+        raise HTTPException(status_code=404, detail="Invalid token")
+    
+    expires_at = datetime.fromisoformat(reset_record['expires_at'].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=410, detail="Token expired")
+    
+    # Hash new password
+    password_hash = bcrypt.hashpw(request.new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    
+    # Update participant password
+    await db.participants.update_one(
+        {"id": reset_record['user_id']},
+        {"$set": {"password_hash": password_hash, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Mark token as used
+    await db.password_resets.update_one(
+        {"token": request.token},
+        {"$set": {"used": True, "used_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    return {"success": True, "message": "Password reset successfully"}
+
+
+async def send_password_reset_email(email: str, name: str, token: str, user_type: str):
+    """Send password reset email"""
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://community-manager-9.preview.emergentagent.com')
+    
+    if user_type == "participant":
+        reset_link = f"{frontend_url}/deltagare/aterstall-losenord/{token}"
+        portal_name = "Deltagare Portal"
+    else:
+        reset_link = f"{frontend_url}/ledare/aterstall-losenord/{token}"
+        portal_name = "Ledarportalen"
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #0891B2 0%, #0e7490 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">🔒 Återställ lösenord</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">{portal_name}</p>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+            <p>Hej <strong>{name}</strong>,</p>
+            
+            <p>Du har begärt att återställa ditt lösenord för {portal_name}.</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{reset_link}" style="display: inline-block; background: #0891B2; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                    Återställ lösenord →
+                </a>
+            </div>
+            
+            <p style="color: #666; font-size: 14px;">Länken är giltig i 1 timme.</p>
+            
+            <p style="color: #999; font-size: 12px; margin-top: 20px;">Om du inte begärde denna återställning, ignorera detta mejl.</p>
+            
+            <p style="margin-top: 30px;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        await asyncio.to_thread(resend.Emails.send, {
+            "from": SENDER_EMAIL,
+            "to": [email],
+            "subject": "🔒 Återställ ditt lösenord - Haggai Sweden",
+            "html": html_content
+        })
+        logging.info(f"Password reset email sent to {email}")
+    except Exception as e:
+        logging.error(f"Failed to send password reset email: {str(e)}")
+
     )
     
     workshop_style = ParagraphStyle(
