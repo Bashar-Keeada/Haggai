@@ -403,6 +403,55 @@ const AdminWorkshops = () => {
     return `${price} ${currency}`;
   };
 
+  // Get nomination link for a workshop
+  const getNominationLink = (workshopId) => {
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/nominera/${workshopId}`;
+  };
+
+  // Copy nomination link to clipboard
+  const copyNominationLink = (workshopId) => {
+    const link = getNominationLink(workshopId);
+    navigator.clipboard.writeText(link).then(() => {
+      toast.success(txt.linkCopied);
+    }).catch(() => {
+      toast.error('Kunde inte kopiera länken');
+    });
+  };
+
+  // Open QR code modal
+  const openQRModal = (workshop) => {
+    setQrWorkshop(workshop);
+    setShowQRDialog(true);
+  };
+
+  // Download QR code as image
+  const downloadQRCode = () => {
+    const svg = document.getElementById('nomination-qr-code');
+    if (!svg) return;
+    
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    img.onload = () => {
+      canvas.width = 300;
+      canvas.height = 300;
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, 300, 300);
+      
+      const pngFile = canvas.toDataURL('image/png');
+      const downloadLink = document.createElement('a');
+      downloadLink.download = `nominering-qr-${qrWorkshop?.id || 'workshop'}.png`;
+      downloadLink.href = pngFile;
+      downloadLink.click();
+    };
+    
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+  };
+
   return (
     <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
