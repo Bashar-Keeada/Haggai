@@ -92,6 +92,16 @@ const LeaderPortal = () => {
         noDocuments: 'Du har inga uppladdade dokument.',
         delete: 'Radera',
         uploadedAt: 'Uppladdat'
+      },
+      badge: {
+        title: 'Namnskylt',
+        subtitle: 'Ladda ner eller skriv ut din namnskylt för workshopen',
+        leader: 'LEADER',
+        workshop: 'WORKSHOP',
+        download: 'Ladda ner',
+        print: 'Skriv ut',
+        notAvailable: 'Namnbricka ej tillgänglig',
+        notApproved: 'Du behöver vara godkänd ledare för att se din namnbricka.'
       }
     },
     en: {
@@ -152,6 +162,16 @@ const LeaderPortal = () => {
         noDocuments: 'You have no uploaded documents.',
         delete: 'Delete',
         uploadedAt: 'Uploaded'
+      },
+      badge: {
+        title: 'Name Badge',
+        subtitle: 'Download or print your name badge for the workshop',
+        leader: 'LEADER',
+        workshop: 'WORKSHOP',
+        download: 'Download',
+        print: 'Print',
+        notAvailable: 'Name badge not available',
+        notApproved: 'You need to be an approved leader to see your name badge.'
       }
     }
   }[language] || {};
