@@ -343,6 +343,7 @@ test_plan:
     - "Admin Leaders Page"
     - "Leaders Public Page"
     - "Remove Made with Emergent Badge"
+    - "Share Nomination Link (Dela nomineringslänk)"
   stuck_tasks:
     - "Admin Leaders Page"
     - "Leaders Public Page"
