@@ -494,10 +494,10 @@ const LeaderRegistrationForm = () => {
       <section className="py-10" style={{background: 'linear-gradient(135deg, #014D73 0%, #012d44 100%)'}}>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <Badge className="bg-white/20 text-white mb-4 border-white/30">
-            <User className="h-4 w-4 mr-1" />
+            <User className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
             {txt.title}
           </Badge>
-          <h1 className="text-2xl md:text-3xl font-bold mb-2">{txt.title}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold mb-2" translate="no">{txt.title}</h1>
           <p className="text-white/80">{txt.subtitle}</p>
           
           {invitation?.workshop_title && (
@@ -510,20 +510,20 @@ const LeaderRegistrationForm = () => {
       </section>
 
       {/* Form */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8" translate="no">
         <form onSubmit={handleSubmit} className="space-y-6">
           
           {/* Personal Info */}
           <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-haggai">
+            <CardHeader className={isRTL ? 'text-right' : ''}>
+              <CardTitle className={`flex items-center gap-2 text-haggai ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <User className="h-5 w-5" />
                 {txt.personalInfo}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div className={`space-y-2 ${isRTL ? 'text-right' : ''}`}>
                   <Label>{txt.name} *</Label>
                   <Input
                     value={formData.name}
