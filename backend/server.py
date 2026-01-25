@@ -421,6 +421,7 @@ class LeaderRegistrationCreate(BaseModel):
     email: str
     phone: Optional[str] = None
     password: str
+    profile_image: Optional[str] = None
     
     # Profile
     bio_sv: Optional[str] = None
