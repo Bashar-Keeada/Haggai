@@ -906,6 +906,63 @@ const AdminWorkshopAgenda = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* QR Code Dialog */}
+      <Dialog open={showQRDialog} onOpenChange={setShowQRDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <QrCode className="h-5 w-5 text-purple-600" />
+              QR-kod för utvärdering
+            </DialogTitle>
+          </DialogHeader>
+          
+          {qrSession && (
+            <div className="text-center py-6">
+              <h3 className="font-semibold text-stone-800 mb-2">{qrSession.title}</h3>
+              {qrSession.leader_name && (
+                <p className="text-sm text-stone-500 mb-6">Ledare: {qrSession.leader_name}</p>
+              )}
+              
+              <div className="inline-block p-4 bg-white rounded-xl shadow-lg border-2 border-purple-200">
+                <QRCodeSVG 
+                  value={getEvalUrl(qrSession.id)}
+                  size={200}
+                  level="M"
+                  includeMargin={true}
+                />
+              </div>
+              
+              <p className="text-sm text-stone-500 mt-4">
+                Scanna med mobilen för att utvärdera
+              </p>
+              
+              <p className="text-xs text-stone-400 mt-2 break-all">
+                {getEvalUrl(qrSession.id)}
+              </p>
+              
+              <div className="flex gap-3 mt-6">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    navigator.clipboard.writeText(getEvalUrl(qrSession.id));
+                    toast.success('Länk kopierad!');
+                  }}
+                  className="flex-1"
+                >
+                  📋 Kopiera länk
+                </Button>
+                <Button
+                  onClick={printQRCode}
+                  className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
+                >
+                  🖨️ Skriv ut
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
