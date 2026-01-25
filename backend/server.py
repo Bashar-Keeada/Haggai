@@ -1765,6 +1765,106 @@ class WorkshopUpdate(BaseModel):
     is_active: Optional[bool] = None
 
 
+# ==================== SESSION EVALUATION MODELS ====================
+
+class EvaluationQuestion(BaseModel):
+    """A question used in session evaluations"""
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    text_sv: str  # Swedish text
+    text_en: Optional[str] = None  # English text
+    text_ar: Optional[str] = None  # Arabic text
+    description_sv: Optional[str] = None  # Optional helper text
+    description_en: Optional[str] = None
+    description_ar: Optional[str] = None
+    is_active: bool = True
+    order: int = 0
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    updated_at: Optional[str] = None
+
+
+class EvaluationQuestionCreate(BaseModel):
+    text_sv: str
+    text_en: Optional[str] = None
+    text_ar: Optional[str] = None
+    description_sv: Optional[str] = None
+    description_en: Optional[str] = None
+    description_ar: Optional[str] = None
+    is_active: bool = True
+    order: int = 0
+
+
+class EvaluationQuestionUpdate(BaseModel):
+    text_sv: Optional[str] = None
+    text_en: Optional[str] = None
+    text_ar: Optional[str] = None
+    description_sv: Optional[str] = None
+    description_en: Optional[str] = None
+    description_ar: Optional[str] = None
+    is_active: Optional[bool] = None
+    order: Optional[int] = None
+
+
+class EvaluationAnswer(BaseModel):
+    """Answer to a single evaluation question"""
+    question_id: str
+    rating: int  # 1-10
+
+
+class SessionEvaluation(BaseModel):
+    """A participant's evaluation of a session leader"""
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    workshop_id: str
+    session_id: str
+    leader_id: str
+    leader_name: Optional[str] = None  # Cached for display
+    session_title: Optional[str] = None  # Cached
+    participant_id: Optional[str] = None  # For tracking (hidden from leader)
+    participant_email: Optional[str] = None  # For tracking
+    answers: List[EvaluationAnswer] = []
+    comment: Optional[str] = None  # Optional free text comment
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class SessionEvaluationCreate(BaseModel):
+    workshop_id: str
+    session_id: str
+    leader_id: str
+    answers: List[EvaluationAnswer]
+    comment: Optional[str] = None
+    participant_email: Optional[str] = None  # Optional identifier
+
+
+class LeaderFeedback(BaseModel):
+    """Feedback sent to a leader by admin"""
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    leader_id: str
+    leader_email: Optional[str] = None
+    workshop_id: Optional[str] = None
+    session_id: Optional[str] = None
+    feedback_type: str  # "praise", "improvement", "general"
+    subject: str
+    message: str
+    statistics_summary: Optional[dict] = None  # Include stats in feedback
+    sent_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    sent_by: Optional[str] = None  # Admin who sent
+
+
+class LeaderFeedbackCreate(BaseModel):
+    leader_id: str
+    workshop_id: Optional[str] = None
+    session_id: Optional[str] = None
+    feedback_type: str = "general"
+    subject: str
+    message: str
+    include_statistics: bool = True
+
+
 # ==================== WORKSHOP AGENDA MODELS ====================
 
 class AgendaSession(BaseModel):
