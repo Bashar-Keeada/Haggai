@@ -239,6 +239,17 @@ const LeaderRegistrationForm = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleBackupTopicToggle = (topicId) => {
+    setFormData(prev => {
+      const currentBackups = prev.backup_topics || [];
+      if (currentBackups.includes(topicId)) {
+        return { ...prev, backup_topics: currentBackups.filter(t => t !== topicId) };
+      } else {
+        return { ...prev, backup_topics: [...currentBackups, topicId] };
+      }
+    });
+  };
+
   const handleFileChange = async (type, files) => {
     if (!files || files.length === 0) return;
     
