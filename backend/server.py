@@ -5168,7 +5168,7 @@ async def upload_leader_document(
 
 
 @api_router.delete("/leaders/me/documents/{document_id}")
-async def delete_leader_document(document_id: str, authorization: str = None):
+async def delete_leader_document(document_id: str, authorization: str = Header(None)):
     """Delete a document"""
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Ej auktoriserad")
