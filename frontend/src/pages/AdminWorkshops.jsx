@@ -821,6 +821,79 @@ const AdminWorkshops = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* QR Code Dialog for Nomination */}
+      <Dialog open={showQRDialog} onOpenChange={setShowQRDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader className={isRTL ? 'text-right' : ''}>
+            <DialogTitle className="flex items-center gap-2">
+              <QrCode className="h-5 w-5 text-haggai" />
+              {txt.qrCodeTitle}
+            </DialogTitle>
+          </DialogHeader>
+
+          {qrWorkshop && (
+            <div className="space-y-6 py-4">
+              {/* Workshop info */}
+              <div className={`text-center ${isRTL ? 'text-right' : ''}`}>
+                <h3 className="font-semibold text-stone-800 text-lg mb-1">
+                  {getLocalizedText(qrWorkshop.title)}
+                </h3>
+                {qrWorkshop.date && (
+                  <p className="text-stone-500 text-sm flex items-center justify-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    {formatDate(qrWorkshop.date)}
+                    {qrWorkshop.end_date && ` - ${formatDate(qrWorkshop.end_date)}`}
+                  </p>
+                )}
+              </div>
+
+              {/* QR Code */}
+              <div className="flex justify-center p-4 bg-white rounded-xl border-2 border-dashed border-stone-200">
+                <QRCodeSVG 
+                  id="nomination-qr-code"
+                  value={getNominationLink(qrWorkshop.id)}
+                  size={200}
+                  level="H"
+                  includeMargin={true}
+                  data-testid="nomination-qr-code"
+                />
+              </div>
+
+              {/* Description */}
+              <p className="text-center text-sm text-stone-500">
+                {txt.qrCodeDescription}
+              </p>
+
+              {/* Link display */}
+              <div className="bg-stone-50 rounded-lg p-3 break-all text-sm text-stone-600 font-mono">
+                {getNominationLink(qrWorkshop.id)}
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-3">
+                <Button 
+                  variant="outline" 
+                  onClick={() => copyNominationLink(qrWorkshop.id)}
+                  className="flex-1"
+                  data-testid="copy-nomination-link-btn"
+                >
+                  <Share2 className="h-4 w-4 mr-2" />
+                  {txt.copyLink}
+                </Button>
+                <Button 
+                  onClick={downloadQRCode}
+                  className="flex-1 bg-haggai hover:bg-haggai-dark"
+                  data-testid="download-qr-btn"
+                >
+                  <QrCode className="h-4 w-4 mr-2" />
+                  {txt.downloadQR}
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
