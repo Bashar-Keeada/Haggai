@@ -56,6 +56,37 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - **Leader Sessions View** (`/ledare/{id}/sessioner`)
   - Leaders can see their assigned sessions
 
+### Session Evaluation System ✅ NEW (Jan 25)
+- **Admin Question Management** (`/admin/utvardering/fragor`)
+  - CRUD for evaluation questions with multilingual support (SV/EN/AR)
+  - Questions can be activated/deactivated
+  - Custom ordering
+- **Participant Evaluation Form** (`/utvardering/{workshop_id}/{session_id}`)
+  - Public form accessible via email link or QR code
+  - Rating scale 1-10 with color-coded buttons (red/yellow/green)
+  - Anonymous for leaders, traceable by admin
+  - Optional comments and email
+- **Admin Evaluation Results** (`/admin/utvardering`)
+  - Overall statistics with averages
+  - Per-question breakdown with progress bars
+  - Leader comparison with ranking
+  - Per-session breakdown
+  - Filter by workshop and leader
+  - Identify strengths (≥8) and improvement areas (<7)
+- **Admin Feedback System**
+  - Send personalized feedback to leaders via email
+  - Choose feedback type: Praise, Improvement, General
+  - Optionally include statistics in email
+  - Feedback history tracking
+- **API Endpoints:**
+  - `GET/POST/PUT/DELETE /api/evaluation-questions` - Question CRUD
+  - `POST /api/evaluations` - Submit evaluation
+  - `GET /api/evaluations/stats` - Get statistics with filters
+  - `GET /api/evaluations/leader/{id}/detailed` - Detailed leader stats
+  - `POST /api/evaluations/feedback` - Send feedback email
+  - `GET /api/evaluation/form/{workshop_id}/{session_id}` - Form data
+- **Tests:** 25 backend API tests passing (100%)
+
 ### Member Portal ✅
 - **Member Login** (`/medlem-login`) - Automatic account creation when diploma is sent
 - **Mina Sidor** (`/mina-sidor`) - Member dashboard with profile, messages, diplomas
