@@ -339,6 +339,7 @@ class LeaderInvitation(BaseModel):
     name: str
     workshop_id: Optional[str] = None  # Optional - for workshop-specific invitations
     workshop_title: Optional[str] = None
+    language: str = "sv"  # sv, en, ar
     status: str = "pending"  # pending, registered, expired
     sent_at: Optional[str] = None
     expires_at: str = Field(default_factory=lambda: (datetime.now(timezone.utc) + timedelta(days=30)).isoformat())
@@ -350,6 +351,7 @@ class LeaderInvitationCreate(BaseModel):
     name: str
     workshop_id: Optional[str] = None
     workshop_title: Optional[str] = None
+    language: str = "sv"  # sv, en, ar
 
 
 class LeaderRegistration(BaseModel):
