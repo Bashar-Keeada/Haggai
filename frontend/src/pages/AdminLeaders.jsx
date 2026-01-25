@@ -219,6 +219,8 @@ const AdminLeaders = () => {
 
   useEffect(() => {
     fetchLeaders();
+    fetchInvitations();
+    fetchRegistrations();
   }, []);
 
   const fetchLeaders = async () => {
@@ -233,6 +235,107 @@ const AdminLeaders = () => {
       toast.error('Kunde inte hämta ledare');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchInvitations = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/leader-invitations`);
+      if (response.ok) {
+        const data = await response.json();
+        setInvitations(data);
+      }
+    } catch (error) {
+      console.error('Error fetching invitations:', error);
+    }
+  };
+
+  const fetchRegistrations = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/leader-registrations`);
+      if (response.ok) {
+        const data = await response.json();
+        setRegistrations(data);
+      }
+    } catch (error) {
+      console.error('Error fetching registrations:', error);
+    }
+  };
+
+  const handleSendInvite = async () => {
+    if (!inviteData.name || !inviteData.email) {
+      toast.error('Namn och e-post krävs');
+      return;
+    }
+    
+    setSendingInvite(true);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/leader-invitations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(inviteData)
+      });
+      
+      if (response.ok) {
+        toast.success(language === 'sv' ? 'Inbjudan skickad!' : 'Invitation sent!');
+        setShowInviteDialog(false);
+        setInviteData({ name: '', email: '', workshop_id: '', workshop_title: '' });
+        fetchInvitations();
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to send invitation');
+      }
+    } catch (error) {
+      toast.error(error.message || 'Kunde inte skicka inbjudan');
+    } finally {
+      setSendingInvite(false);
+    }
+  };
+
+  const handleResendInvite = async (invitationId) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/leader-invitations/${invitationId}/resend`, {
+        method: 'POST'
+      });
+      
+      if (response.ok) {
+        toast.success(language === 'sv' ? 'Påminnelse skickad!' : 'Reminder sent!');
+      }
+    } catch (error) {
+      toast.error('Kunde inte skicka påminnelse');
+    }
+  };
+
+  const handleApproveRegistration = async (registrationId) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/leader-registrations/${registrationId}/approve`, {
+        method: 'POST'
+      });
+      
+      if (response.ok) {
+        toast.success(language === 'sv' ? 'Ledare godkänd!' : 'Leader approved!');
+        fetchRegistrations();
+        fetchLeaders();
+      }
+    } catch (error) {
+      toast.error('Kunde inte godkänna');
+    }
+  };
+
+  const handleRejectRegistration = async (registrationId) => {
+    const reason = window.prompt(language === 'sv' ? 'Ange anledning (valfritt):' : 'Enter reason (optional):');
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/leader-registrations/${registrationId}/reject?reason=${encodeURIComponent(reason || '')}`, {
+        method: 'POST'
+      });
+      
+      if (response.ok) {
+        toast.success(language === 'sv' ? 'Registrering avslagen' : 'Registration rejected');
+        fetchRegistrations();
+      }
+    } catch (error) {
+      toast.error('Kunde inte avslå');
     }
   };
 
