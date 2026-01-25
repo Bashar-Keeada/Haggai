@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -26,6 +26,7 @@ const ParticipantLogin = () => {
       password: 'Lösenord',
       login: 'Logga in',
       forgotPassword: 'Glömt lösenord?',
+      resetPassword: 'Återställ här',
       contactAdmin: 'Kontakta administratören',
       loginError: 'Fel e-post eller lösenord'
     },
@@ -139,7 +140,7 @@ const ParticipantLogin = () => {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-stone-500">
-              {t.forgotPassword} <a href="mailto:info@haggai.se" className="text-haggai hover:underline">{t.contactAdmin}</a>
+              {t.forgotPassword} <Link to="/deltagare/glomt-losenord" className="text-haggai hover:underline">{t.contactAdmin}</Link>
             </p>
           </div>
         </CardContent>
