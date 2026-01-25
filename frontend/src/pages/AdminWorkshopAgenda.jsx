@@ -480,6 +480,69 @@ const AdminWorkshopAgenda = () => {
     return <Badge className={styles[type] || styles.other}>{labels[type] || type}</Badge>;
   };
 
+  const openQRDialog = (session) => {
+    setQrSession(session);
+    setShowQRDialog(true);
+  };
+
+  const getEvalUrl = (sessionId) => {
+    return `${window.location.origin}/utvardering/${workshopId}/${sessionId}`;
+  };
+
+  const sendEvaluationEmails = async (sessionId) => {
+    setSendingEval(sessionId);
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/api/workshops/${workshopId}/sessions/${sessionId}/send-evaluation`,
+        { method: 'POST' }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        toast.success(`Utvärdering skickad till ${data.sent_count} deltagare!`);
+      } else {
+        throw new Error('Failed to send');
+      }
+    } catch (error) {
+      console.error('Error sending evaluation:', error);
+      toast.error('Kunde inte skicka utvärdering');
+    } finally {
+      setSendingEval(null);
+    }
+  };
+
+  const printQRCode = () => {
+    const printWindow = window.open('', '_blank');
+    const evalUrl = getEvalUrl(qrSession.id);
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>QR-kod - ${qrSession.title}</title>
+        <style>
+          body { font-family: Arial, sans-serif; text-align: center; padding: 40px; }
+          h1 { color: #014D73; margin-bottom: 10px; }
+          h2 { color: #666; font-weight: normal; margin-bottom: 30px; }
+          .qr-container { display: inline-block; padding: 20px; border: 2px solid #014D73; border-radius: 10px; }
+          p { color: #888; margin-top: 20px; }
+          .url { font-size: 12px; color: #999; word-break: break-all; }
+        </style>
+      </head>
+      <body>
+        <h1>📝 Utvärdera sessionen</h1>
+        <h2>${qrSession.title}</h2>
+        <div class="qr-container">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(evalUrl)}" />
+        </div>
+        <p>Scanna QR-koden med din mobil för att utvärdera</p>
+        <p class="url">${evalUrl}</p>
+        <script>window.print();</script>
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-cream-50 flex items-center justify-center">
