@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
-import { Heart, Smartphone, Building2, Repeat, Gift, Users, BookOpen, Target, Globe, CheckCircle, Copy, Check } from 'lucide-react';
+import { Heart, Smartphone, Building2, Repeat, Gift, Users, BookOpen, Target, Globe, CheckCircle, Copy, Check, PenLine } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
+import { Input } from '../components/ui/input';
 import { useLanguage } from '../context/LanguageContext';
 import { toast } from 'sonner';
 
 const Donations = () => {
   const { language, isRTL } = useLanguage();
   const [copiedField, setCopiedField] = useState(null);
+  const [selectedOneTime, setSelectedOneTime] = useState(null);
+  const [selectedRecurring, setSelectedRecurring] = useState(null);
+  const [customOneTime, setCustomOneTime] = useState('');
+  const [customRecurring, setCustomRecurring] = useState('');
+  const [showCustomOneTime, setShowCustomOneTime] = useState(false);
+  const [showCustomRecurring, setShowCustomRecurring] = useState(false);
 
   const txt = {
     sv: {
