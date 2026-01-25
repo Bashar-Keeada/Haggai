@@ -34,6 +34,10 @@ import NomineeRegistration from "./pages/NomineeRegistration";
 import PublicAgenda from "./pages/PublicAgenda";
 import LeaderSessions from "./pages/LeaderSessions";
 import PublicNominationForm from "./pages/PublicNominationForm";
+// Leader Portal Pages
+import LeaderRegistrationForm from "./pages/LeaderRegistrationForm";
+import LeaderLogin from "./pages/LeaderLogin";
+import LeaderPortal from "./pages/LeaderPortal";
 // Member Portal Pages
 import MemberLogin from "./pages/MemberLogin";
 import MinaSidor from "./pages/MinaSidor";
