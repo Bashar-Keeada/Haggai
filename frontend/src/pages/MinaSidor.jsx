@@ -8,7 +8,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { 
   User, MessageSquare, GraduationCap, Users, Settings, LogOut, 
   Bell, Edit, Mail, Phone, MapPin, Award, Heart, Briefcase,
-  MessageCircle, ArrowLeft
+  MessageCircle, ArrowLeft, ClipboardCheck
 } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -18,6 +18,7 @@ const MinaSidor = () => {
   const navigate = useNavigate();
   const [member, setMember] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [pendingEvaluations, setPendingEvaluations] = useState([]);
 
   const translations = {
     sv: {
@@ -38,7 +39,10 @@ const MinaSidor = () => {
       noInterests: 'Inga intressen valda',
       memberSince: 'Medlem sedan',
       viewAll: 'Visa alla',
-      backToHome: 'Tillbaka till startsidan'
+      backToHome: 'Tillbaka till startsidan',
+      pendingEvaluations: 'Väntande utvärderingar',
+      evaluateNow: 'Utvärdera nu',
+      noEvaluations: 'Inga väntande utvärderingar'
     },
     en: {
       title: 'My Pages',
@@ -58,6 +62,10 @@ const MinaSidor = () => {
       noInterests: 'No interests selected',
       memberSince: 'Member since',
       viewAll: 'View all',
+      pendingEvaluations: 'Pending Evaluations',
+      evaluateNow: 'Evaluate now',
+      noEvaluations: 'No pending evaluations'
+    },
       backToHome: 'Back to home'
     },
     ar: {
