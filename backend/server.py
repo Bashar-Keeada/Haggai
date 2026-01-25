@@ -5207,6 +5207,10 @@ async def register_leader(token: str, input: LeaderRegistrationCreate):
     # Update email to lowercase before creating the object
     leader_data['email'] = input.email.lower()
     
+    # Store profile image in image_url field if provided
+    if input.profile_image:
+        leader_data['image_url'] = input.profile_image
+    
     leader = LeaderRegistration(
         **leader_data,
         invitation_id=invitation['id'],
