@@ -4603,6 +4603,24 @@ async def seed_categories():
     return {"message": "Categories already exist"}
 
 
+# ==================== WORKSHOP TOPICS FOR LEADERS ====================
+
+# Predefined workshop topics that leaders can choose from
+WORKSHOP_TOPICS = [
+    {"id": "vision", "name_sv": "Vision", "name_en": "Vision", "description_sv": "Utveckla och kommunicera en tydlig vision för din organisation"},
+    {"id": "faithfulness", "name_sv": "Trofasthet", "name_en": "Faithfulness", "description_sv": "Vikten av trofasthet och integritet i ledarskap"},
+    {"id": "success", "name_sv": "Framgång", "name_en": "Success", "description_sv": "Definiera och uppnå framgång som ledare"},
+    {"id": "preparation", "name_sv": "Förberedelse", "name_en": "Preparation", "description_sv": "Strategisk planering och förberedelse för framtiden"},
+    {"id": "multiplication", "name_sv": "Multiplikation", "name_en": "Multiplication", "description_sv": "Utveckla och multiplicera ledarskap i din organisation"}
+]
+
+
+@api_router.get("/workshop-topics")
+async def get_workshop_topics():
+    """Get available workshop topics for leader selection"""
+    return WORKSHOP_TOPICS
+
+
 # ==================== LEADER INVITATION & REGISTRATION ENDPOINTS ====================
 
 # --- Leader Invitations ---
