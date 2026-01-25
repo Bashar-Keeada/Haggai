@@ -715,6 +715,128 @@ const LeaderPortal = () => {
               </CardContent>
             </Card>
           </TabsContent>
+
+          {/* Badge Tab */}
+          <TabsContent value="badge">
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <IdCard className="h-5 w-5 text-haggai" />
+                  {txt.badge.title}
+                </CardTitle>
+                <p className="text-sm text-stone-500 mt-2">{txt.badge.subtitle}</p>
+              </CardHeader>
+              <CardContent>
+                {leader.status === 'approved' ? (
+                  <div className="max-w-md mx-auto">
+                    {/* Name Badge Preview */}
+                    <div className="bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-stone-100 mb-6">
+                      {/* Header */}
+                      <div className="bg-gradient-to-br from-[#8B5CF6] to-[#7C3AED] text-white py-8 px-6 text-center">
+                        <div className="text-3xl font-bold tracking-[0.3em] mb-3">HAGGAI</div>
+                        <div className="bg-[#A78BFA] text-white text-sm font-bold py-2 px-4 rounded-lg inline-block">
+                          {txt.badge.leader}
+                        </div>
+                      </div>
+
+                      {/* Body */}
+                      <div className="bg-white py-10 px-6 text-center">
+                        <div className="text-2xl font-bold text-stone-800 mb-8">
+                          {leader.name}
+                        </div>
+
+                        <div className="border-t pt-6">
+                          <div className="text-xs text-stone-400 tracking-widest mb-2">{txt.badge.workshop}</div>
+                          <div className="text-lg font-bold text-stone-800">
+                            Haggai Workshop
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-3">
+                      <button
+                        onClick={async () => {
+                          try {
+                            const token = localStorage.getItem('leader_token');
+                            const response = await fetch(`${BACKEND_URL}/api/leaders/${leader.id}/name-badge`, {
+                              headers: { 'Authorization': `Bearer ${token}` }
+                            });
+                            
+                            if (response.ok) {
+                              const blob = await response.blob();
+                              const url = window.URL.createObjectURL(blob);
+                              const a = document.createElement('a');
+                              a.href = url;
+                              a.download = `Namnskylt_${leader.name}.pdf`;
+                              document.body.appendChild(a);
+                              a.click();
+                              window.URL.revokeObjectURL(url);
+                              document.body.removeChild(a);
+                              toast.success(language === 'sv' ? 'Namnbrickan har laddats ner!' : 'Name badge downloaded!');
+                            } else {
+                              throw new Error('Download failed');
+                            }
+                          } catch (err) {
+                            console.error('Error downloading badge:', err);
+                            toast.error(language === 'sv' ? 'Kunde inte ladda ner namnbrickan' : 'Could not download name badge');
+                          }
+                        }}
+                        className="flex-1 bg-stone-800 hover:bg-stone-900 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                      >
+                        <Download className="h-4 w-4" />
+                        {txt.badge.download}
+                      </button>
+                      <button
+                        onClick={async () => {
+                          try {
+                            const token = localStorage.getItem('leader_token');
+                            const response = await fetch(`${BACKEND_URL}/api/leaders/${leader.id}/name-badge`, {
+                              headers: { 'Authorization': `Bearer ${token}` }
+                            });
+                            
+                            if (response.ok) {
+                              const blob = await response.blob();
+                              const url = window.URL.createObjectURL(blob);
+                              const iframe = document.createElement('iframe');
+                              iframe.style.display = 'none';
+                              iframe.src = url;
+                              document.body.appendChild(iframe);
+                              
+                              iframe.onload = function() {
+                                iframe.contentWindow.print();
+                              };
+                              
+                              setTimeout(() => {
+                                document.body.removeChild(iframe);
+                                window.URL.revokeObjectURL(url);
+                              }, 1000);
+                            } else {
+                              throw new Error('Print failed');
+                            }
+                          } catch (err) {
+                            console.error('Error printing badge:', err);
+                            toast.error(language === 'sv' ? 'Kunde inte skriva ut namnbrickan' : 'Could not print name badge');
+                          }
+                        }}
+                        className="flex-1 border-2 border-stone-300 hover:bg-stone-50 text-stone-700 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                      >
+                        <Printer className="h-4 w-4" />
+                        {txt.badge.print}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <IdCard className="h-16 w-16 text-stone-300 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-stone-800 mb-2">{txt.badge.notAvailable}</h3>
+                    <p className="text-stone-500">{txt.badge.notApproved}</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
       </main>
 
