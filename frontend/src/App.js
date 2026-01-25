@@ -61,6 +61,10 @@ function App() {
               <Route path="/ledare/:leaderId/sessioner" element={<LeaderSessions />} />
               <Route path="/utvardering/:workshopId/:sessionId" element={<SessionEvaluationForm />} />
               <Route path="/nominera/:workshopId" element={<PublicNominationForm />} />
+              {/* Leader Portal Routes */}
+              <Route path="/ledare/registrera/:token" element={<LeaderRegistrationForm />} />
+              <Route path="/ledare/login" element={<LeaderLogin />} />
+              <Route path="/ledare/portal" element={<LeaderPortal />} />
               {/* Member Portal Routes */}
               <Route path="/mina-sidor" element={<MinaSidor />} />
               <Route path="/mina-sidor/profil" element={<MemberProfile />} />
