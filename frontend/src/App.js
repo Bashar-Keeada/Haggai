@@ -23,6 +23,9 @@ import AdminNominations from "./pages/AdminNominations";
 import AdminWorkshops from "./pages/AdminWorkshops";
 import AdminWorkshopAgenda from "./pages/AdminWorkshopAgenda";
 import AdminTrainingParticipants from "./pages/AdminTrainingParticipants";
+import AdminEvaluationQuestions from "./pages/AdminEvaluationQuestions";
+import AdminEvaluationResults from "./pages/AdminEvaluationResults";
+import SessionEvaluationForm from "./pages/SessionEvaluationForm";
 import MembersArea from "./pages/MembersArea";
 import Partners from "./pages/Partners";
 import Donations from "./pages/Donations";
@@ -51,6 +54,7 @@ function App() {
               <Route path="/medlem-login" element={<MemberLogin />} />
               <Route path="/program/:workshopId" element={<PublicAgenda />} />
               <Route path="/ledare/:leaderId/sessioner" element={<LeaderSessions />} />
+              <Route path="/utvardering/:workshopId/:sessionId" element={<SessionEvaluationForm />} />
               {/* Member Portal Routes */}
               <Route path="/mina-sidor" element={<MinaSidor />} />
               <Route path="/mina-sidor/profil" element={<MemberProfile />} />
