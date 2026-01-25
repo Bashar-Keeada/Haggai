@@ -86,7 +86,10 @@ const MinaSidor = () => {
       noInterests: 'لم يتم اختيار اهتمامات',
       memberSince: 'عضو منذ',
       viewAll: 'عرض الكل',
-      backToHome: 'العودة للصفحة الرئيسية'
+      backToHome: 'العودة للصفحة الرئيسية',
+      pendingEvaluations: 'التقييمات المعلقة',
+      evaluateNow: 'قيم الآن',
+      noEvaluations: 'لا توجد تقييمات معلقة'
     }
   };
 
@@ -104,14 +107,24 @@ const MinaSidor = () => {
     }
 
     try {
-      const response = await fetch(`${BACKEND_URL}/api/members/me?token=${token}`);
-      if (response.ok) {
-        const data = await response.json();
+      const [memberRes, evalsRes] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/members/me?token=${token}`),
+        fetch(`${BACKEND_URL}/api/member/pending-evaluations?token=${token}`)
+      ]);
+      
+      if (memberRes.ok) {
+        const data = await memberRes.json();
         setMember(data);
       } else {
         localStorage.removeItem('memberToken');
         localStorage.removeItem('memberData');
         navigate('/medlem-login');
+        return;
+      }
+      
+      if (evalsRes.ok) {
+        const evalsData = await evalsRes.json();
+        setPendingEvaluations(evalsData);
       }
     } catch (error) {
       console.error('Error fetching member data:', error);
