@@ -3090,7 +3090,6 @@ async def send_evaluation_to_participants(workshop_id: str, session_id: str):
     
     # Also get members who might be participants
     members = await db.members.find({}, {"_id": 0, "email": 1, "name": 1}).to_list(1000)
-    member_emails = {m["email"] for m in members}
     
     if not participants and not members:
         return {"success": False, "message": "No participants found", "sent_count": 0}
