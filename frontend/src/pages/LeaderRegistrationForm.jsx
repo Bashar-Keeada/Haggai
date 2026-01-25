@@ -592,8 +592,8 @@ const LeaderRegistrationForm = () => {
 
           {/* Topic Selection */}
           <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-haggai">
+            <CardHeader className={isRTL ? 'text-right' : ''}>
+              <CardTitle className={`flex items-center gap-2 text-haggai ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <BookOpen className="h-5 w-5" />
                 {txt.topicSection}
               </CardTitle>
@@ -601,7 +601,7 @@ const LeaderRegistrationForm = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Primary Topic */}
-              <div className="space-y-3">
+              <div className={`space-y-3 ${isRTL ? 'text-right' : ''}`}>
                 <Label className="text-base font-semibold">{txt.primaryTopic} *</Label>
                 <p className="text-sm text-stone-500">{txt.primaryTopicDesc}</p>
                 <div className="grid gap-3">
@@ -612,7 +612,7 @@ const LeaderRegistrationForm = () => {
                         formData.primary_topic === topic.id 
                           ? 'border-haggai bg-haggai/5 shadow-sm' 
                           : 'border-stone-200 hover:border-stone-300 hover:bg-stone-50'
-                      }`}
+                      } ${isRTL ? 'flex-row-reverse text-right' : ''}`}
                     >
                       <input
                         type="radio"
