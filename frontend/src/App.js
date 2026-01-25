@@ -14,6 +14,7 @@ import LeaderExperience from "./pages/LeaderExperience";
 import LeaderExperienceApplication from "./pages/LeaderExperienceApplication";
 import Leaders from "./pages/Leaders";
 import AdminLeaders from "./pages/AdminLeaders";
+import AdminNameBadges from "./pages/AdminNameBadges";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminBoardMembers from "./pages/AdminBoardMembers";
 import AdminOrganizationMembers from "./pages/AdminOrganizationMembers";
