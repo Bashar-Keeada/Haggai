@@ -4730,11 +4730,12 @@ async def register_leader(token: str, input: LeaderRegistrationCreate):
     # Create leader registration
     leader_data = input.model_dump()
     del leader_data['password']
+    # Update email to lowercase before creating the object
+    leader_data['email'] = input.email.lower()
     
     leader = LeaderRegistration(
         **leader_data,
         invitation_id=invitation['id'],
-        email=input.email.lower(),
         password_hash=password_hash
     )
     
