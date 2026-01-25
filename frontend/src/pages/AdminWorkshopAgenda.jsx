@@ -722,21 +722,57 @@ const AdminWorkshopAgenda = () => {
                           
                           {getSessionTypeBadge(session.session_type)}
                           
-                          {/* Evaluation link button - only for sessions with leaders */}
+                          {/* Evaluation buttons - only for sessions with leaders */}
                           {session.session_type === 'session' && session.leader_id && agenda.is_published && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="text-orange-600 border-orange-300 hover:bg-orange-50"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                const evalUrl = `${window.location.origin}/utvardering/${workshopId}/${session.id}`;
-                                navigator.clipboard.writeText(evalUrl);
-                                toast.success('Utvärderingslänk kopierad!');
-                              }}
-                            >
-                              📋 Kopiera utvärderingslänk
-                            </Button>
+                            <div className="flex gap-1">
+                              {/* QR Code button */}
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-purple-600 border-purple-300 hover:bg-purple-50"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openQRDialog(session);
+                                }}
+                                title="Visa QR-kod"
+                              >
+                                <QrCode className="h-4 w-4" />
+                              </Button>
+                              
+                              {/* Send Email button */}
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-blue-600 border-blue-300 hover:bg-blue-50"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  sendEvaluationEmails(session.id);
+                                }}
+                                disabled={sendingEval === session.id}
+                                title="Skicka utvärdering via e-post"
+                              >
+                                {sendingEval === session.id ? (
+                                  <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                                ) : (
+                                  <Mail className="h-4 w-4" />
+                                )}
+                              </Button>
+                              
+                              {/* Copy Link button */}
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigator.clipboard.writeText(getEvalUrl(session.id));
+                                  toast.success('Utvärderingslänk kopierad!');
+                                }}
+                                title="Kopiera länk"
+                              >
+                                📋
+                              </Button>
+                            </div>
                           )}
                           
                           <Button
