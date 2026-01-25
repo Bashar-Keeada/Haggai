@@ -4504,6 +4504,746 @@ async def seed_categories():
     return {"message": "Categories already exist"}
 
 
+# ==================== LEADER INVITATION & REGISTRATION ENDPOINTS ====================
+
+# --- Leader Invitations ---
+
+@api_router.get("/leader-invitations")
+async def get_leader_invitations(status: Optional[str] = None):
+    """Get all leader invitations"""
+    query = {}
+    if status:
+        query["status"] = status
+    invitations = await db.leader_invitations.find(query, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return invitations
+
+
+@api_router.get("/leader-invitations/{token}")
+async def get_leader_invitation_by_token(token: str):
+    """Get a leader invitation by token (public endpoint for registration form)"""
+    invitation = await db.leader_invitations.find_one({"token": token}, {"_id": 0})
+    if not invitation:
+        raise HTTPException(status_code=404, detail="Inbjudan hittades inte")
+    
+    # Check if expired
+    if invitation.get("expires_at"):
+        expires_at = datetime.fromisoformat(invitation["expires_at"].replace("Z", "+00:00"))
+        if datetime.now(timezone.utc) > expires_at:
+            raise HTTPException(status_code=410, detail="Inbjudan har gått ut")
+    
+    # Check if already registered
+    if invitation.get("status") == "registered":
+        raise HTTPException(status_code=400, detail="Denna inbjudan har redan använts")
+    
+    return invitation
+
+
+@api_router.post("/leader-invitations")
+async def create_leader_invitation(input: LeaderInvitationCreate):
+    """Create and send a leader invitation"""
+    # Check if email already has pending invitation
+    existing = await db.leader_invitations.find_one({
+        "email": input.email.lower(),
+        "status": "pending"
+    })
+    if existing:
+        raise HTTPException(status_code=400, detail="En inbjudan har redan skickats till denna e-post")
+    
+    # Check if leader is already registered
+    existing_leader = await db.leader_registrations.find_one({"email": input.email.lower()})
+    if existing_leader:
+        raise HTTPException(status_code=400, detail="Denna ledare är redan registrerad")
+    
+    invitation = LeaderInvitation(**input.model_dump())
+    invitation.email = invitation.email.lower()
+    
+    doc = invitation.model_dump()
+    await db.leader_invitations.insert_one(doc)
+    
+    # Send invitation email
+    base_url = os.environ.get('FRONTEND_URL', 'https://haggai-portal.preview.emergentagent.com')
+    registration_link = f"{base_url}/ledare/registrera/{invitation.token}"
+    
+    workshop_info = ""
+    if input.workshop_title:
+        workshop_info = f"""
+        <p><strong>Workshop:</strong> {input.workshop_title}</p>
+        """
+    
+    email_html = f"""
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; text-align: center;">
+            <h1 style="color: white; margin: 0;">Haggai Sweden</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Inbjudan till ledarregistrering</p>
+        </div>
+        
+        <div style="padding: 30px; background: #f8f9fa;">
+            <p>Hej <strong>{input.name}</strong>,</p>
+            
+            <p>Du har blivit inbjuden att registrera dig som ledare hos Haggai Sweden.</p>
+            
+            {workshop_info}
+            
+            <p>Klicka på länken nedan för att slutföra din registrering:</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{registration_link}" 
+                   style="background: #014D73; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold;">
+                    Registrera dig nu
+                </a>
+            </div>
+            
+            <p style="color: #666; font-size: 14px;">
+                Länken är giltig i 30 dagar. Om du har frågor, kontakta oss på info@haggai.se
+            </p>
+            
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+            
+            <p style="color: #888; font-size: 12px;">
+                Haggai Sweden | <a href="https://haggai.se" style="color: #014D73;">haggai.se</a> (By Keeada)
+            </p>
+        </div>
+    </div>
+    """
+    
+    try:
+        resend.emails.send({
+            "from": SENDER_EMAIL,
+            "to": [input.email],
+            "subject": "Inbjudan till ledarregistrering - Haggai Sweden",
+            "html": email_html
+        })
+        
+        # Update sent_at
+        await db.leader_invitations.update_one(
+            {"id": invitation.id},
+            {"$set": {"sent_at": datetime.now(timezone.utc).isoformat()}}
+        )
+    except Exception as e:
+        logger.error(f"Failed to send invitation email: {e}")
+    
+    return {"message": "Inbjudan skickad", "invitation_id": invitation.id}
+
+
+@api_router.delete("/leader-invitations/{invitation_id}")
+async def delete_leader_invitation(invitation_id: str):
+    """Delete a leader invitation"""
+    result = await db.leader_invitations.delete_one({"id": invitation_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Inbjudan hittades inte")
+    return {"message": "Inbjudan raderad"}
+
+
+@api_router.post("/leader-invitations/{invitation_id}/resend")
+async def resend_leader_invitation(invitation_id: str):
+    """Resend a leader invitation email"""
+    invitation = await db.leader_invitations.find_one({"id": invitation_id})
+    if not invitation:
+        raise HTTPException(status_code=404, detail="Inbjudan hittades inte")
+    
+    if invitation.get("status") == "registered":
+        raise HTTPException(status_code=400, detail="Denna inbjudan har redan använts")
+    
+    base_url = os.environ.get('FRONTEND_URL', 'https://haggai-portal.preview.emergentagent.com')
+    registration_link = f"{base_url}/ledare/registrera/{invitation['token']}"
+    
+    workshop_info = ""
+    if invitation.get("workshop_title"):
+        workshop_info = f"<p><strong>Workshop:</strong> {invitation['workshop_title']}</p>"
+    
+    email_html = f"""
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; text-align: center;">
+            <h1 style="color: white; margin: 0;">Haggai Sweden</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Påminnelse: Ledarregistrering</p>
+        </div>
+        
+        <div style="padding: 30px; background: #f8f9fa;">
+            <p>Hej <strong>{invitation['name']}</strong>,</p>
+            
+            <p>Detta är en påminnelse om din inbjudan att registrera dig som ledare hos Haggai Sweden.</p>
+            
+            {workshop_info}
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{registration_link}" 
+                   style="background: #014D73; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold;">
+                    Registrera dig nu
+                </a>
+            </div>
+            
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+            
+            <p style="color: #888; font-size: 12px;">
+                Haggai Sweden | <a href="https://haggai.se" style="color: #014D73;">haggai.se</a> (By Keeada)
+            </p>
+        </div>
+    </div>
+    """
+    
+    try:
+        resend.emails.send({
+            "from": SENDER_EMAIL,
+            "to": [invitation['email']],
+            "subject": "Påminnelse: Ledarregistrering - Haggai Sweden",
+            "html": email_html
+        })
+        
+        await db.leader_invitations.update_one(
+            {"id": invitation_id},
+            {"$set": {"sent_at": datetime.now(timezone.utc).isoformat()}}
+        )
+    except Exception as e:
+        logger.error(f"Failed to resend invitation email: {e}")
+        raise HTTPException(status_code=500, detail="Kunde inte skicka e-post")
+    
+    return {"message": "Påminnelse skickad"}
+
+
+# --- Leader Registration ---
+
+@api_router.post("/leaders/register/{token}")
+async def register_leader(token: str, input: LeaderRegistrationCreate):
+    """Register a new leader using invitation token"""
+    # Verify invitation
+    invitation = await db.leader_invitations.find_one({"token": token})
+    if not invitation:
+        raise HTTPException(status_code=404, detail="Ogiltig inbjudningslänk")
+    
+    if invitation.get("status") == "registered":
+        raise HTTPException(status_code=400, detail="Denna inbjudan har redan använts")
+    
+    # Check expiry
+    if invitation.get("expires_at"):
+        expires_at = datetime.fromisoformat(invitation["expires_at"].replace("Z", "+00:00"))
+        if datetime.now(timezone.utc) > expires_at:
+            raise HTTPException(status_code=410, detail="Inbjudan har gått ut")
+    
+    # Check if email already registered
+    existing = await db.leader_registrations.find_one({"email": input.email.lower()})
+    if existing:
+        raise HTTPException(status_code=400, detail="Denna e-post är redan registrerad")
+    
+    # Hash password
+    password_hash = bcrypt.hashpw(input.password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    
+    # Create leader registration
+    leader_data = input.model_dump()
+    del leader_data['password']
+    
+    leader = LeaderRegistration(
+        **leader_data,
+        invitation_id=invitation['id'],
+        email=input.email.lower(),
+        password_hash=password_hash
+    )
+    
+    doc = leader.model_dump()
+    await db.leader_registrations.insert_one(doc)
+    
+    # Update invitation status
+    await db.leader_invitations.update_one(
+        {"token": token},
+        {"$set": {"status": "registered"}}
+    )
+    
+    # Notify admin
+    try:
+        admin_html = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px;">
+            <h2 style="color: #014D73;">Ny ledarregistrering</h2>
+            <p>En ny ledare har registrerat sig och väntar på godkännande:</p>
+            <ul>
+                <li><strong>Namn:</strong> {leader.name}</li>
+                <li><strong>E-post:</strong> {leader.email}</li>
+                <li><strong>Telefon:</strong> {leader.phone or '-'}</li>
+                <li><strong>Kostnadsval:</strong> {'Själv' if leader.cost_preference == 'self' else 'Haggai bidrar'}</li>
+                <li><strong>Ankomst:</strong> {leader.arrival_date or '-'}</li>
+                <li><strong>Avresa:</strong> {leader.departure_date or '-'}</li>
+            </ul>
+            <p>Gå till admin-panelen för att granska och godkänna registreringen.</p>
+        </div>
+        """
+        
+        resend.emails.send({
+            "from": SENDER_EMAIL,
+            "to": [ADMIN_EMAIL],
+            "subject": f"Ny ledarregistrering: {leader.name}",
+            "html": admin_html
+        })
+    except Exception as e:
+        logger.error(f"Failed to send admin notification: {e}")
+    
+    return {"message": "Registrering genomförd! Väntar på godkännande.", "leader_id": leader.id}
+
+
+@api_router.get("/leader-registrations")
+async def get_leader_registrations(status: Optional[str] = None):
+    """Get all leader registrations (admin)"""
+    query = {}
+    if status:
+        query["status"] = status
+    registrations = await db.leader_registrations.find(query, {"_id": 0, "password_hash": 0}).sort("created_at", -1).to_list(500)
+    return registrations
+
+
+@api_router.get("/leader-registrations/{registration_id}")
+async def get_leader_registration(registration_id: str):
+    """Get a specific leader registration (admin)"""
+    registration = await db.leader_registrations.find_one({"id": registration_id}, {"_id": 0, "password_hash": 0})
+    if not registration:
+        raise HTTPException(status_code=404, detail="Registrering hittades inte")
+    return registration
+
+
+@api_router.post("/leader-registrations/{registration_id}/approve")
+async def approve_leader_registration(registration_id: str):
+    """Approve a leader registration"""
+    registration = await db.leader_registrations.find_one({"id": registration_id})
+    if not registration:
+        raise HTTPException(status_code=404, detail="Registrering hittades inte")
+    
+    if registration.get("status") == "approved":
+        raise HTTPException(status_code=400, detail="Registreringen är redan godkänd")
+    
+    # Update status
+    await db.leader_registrations.update_one(
+        {"id": registration_id},
+        {"$set": {
+            "status": "approved",
+            "approved_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Also create/update entry in main leaders collection for display
+    leader_doc = {
+        "id": registration_id,
+        "name": registration['name'],
+        "email": registration['email'],
+        "phone": registration.get('phone'),
+        "role": {
+            "sv": registration.get('role_sv', ''),
+            "en": registration.get('role_en', ''),
+            "ar": registration.get('role_ar', '')
+        },
+        "bio": {
+            "sv": registration.get('bio_sv', ''),
+            "en": registration.get('bio_en', ''),
+            "ar": registration.get('bio_ar', '')
+        },
+        "topics": {
+            "sv": registration.get('topics_sv', []),
+            "en": registration.get('topics_en', []),
+            "ar": registration.get('topics_ar', [])
+        },
+        "image_url": registration.get('image_url'),
+        "is_active": True,
+        "is_registered_leader": True,
+        "registration_id": registration_id,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # Upsert to leaders collection
+    await db.leaders.update_one(
+        {"id": registration_id},
+        {"$set": leader_doc},
+        upsert=True
+    )
+    
+    # Send approval email
+    try:
+        base_url = os.environ.get('FRONTEND_URL', 'https://haggai-portal.preview.emergentagent.com')
+        login_link = f"{base_url}/ledare/login"
+        
+        email_html = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; text-align: center;">
+                <h1 style="color: white; margin: 0;">Haggai Sweden</h1>
+                <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Din registrering är godkänd!</p>
+            </div>
+            
+            <div style="padding: 30px; background: #f8f9fa;">
+                <p>Hej <strong>{registration['name']}</strong>,</p>
+                
+                <p>🎉 Grattis! Din registrering som ledare har nu blivit godkänd.</p>
+                
+                <p>Du har nu tillgång till:</p>
+                <ul>
+                    <li>Din ledarprofil</li>
+                    <li>Workshop-agendor och program</li>
+                    <li>Dina tilldelade sessioner</li>
+                    <li>Dokumenthantering</li>
+                </ul>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="{login_link}" 
+                       style="background: #014D73; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold;">
+                        Logga in på ledarportalen
+                    </a>
+                </div>
+                
+                <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+                
+                <p style="color: #888; font-size: 12px;">
+                    Haggai Sweden | <a href="https://haggai.se" style="color: #014D73;">haggai.se</a> (By Keeada)
+                </p>
+            </div>
+        </div>
+        """
+        
+        resend.emails.send({
+            "from": SENDER_EMAIL,
+            "to": [registration['email']],
+            "subject": "Din registrering är godkänd - Haggai Sweden",
+            "html": email_html
+        })
+    except Exception as e:
+        logger.error(f"Failed to send approval email: {e}")
+    
+    return {"message": "Ledaren har godkänts"}
+
+
+@api_router.post("/leader-registrations/{registration_id}/reject")
+async def reject_leader_registration(registration_id: str, reason: Optional[str] = None):
+    """Reject a leader registration"""
+    registration = await db.leader_registrations.find_one({"id": registration_id})
+    if not registration:
+        raise HTTPException(status_code=404, detail="Registrering hittades inte")
+    
+    await db.leader_registrations.update_one(
+        {"id": registration_id},
+        {"$set": {
+            "status": "rejected",
+            "admin_notes": reason,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Send rejection email
+    try:
+        email_html = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: #dc2626; padding: 30px; text-align: center;">
+                <h1 style="color: white; margin: 0;">Haggai Sweden</h1>
+            </div>
+            
+            <div style="padding: 30px; background: #f8f9fa;">
+                <p>Hej <strong>{registration['name']}</strong>,</p>
+                
+                <p>Tyvärr kunde vi inte godkänna din registrering som ledare vid detta tillfälle.</p>
+                
+                {f'<p><strong>Anledning:</strong> {reason}</p>' if reason else ''}
+                
+                <p>Om du har frågor, vänligen kontakta oss på info@haggai.se</p>
+                
+                <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+                
+                <p style="color: #888; font-size: 12px;">
+                    Haggai Sweden | <a href="https://haggai.se" style="color: #014D73;">haggai.se</a> (By Keeada)
+                </p>
+            </div>
+        </div>
+        """
+        
+        resend.emails.send({
+            "from": SENDER_EMAIL,
+            "to": [registration['email']],
+            "subject": "Angående din registrering - Haggai Sweden",
+            "html": email_html
+        })
+    except Exception as e:
+        logger.error(f"Failed to send rejection email: {e}")
+    
+    return {"message": "Registreringen har avslagits"}
+
+
+# --- Leader Portal (Login & Profile) ---
+
+@api_router.post("/leaders/login")
+async def leader_login(input: LeaderLogin):
+    """Login for registered leaders"""
+    leader = await db.leader_registrations.find_one({"email": input.email.lower()})
+    if not leader:
+        raise HTTPException(status_code=401, detail="Fel e-post eller lösenord")
+    
+    if not leader.get("password_hash"):
+        raise HTTPException(status_code=401, detail="Kontot är inte aktiverat")
+    
+    if not bcrypt.checkpw(input.password.encode('utf-8'), leader['password_hash'].encode('utf-8')):
+        raise HTTPException(status_code=401, detail="Fel e-post eller lösenord")
+    
+    if leader.get("status") != "approved":
+        raise HTTPException(status_code=403, detail="Din registrering väntar fortfarande på godkännande")
+    
+    # Generate JWT token
+    token_data = {
+        "sub": leader['id'],
+        "email": leader['email'],
+        "name": leader['name'],
+        "type": "leader",
+        "exp": datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRATION_HOURS)
+    }
+    token = jwt.encode(token_data, JWT_SECRET, algorithm=JWT_ALGORITHM)
+    
+    return {
+        "token": token,
+        "leader": {
+            "id": leader['id'],
+            "name": leader['name'],
+            "email": leader['email'],
+            "image_url": leader.get('image_url')
+        }
+    }
+
+
+@api_router.get("/leaders/me")
+async def get_current_leader(authorization: str = None):
+    """Get current logged-in leader's profile"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Ej auktoriserad")
+    
+    token = authorization.replace("Bearer ", "")
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        if payload.get("type") != "leader":
+            raise HTTPException(status_code=401, detail="Ogiltig token")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token har gått ut")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Ogiltig token")
+    
+    leader = await db.leader_registrations.find_one(
+        {"id": payload['sub']},
+        {"_id": 0, "password_hash": 0}
+    )
+    if not leader:
+        raise HTTPException(status_code=404, detail="Ledare hittades inte")
+    
+    return leader
+
+
+@api_router.put("/leaders/me")
+async def update_current_leader(authorization: str = None, input: LeaderRegistrationUpdate = None):
+    """Update current leader's profile"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Ej auktoriserad")
+    
+    token = authorization.replace("Bearer ", "")
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        if payload.get("type") != "leader":
+            raise HTTPException(status_code=401, detail="Ogiltig token")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token har gått ut")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Ogiltig token")
+    
+    leader_id = payload['sub']
+    
+    update_data = {k: v for k, v in input.model_dump().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.leader_registrations.update_one(
+        {"id": leader_id},
+        {"$set": update_data}
+    )
+    
+    # Also update main leaders collection if approved
+    leader = await db.leader_registrations.find_one({"id": leader_id})
+    if leader and leader.get("status") == "approved":
+        leader_update = {}
+        if "bio_sv" in update_data or "bio_en" in update_data or "bio_ar" in update_data:
+            leader_update["bio"] = {
+                "sv": leader.get('bio_sv', ''),
+                "en": leader.get('bio_en', ''),
+                "ar": leader.get('bio_ar', '')
+            }
+        if "role_sv" in update_data or "role_en" in update_data or "role_ar" in update_data:
+            leader_update["role"] = {
+                "sv": leader.get('role_sv', ''),
+                "en": leader.get('role_en', ''),
+                "ar": leader.get('role_ar', '')
+            }
+        if "topics_sv" in update_data or "topics_en" in update_data or "topics_ar" in update_data:
+            leader_update["topics"] = {
+                "sv": leader.get('topics_sv', []),
+                "en": leader.get('topics_en', []),
+                "ar": leader.get('topics_ar', [])
+            }
+        if "image_url" in update_data:
+            leader_update["image_url"] = update_data["image_url"]
+        if "phone" in update_data:
+            leader_update["phone"] = update_data["phone"]
+        
+        if leader_update:
+            leader_update["updated_at"] = datetime.now(timezone.utc).isoformat()
+            await db.leaders.update_one({"id": leader_id}, {"$set": leader_update})
+    
+    updated = await db.leader_registrations.find_one({"id": leader_id}, {"_id": 0, "password_hash": 0})
+    return updated
+
+
+@api_router.post("/leaders/me/documents")
+async def upload_leader_document(
+    authorization: str = None,
+    document_type: str = None,
+    filename: str = None,
+    file_data: str = None  # Base64 encoded
+):
+    """Upload a document for the current leader"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Ej auktoriserad")
+    
+    token = authorization.replace("Bearer ", "")
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        if payload.get("type") != "leader":
+            raise HTTPException(status_code=401, detail="Ogiltig token")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token har gått ut")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Ogiltig token")
+    
+    leader_id = payload['sub']
+    
+    if not document_type or not filename or not file_data:
+        raise HTTPException(status_code=400, detail="document_type, filename och file_data krävs")
+    
+    # Valid document types
+    valid_types = ["topic_material", "receipt", "travel_ticket", "profile_image", "other"]
+    if document_type not in valid_types:
+        raise HTTPException(status_code=400, detail=f"Ogiltig dokumenttyp. Giltiga: {valid_types}")
+    
+    document = {
+        "id": str(uuid.uuid4()),
+        "filename": filename,
+        "type": document_type,
+        "data": file_data,  # Store base64 in MongoDB
+        "uploaded_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # If profile image, also update image_url field
+    if document_type == "profile_image":
+        # Create data URL for image
+        # Detect mime type from filename
+        ext = filename.lower().split('.')[-1]
+        mime_types = {
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'png': 'image/png',
+            'gif': 'image/gif',
+            'webp': 'image/webp'
+        }
+        mime_type = mime_types.get(ext, 'image/jpeg')
+        data_url = f"data:{mime_type};base64,{file_data}"
+        
+        await db.leader_registrations.update_one(
+            {"id": leader_id},
+            {
+                "$push": {"documents": document},
+                "$set": {
+                    "image_url": data_url,
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        )
+        
+        # Also update main leaders collection if approved
+        leader = await db.leader_registrations.find_one({"id": leader_id})
+        if leader and leader.get("status") == "approved":
+            await db.leaders.update_one({"id": leader_id}, {"$set": {"image_url": data_url}})
+    else:
+        await db.leader_registrations.update_one(
+            {"id": leader_id},
+            {
+                "$push": {"documents": document},
+                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+            }
+        )
+    
+    return {"message": "Dokument uppladdat", "document_id": document["id"]}
+
+
+@api_router.delete("/leaders/me/documents/{document_id}")
+async def delete_leader_document(document_id: str, authorization: str = None):
+    """Delete a document"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Ej auktoriserad")
+    
+    token = authorization.replace("Bearer ", "")
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        if payload.get("type") != "leader":
+            raise HTTPException(status_code=401, detail="Ogiltig token")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token har gått ut")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Ogiltig token")
+    
+    leader_id = payload['sub']
+    
+    await db.leader_registrations.update_one(
+        {"id": leader_id},
+        {
+            "$pull": {"documents": {"id": document_id}},
+            "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+        }
+    )
+    
+    return {"message": "Dokument raderat"}
+
+
+@api_router.get("/leaders/me/sessions")
+async def get_leader_sessions(authorization: str = None):
+    """Get all sessions assigned to the current leader"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Ej auktoriserad")
+    
+    token = authorization.replace("Bearer ", "")
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        if payload.get("type") != "leader":
+            raise HTTPException(status_code=401, detail="Ogiltig token")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token har gått ut")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Ogiltig token")
+    
+    leader_id = payload['sub']
+    
+    # Get leader's email to match with sessions
+    leader = await db.leader_registrations.find_one({"id": leader_id})
+    if not leader:
+        raise HTTPException(status_code=404, detail="Ledare hittades inte")
+    
+    # Find all agendas with sessions assigned to this leader
+    all_agendas = await db.agenda.find({}, {"_id": 0}).to_list(100)
+    
+    sessions_with_workshop = []
+    for agenda in all_agendas:
+        workshop = await db.workshops.find_one({"id": agenda.get("workshop_id")}, {"_id": 0})
+        if not workshop:
+            continue
+        
+        for day in agenda.get("days", []):
+            for session in day.get("sessions", []):
+                # Check if this leader is assigned
+                if session.get("leader_id") == leader_id or session.get("leader_id") == leader.get("email"):
+                    sessions_with_workshop.append({
+                        "session": session,
+                        "day_date": day.get("date"),
+                        "day_title": day.get("title"),
+                        "workshop_id": agenda.get("workshop_id"),
+                        "workshop_title": workshop.get("title"),
+                        "workshop_date": workshop.get("date"),
+                        "workshop_location": workshop.get("location")
+                    })
+    
+    return sessions_with_workshop
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
