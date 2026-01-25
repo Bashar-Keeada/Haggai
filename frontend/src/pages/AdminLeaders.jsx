@@ -880,6 +880,77 @@ const AdminLeaders = () => {
             </div>
           </div>
         )}
+
+        {/* Invite Dialog */}
+        <Dialog open={showInviteDialog} onOpenChange={setShowInviteDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Send className="h-5 w-5 text-haggai" />
+                {txt.invite.title}
+              </DialogTitle>
+            </DialogHeader>
+            <p className="text-sm text-stone-500">{txt.invite.subtitle}</p>
+            
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>{txt.name} *</Label>
+                <Input
+                  value={inviteData.name}
+                  onChange={(e) => setInviteData({...inviteData, name: e.target.value})}
+                  placeholder={txt.invite.namePlaceholder}
+                  data-testid="invite-name-input"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>{txt.email} *</Label>
+                <Input
+                  type="email"
+                  value={inviteData.email}
+                  onChange={(e) => setInviteData({...inviteData, email: e.target.value})}
+                  placeholder={txt.invite.emailPlaceholder}
+                  data-testid="invite-email-input"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>{txt.invite.workshopOptional}</Label>
+                <Input
+                  value={inviteData.workshop_title}
+                  onChange={(e) => setInviteData({...inviteData, workshop_title: e.target.value})}
+                  placeholder="T.ex. Workshop mars 2026"
+                />
+              </div>
+            </div>
+            
+            <div className="flex gap-3">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowInviteDialog(false)}
+                className="flex-1"
+              >
+                {txt.cancel}
+              </Button>
+              <Button 
+                onClick={handleSendInvite}
+                disabled={sendingInvite}
+                className="flex-1 bg-haggai hover:bg-haggai-dark"
+                data-testid="send-invite-btn"
+              >
+                {sendingInvite ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                    {txt.invite.sending}
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-4 w-4 mr-2" />
+                    {txt.invite.send}
+                  </>
+                )}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
