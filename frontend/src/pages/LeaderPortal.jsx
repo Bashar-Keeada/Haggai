@@ -41,7 +41,8 @@ const LeaderPortal = () => {
       tabs: {
         profile: 'Min Profil',
         sessions: 'Mina Sessioner',
-        documents: 'Dokument'
+        documents: 'Dokument',
+        badge: 'Namnskylt'
       },
       profile: {
         title: 'Profilinformation',
@@ -100,7 +101,8 @@ const LeaderPortal = () => {
       tabs: {
         profile: 'My Profile',
         sessions: 'My Sessions',
-        documents: 'Documents'
+        documents: 'Documents',
+        badge: 'Name Badge'
       },
       profile: {
         title: 'Profile Information',
