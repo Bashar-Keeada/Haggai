@@ -23,6 +23,7 @@ const NomineeRegistration = () => {
   const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
+    profile_image: '',
     full_name: '',
     gender: '',
     date_of_birth: '',
@@ -59,6 +60,9 @@ const NomineeRegistration = () => {
       formTitle: 'Registreringsformulär',
       required: 'Obligatoriskt',
       // Form fields
+      profilePhoto: 'Profilfoto',
+      uploadPhoto: 'Ladda upp foto',
+      photoSelected: 'Foto valt',
       fullName: 'Fullständigt namn',
       gender: 'Kön',
       male: 'Man',
