@@ -5026,7 +5026,7 @@ async def get_current_leader(authorization: str = Header(None)):
 
 
 @api_router.put("/leaders/me")
-async def update_current_leader(authorization: str = None, input: LeaderRegistrationUpdate = None):
+async def update_current_leader(input: LeaderRegistrationUpdate = None, authorization: str = Header(None)):
     """Update current leader's profile"""
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Ej auktoriserad")
