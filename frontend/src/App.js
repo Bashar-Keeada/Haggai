@@ -46,6 +46,7 @@ import MemberDirectory from "./pages/MemberDirectory";
 import MemberMessages from "./pages/MemberMessages";
 import MemberForum from "./pages/MemberForum";
 import MemberDiplomas from "./pages/MemberDiplomas";
+import MemberNameBadge from "./pages/MemberNameBadge";
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
               <Route path="/mina-sidor/forum" element={<MemberForum />} />
               <Route path="/mina-sidor/forum/:postId" element={<MemberForum />} />
               <Route path="/mina-sidor/diplom" element={<MemberDiplomas />} />
+              <Route path="/mina-sidor/namnskylt" element={<MemberNameBadge />} />
               {/* All other routes handled by ProtectedApp */}
               <Route path="/*" element={<ProtectedAppContent />} />
             </Routes>
