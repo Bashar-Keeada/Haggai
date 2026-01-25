@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 // Passwords from environment variables
-const SITE_PASSWORD = process.env.REACT_APP_SITE_PASSWORD || 'Keeada2030';
+const SITE_PASSWORD = process.env.REACT_APP_SITE_PASSWORD || 'Haggai2030';
 const MEMBERS_PASSWORD = process.env.REACT_APP_MEMBERS_PASSWORD || 'Haggai2030!';
 
 export const useAuth = () => {
