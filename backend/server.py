@@ -1804,6 +1804,226 @@ async def register_nominee(nomination_id: str, registration: NomineeRegistration
     return {"message": "Registration completed successfully", "nomination_id": nomination_id}
 
 
+class RegistrationApproval(BaseModel):
+    action: str  # "approve" or "reject"
+    rejection_reason: Optional[str] = None
+
+
+@api_router.post("/nominations/{nomination_id}/approve-registration")
+async def approve_or_reject_registration(nomination_id: str, approval: RegistrationApproval):
+    """Admin approves or rejects a participant's registration"""
+    nomination = await db.nominations.find_one({"id": nomination_id})
+    if not nomination:
+        raise HTTPException(status_code=404, detail="Nomination not found")
+    
+    if not nomination.get("registration_completed"):
+        raise HTTPException(status_code=400, detail="No registration to approve")
+    
+    registration_data = nomination.get("registration_data", {})
+    
+    if approval.action == "approve":
+        # Create participant account
+        participant_account = await create_participant_account(nomination, registration_data)
+        
+        # Update nomination status
+        await db.nominations.update_one(
+            {"id": nomination_id},
+            {"$set": {
+                "status": "approved",
+                "participant_id": participant_account['id'],
+                "approved_at": datetime.now(timezone.utc).isoformat(),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        # Send approval email with login credentials
+        await send_participant_approval_email(
+            registration_data.get("email", nomination.get("nominee_email")),
+            registration_data.get("full_name", nomination.get("nominee_name")),
+            participant_account['password'],
+            nomination.get("event_title", "Haggai Workshop")
+        )
+        
+        return {"success": True, "message": "Registration approved", "participant_id": participant_account['id']}
+    
+    elif approval.action == "reject":
+        # Update nomination status
+        await db.nominations.update_one(
+            {"id": nomination_id},
+            {"$set": {
+                "status": "rejected",
+                "rejection_reason": approval.rejection_reason,
+                "rejected_at": datetime.now(timezone.utc).isoformat(),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        # Send rejection email
+        await send_participant_rejection_email(
+            registration_data.get("email", nomination.get("nominee_email")),
+            registration_data.get("full_name", nomination.get("nominee_name")),
+            approval.rejection_reason or "Inga ytterligare detaljer tillhandahållna",
+            nomination.get("event_title", "Haggai Workshop")
+        )
+        
+        return {"success": True, "message": "Registration rejected"}
+    
+    else:
+        raise HTTPException(status_code=400, detail="Invalid action")
+
+
+async def create_participant_account(nomination: dict, registration_data: dict):
+    """Create a participant account with login access"""
+    email = registration_data.get("email", nomination.get("nominee_email"))
+    
+    if not email:
+        raise HTTPException(status_code=400, detail="Email not found")
+    
+    # Check if participant already exists
+    existing = await db.participants.find_one({"email": email})
+    if existing:
+        return existing
+    
+    # Generate password
+    password = generate_password()
+    password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    
+    participant = {
+        "id": str(uuid.uuid4()),
+        "nomination_id": nomination.get("id"),
+        "email": email,
+        "password_hash": password_hash,
+        "full_name": registration_data.get("full_name", nomination.get("nominee_name", "")),
+        "phone": registration_data.get("phone", ""),
+        "gender": registration_data.get("gender", ""),
+        "date_of_birth": registration_data.get("date_of_birth", ""),
+        "church_name": registration_data.get("church_name", ""),
+        "church_role": registration_data.get("church_role", ""),
+        "profile_image": registration_data.get("profile_image"),
+        "workshop_id": nomination.get("event_id"),
+        "workshop_title": nomination.get("event_title", ""),
+        "attendance_hours": 0,
+        "diploma_received": False,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "is_active": True,
+        "password": password  # Store temporarily to send in email
+    }
+    
+    # Don't store plain password in DB
+    temp_password = participant.pop("password")
+    
+    await db.participants.insert_one(participant)
+    
+    # Return with password for email
+    participant["password"] = temp_password
+    return participant
+
+
+async def send_participant_approval_email(email: str, name: str, password: str, workshop_title: str):
+    """Send approval email to participant with login credentials"""
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://community-manager-9.preview.emergentagent.com')
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">🎉 Din registrering är godkänd!</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Välkommen till {workshop_title}</p>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+            <p>Hej <strong>{name}</strong>,</p>
+            
+            <p>Grattis! Din registrering för <strong>{workshop_title}</strong> har godkänts.</p>
+            
+            <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border-left: 4px solid #2e7d32; margin: 20px 0;">
+                <h3 style="color: #2e7d32; margin-top: 0;">Dina inloggningsuppgifter</h3>
+                <p style="margin: 5px 0;"><strong>E-post:</strong> {email}</p>
+                <p style="margin: 5px 0;"><strong>Lösenord:</strong> <code style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 16px;">{password}</code></p>
+            </div>
+            
+            <p><strong>Som deltagare kan du nu:</strong></p>
+            <ul>
+                <li>📛 Ladda ner din namnbricka</li>
+                <li>📅 Se workshop-agenda och schema</li>
+                <li>ℹ️ Få tillgång till workshop-information</li>
+                <li>👤 Hantera din profil</li>
+            </ul>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{frontend_url}/deltagare/login" style="display: inline-block; background: #15564e; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                    Logga in till din portal →
+                </a>
+            </div>
+            
+            <p style="color: #666; font-size: 14px; margin-top: 30px;">Vi ser fram emot att ha dig med på workshopen!</p>
+            
+            <p>Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        await asyncio.to_thread(resend.Emails.send, {
+            "from": SENDER_EMAIL,
+            "to": [email],
+            "subject": f"✅ Godkänd för {workshop_title} - Dina inloggningsuppgifter",
+            "html": html_content
+        })
+        logging.info(f"Approval email sent to participant {email}")
+    except Exception as e:
+        logging.error(f"Failed to send approval email: {str(e)}")
+
+
+async def send_participant_rejection_email(email: str, name: str, reason: str, workshop_title: str):
+    """Send rejection email to participant"""
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">Angående din registrering</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">{workshop_title}</p>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+            <p>Hej <strong>{name}</strong>,</p>
+            
+            <p>Tack för din registrering för <strong>{workshop_title}</strong>.</p>
+            
+            <p>Tyvärr kan vi just nu inte godkänna din registrering.</p>
+            
+            <div style="background: #fee; padding: 20px; border-radius: 8px; border-left: 4px solid #dc2626; margin: 20px 0;">
+                <h4 style="color: #dc2626; margin-top: 0;">Anledning:</h4>
+                <p style="margin: 0;">{reason}</p>
+            </div>
+            
+            <p>Om du har frågor eller vill diskutera detta vidare, tveka inte att kontakta oss.</p>
+            
+            <p style="margin-top: 30px;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        await asyncio.to_thread(resend.Emails.send, {
+            "from": SENDER_EMAIL,
+            "to": [email],
+            "subject": f"Angående din registrering för {workshop_title}",
+            "html": html_content
+        })
+        logging.info(f"Rejection email sent to {email}")
+    except Exception as e:
+        logging.error(f"Failed to send rejection email: {str(e)}")
+
+
+
 async def send_registration_email_to_admin(nomination: dict, registration: NomineeRegistrationData):
     """Send notification email to admin when nominee registers"""
     if not resend.api_key:
