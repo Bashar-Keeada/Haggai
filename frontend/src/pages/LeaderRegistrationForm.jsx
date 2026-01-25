@@ -313,6 +313,8 @@ const LeaderRegistrationForm = () => {
         role_en: formData.role_en,
         topics_sv: formData.topics_sv ? formData.topics_sv.split(',').map(t => t.trim()).filter(Boolean) : [],
         topics_en: formData.topics_en ? formData.topics_en.split(',').map(t => t.trim()).filter(Boolean) : [],
+        primary_topic: formData.primary_topic,
+        backup_topics: formData.backup_topics,
         cost_preference: formData.cost_preference,
         arrival_date: formData.arrival_date,
         departure_date: formData.departure_date,
@@ -348,6 +350,11 @@ const LeaderRegistrationForm = () => {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // Get topic name based on language
+  const getTopicName = (topic) => {
+    return language === 'en' ? topic.name_en : topic.name_sv;
   };
 
   if (loading) {
