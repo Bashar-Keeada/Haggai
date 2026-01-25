@@ -327,6 +327,150 @@ class TestimonialCreate(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
+
+# ==================== LEADER INVITATION & REGISTRATION MODELS ====================
+
+class LeaderInvitation(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    token: str = Field(default_factory=lambda: secrets.token_urlsafe(32))
+    email: str
+    name: str
+    workshop_id: Optional[str] = None  # Optional - for workshop-specific invitations
+    workshop_title: Optional[str] = None
+    status: str = "pending"  # pending, registered, expired
+    sent_at: Optional[str] = None
+    expires_at: str = Field(default_factory=lambda: (datetime.now(timezone.utc) + timedelta(days=30)).isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class LeaderInvitationCreate(BaseModel):
+    email: str
+    name: str
+    workshop_id: Optional[str] = None
+    workshop_title: Optional[str] = None
+
+
+class LeaderRegistration(BaseModel):
+    """Extended leader profile for registered leaders"""
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    invitation_id: Optional[str] = None
+    
+    # Basic info
+    name: str
+    email: str
+    phone: Optional[str] = None
+    
+    # Profile
+    bio_sv: Optional[str] = None
+    bio_en: Optional[str] = None
+    bio_ar: Optional[str] = None
+    role_sv: Optional[str] = None
+    role_en: Optional[str] = None
+    role_ar: Optional[str] = None
+    topics_sv: Optional[List[str]] = []
+    topics_en: Optional[List[str]] = []
+    topics_ar: Optional[List[str]] = []
+    image_url: Optional[str] = None
+    
+    # Cost & Travel
+    cost_preference: str = "self"  # "self" or "haggai_support"
+    arrival_date: Optional[str] = None
+    departure_date: Optional[str] = None
+    special_dietary: Optional[str] = None
+    other_needs: Optional[str] = None
+    
+    # Bank details (for reimbursements)
+    bank_name: Optional[str] = None
+    bank_account: Optional[str] = None
+    bank_clearing: Optional[str] = None
+    bank_iban: Optional[str] = None
+    bank_swift: Optional[str] = None
+    
+    # Documents
+    documents: List[dict] = []  # [{filename, url, type, uploaded_at}]
+    # Types: "topic_material", "receipt", "travel_ticket", "other"
+    
+    # Authentication
+    password_hash: Optional[str] = None
+    
+    # Status
+    status: str = "pending"  # pending, approved, rejected
+    admin_notes: Optional[str] = None
+    approved_at: Optional[str] = None
+    approved_by: Optional[str] = None
+    
+    # Metadata
+    is_active: bool = True
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class LeaderRegistrationCreate(BaseModel):
+    """Data submitted by leader during registration"""
+    name: str
+    email: str
+    phone: Optional[str] = None
+    password: str
+    
+    # Profile
+    bio_sv: Optional[str] = None
+    bio_en: Optional[str] = None
+    role_sv: Optional[str] = None
+    role_en: Optional[str] = None
+    topics_sv: Optional[List[str]] = []
+    topics_en: Optional[List[str]] = []
+    
+    # Cost & Travel
+    cost_preference: str = "self"
+    arrival_date: Optional[str] = None
+    departure_date: Optional[str] = None
+    special_dietary: Optional[str] = None
+    other_needs: Optional[str] = None
+    
+    # Bank details
+    bank_name: Optional[str] = None
+    bank_account: Optional[str] = None
+    bank_clearing: Optional[str] = None
+    bank_iban: Optional[str] = None
+    bank_swift: Optional[str] = None
+
+
+class LeaderRegistrationUpdate(BaseModel):
+    """For leaders updating their own profile"""
+    phone: Optional[str] = None
+    bio_sv: Optional[str] = None
+    bio_en: Optional[str] = None
+    bio_ar: Optional[str] = None
+    role_sv: Optional[str] = None
+    role_en: Optional[str] = None
+    role_ar: Optional[str] = None
+    topics_sv: Optional[List[str]] = None
+    topics_en: Optional[List[str]] = None
+    topics_ar: Optional[List[str]] = None
+    image_url: Optional[str] = None
+    
+    cost_preference: Optional[str] = None
+    arrival_date: Optional[str] = None
+    departure_date: Optional[str] = None
+    special_dietary: Optional[str] = None
+    other_needs: Optional[str] = None
+    
+    bank_name: Optional[str] = None
+    bank_account: Optional[str] = None
+    bank_clearing: Optional[str] = None
+    bank_iban: Optional[str] = None
+    bank_swift: Optional[str] = None
+
+
+class LeaderLogin(BaseModel):
+    email: str
+    password: str
+
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
