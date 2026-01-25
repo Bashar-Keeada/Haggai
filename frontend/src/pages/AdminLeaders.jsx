@@ -40,6 +40,7 @@ const AdminLeaders = () => {
       title: 'Hantera Ledare & Facilitatorer',
       subtitle: 'Lägg till, redigera eller ta bort ledare och facilitatorer',
       addNew: 'Lägg till ny ledare',
+      sendInvite: 'Skicka inbjudan',
       name: 'Namn',
       role: 'Roll/Titel',
       bio: 'Biografi',
@@ -57,12 +58,48 @@ const AdminLeaders = () => {
       english: 'Engelska',
       arabic: 'Arabiska',
       active: 'Aktiv',
-      inactive: 'Inaktiv'
+      inactive: 'Inaktiv',
+      tabs: {
+        leaders: 'Ledare',
+        invitations: 'Inbjudningar',
+        registrations: 'Registreringar'
+      },
+      invite: {
+        title: 'Skicka ledarinbjudan',
+        subtitle: 'Skicka en inbjudan via e-post så att ledaren kan registrera sig',
+        namePlaceholder: 'Ledarens namn',
+        emailPlaceholder: 'ledare@email.se',
+        workshopOptional: 'Workshop (valfritt)',
+        send: 'Skicka inbjudan',
+        sending: 'Skickar...'
+      },
+      invitations: {
+        noInvitations: 'Inga inbjudningar har skickats ännu.',
+        status: 'Status',
+        pending: 'Väntande',
+        registered: 'Registrerad',
+        expired: 'Utgången',
+        sentAt: 'Skickad',
+        resend: 'Skicka igen'
+      },
+      registrations: {
+        noRegistrations: 'Inga registreringar väntar på godkännande.',
+        approve: 'Godkänn',
+        reject: 'Avslå',
+        pending: 'Väntande',
+        approved: 'Godkänd',
+        rejected: 'Avslagen',
+        costSelf: 'Egen kostnad',
+        costHaggai: 'Haggai bidrar',
+        arrival: 'Ankomst',
+        departure: 'Avresa'
+      }
     },
     en: {
       title: 'Manage Leaders & Facilitators',
       subtitle: 'Add, edit or remove leaders and facilitators',
       addNew: 'Add new leader',
+      sendInvite: 'Send invitation',
       name: 'Name',
       role: 'Role/Title',
       bio: 'Biography',
@@ -80,12 +117,48 @@ const AdminLeaders = () => {
       english: 'English',
       arabic: 'Arabic',
       active: 'Active',
-      inactive: 'Inactive'
+      inactive: 'Inactive',
+      tabs: {
+        leaders: 'Leaders',
+        invitations: 'Invitations',
+        registrations: 'Registrations'
+      },
+      invite: {
+        title: 'Send leader invitation',
+        subtitle: 'Send an email invitation so the leader can register',
+        namePlaceholder: 'Leader name',
+        emailPlaceholder: 'leader@email.com',
+        workshopOptional: 'Workshop (optional)',
+        send: 'Send invitation',
+        sending: 'Sending...'
+      },
+      invitations: {
+        noInvitations: 'No invitations have been sent yet.',
+        status: 'Status',
+        pending: 'Pending',
+        registered: 'Registered',
+        expired: 'Expired',
+        sentAt: 'Sent',
+        resend: 'Resend'
+      },
+      registrations: {
+        noRegistrations: 'No registrations waiting for approval.',
+        approve: 'Approve',
+        reject: 'Reject',
+        pending: 'Pending',
+        approved: 'Approved',
+        rejected: 'Rejected',
+        costSelf: 'Self-funded',
+        costHaggai: 'Haggai contributes',
+        arrival: 'Arrival',
+        departure: 'Departure'
+      }
     },
     ar: {
       title: 'إدارة القادة والميسرين',
       subtitle: 'إضافة أو تعديل أو حذف القادة والميسرين',
       addNew: 'إضافة قائد جديد',
+      sendInvite: 'إرسال دعوة',
       name: 'الاسم',
       role: 'الدور/المسمى',
       bio: 'السيرة الذاتية',
@@ -103,7 +176,42 @@ const AdminLeaders = () => {
       english: 'الإنجليزية',
       arabic: 'العربية',
       active: 'نشط',
-      inactive: 'غير نشط'
+      inactive: 'غير نشط',
+      tabs: {
+        leaders: 'القادة',
+        invitations: 'الدعوات',
+        registrations: 'التسجيلات'
+      },
+      invite: {
+        title: 'إرسال دعوة للقائد',
+        subtitle: 'إرسال دعوة بالبريد الإلكتروني للتسجيل',
+        namePlaceholder: 'اسم القائد',
+        emailPlaceholder: 'leader@email.com',
+        workshopOptional: 'ورشة العمل (اختياري)',
+        send: 'إرسال الدعوة',
+        sending: 'جاري الإرسال...'
+      },
+      invitations: {
+        noInvitations: 'لم يتم إرسال أي دعوات بعد.',
+        status: 'الحالة',
+        pending: 'قيد الانتظار',
+        registered: 'مسجل',
+        expired: 'منتهي الصلاحية',
+        sentAt: 'أرسلت',
+        resend: 'إعادة إرسال'
+      },
+      registrations: {
+        noRegistrations: 'لا توجد تسجيلات في انتظار الموافقة.',
+        approve: 'موافقة',
+        reject: 'رفض',
+        pending: 'قيد الانتظار',
+        approved: 'معتمد',
+        rejected: 'مرفوض',
+        costSelf: 'تمويل ذاتي',
+        costHaggai: 'تساهم حجي',
+        arrival: 'الوصول',
+        departure: 'المغادرة'
+      }
     }
   };
 
