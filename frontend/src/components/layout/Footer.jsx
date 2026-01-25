@@ -77,6 +77,9 @@ const Footer = () => {
 
         <div className="border-t border-haggai-700 mt-12 pt-8 text-center">
           <p className="text-cream-400 text-sm">
+            Haggai Sweden | <a href="https://haggai.se" className="text-haggai-200 hover:text-haggai-100" target="_blank" rel="noopener noreferrer">haggai.se</a> <span className="text-cream-500">(By Keeada)</span>
+          </p>
+          <p className="text-cream-500 text-xs mt-2">
             © {new Date().getFullYear()} Haggai Sweden. {t('footer.copyright')}
           </p>
         </div>
