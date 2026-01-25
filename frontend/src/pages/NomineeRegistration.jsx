@@ -173,6 +173,10 @@ const NomineeRegistration = () => {
       nominatedBy: 'تم الترشيح بواسطة',
       formTitle: 'استمارة التسجيل',
       required: 'مطلوب',
+      // Form fields
+      profilePhoto: 'صورة الملف الشخصي',
+      uploadPhoto: 'رفع صورة',
+      photoSelected: 'تم اختيار الصورة',
       fullName: 'الاسم الكامل',
       gender: 'الجنس',
       male: 'ذكر',
