@@ -4008,20 +4008,21 @@ def generate_name_badge_pdf(
     workshop_title: str,
     badge_type: str = "participant"  # "participant" or "leader"
 ) -> BytesIO:
-    """Generate a PDF name badge for participants or leaders"""
+    """Generate a PDF name badge for participants or leaders in business card format with lanyard hole"""
     buffer = BytesIO()
     
-    # Create PDF with custom size (approximately 10cm x 15cm)
-    badge_width = 10 * cm
-    badge_height = 15 * cm
+    # Business card size: 85mm x 55mm (standard credit card size)
+    # But we need space for lanyard hole, so make it slightly taller: 85mm x 65mm
+    badge_width = 8.5 * cm
+    badge_height = 6.5 * cm
     
     doc = SimpleDocTemplate(
         buffer,
         pagesize=(badge_width, badge_height),
-        leftMargin=0.5*cm,
-        rightMargin=0.5*cm,
-        topMargin=0.5*cm,
-        bottomMargin=0.5*cm
+        leftMargin=0.3*cm,
+        rightMargin=0.3*cm,
+        topMargin=0.8*cm,  # Extra space for lanyard hole
+        bottomMargin=0.3*cm
     )
     
     # Define colors based on badge type
@@ -4040,17 +4041,17 @@ def generate_name_badge_pdf(
     logo_style = ParagraphStyle(
         'Logo',
         parent=styles['Heading1'],
-        fontSize=32,
+        fontSize=18,
         textColor=colors.white,
         alignment=TA_CENTER,
         fontName='Helvetica-Bold',
-        letterSpacing=4
+        letterSpacing=3
     )
     
     label_style = ParagraphStyle(
         'Label',
         parent=styles['Normal'],
-        fontSize=14,
+        fontSize=8,
         textColor=colors.white,
         alignment=TA_CENTER,
         fontName='Helvetica-Bold'
@@ -4059,17 +4060,17 @@ def generate_name_badge_pdf(
     name_style = ParagraphStyle(
         'NameBadge',
         parent=styles['Heading1'],
-        fontSize=24,
+        fontSize=14,
         textColor=colors.black,
         alignment=TA_CENTER,
         fontName='Helvetica-Bold',
-        leading=28
+        leading=16
     )
     
     org_style = ParagraphStyle(
         'Organization',
         parent=styles['Normal'],
-        fontSize=14,
+        fontSize=9,
         textColor=colors.grey,
         alignment=TA_CENTER,
         fontName='Helvetica'
@@ -4078,17 +4079,17 @@ def generate_name_badge_pdf(
     workshop_label_style = ParagraphStyle(
         'WorkshopLabel',
         parent=styles['Normal'],
-        fontSize=10,
+        fontSize=7,
         textColor=colors.grey,
         alignment=TA_CENTER,
         fontName='Helvetica',
-        letterSpacing=2
+        letterSpacing=1.5
     )
     
     workshop_style = ParagraphStyle(
         'Workshop',
         parent=styles['Normal'],
-        fontSize=16,
+        fontSize=10,
         textColor=colors.black,
         alignment=TA_CENTER,
         fontName='Helvetica-Bold'
@@ -4097,38 +4098,54 @@ def generate_name_badge_pdf(
     # Build content
     story = []
     
+    # Lanyard hole indicator (visual guide)
+    # Draw a small circle at the top center to indicate where to punch hole
+    from reportlab.graphics.shapes import Drawing, Circle
+    from reportlab.graphics import renderPDF
+    
+    hole_drawing = Drawing(badge_width - 0.6*cm, 0.4*cm)
+    hole = Circle(
+        (badge_width - 0.6*cm) / 2,  # Center horizontally
+        0.2*cm,  # Vertical position
+        0.15*cm,  # Radius
+        strokeColor=colors.grey,
+        strokeWidth=1,
+        fillColor=colors.white
+    )
+    hole_drawing.add(hole)
+    
     # Header with logo and label
     header_data = [
         [Paragraph("HAGGAI", logo_style)],
         [Paragraph(badge_label, label_style)]
     ]
     
-    header_table = Table(header_data, colWidths=[badge_width - 1*cm])
+    header_table = Table(header_data, colWidths=[badge_width - 0.6*cm])
     header_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), header_color),
         ('BACKGROUND', (0, 1), (-1, 1), label_bg_color),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('TOPPADDING', (0, 0), (-1, 0), 20),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
-        ('TOPPADDING', (0, 1), (-1, 1), 8),
-        ('BOTTOMPADDING', (0, 1), (-1, 1), 8),
-        ('ROUNDEDCORNERS', [10, 10, 0, 0]),
+        ('TOPPADDING', (0, 0), (-1, 0), 10),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 5),
+        ('TOPPADDING', (0, 1), (-1, 1), 4),
+        ('BOTTOMPADDING', (0, 1), (-1, 1), 4),
     ]))
     
     story.append(header_table)
-    story.append(Spacer(1, 30))
+    story.append(Spacer(1, 0.3*cm))
     
     # Name
     story.append(Paragraph(name, name_style))
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 0.1*cm))
     
     # Organization
-    story.append(Paragraph(organization, org_style))
-    story.append(Spacer(1, 40))
+    if organization:
+        story.append(Paragraph(organization, org_style))
+        story.append(Spacer(1, 0.3*cm))
     
     # Workshop section
     story.append(Paragraph("WORKSHOP", workshop_label_style))
-    story.append(Spacer(1, 5))
+    story.append(Spacer(1, 0.05*cm))
     story.append(Paragraph(workshop_title, workshop_style))
     
     # Build PDF
