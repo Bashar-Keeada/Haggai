@@ -1266,6 +1266,7 @@ class Nomination(BaseModel):
 
 
 class NomineeRegistrationData(BaseModel):
+    profile_image: Optional[str] = None
     full_name: str
     gender: str
     date_of_birth: str
