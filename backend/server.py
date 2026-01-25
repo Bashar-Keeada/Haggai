@@ -2590,6 +2590,495 @@ async def get_member_agenda(workshop_id: str, token: str):
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
+# ==================== SESSION EVALUATION ENDPOINTS ====================
+
+@api_router.get("/evaluation-questions")
+async def get_evaluation_questions(active_only: bool = True):
+    """Get all evaluation questions"""
+    query = {"is_active": True} if active_only else {}
+    questions = await db.evaluation_questions.find(query, {"_id": 0}).sort("order", 1).to_list(100)
+    return questions
+
+
+@api_router.post("/evaluation-questions")
+async def create_evaluation_question(input: EvaluationQuestionCreate):
+    """Create a new evaluation question"""
+    question = EvaluationQuestion(
+        **input.model_dump()
+    )
+    await db.evaluation_questions.insert_one(question.model_dump())
+    return question.model_dump()
+
+
+@api_router.put("/evaluation-questions/{question_id}")
+async def update_evaluation_question(question_id: str, input: EvaluationQuestionUpdate):
+    """Update an evaluation question"""
+    existing = await db.evaluation_questions.find_one({"id": question_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Question not found")
+    
+    update_data = {k: v for k, v in input.model_dump().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.evaluation_questions.update_one({"id": question_id}, {"$set": update_data})
+    updated = await db.evaluation_questions.find_one({"id": question_id}, {"_id": 0})
+    return updated
+
+
+@api_router.delete("/evaluation-questions/{question_id}")
+async def delete_evaluation_question(question_id: str):
+    """Delete an evaluation question (soft delete - set inactive)"""
+    result = await db.evaluation_questions.update_one(
+        {"id": question_id},
+        {"$set": {"is_active": False, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Question not found")
+    return {"success": True}
+
+
+@api_router.post("/evaluations")
+async def submit_evaluation(input: SessionEvaluationCreate):
+    """Submit a session evaluation (by participant)"""
+    # Get session and leader info for caching
+    agenda = await db.workshop_agendas.find_one({"workshop_id": input.workshop_id}, {"_id": 0})
+    session_title = None
+    if agenda:
+        for day in agenda.get("days", []):
+            for session in day.get("sessions", []):
+                if session.get("id") == input.session_id:
+                    session_title = session.get("title")
+                    break
+    
+    # Get leader name
+    leader = await db.leaders.find_one({"id": input.leader_id}, {"_id": 0, "name": 1})
+    leader_name = leader.get("name") if leader else None
+    
+    evaluation = SessionEvaluation(
+        workshop_id=input.workshop_id,
+        session_id=input.session_id,
+        leader_id=input.leader_id,
+        leader_name=leader_name,
+        session_title=session_title,
+        participant_email=input.participant_email,
+        answers=input.answers,
+        comment=input.comment
+    )
+    
+    await db.session_evaluations.insert_one(evaluation.model_dump())
+    return {"success": True, "id": evaluation.id}
+
+
+@api_router.get("/evaluations/session/{session_id}")
+async def get_session_evaluations(session_id: str, include_participant_info: bool = False):
+    """Get all evaluations for a specific session (admin only)"""
+    projection = {"_id": 0}
+    if not include_participant_info:
+        projection["participant_id"] = 0
+        projection["participant_email"] = 0
+    
+    evaluations = await db.session_evaluations.find(
+        {"session_id": session_id}, 
+        projection
+    ).to_list(1000)
+    
+    return evaluations
+
+
+@api_router.get("/evaluations/leader/{leader_id}")
+async def get_leader_evaluations(leader_id: str, workshop_id: Optional[str] = None):
+    """Get all evaluations for a specific leader"""
+    query = {"leader_id": leader_id}
+    if workshop_id:
+        query["workshop_id"] = workshop_id
+    
+    evaluations = await db.session_evaluations.find(
+        query,
+        {"_id": 0, "participant_id": 0, "participant_email": 0}
+    ).to_list(1000)
+    
+    return evaluations
+
+
+@api_router.get("/evaluations/stats")
+async def get_evaluation_statistics(
+    workshop_id: Optional[str] = None,
+    leader_id: Optional[str] = None,
+    session_id: Optional[str] = None
+):
+    """Get evaluation statistics with averages and comparisons"""
+    query = {}
+    if workshop_id:
+        query["workshop_id"] = workshop_id
+    if leader_id:
+        query["leader_id"] = leader_id
+    if session_id:
+        query["session_id"] = session_id
+    
+    evaluations = await db.session_evaluations.find(query, {"_id": 0}).to_list(10000)
+    
+    if not evaluations:
+        return {
+            "total_evaluations": 0,
+            "overall_average": 0,
+            "questions_stats": [],
+            "leaders_comparison": [],
+            "sessions_stats": []
+        }
+    
+    # Get all questions for reference
+    questions = await db.evaluation_questions.find({}, {"_id": 0}).to_list(100)
+    questions_map = {q["id"]: q for q in questions}
+    
+    # Calculate statistics
+    total_evaluations = len(evaluations)
+    all_ratings = []
+    questions_ratings = {}  # question_id -> list of ratings
+    leaders_ratings = {}    # leader_id -> {name, ratings: []}
+    sessions_ratings = {}   # session_id -> {title, leader, ratings: []}
+    
+    for eval in evaluations:
+        leader_id = eval.get("leader_id")
+        session_id = eval.get("session_id")
+        
+        # Initialize leader stats
+        if leader_id not in leaders_ratings:
+            leaders_ratings[leader_id] = {
+                "leader_id": leader_id,
+                "leader_name": eval.get("leader_name", "Okänd"),
+                "ratings": [],
+                "evaluation_count": 0
+            }
+        leaders_ratings[leader_id]["evaluation_count"] += 1
+        
+        # Initialize session stats
+        if session_id not in sessions_ratings:
+            sessions_ratings[session_id] = {
+                "session_id": session_id,
+                "session_title": eval.get("session_title", "Okänd session"),
+                "leader_name": eval.get("leader_name"),
+                "ratings": [],
+                "evaluation_count": 0
+            }
+        sessions_ratings[session_id]["evaluation_count"] += 1
+        
+        for answer in eval.get("answers", []):
+            rating = answer.get("rating", 0)
+            q_id = answer.get("question_id")
+            
+            all_ratings.append(rating)
+            
+            # Per question
+            if q_id not in questions_ratings:
+                questions_ratings[q_id] = []
+            questions_ratings[q_id].append(rating)
+            
+            # Per leader
+            leaders_ratings[leader_id]["ratings"].append(rating)
+            
+            # Per session
+            sessions_ratings[session_id]["ratings"].append(rating)
+    
+    # Calculate averages
+    overall_average = sum(all_ratings) / len(all_ratings) if all_ratings else 0
+    
+    questions_stats = []
+    for q_id, ratings in questions_ratings.items():
+        q_info = questions_map.get(q_id, {})
+        avg = sum(ratings) / len(ratings) if ratings else 0
+        questions_stats.append({
+            "question_id": q_id,
+            "question_text": q_info.get("text_sv", "Okänd fråga"),
+            "average_rating": round(avg, 2),
+            "response_count": len(ratings),
+            "min_rating": min(ratings) if ratings else 0,
+            "max_rating": max(ratings) if ratings else 0
+        })
+    
+    leaders_comparison = []
+    for leader_data in leaders_ratings.values():
+        ratings = leader_data["ratings"]
+        avg = sum(ratings) / len(ratings) if ratings else 0
+        leaders_comparison.append({
+            "leader_id": leader_data["leader_id"],
+            "leader_name": leader_data["leader_name"],
+            "average_rating": round(avg, 2),
+            "evaluation_count": leader_data["evaluation_count"],
+            "total_ratings": len(ratings)
+        })
+    leaders_comparison.sort(key=lambda x: x["average_rating"], reverse=True)
+    
+    sessions_stats = []
+    for session_data in sessions_ratings.values():
+        ratings = session_data["ratings"]
+        avg = sum(ratings) / len(ratings) if ratings else 0
+        sessions_stats.append({
+            "session_id": session_data["session_id"],
+            "session_title": session_data["session_title"],
+            "leader_name": session_data["leader_name"],
+            "average_rating": round(avg, 2),
+            "evaluation_count": session_data["evaluation_count"]
+        })
+    sessions_stats.sort(key=lambda x: x["average_rating"], reverse=True)
+    
+    return {
+        "total_evaluations": total_evaluations,
+        "overall_average": round(overall_average, 2),
+        "questions_stats": questions_stats,
+        "leaders_comparison": leaders_comparison,
+        "sessions_stats": sessions_stats
+    }
+
+
+@api_router.get("/evaluations/leader/{leader_id}/detailed")
+async def get_leader_detailed_stats(leader_id: str):
+    """Get detailed statistics for a specific leader including per-question breakdown"""
+    evaluations = await db.session_evaluations.find(
+        {"leader_id": leader_id},
+        {"_id": 0, "participant_id": 0, "participant_email": 0}
+    ).to_list(1000)
+    
+    if not evaluations:
+        return {
+            "leader_id": leader_id,
+            "total_evaluations": 0,
+            "sessions": [],
+            "questions_breakdown": [],
+            "strengths": [],
+            "improvement_areas": []
+        }
+    
+    # Get questions
+    questions = await db.evaluation_questions.find({"is_active": True}, {"_id": 0}).to_list(100)
+    questions_map = {q["id"]: q for q in questions}
+    
+    # Get leader info
+    leader = await db.leaders.find_one({"id": leader_id}, {"_id": 0})
+    
+    # Organize by session
+    sessions_data = {}
+    questions_ratings = {}
+    
+    for eval in evaluations:
+        s_id = eval.get("session_id")
+        if s_id not in sessions_data:
+            sessions_data[s_id] = {
+                "session_id": s_id,
+                "session_title": eval.get("session_title"),
+                "evaluations": [],
+                "ratings": []
+            }
+        sessions_data[s_id]["evaluations"].append(eval)
+        
+        for answer in eval.get("answers", []):
+            q_id = answer.get("question_id")
+            rating = answer.get("rating", 0)
+            
+            sessions_data[s_id]["ratings"].append(rating)
+            
+            if q_id not in questions_ratings:
+                questions_ratings[q_id] = []
+            questions_ratings[q_id].append(rating)
+    
+    # Calculate per-session averages
+    sessions_summary = []
+    for s_data in sessions_data.values():
+        ratings = s_data["ratings"]
+        avg = sum(ratings) / len(ratings) if ratings else 0
+        sessions_summary.append({
+            "session_id": s_data["session_id"],
+            "session_title": s_data["session_title"],
+            "evaluation_count": len(s_data["evaluations"]),
+            "average_rating": round(avg, 2)
+        })
+    
+    # Calculate per-question breakdown
+    questions_breakdown = []
+    for q_id, ratings in questions_ratings.items():
+        q_info = questions_map.get(q_id, {})
+        avg = sum(ratings) / len(ratings) if ratings else 0
+        questions_breakdown.append({
+            "question_id": q_id,
+            "question_text": q_info.get("text_sv", "Okänd fråga"),
+            "average_rating": round(avg, 2),
+            "response_count": len(ratings)
+        })
+    
+    # Sort to identify strengths and improvement areas
+    questions_breakdown.sort(key=lambda x: x["average_rating"], reverse=True)
+    
+    strengths = [q for q in questions_breakdown if q["average_rating"] >= 8][:3]
+    improvement_areas = [q for q in questions_breakdown if q["average_rating"] < 7][:3]
+    
+    return {
+        "leader_id": leader_id,
+        "leader_name": leader.get("name") if leader else "Okänd",
+        "leader_email": leader.get("email") if leader else None,
+        "total_evaluations": len(evaluations),
+        "overall_average": round(sum(sum(s["ratings"]) for s in sessions_data.values()) / 
+                                  sum(len(s["ratings"]) for s in sessions_data.values()), 2) if sessions_data else 0,
+        "sessions": sessions_summary,
+        "questions_breakdown": questions_breakdown,
+        "strengths": strengths,
+        "improvement_areas": improvement_areas
+    }
+
+
+@api_router.post("/evaluations/feedback")
+async def send_leader_feedback(input: LeaderFeedbackCreate):
+    """Send feedback to a leader (admin action)"""
+    # Get leader info
+    leader = await db.leaders.find_one({"id": input.leader_id}, {"_id": 0})
+    if not leader:
+        raise HTTPException(status_code=404, detail="Leader not found")
+    
+    leader_email = leader.get("email")
+    if not leader_email:
+        raise HTTPException(status_code=400, detail="Leader has no email address")
+    
+    # Get statistics if requested
+    stats_summary = None
+    if input.include_statistics:
+        stats = await get_leader_detailed_stats(input.leader_id)
+        stats_summary = {
+            "total_evaluations": stats.get("total_evaluations"),
+            "overall_average": stats.get("overall_average"),
+            "strengths": stats.get("strengths", []),
+            "improvement_areas": stats.get("improvement_areas", [])
+        }
+    
+    # Build email content
+    feedback_type_text = {
+        "praise": "Beröm",
+        "improvement": "Utvecklingsområden",
+        "general": "Återkoppling"
+    }.get(input.feedback_type, "Återkoppling")
+    
+    stats_html = ""
+    if stats_summary:
+        strengths_html = "".join([f"<li>✓ {s['question_text']}: {s['average_rating']}/10</li>" for s in stats_summary.get("strengths", [])])
+        improvements_html = "".join([f"<li>→ {s['question_text']}: {s['average_rating']}/10</li>" for s in stats_summary.get("improvement_areas", [])])
+        
+        stats_html = f"""
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <h3 style="color: #014D73; margin-top: 0;">📊 Sammanfattning av utvärderingar</h3>
+            <p><strong>Antal utvärderingar:</strong> {stats_summary.get('total_evaluations', 0)}</p>
+            <p><strong>Genomsnittligt betyg:</strong> {stats_summary.get('overall_average', 0)}/10</p>
+            
+            {f'<h4 style="color: #22c55e;">🌟 Styrkor</h4><ul>{strengths_html}</ul>' if strengths_html else ''}
+            {f'<h4 style="color: #f59e0b;">📈 Utvecklingsområden</h4><ul>{improvements_html}</ul>' if improvements_html else ''}
+        </div>
+        """
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">💬 {feedback_type_text} från Haggai Sweden</h1>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Hej {leader.get('name', '')}!</p>
+            
+            <h2 style="color: #014D73;">{input.subject}</h2>
+            
+            <div style="white-space: pre-line;">{input.message}</div>
+            
+            {stats_html}
+            
+            <p style="margin-top: 30px; color: #666;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        await asyncio.to_thread(resend.Emails.send, {
+            "from": SENDER_EMAIL,
+            "to": [leader_email],
+            "subject": f"{feedback_type_text}: {input.subject}",
+            "html": html_content
+        })
+        
+        # Save feedback record
+        feedback = LeaderFeedback(
+            leader_id=input.leader_id,
+            leader_email=leader_email,
+            workshop_id=input.workshop_id,
+            session_id=input.session_id,
+            feedback_type=input.feedback_type,
+            subject=input.subject,
+            message=input.message,
+            statistics_summary=stats_summary
+        )
+        await db.leader_feedback.insert_one(feedback.model_dump())
+        
+        return {"success": True, "message": f"Feedback sent to {leader_email}"}
+    except Exception as e:
+        logging.error(f"Failed to send feedback: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to send feedback: {str(e)}")
+
+
+@api_router.get("/evaluations/feedback/{leader_id}")
+async def get_leader_feedback_history(leader_id: str):
+    """Get history of feedback sent to a leader"""
+    feedback = await db.leader_feedback.find(
+        {"leader_id": leader_id},
+        {"_id": 0}
+    ).sort("sent_at", -1).to_list(100)
+    return feedback
+
+
+@api_router.get("/evaluation/form/{workshop_id}/{session_id}")
+async def get_evaluation_form_data(workshop_id: str, session_id: str):
+    """Get data needed to render evaluation form (public endpoint)"""
+    # Get workshop info
+    workshop = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
+    if not workshop:
+        raise HTTPException(status_code=404, detail="Workshop not found")
+    
+    # Get agenda and session
+    agenda = await db.workshop_agendas.find_one({"workshop_id": workshop_id}, {"_id": 0})
+    session_data = None
+    if agenda:
+        for day in agenda.get("days", []):
+            for session in day.get("sessions", []):
+                if session.get("id") == session_id:
+                    session_data = session
+                    break
+    
+    if not session_data:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    # Get leader info
+    leader = None
+    if session_data.get("leader_id"):
+        leader = await db.leaders.find_one({"id": session_data["leader_id"]}, {"_id": 0, "id": 1, "name": 1})
+    
+    # Get active questions
+    questions = await db.evaluation_questions.find(
+        {"is_active": True},
+        {"_id": 0}
+    ).sort("order", 1).to_list(100)
+    
+    # Get workshop title (handle multilingual)
+    workshop_title = workshop.get("title")
+    if isinstance(workshop_title, dict):
+        workshop_title = workshop_title.get("sv", workshop_title.get("en", ""))
+    
+    return {
+        "workshop_id": workshop_id,
+        "workshop_title": workshop_title,
+        "session_id": session_id,
+        "session_title": session_data.get("title"),
+        "leader_id": session_data.get("leader_id"),
+        "leader_name": leader.get("name") if leader else session_data.get("leader_name"),
+        "questions": questions
+    }
+
+
 # ==================== TRAINING PARTICIPANTS ENDPOINTS ====================
 
 class TrainingParticipantStatusUpdate(BaseModel):
