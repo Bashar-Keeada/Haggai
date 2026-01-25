@@ -299,6 +299,7 @@ const PublicNominationForm = () => {
                       value={formData.nominator_name}
                       onChange={(e) => handleChange('nominator_name', e.target.value)}
                       required
+                      data-testid="nominator-name-input"
                     />
                   </div>
                   <div className="space-y-2">
@@ -308,6 +309,7 @@ const PublicNominationForm = () => {
                       value={formData.nominator_email}
                       onChange={(e) => handleChange('nominator_email', e.target.value)}
                       required
+                      data-testid="nominator-email-input"
                     />
                   </div>
                 </div>
@@ -318,6 +320,7 @@ const PublicNominationForm = () => {
                     <Input
                       value={formData.nominator_phone}
                       onChange={(e) => handleChange('nominator_phone', e.target.value)}
+                      data-testid="nominator-phone-input"
                     />
                   </div>
                   <div className="space-y-2">
@@ -325,6 +328,7 @@ const PublicNominationForm = () => {
                     <Input
                       value={formData.nominator_church}
                       onChange={(e) => handleChange('nominator_church', e.target.value)}
+                      data-testid="nominator-church-input"
                     />
                   </div>
                 </div>
@@ -335,6 +339,7 @@ const PublicNominationForm = () => {
                     value={formData.nominator_relation}
                     onChange={(e) => handleChange('nominator_relation', e.target.value)}
                     placeholder={txt.relationPlaceholder}
+                    data-testid="nominator-relation-input"
                   />
                 </div>
               </div>
@@ -357,6 +362,7 @@ const PublicNominationForm = () => {
                       value={formData.nominee_name}
                       onChange={(e) => handleChange('nominee_name', e.target.value)}
                       required
+                      data-testid="nominee-name-input"
                     />
                   </div>
                   <div className="space-y-2">
@@ -366,6 +372,7 @@ const PublicNominationForm = () => {
                       value={formData.nominee_email}
                       onChange={(e) => handleChange('nominee_email', e.target.value)}
                       required
+                      data-testid="nominee-email-input"
                     />
                   </div>
                 </div>
@@ -376,6 +383,7 @@ const PublicNominationForm = () => {
                     <Input
                       value={formData.nominee_phone}
                       onChange={(e) => handleChange('nominee_phone', e.target.value)}
+                      data-testid="nominee-phone-input"
                     />
                   </div>
                   <div className="space-y-2">
@@ -384,6 +392,7 @@ const PublicNominationForm = () => {
                       value={formData.nominee_church}
                       onChange={(e) => handleChange('nominee_church', e.target.value)}
                       required
+                      data-testid="nominee-church-input"
                     />
                   </div>
                 </div>
@@ -395,6 +404,7 @@ const PublicNominationForm = () => {
                     onChange={(e) => handleChange('nominee_role', e.target.value)}
                     placeholder={txt.rolePlaceholder}
                     required
+                    data-testid="nominee-role-input"
                   />
                 </div>
                 
@@ -405,6 +415,7 @@ const PublicNominationForm = () => {
                     onChange={(e) => handleChange('nominee_activities', e.target.value)}
                     placeholder={txt.activitiesPlaceholder}
                     rows={3}
+                    data-testid="nominee-activities-input"
                   />
                 </div>
               </div>
@@ -421,6 +432,7 @@ const PublicNominationForm = () => {
                 placeholder={txt.motivationPlaceholder}
                 rows={4}
                 required
+                data-testid="motivation-input"
               />
             </CardContent>
           </Card>
@@ -430,6 +442,7 @@ const PublicNominationForm = () => {
             type="submit"
             disabled={submitting}
             className="w-full h-14 bg-haggai hover:bg-haggai-dark text-white text-lg"
+            data-testid="submit-nomination-btn"
           >
             {submitting ? (
               <>
