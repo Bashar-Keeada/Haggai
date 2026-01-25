@@ -506,6 +506,87 @@ const LeaderRegistrationForm = () => {
             </CardContent>
           </Card>
 
+          {/* Topic Selection */}
+          <Card className="border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-haggai">
+                <BookOpen className="h-5 w-5" />
+                {txt.topicSection}
+              </CardTitle>
+              <p className="text-sm text-stone-500">{txt.topicSectionDesc}</p>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Primary Topic */}
+              <div className="space-y-3">
+                <Label className="text-base font-semibold">{txt.primaryTopic} *</Label>
+                <p className="text-sm text-stone-500">{txt.primaryTopicDesc}</p>
+                <div className="grid gap-3">
+                  {workshopTopics.map((topic) => (
+                    <label 
+                      key={topic.id}
+                      className={`flex items-start gap-4 p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                        formData.primary_topic === topic.id 
+                          ? 'border-haggai bg-haggai/5 shadow-sm' 
+                          : 'border-stone-200 hover:border-stone-300 hover:bg-stone-50'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="primary_topic"
+                        value={topic.id}
+                        checked={formData.primary_topic === topic.id}
+                        onChange={(e) => handleChange('primary_topic', e.target.value)}
+                        className="mt-1 h-5 w-5 text-haggai"
+                      />
+                      <div className="flex-1">
+                        <span className="font-semibold text-stone-800">{getTopicName(topic)}</span>
+                        <p className="text-sm text-stone-500 mt-1">{topic.description_sv}</p>
+                      </div>
+                      {formData.primary_topic === topic.id && (
+                        <Badge className="bg-haggai text-white">Valt</Badge>
+                      )}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Backup Topics */}
+              <div className="space-y-3 pt-4 border-t">
+                <Label className="text-base font-semibold">{txt.backupTopics}</Label>
+                <p className="text-sm text-stone-500">{txt.backupTopicsDesc}</p>
+                <div className="grid md:grid-cols-2 gap-3">
+                  {workshopTopics
+                    .filter(topic => topic.id !== formData.primary_topic)
+                    .map((topic) => (
+                      <label 
+                        key={topic.id}
+                        className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
+                          formData.backup_topics?.includes(topic.id)
+                            ? 'border-emerald-400 bg-emerald-50'
+                            : 'border-stone-200 hover:border-stone-300 hover:bg-stone-50'
+                        }`}
+                      >
+                        <Checkbox
+                          checked={formData.backup_topics?.includes(topic.id)}
+                          onCheckedChange={() => handleBackupTopicToggle(topic.id)}
+                          className="data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                        />
+                        <span className="font-medium text-stone-700">{getTopicName(topic)}</span>
+                        {formData.backup_topics?.includes(topic.id) && (
+                          <CheckSquare className="h-4 w-4 text-emerald-500 ml-auto" />
+                        )}
+                      </label>
+                    ))}
+                </div>
+                {formData.backup_topics?.length > 0 && (
+                  <p className="text-sm text-emerald-600">
+                    ✓ {formData.backup_topics.length} backup-ämne{formData.backup_topics.length > 1 ? 'n' : ''} valt
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Profile */}
           <Card className="border-0 shadow-lg">
             <CardHeader>
