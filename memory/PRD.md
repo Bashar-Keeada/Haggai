@@ -325,6 +325,7 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - ✅ COMPLETED: Training Participants Admin Panel with Diploma Generation
 - ✅ COMPLETED: Admin-Moderated Nomination Workflow with new fields (Jan 24)
 - ✅ COMPLETED: Workshop Agenda System (Jan 24)
+- ✅ COMPLETED: Session Evaluation System (Jan 25)
 - **Admin Panel for Categories** - Create UI to manage expertise/interest options for member profiles
 - Migrate EventCalendar.jsx to use /api/workshops instead of mock.js
 - Migrate LeaderExperience.jsx to use /api/workshops instead of mock.js
@@ -348,6 +349,9 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - `/app/frontend/src/pages/AdminWorkshopAgenda.jsx` - Workshop agenda editor ✅ NEW
 - `/app/frontend/src/pages/PublicAgenda.jsx` - Public program view for participants ✅ NEW
 - `/app/frontend/src/pages/LeaderSessions.jsx` - Leader's assigned sessions ✅ NEW
+- `/app/frontend/src/pages/AdminEvaluationQuestions.jsx` - Manage evaluation questions ✅ NEW
+- `/app/frontend/src/pages/AdminEvaluationResults.jsx` - View evaluation results & send feedback ✅ NEW
+- `/app/frontend/src/pages/SessionEvaluationForm.jsx` - Public evaluation form ✅ NEW
 - `/app/frontend/src/pages/EventCalendar.jsx` - Calendar with nomination button & enhanced form ✅ UPDATED
 - `/app/frontend/src/pages/AdminNominations.jsx` - Admin panel for nominations with approve/reject ✅ UPDATED
 - `/app/frontend/src/pages/Donations.jsx` - Donations page
@@ -355,6 +359,7 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - `/app/backend/server.py` - All API endpoints ✅ UPDATED
 - `/app/backend/tests/test_nominations.py` - Nomination API tests (12 tests) ✅
 - `/app/backend/tests/test_agenda.py` - Agenda API tests (16 tests) ✅ NEW
+- `/app/backend/tests/test_evaluations.py` - Evaluation API tests (25 tests) ✅ NEW
 
 ---
 
