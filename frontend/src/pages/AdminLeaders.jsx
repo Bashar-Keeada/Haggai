@@ -469,93 +469,279 @@ const AdminLeaders = () => {
     <div className={`min-h-screen bg-cream-50 py-24 ${isRTL ? 'rtl' : 'ltr'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className={`mb-12 ${isRTL ? 'text-right' : ''}`}>
+        <div className={`mb-8 ${isRTL ? 'text-right' : ''}`}>
           <h1 className="text-4xl font-bold text-stone-800 mb-4">{txt.title}</h1>
-          <p className="text-lg text-stone-600 mb-8">{txt.subtitle}</p>
+          <p className="text-lg text-stone-600 mb-6">{txt.subtitle}</p>
           
-          <Button 
-            onClick={() => openModal()}
-            className="bg-haggai hover:bg-haggai-dark text-cream-50"
-          >
-            <Plus className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-            {txt.addNew}
-          </Button>
+          <div className={`flex gap-3 flex-wrap ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <Button 
+              onClick={() => openModal()}
+              className="bg-haggai hover:bg-haggai-dark text-cream-50"
+            >
+              <Plus className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+              {txt.addNew}
+            </Button>
+            <Button 
+              onClick={() => setShowInviteDialog(true)}
+              variant="outline"
+              className="border-haggai text-haggai hover:bg-haggai hover:text-white"
+            >
+              <Send className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+              {txt.sendInvite}
+            </Button>
+          </div>
         </div>
 
-        {/* Leaders Grid */}
-        {leaders.length === 0 ? (
-          <Card className="border-0 shadow-lg">
-            <CardContent className="p-12 text-center">
-              <User className="h-16 w-16 text-stone-300 mx-auto mb-4" />
-              <p className="text-lg text-stone-500">{txt.noLeaders}</p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {leaders.map((leader) => (
-              <Card key={leader.id} className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-                <CardContent className="p-6">
-                  <div className={`flex items-start gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    {leader.image_url ? (
-                      <img 
-                        src={leader.image_url} 
-                        alt={leader.name}
-                        className="w-20 h-20 rounded-full object-cover flex-shrink-0"
-                      />
-                    ) : (
-                      <div className="w-20 h-20 rounded-full bg-haggai-100 flex items-center justify-center flex-shrink-0">
-                        <User className="h-10 w-10 text-haggai" />
-                      </div>
-                    )}
-                    <div className={`flex-1 ${isRTL ? 'text-right' : ''}`}>
-                      <div className={`flex items-center gap-2 mb-1 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                        <h3 className="text-lg font-semibold text-stone-800">{leader.name}</h3>
-                        <Badge variant={leader.is_active ? 'default' : 'secondary'} className="text-xs">
-                          {leader.is_active ? txt.active : txt.inactive}
-                        </Badge>
-                      </div>
-                      <p className="text-haggai font-medium text-sm mb-2">
-                        {leader.role?.[language] || leader.role?.sv}
-                      </p>
-                      <p className="text-stone-600 text-sm line-clamp-2 mb-3">
-                        {leader.bio?.[language] || leader.bio?.sv}
-                      </p>
-                      {leader.topics?.[language]?.length > 0 && (
-                        <div className={`flex flex-wrap gap-1 mb-3 ${isRTL ? 'justify-end' : ''}`}>
-                          {(leader.topics[language] || leader.topics.sv || []).slice(0, 3).map((topic, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs">
-                              {topic}
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <div className={`flex gap-2 mt-4 pt-4 border-t border-stone-100 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => openModal(leader)}
-                      className="flex-1"
-                    >
-                      <Edit className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                      {txt.edit}
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => handleDelete(leader.id)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="bg-white shadow-sm">
+            <TabsTrigger value="leaders" className="data-[state=active]:bg-haggai data-[state=active]:text-white">
+              <Users className="h-4 w-4 mr-2" />
+              {txt.tabs.leaders}
+              <Badge className="ml-2 bg-stone-200 text-stone-700">{leaders.length}</Badge>
+            </TabsTrigger>
+            <TabsTrigger value="invitations" className="data-[state=active]:bg-haggai data-[state=active]:text-white">
+              <Send className="h-4 w-4 mr-2" />
+              {txt.tabs.invitations}
+              <Badge className="ml-2 bg-stone-200 text-stone-700">{invitations.filter(i => i.status === 'pending').length}</Badge>
+            </TabsTrigger>
+            <TabsTrigger value="registrations" className="data-[state=active]:bg-haggai data-[state=active]:text-white">
+              <UserPlus className="h-4 w-4 mr-2" />
+              {txt.tabs.registrations}
+              <Badge className="ml-2 bg-amber-200 text-amber-800">{registrations.filter(r => r.status === 'pending').length}</Badge>
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Leaders Tab */}
+          <TabsContent value="leaders">
+            {leaders.length === 0 ? (
+              <Card className="border-0 shadow-lg">
+                <CardContent className="p-12 text-center">
+                  <User className="h-16 w-16 text-stone-300 mx-auto mb-4" />
+                  <p className="text-lg text-stone-500">{txt.noLeaders}</p>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-        )}
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {leaders.map((leader) => (
+                  <Card key={leader.id} className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+                    <CardContent className="p-6">
+                      <div className={`flex items-start gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                        {leader.image_url ? (
+                          <img 
+                            src={leader.image_url} 
+                            alt={leader.name}
+                            className="w-20 h-20 rounded-full object-cover flex-shrink-0"
+                          />
+                        ) : (
+                          <div className="w-20 h-20 rounded-full bg-haggai-100 flex items-center justify-center flex-shrink-0">
+                            <User className="h-10 w-10 text-haggai" />
+                          </div>
+                        )}
+                        <div className={`flex-1 ${isRTL ? 'text-right' : ''}`}>
+                          <div className={`flex items-center gap-2 mb-1 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                            <h3 className="text-lg font-semibold text-stone-800">{leader.name}</h3>
+                            <Badge variant={leader.is_active ? 'default' : 'secondary'} className="text-xs">
+                              {leader.is_active ? txt.active : txt.inactive}
+                            </Badge>
+                            {leader.is_registered_leader && (
+                              <Badge className="bg-violet-100 text-violet-800 text-xs">Registrerad</Badge>
+                            )}
+                          </div>
+                          <p className="text-haggai font-medium text-sm mb-2">
+                            {leader.role?.[language] || leader.role?.sv}
+                          </p>
+                          <p className="text-stone-600 text-sm line-clamp-2 mb-3">
+                            {leader.bio?.[language] || leader.bio?.sv}
+                          </p>
+                          {leader.topics?.[language]?.length > 0 && (
+                            <div className={`flex flex-wrap gap-1 mb-3 ${isRTL ? 'justify-end' : ''}`}>
+                              {(leader.topics[language] || leader.topics.sv || []).slice(0, 3).map((topic, idx) => (
+                                <Badge key={idx} variant="outline" className="text-xs">
+                                  {topic}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className={`flex gap-2 mt-4 pt-4 border-t border-stone-100 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => openModal(leader)}
+                          className="flex-1"
+                        >
+                          <Edit className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                          {txt.edit}
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleDelete(leader.id)}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Invitations Tab */}
+          <TabsContent value="invitations">
+            {invitations.length === 0 ? (
+              <Card className="border-0 shadow-lg">
+                <CardContent className="p-12 text-center">
+                  <Send className="h-16 w-16 text-stone-300 mx-auto mb-4" />
+                  <p className="text-lg text-stone-500">{txt.invitations.noInvitations}</p>
+                  <Button onClick={() => setShowInviteDialog(true)} className="mt-4 bg-haggai hover:bg-haggai-dark">
+                    <Send className="h-4 w-4 mr-2" />
+                    {txt.sendInvite}
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="space-y-4">
+                {invitations.map((inv) => (
+                  <Card key={inv.id} className="border-0 shadow-lg">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-haggai-100 rounded-full flex items-center justify-center">
+                            <Mail className="h-6 w-6 text-haggai" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-stone-800">{inv.name}</h4>
+                            <p className="text-sm text-stone-500">{inv.email}</p>
+                            {inv.workshop_title && (
+                              <p className="text-xs text-haggai">Workshop: {inv.workshop_title}</p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Badge className={
+                            inv.status === 'registered' ? 'bg-green-100 text-green-800' :
+                            inv.status === 'expired' ? 'bg-red-100 text-red-800' :
+                            'bg-amber-100 text-amber-800'
+                          }>
+                            {inv.status === 'registered' ? <CheckCircle className="h-3 w-3 mr-1" /> : <Clock className="h-3 w-3 mr-1" />}
+                            {txt.invitations[inv.status] || inv.status}
+                          </Badge>
+                          {inv.status === 'pending' && (
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => handleResendInvite(inv.id)}
+                            >
+                              <RefreshCw className="h-4 w-4 mr-1" />
+                              {txt.invitations.resend}
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                      {inv.sent_at && (
+                        <p className="text-xs text-stone-400 mt-2">
+                          {txt.invitations.sentAt}: {new Date(inv.sent_at).toLocaleDateString()}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Registrations Tab */}
+          <TabsContent value="registrations">
+            {registrations.length === 0 ? (
+              <Card className="border-0 shadow-lg">
+                <CardContent className="p-12 text-center">
+                  <UserPlus className="h-16 w-16 text-stone-300 mx-auto mb-4" />
+                  <p className="text-lg text-stone-500">{txt.registrations.noRegistrations}</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="space-y-4">
+                {registrations.map((reg) => (
+                  <Card key={reg.id} className={`border-0 shadow-lg ${reg.status !== 'pending' ? 'opacity-60' : ''}`}>
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-4">
+                          {reg.image_url ? (
+                            <img src={reg.image_url} alt={reg.name} className="w-16 h-16 rounded-full object-cover" />
+                          ) : (
+                            <div className="w-16 h-16 bg-haggai-100 rounded-full flex items-center justify-center">
+                              <User className="h-8 w-8 text-haggai" />
+                            </div>
+                          )}
+                          <div>
+                            <h4 className="font-semibold text-stone-800 text-lg">{reg.name}</h4>
+                            <p className="text-sm text-stone-500">{reg.email}</p>
+                            <p className="text-sm text-stone-500">{reg.phone}</p>
+                            {reg.role_sv && <p className="text-sm text-haggai font-medium">{reg.role_sv}</p>}
+                          </div>
+                        </div>
+                        <Badge className={
+                          reg.status === 'approved' ? 'bg-green-100 text-green-800' :
+                          reg.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                          'bg-amber-100 text-amber-800'
+                        }>
+                          {txt.registrations[reg.status] || reg.status}
+                        </Badge>
+                      </div>
+                      
+                      <div className="grid md:grid-cols-3 gap-4 mt-4 pt-4 border-t">
+                        <div>
+                          <span className="text-xs text-stone-500">Kostnadsval:</span>
+                          <p className="font-medium text-sm">
+                            {reg.cost_preference === 'haggai_support' ? txt.registrations.costHaggai : txt.registrations.costSelf}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-xs text-stone-500">{txt.registrations.arrival}:</span>
+                          <p className="font-medium text-sm">{reg.arrival_date || '-'}</p>
+                        </div>
+                        <div>
+                          <span className="text-xs text-stone-500">{txt.registrations.departure}:</span>
+                          <p className="font-medium text-sm">{reg.departure_date || '-'}</p>
+                        </div>
+                      </div>
+                      
+                      {reg.bio_sv && (
+                        <p className="text-sm text-stone-600 mt-3 line-clamp-2">{reg.bio_sv}</p>
+                      )}
+                      
+                      {reg.status === 'pending' && (
+                        <div className="flex gap-3 mt-4 pt-4 border-t">
+                          <Button 
+                            onClick={() => handleApproveRegistration(reg.id)}
+                            className="bg-green-600 hover:bg-green-700"
+                          >
+                            <CheckCircle className="h-4 w-4 mr-2" />
+                            {txt.registrations.approve}
+                          </Button>
+                          <Button 
+                            variant="outline"
+                            onClick={() => handleRejectRegistration(reg.id)}
+                            className="text-red-600 border-red-200 hover:bg-red-50"
+                          >
+                            <X className="h-4 w-4 mr-2" />
+                            {txt.registrations.reject}
+                          </Button>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
 
         {/* Modal */}
         {isModalOpen && (
