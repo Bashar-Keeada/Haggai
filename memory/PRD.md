@@ -326,7 +326,9 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
 - ✅ COMPLETED: Admin-Moderated Nomination Workflow with new fields (Jan 24)
 - ✅ COMPLETED: Workshop Agenda System (Jan 24)
 - ✅ COMPLETED: Session Evaluation System (Jan 25)
+- ✅ COMPLETED: Shareable Nomination Link & QR Code (Jan 25)
 - **Admin Panel for Categories** - Create UI to manage expertise/interest options for member profiles
+- **Implement LeaderSessions.jsx** - Show logged-in leader their assigned sessions across workshops
 - Migrate EventCalendar.jsx to use /api/workshops instead of mock.js
 - Migrate LeaderExperience.jsx to use /api/workshops instead of mock.js
 
