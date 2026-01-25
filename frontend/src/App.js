@@ -120,6 +120,7 @@ const ProtectedAppContent = () => {
         <Route path="/medlemmar" element={<MembersArea />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/ledare" element={<AdminLeaders />} />
+        <Route path="/admin/namnbrickor" element={<AdminNameBadges />} />
         <Route path="/admin/styrelse" element={<AdminBoardMembers />} />
         <Route path="/admin/medlemmar" element={<AdminOrganizationMembers />} />
         <Route path="/admin/partners" element={<AdminPartners />} />
