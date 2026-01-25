@@ -410,13 +410,15 @@ const AdminWorkshops = () => {
   };
 
   // Copy nomination link to clipboard
-  const copyNominationLink = (workshopId) => {
-    const link = getNominationLink(workshopId);
+  const copyNominationLink = (workshop) => {
+    const link = getNominationLink(workshop.id);
     navigator.clipboard.writeText(link).then(() => {
       toast.success(txt.linkCopied);
     }).catch(() => {
       toast.error('Kunde inte kopiera länken');
     });
+    // Also open QR modal to show the link visually
+    openQRModal(workshop);
   };
 
   // Open QR code modal
@@ -564,7 +566,7 @@ const AdminWorkshops = () => {
                         <Button 
                           size="sm" 
                           variant="outline"
-                          onClick={() => copyNominationLink(workshop.id)}
+                          onClick={() => copyNominationLink(workshop)}
                           className="border-emerald-500 text-emerald-600 hover:bg-emerald-50"
                           data-testid={`share-link-btn-${workshop.id}`}
                         >
