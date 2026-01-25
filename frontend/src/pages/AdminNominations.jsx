@@ -619,7 +619,31 @@ const AdminNominations = () => {
                           Inbjudan skickad - väntar på registrering
                         </Badge>
                       )}
-                      {nomination.registration_completed && (
+                      {nomination.status === 'pending_approval' && (
+                        <>
+                          <Button
+                            size="sm"
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                            onClick={() => approveRegistration(nomination.id)}
+                          >
+                            <Check className="h-4 w-4 mr-1" />
+                            {txt.approveRegistration}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="border-red-300 text-red-600 hover:bg-red-50"
+                            onClick={() => {
+                              const reason = prompt(txt.rejectRegistrationReason || 'Anledning:');
+                              if (reason) rejectRegistration(nomination.id, reason);
+                            }}
+                          >
+                            <X className="h-4 w-4 mr-1" />
+                            {txt.rejectRegistration}
+                          </Button>
+                        </>
+                      )}
+                      {nomination.registration_completed && nomination.status === 'approved' && (
                         <Badge className="bg-green-100 text-green-700">
                           ✅ Registrerad
                         </Badge>
