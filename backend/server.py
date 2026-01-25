@@ -5000,7 +5000,7 @@ async def leader_login(input: LeaderLogin):
 
 
 @api_router.get("/leaders/me")
-async def get_current_leader(authorization: str = None):
+async def get_current_leader(authorization: str = Header(None)):
     """Get current logged-in leader's profile"""
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Ej auktoriserad")
