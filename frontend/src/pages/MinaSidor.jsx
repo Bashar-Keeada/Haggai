@@ -332,6 +332,38 @@ const MinaSidor = () => {
               ))}
             </div>
 
+            {/* Pending Evaluations */}
+            {pendingEvaluations.length > 0 && (
+              <Card className="border-0 shadow-lg mt-6 border-l-4 border-l-orange-500">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <ClipboardCheck className="h-5 w-5 text-orange-500" />
+                    {txt.pendingEvaluations}
+                    <Badge className="bg-orange-500 text-white">{pendingEvaluations.length}</Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {pendingEvaluations.slice(0, 3).map((evaluation, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                        <div className="flex-1">
+                          <p className="font-medium text-stone-800">{evaluation.session_title}</p>
+                          <p className="text-sm text-stone-500">
+                            {evaluation.workshop_title} • Ledare: {evaluation.leader_name}
+                          </p>
+                        </div>
+                        <Link to={`/utvardering/${evaluation.workshop_id}/${evaluation.session_id}`}>
+                          <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">
+                            {txt.evaluateNow}
+                          </Button>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Diplomas Preview */}
             {member.diplomas && member.diplomas.length > 0 && (
               <Card className="border-0 shadow-lg mt-6">
