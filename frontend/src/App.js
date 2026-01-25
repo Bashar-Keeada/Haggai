@@ -48,6 +48,9 @@ import MemberMessages from "./pages/MemberMessages";
 import MemberForum from "./pages/MemberForum";
 import MemberDiplomas from "./pages/MemberDiplomas";
 import MemberNameBadge from "./pages/MemberNameBadge";
+// Participant Portal Pages
+import ParticipantLogin from "./pages/ParticipantLogin";
+import ParticipantPortal from "./pages/ParticipantPortal";
 
 function App() {
   return (
@@ -67,6 +70,9 @@ function App() {
               <Route path="/ledare/registrera/:token" element={<LeaderRegistrationForm />} />
               <Route path="/ledare/login" element={<LeaderLogin />} />
               <Route path="/ledare/portal" element={<LeaderPortal />} />
+              {/* Participant Portal Routes */}
+              <Route path="/deltagare/login" element={<ParticipantLogin />} />
+              <Route path="/deltagare/portal" element={<ParticipantPortal />} />
               {/* Member Portal Routes */}
               <Route path="/mina-sidor" element={<MinaSidor />} />
               <Route path="/mina-sidor/profil" element={<MemberProfile />} />
