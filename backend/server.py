@@ -4605,13 +4605,48 @@ async def seed_categories():
 
 # ==================== WORKSHOP TOPICS FOR LEADERS ====================
 
-# Predefined workshop topics that leaders can choose from
+# Predefined workshop topics that leaders can choose from (based on Haggai curriculum)
 WORKSHOP_TOPICS = [
-    {"id": "vision", "name_sv": "Vision", "name_en": "Vision", "description_sv": "Utveckla och kommunicera en tydlig vision för din organisation"},
-    {"id": "faithfulness", "name_sv": "Trofasthet", "name_en": "Faithfulness", "description_sv": "Vikten av trofasthet och integritet i ledarskap"},
-    {"id": "success", "name_sv": "Framgång", "name_en": "Success", "description_sv": "Definiera och uppnå framgång som ledare"},
-    {"id": "preparation", "name_sv": "Förberedelse", "name_en": "Preparation", "description_sv": "Strategisk planering och förberedelse för framtiden"},
-    {"id": "multiplication", "name_sv": "Multiplikation", "name_en": "Multiplication", "description_sv": "Utveckla och multiplicera ledarskap i din organisation"}
+    {
+        "id": "stewardship",
+        "name_sv": "Förvaltarskap",
+        "name_en": "Stewardship",
+        "description_sv": "Hur man förvaltar resurser, tid och talanger ansvarsfullt",
+        "description_en": "How to manage resources, time and talents responsibly",
+        "hours": 4
+    },
+    {
+        "id": "context",
+        "name_sv": "Sammanhang",
+        "name_en": "Context",
+        "description_sv": "Förstå kulturella och samhälleliga sammanhang inom ledarskap",
+        "description_en": "Understanding cultural and societal contexts in leadership",
+        "hours": 5
+    },
+    {
+        "id": "next_generation",
+        "name_sv": "Nästa Generation",
+        "name_en": "Next Generation",
+        "description_sv": "Strategier för att utveckla och utrusta framtida ledare",
+        "description_en": "Strategies for developing and equipping future leaders",
+        "hours": 5
+    },
+    {
+        "id": "leadership",
+        "name_sv": "Ledarskap",
+        "name_en": "Leadership",
+        "description_sv": "Praktiska verktyg och principer för effektivt ledarskap",
+        "description_en": "Practical tools and principles for effective leadership",
+        "hours": 4
+    },
+    {
+        "id": "goal_setting",
+        "name_sv": "Målsättning",
+        "name_en": "Goal Setting",
+        "description_sv": "Hur man sätter och uppnår meningsfulla mål",
+        "description_en": "How to set and achieve meaningful goals",
+        "hours": 5
+    }
 ]
 
 
