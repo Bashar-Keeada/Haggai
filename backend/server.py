@@ -4727,67 +4727,130 @@ async def create_leader_invitation(input: LeaderInvitationCreate):
     # Send invitation email
     base_url = os.environ.get('FRONTEND_URL', 'https://haggai-portal.preview.emergentagent.com')
     registration_link = f"{base_url}/ledare/registrera/{invitation.token}"
+    lang = input.language or "sv"
+    
+    # Multilingual email content
+    email_texts = {
+        "sv": {
+            "subject": "🎉 Du är inbjuden som ledare - Haggai Sweden Workshop",
+            "header": "Du är inbjuden som ledare!",
+            "greeting": f"Hej <strong>{input.name}</strong>,",
+            "intro": "Vi är glada att meddela att du har blivit inbjuden att delta som <strong>ledare/facilitator</strong> i en kommande Haggai Sweden workshop! 🙌",
+            "workshop_label": "Workshop",
+            "form_intro": "För att vi ska kunna planera i god ordning ber vi dig vänligen fylla i registreringsformuläret. Där kan du bland annat:",
+            "items": [
+                "📝 Ange dina kontaktuppgifter och bakgrund",
+                "📚 <strong>Välja vilket ämne du ska hålla</strong> bland våra fem kärnämnen",
+                "🔄 Ange vilka <strong>backup-ämnen</strong> du kan ta om behov uppstår",
+                "✈️ Meddela om du behöver stöd med resa och logi",
+                "🏦 Lämna bankuppgifter för eventuell ersättning",
+                "📄 Ladda upp material om ditt ämne"
+            ],
+            "button": "✨ Fyll i formuläret nu",
+            "validity": "Länken är giltig i 30 dagar.",
+            "closing": "Vi ser fram emot ditt deltagande och bidrag till vår workshop! Tveka inte att kontakta oss på",
+            "signature": "Med varma hälsningar,"
+        },
+        "en": {
+            "subject": "🎉 You are invited as a leader - Haggai Sweden Workshop",
+            "header": "You are invited as a leader!",
+            "greeting": f"Hello <strong>{input.name}</strong>,",
+            "intro": "We are pleased to inform you that you have been invited to participate as a <strong>leader/facilitator</strong> in an upcoming Haggai Sweden workshop! 🙌",
+            "workshop_label": "Workshop",
+            "form_intro": "To help us plan effectively, please fill out the registration form. You can:",
+            "items": [
+                "📝 Enter your contact details and background",
+                "📚 <strong>Choose which topic to present</strong> from our five core subjects",
+                "🔄 Indicate which <strong>backup topics</strong> you can cover if needed",
+                "✈️ Let us know if you need support with travel and accommodation",
+                "🏦 Provide bank details for potential reimbursement",
+                "📄 Upload materials about your topic"
+            ],
+            "button": "✨ Fill out the form now",
+            "validity": "The link is valid for 30 days.",
+            "closing": "We look forward to your participation and contribution to our workshop! Please don't hesitate to contact us at",
+            "signature": "Warm regards,"
+        },
+        "ar": {
+            "subject": "🎉 أنت مدعو كقائد - ورشة عمل هاجاي السويد",
+            "header": "أنت مدعو كقائد!",
+            "greeting": f"مرحباً <strong>{input.name}</strong>،",
+            "intro": "يسعدنا أن نبلغك أنك قد تمت دعوتك للمشاركة كـ<strong>قائد/ميسر</strong> في ورشة عمل هاجاي السويد القادمة! 🙌",
+            "workshop_label": "ورشة العمل",
+            "form_intro": "لمساعدتنا في التخطيط بشكل فعال، يرجى ملء استمارة التسجيل. يمكنك:",
+            "items": [
+                "📝 إدخال بيانات الاتصال والخلفية الخاصة بك",
+                "📚 <strong>اختيار الموضوع الذي ستقدمه</strong> من بين موضوعاتنا الخمسة الأساسية",
+                "🔄 تحديد <strong>المواضيع الاحتياطية</strong> التي يمكنك تغطيتها عند الحاجة",
+                "✈️ إعلامنا إذا كنت بحاجة إلى دعم للسفر والإقامة",
+                "🏦 تقديم التفاصيل البنكية لتعويض المصاريف المحتملة",
+                "📄 رفع المواد المتعلقة بموضوعك"
+            ],
+            "button": "✨ املأ الاستمارة الآن",
+            "validity": "الرابط صالح لمدة 30 يوماً.",
+            "closing": "نتطلع إلى مشاركتك ومساهمتك في ورشة العمل! لا تتردد في التواصل معنا على",
+            "signature": "مع أطيب التحيات،"
+        }
+    }
+    
+    txt = email_texts.get(lang, email_texts["sv"])
+    is_rtl = lang == "ar"
+    dir_attr = 'dir="rtl"' if is_rtl else ''
+    text_align = "right" if is_rtl else "left"
     
     workshop_info = ""
     if input.workshop_title:
         workshop_info = f"""
-        <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; border-left: 4px solid #014D73; margin: 20px 0;">
-            <p style="margin: 0;"><strong>🎯 Workshop:</strong> {input.workshop_title}</p>
+        <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; border-{'right' if is_rtl else 'left'}: 4px solid #014D73; margin: 20px 0;">
+            <p style="margin: 0;"><strong>🎯 {txt['workshop_label']}:</strong> {input.workshop_title}</p>
         </div>
         """
     
+    items_html = "".join([f"<li>{item}</li>" for item in txt['items']])
+    
     email_html = f"""
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;" {dir_attr}>
         <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 40px 30px; text-align: center;">
             <h1 style="color: white; margin: 0; font-size: 28px;">Haggai Sweden</h1>
-            <p style="color: rgba(255,255,255,0.9); margin: 15px 0 0 0; font-size: 18px;">Du är inbjuden som ledare!</p>
+            <p style="color: rgba(255,255,255,0.9); margin: 15px 0 0 0; font-size: 18px;">{txt['header']}</p>
         </div>
         
-        <div style="padding: 30px; background: #ffffff;">
-            <p style="font-size: 16px;">Hej <strong>{input.name}</strong>,</p>
+        <div style="padding: 30px; background: #ffffff; text-align: {text_align};">
+            <p style="font-size: 16px;">{txt['greeting']}</p>
             
             <p style="font-size: 16px; line-height: 1.6;">
-                Vi är glada att meddela att du har blivit inbjuden att delta som <strong>ledare/facilitator</strong> 
-                i en kommande Haggai Sweden workshop! 🙌
+                {txt['intro']}
             </p>
             
             {workshop_info}
             
             <p style="font-size: 16px; line-height: 1.6;">
-                För att vi ska kunna planera i god ordning ber vi dig vänligen fylla i registreringsformuläret. 
-                Där kan du bland annat:
+                {txt['form_intro']}
             </p>
             
-            <ul style="font-size: 15px; line-height: 1.8; color: #444;">
-                <li>📝 Ange dina kontaktuppgifter och bakgrund</li>
-                <li>📚 <strong>Välja vilket ämne du ska hålla</strong> bland våra fem kärnämnen</li>
-                <li>🔄 Ange vilka <strong>backup-ämnen</strong> du kan ta om behov uppstår</li>
-                <li>✈️ Meddela om du behöver stöd med resa och logi</li>
-                <li>🏦 Lämna bankuppgifter för eventuell ersättning</li>
-                <li>📄 Ladda upp material om ditt ämne</li>
+            <ul style="font-size: 15px; line-height: 1.8; color: #444; text-align: {text_align};">
+                {items_html}
             </ul>
             
             <div style="text-align: center; margin: 35px 0;">
                 <a href="{registration_link}" 
                    style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); color: white; padding: 18px 40px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold; font-size: 16px; box-shadow: 0 4px 15px rgba(1, 77, 115, 0.3);">
-                    ✨ Fyll i formuläret nu
+                    {txt['button']}
                 </a>
             </div>
             
             <p style="color: #666; font-size: 14px; text-align: center;">
-                Länken är giltig i 30 dagar.
+                {txt['validity']}
             </p>
             
             <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
             
             <p style="font-size: 15px; line-height: 1.6;">
-                Vi ser fram emot ditt deltagande och bidrag till vår workshop! 
-                Tveka inte att kontakta oss på <a href="mailto:info@haggai.se" style="color: #014D73;">info@haggai.se</a> 
-                om du har några frågor.
+                {txt['closing']} <a href="mailto:info@haggai.se" style="color: #014D73;">info@haggai.se</a>
             </p>
             
             <p style="margin-top: 25px; font-size: 15px;">
-                Med varma hälsningar,<br>
+                {txt['signature']}<br>
                 <strong>Haggai Sweden</strong>
             </p>
         </div>
@@ -4804,7 +4867,7 @@ async def create_leader_invitation(input: LeaderInvitationCreate):
         resend.Emails.send({
             "from": SENDER_EMAIL,
             "to": [input.email],
-            "subject": "🎉 Du är inbjuden som ledare - Haggai Sweden Workshop",
+            "subject": txt['subject'],
             "html": email_html
         })
         
