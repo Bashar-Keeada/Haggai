@@ -4658,39 +4658,69 @@ async def create_leader_invitation(input: LeaderInvitationCreate):
     workshop_info = ""
     if input.workshop_title:
         workshop_info = f"""
-        <p><strong>Workshop:</strong> {input.workshop_title}</p>
+        <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; border-left: 4px solid #014D73; margin: 20px 0;">
+            <p style="margin: 0;"><strong>🎯 Workshop:</strong> {input.workshop_title}</p>
+        </div>
         """
     
     email_html = f"""
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; text-align: center;">
-            <h1 style="color: white; margin: 0;">Haggai Sweden</h1>
-            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Inbjudan till ledarregistrering</p>
+        <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 40px 30px; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 28px;">Haggai Sweden</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 15px 0 0 0; font-size: 18px;">Du är inbjuden som ledare!</p>
         </div>
         
-        <div style="padding: 30px; background: #f8f9fa;">
-            <p>Hej <strong>{input.name}</strong>,</p>
+        <div style="padding: 30px; background: #ffffff;">
+            <p style="font-size: 16px;">Hej <strong>{input.name}</strong>,</p>
             
-            <p>Du har blivit inbjuden att registrera dig som ledare hos Haggai Sweden.</p>
+            <p style="font-size: 16px; line-height: 1.6;">
+                Vi är glada att meddela att du har blivit inbjuden att delta som <strong>ledare/facilitator</strong> 
+                i en kommande Haggai Sweden workshop! 🙌
+            </p>
             
             {workshop_info}
             
-            <p>Klicka på länken nedan för att slutföra din registrering:</p>
+            <p style="font-size: 16px; line-height: 1.6;">
+                För att vi ska kunna planera i god ordning ber vi dig vänligen fylla i registreringsformuläret. 
+                Där kan du bland annat:
+            </p>
             
-            <div style="text-align: center; margin: 30px 0;">
+            <ul style="font-size: 15px; line-height: 1.8; color: #444;">
+                <li>📝 Ange dina kontaktuppgifter och bakgrund</li>
+                <li>📚 <strong>Välja vilket ämne du ska hålla</strong> bland våra fem kärnämnen</li>
+                <li>🔄 Ange vilka <strong>backup-ämnen</strong> du kan ta om behov uppstår</li>
+                <li>✈️ Meddela om du behöver stöd med resa och logi</li>
+                <li>🏦 Lämna bankuppgifter för eventuell ersättning</li>
+                <li>📄 Ladda upp material om ditt ämne</li>
+            </ul>
+            
+            <div style="text-align: center; margin: 35px 0;">
                 <a href="{registration_link}" 
-                   style="background: #014D73; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold;">
-                    Registrera dig nu
+                   style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); color: white; padding: 18px 40px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold; font-size: 16px; box-shadow: 0 4px 15px rgba(1, 77, 115, 0.3);">
+                    ✨ Fyll i formuläret nu
                 </a>
             </div>
             
-            <p style="color: #666; font-size: 14px;">
-                Länken är giltig i 30 dagar. Om du har frågor, kontakta oss på info@haggai.se
+            <p style="color: #666; font-size: 14px; text-align: center;">
+                Länken är giltig i 30 dagar.
             </p>
             
-            <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
             
-            <p style="color: #888; font-size: 12px;">
+            <p style="font-size: 15px; line-height: 1.6;">
+                Vi ser fram emot ditt deltagande och bidrag till vår workshop! 
+                Tveka inte att kontakta oss på <a href="mailto:info@haggai.se" style="color: #014D73;">info@haggai.se</a> 
+                om du har några frågor.
+            </p>
+            
+            <p style="margin-top: 25px; font-size: 15px;">
+                Med varma hälsningar,<br>
+                <strong>Haggai Sweden</strong>
+            </p>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 20px; text-align: center;">
+            <p style="color: #888; font-size: 12px; margin: 0;">
                 Haggai Sweden | <a href="https://haggai.se" style="color: #014D73;">haggai.se</a> (By Keeada)
             </p>
         </div>
@@ -4701,7 +4731,7 @@ async def create_leader_invitation(input: LeaderInvitationCreate):
         resend.Emails.send({
             "from": SENDER_EMAIL,
             "to": [input.email],
-            "subject": "Inbjudan till ledarregistrering - Haggai Sweden",
+            "subject": "🎉 Du är inbjuden som ledare - Haggai Sweden Workshop",
             "html": email_html
         })
         
