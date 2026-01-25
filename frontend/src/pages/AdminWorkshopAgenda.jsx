@@ -655,6 +655,23 @@ const AdminWorkshopAgenda = () => {
                           
                           {getSessionTypeBadge(session.session_type)}
                           
+                          {/* Evaluation link button - only for sessions with leaders */}
+                          {session.session_type === 'session' && session.leader_id && agenda.is_published && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const evalUrl = `${window.location.origin}/utvardering/${workshopId}/${session.id}`;
+                                navigator.clipboard.writeText(evalUrl);
+                                toast.success('Utvärderingslänk kopierad!');
+                              }}
+                            >
+                              📋 Kopiera utvärderingslänk
+                            </Button>
+                          )}
+                          
                           <Button
                             size="sm"
                             variant="ghost"
