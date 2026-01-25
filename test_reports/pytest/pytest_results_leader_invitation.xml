@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="7" failures="5" skipped="0" tests="22" time="5.607" timestamp="2026-01-25T01:45:44.054302+00:00" hostname="agent-env-95271255-9898-4149-a8a7-0336dad85544"><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderInvitationEndpoints" name="test_get_leader_invitations_empty_or_list" time="0.661" /><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderInvitationEndpoints" name="test_create_leader_invitation" time="0.165" /><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderInvitationEndpoints" name="test_create_duplicate_invitation_fails" time="0.130" /><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderInvitationEndpoints" name="test_get_invitation_by_token" time="0.169" /><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderInvitationEndpoints" name="test_get_invitation_invalid_token" time="0.039" /><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderInvitationEndpoints" name="test_delete_invitation" time="0.114" /><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderRegistrationEndpoints" name="test_register_leader_with_valid_token" time="0.332"><failure message="assert 520 == 200&#10; +  where 520 = &lt;Response [520]&gt;.status_code">backend/tests/test_leader_invitation_registration.py:185: in test_register_leader_with_valid_token
+    assert response.status_code == 200
+E   assert 520 == 200
+E    +  where 520 = &lt;Response [520]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderRegistrationEndpoints" name="test_register_with_invalid_token" time="0.037" /><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderRegistrationEndpoints" name="test_register_with_used_token" time="0.342"><failure message="assert 520 == 200&#10; +  where 520 = &lt;Response [520]&gt;.status_code">backend/tests/test_leader_invitation_registration.py:240: in test_register_with_used_token
+    assert response1.status_code == 200
+E   assert 520 == 200
+E    +  where 520 = &lt;Response [520]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderRegistrationApproval" name="test_get_leader_registrations" time="0.040" /><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderRegistrationApproval" name="test_get_leader_registrations_by_status" time="0.038" /><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderRegistrationApproval" name="test_approve_registration" time="0.338"><error message="failed on setup with &quot;requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)&quot;">/root/.venv/lib/python3.11/site-packages/requests/models.py:976: in json
+    return complexjson.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:355: in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+E   json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+backend/tests/test_leader_invitation_registration.py:290: in create_pending_registration
+    leader_id = register_response.json()["leader_id"]
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/models.py:980: in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E   requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)</error></testcase><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderRegistrationApproval" name="test_reject_registration" time="0.338"><error message="failed on setup with &quot;requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)&quot;">/root/.venv/lib/python3.11/site-packages/requests/models.py:976: in json
+    return complexjson.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:355: in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+E   json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+backend/tests/test_leader_invitation_registration.py:290: in create_pending_registration
+    leader_id = register_response.json()["leader_id"]
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/models.py:980: in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E   requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)</error></testcase><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderLogin" name="test_login_approved_leader" time="0.342"><error message="failed on setup with &quot;requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)&quot;">/root/.venv/lib/python3.11/site-packages/requests/models.py:976: in json
+    return complexjson.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:355: in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+E   json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+backend/tests/test_leader_invitation_registration.py:398: in create_approved_leader
+    leader_id = register_response.json()["leader_id"]
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/models.py:980: in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E   requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)</error></testcase><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderLogin" name="test_login_wrong_password" time="0.341"><error message="failed on setup with &quot;requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)&quot;">/root/.venv/lib/python3.11/site-packages/requests/models.py:976: in json
+    return complexjson.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:355: in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+E   json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+backend/tests/test_leader_invitation_registration.py:398: in create_approved_leader
+    leader_id = register_response.json()["leader_id"]
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/models.py:980: in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E   requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)</error></testcase><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderLogin" name="test_login_nonexistent_email" time="0.040" /><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderLogin" name="test_login_pending_leader" time="0.377"><failure message="assert 401 == 403&#10; +  where 401 = &lt;Response [401]&gt;.status_code">backend/tests/test_leader_invitation_registration.py:497: in test_login_pending_leader
+    assert response.status_code == 403
+E   assert 401 == 403
+E    +  where 401 = &lt;Response [401]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderPortalEndpoints" name="test_get_current_leader_profile" time="0.339"><error message="failed on setup with &quot;requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)&quot;">/root/.venv/lib/python3.11/site-packages/requests/models.py:976: in json
+    return complexjson.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:355: in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+E   json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+backend/tests/test_leader_invitation_registration.py:538: in authenticated_leader
+    leader_id = register_response.json()["leader_id"]
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/models.py:980: in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E   requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)</error></testcase><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderPortalEndpoints" name="test_get_current_leader_unauthorized" time="0.037"><failure message="assert 404 == 401&#10; +  where 404 = &lt;Response [404]&gt;.status_code">backend/tests/test_leader_invitation_registration.py:578: in test_get_current_leader_unauthorized
+    assert response.status_code == 401
+E   assert 404 == 401
+E    +  where 404 = &lt;Response [404]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderPortalEndpoints" name="test_update_leader_profile" time="0.333"><error message="failed on setup with &quot;requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)&quot;">/root/.venv/lib/python3.11/site-packages/requests/models.py:976: in json
+    return complexjson.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:355: in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+E   json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+backend/tests/test_leader_invitation_registration.py:538: in authenticated_leader
+    leader_id = register_response.json()["leader_id"]
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/models.py:980: in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E   requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)</error></testcase><testcase classname="backend.tests.test_leader_invitation_registration.TestLeaderPortalEndpoints" name="test_get_leader_sessions" time="0.337"><error message="failed on setup with &quot;requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)&quot;">/root/.venv/lib/python3.11/site-packages/requests/models.py:976: in json
+    return complexjson.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/json/decoder.py:355: in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+E   json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+backend/tests/test_leader_invitation_registration.py:538: in authenticated_leader
+    leader_id = register_response.json()["leader_id"]
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/models.py:980: in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E   requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)</error></testcase><testcase classname="backend.tests.test_leader_invitation_registration.TestFullLeaderFlow" name="test_complete_leader_flow" time="0.390"><failure message="assert 520 == 200&#10; +  where 520 = &lt;Response [520]&gt;.status_code">backend/tests/test_leader_invitation_registration.py:679: in test_complete_leader_flow
+    assert register_response.status_code == 200
+E   assert 520 == 200
+E    +  where 520 = &lt;Response [520]&gt;.status_code</failure></testcase></testsuite></testsuites>
