@@ -2592,6 +2592,175 @@ async def get_member_agenda(workshop_id: str, token: str):
 
 # ==================== SESSION EVALUATION ENDPOINTS ====================
 
+@api_router.post("/workshops/{workshop_id}/sessions/{session_id}/send-evaluation")
+async def send_evaluation_to_participants(workshop_id: str, session_id: str):
+    """Send evaluation link to all registered participants for a session"""
+    # Get workshop info
+    workshop = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
+    if not workshop:
+        raise HTTPException(status_code=404, detail="Workshop not found")
+    
+    # Get agenda and session info
+    agenda = await db.workshop_agendas.find_one({"workshop_id": workshop_id}, {"_id": 0})
+    if not agenda:
+        raise HTTPException(status_code=404, detail="Agenda not found")
+    
+    session_data = None
+    for day in agenda.get("days", []):
+        for session in day.get("sessions", []):
+            if session.get("id") == session_id:
+                session_data = session
+                break
+    
+    if not session_data:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    # Get all registered/approved participants
+    participants = await db.nominations.find({
+        "event_id": workshop_id,
+        "status": {"$in": ["approved", "registered", "completed"]}
+    }, {"_id": 0}).to_list(1000)
+    
+    # Also get members who might be participants
+    members = await db.members.find({}, {"_id": 0, "email": 1, "name": 1}).to_list(1000)
+    member_emails = {m["email"] for m in members}
+    
+    if not participants and not members:
+        return {"success": False, "message": "No participants found", "sent_count": 0}
+    
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://members-portal-10.preview.emergentagent.com')
+    eval_link = f"{frontend_url}/utvardering/{workshop_id}/{session_id}"
+    
+    # Get workshop title
+    workshop_title = workshop.get("title")
+    if isinstance(workshop_title, dict):
+        workshop_title = workshop_title.get("sv", workshop_title.get("en", ""))
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">📝 Utvärdera sessionen</h1>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Hej!</p>
+            
+            <p>Vi vill gärna höra vad du tyckte om sessionen:</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 10px; border-left: 4px solid #014D73; margin: 20px 0;">
+                <p style="margin: 0; font-weight: bold; font-size: 18px;">{session_data.get('title', 'Session')}</p>
+                <p style="margin: 5px 0 0 0; color: #666;">Ledare: {session_data.get('leader_name', 'N/A')}</p>
+                <p style="margin: 5px 0 0 0; color: #666;">{workshop_title}</p>
+            </div>
+            
+            <p>Din feedback hjälper oss att förbättra våra utbildningar. Utvärderingen tar bara 1-2 minuter.</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{eval_link}" style="display: inline-block; background: #014D73; color: white; padding: 15px 40px; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 16px;">
+                    Utvärdera nu →
+                </a>
+            </div>
+            
+            <p style="color: #999; font-size: 12px;">Utvärderingen är anonym för ledaren.</p>
+            
+            <p style="margin-top: 30px;">Tack för din medverkan!<br><strong>Haggai Sweden</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    sent_count = 0
+    emails_sent = set()
+    
+    # Send to participants
+    for participant in participants:
+        email = participant.get("nominee_email") or participant.get("registration_data", {}).get("email")
+        if email and email not in emails_sent:
+            try:
+                await asyncio.to_thread(resend.Emails.send, {
+                    "from": SENDER_EMAIL,
+                    "to": [email],
+                    "subject": f"📝 Utvärdera: {session_data.get('title', 'Session')} - {workshop_title}",
+                    "html": html_content
+                })
+                emails_sent.add(email)
+                sent_count += 1
+            except Exception as e:
+                logging.error(f"Failed to send evaluation email to {email}: {str(e)}")
+    
+    # Send to members
+    for member in members:
+        email = member.get("email")
+        if email and email not in emails_sent:
+            try:
+                await asyncio.to_thread(resend.Emails.send, {
+                    "from": SENDER_EMAIL,
+                    "to": [email],
+                    "subject": f"📝 Utvärdera: {session_data.get('title', 'Session')} - {workshop_title}",
+                    "html": html_content
+                })
+                emails_sent.add(email)
+                sent_count += 1
+            except Exception as e:
+                logging.error(f"Failed to send evaluation email to {email}: {str(e)}")
+    
+    return {"success": True, "message": f"Evaluation sent to {sent_count} participants", "sent_count": sent_count}
+
+
+@api_router.get("/member/pending-evaluations")
+async def get_member_pending_evaluations(token: str):
+    """Get pending evaluations for a member"""
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        member_id = payload.get("member_id")
+        
+        member = await db.members.find_one({"id": member_id}, {"_id": 0})
+        if not member:
+            raise HTTPException(status_code=404, detail="Member not found")
+        
+        member_email = member.get("email")
+        
+        # Get all published agendas
+        agendas = await db.workshop_agendas.find({"is_published": True}, {"_id": 0}).to_list(100)
+        
+        # Get evaluations already submitted by this member
+        submitted_evals = await db.session_evaluations.find(
+            {"participant_email": member_email},
+            {"_id": 0, "session_id": 1}
+        ).to_list(1000)
+        submitted_session_ids = {e["session_id"] for e in submitted_evals}
+        
+        pending = []
+        for agenda in agendas:
+            workshop = await db.workshops.find_one({"id": agenda["workshop_id"]}, {"_id": 0})
+            workshop_title = workshop.get("title") if workshop else ""
+            if isinstance(workshop_title, dict):
+                workshop_title = workshop_title.get("sv", workshop_title.get("en", ""))
+            
+            for day in agenda.get("days", []):
+                for session in day.get("sessions", []):
+                    # Only include sessions with leaders that haven't been evaluated
+                    if (session.get("session_type") == "session" and 
+                        session.get("leader_id") and 
+                        session.get("id") not in submitted_session_ids):
+                        pending.append({
+                            "workshop_id": agenda["workshop_id"],
+                            "workshop_title": workshop_title,
+                            "session_id": session.get("id"),
+                            "session_title": session.get("title"),
+                            "leader_name": session.get("leader_name"),
+                            "day_date": day.get("date"),
+                            "start_time": session.get("start_time")
+                        })
+        
+        return pending
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
 @api_router.get("/evaluation-questions")
 async def get_evaluation_questions(active_only: bool = True):
     """Get all evaluation questions"""
