@@ -87,6 +87,24 @@ Build a multi-page website for "Haggai Sweden" - a Christian leadership organiza
   - `GET /api/evaluation/form/{workshop_id}/{session_id}` - Form data
 - **Tests:** 25 backend API tests passing (100%)
 
+### Shareable Nomination Link & QR Code ✅ NEW (Jan 25)
+- **Admin Workshop Page** (`/admin/workshops`)
+  - "Dela nomineringslänk" button - copies workshop nomination link to clipboard
+  - "Visa QR-kod" button - opens modal with QR code for the workshop
+  - QR modal shows: workshop title, QR code, nomination link, copy button, download button
+  - Download QR code as PNG image
+- **Public Nomination Form** (`/nominera/{workshop_id}`)
+  - Public page accessible via link or QR code scan
+  - Shows workshop information (title, date, location)
+  - Complete nomination form with nominator and nominee sections
+  - Admin moderation note displayed
+  - Multilingual support (SV/EN/AR)
+- **Technical Details:**
+  - Uses `qrcode.react` library for QR code generation
+  - QR code: 200x200 pixels, high error correction
+  - Download format: PNG 300x300 pixels
+- **Tests:** 11 backend + full frontend UI tests passing (100%)
+
 ### Member Portal ✅
 - **Member Login** (`/medlem-login`) - Automatic account creation when diploma is sent
 - **Mina Sidor** (`/mina-sidor`) - Member dashboard with profile, messages, diplomas
