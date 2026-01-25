@@ -274,7 +274,7 @@ const PublicAgenda = () => {
 
         {/* Footer */}
         <div className="mt-12 text-center text-stone-500 text-sm print:hidden">
-          <p>Haggai Sweden | <a href="https://peoplepotential.se" className="text-haggai hover:underline">peoplepotential.se</a></p>
+          <p>Haggai Sweden | <a href="https://haggai.se" className="text-haggai hover:underline">haggai.se</a> <span className="text-stone-400">(By Keeada)</span></p>
         </div>
       </div>
 
