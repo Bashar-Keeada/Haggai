@@ -62,11 +62,10 @@ const MinaSidor = () => {
       noInterests: 'No interests selected',
       memberSince: 'Member since',
       viewAll: 'View all',
+      backToHome: 'Back to home',
       pendingEvaluations: 'Pending Evaluations',
       evaluateNow: 'Evaluate now',
       noEvaluations: 'No pending evaluations'
-    },
-      backToHome: 'Back to home'
     },
     ar: {
       title: 'صفحاتي',
