@@ -361,6 +361,46 @@ const NomineeRegistration = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Profile Photo Upload */}
+              <div className="md:col-span-2">
+                <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                  <User className="h-4 w-4" />
+                  {txt.profilePhoto}
+                </Label>
+                <div className="flex items-center gap-4">
+                  <label className="flex-1">
+                    <div className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-stone-300 rounded-lg cursor-pointer hover:border-haggai hover:bg-haggai/5 transition-colors">
+                      <Upload className="h-5 w-5 text-stone-400" />
+                      <span className="text-sm text-stone-600">
+                        {formData.profile_image ? txt.photoSelected : txt.uploadPhoto}
+                      </span>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            handleChange('profile_image', event.target.result);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </label>
+                  {formData.profile_image && (
+                    <img 
+                      src={formData.profile_image} 
+                      alt="Profile preview" 
+                      className="h-20 w-20 rounded-full object-cover border-2 border-haggai"
+                    />
+                  )}
+                </div>
+              </div>
+
               {/* Personal Information */}
               <div className="grid md:grid-cols-2 gap-4">
                 {/* Full Name */}
