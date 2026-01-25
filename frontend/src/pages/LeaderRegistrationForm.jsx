@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { 
   User, Mail, Phone, Calendar, CreditCard, Upload, FileText, 
   Plane, Building2, CheckCircle2, AlertCircle, Eye, EyeOff,
-  Utensils, MessageSquare
+  Utensils, MessageSquare, BookOpen, CheckSquare
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -11,6 +11,7 @@ import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
 import { Badge } from '../components/ui/badge';
+import { Checkbox } from '../components/ui/checkbox';
 import { useLanguage } from '../context/LanguageContext';
 import { toast } from 'sonner';
 
@@ -22,6 +23,7 @@ const LeaderRegistrationForm = () => {
   const { language, isRTL } = useLanguage();
   
   const [invitation, setInvitation] = useState(null);
+  const [workshopTopics, setWorkshopTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -40,6 +42,8 @@ const LeaderRegistrationForm = () => {
     role_en: '',
     topics_sv: '',
     topics_en: '',
+    primary_topic: '',
+    backup_topics: [],
     cost_preference: 'self',
     arrival_date: '',
     departure_date: '',
@@ -71,6 +75,13 @@ const LeaderRegistrationForm = () => {
       password: 'Lösenord',
       confirmPassword: 'Bekräfta lösenord',
       passwordHint: 'Minst 6 tecken',
+      topicSection: 'Ämnesval',
+      topicSectionDesc: 'Välj vilket ämne du ska hålla under workshopen',
+      primaryTopic: 'Huvudämne (välj ett)',
+      primaryTopicDesc: 'Detta är det ämne du kommer att presentera',
+      backupTopics: 'Backup-ämnen',
+      backupTopicsDesc: 'Vilka andra ämnen kan du ta om behov uppstår?',
+      selectTopic: 'Välj ditt huvudämne',
       profileSection: 'Profil & Bakgrund',
       bioLabel: 'Om dig (Svenska)',
       bioLabelEn: 'Om dig (Engelska)',
