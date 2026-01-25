@@ -5825,7 +5825,7 @@ async def delete_leader_document(document_id: str, authorization: str = Header(N
 
 
 @api_router.get("/leaders/me/sessions")
-async def get_leader_sessions(authorization: str = Header(None)):
+async def get_current_leader_sessions(authorization: str = Header(None)):
     """Get all sessions assigned to the current leader"""
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Ej auktoriserad")
