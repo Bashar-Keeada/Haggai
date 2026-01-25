@@ -33,6 +33,7 @@ import LoginPage from "./pages/LoginPage";
 import NomineeRegistration from "./pages/NomineeRegistration";
 import PublicAgenda from "./pages/PublicAgenda";
 import LeaderSessions from "./pages/LeaderSessions";
+import PublicNominationForm from "./pages/PublicNominationForm";
 // Member Portal Pages
 import MemberLogin from "./pages/MemberLogin";
 import MinaSidor from "./pages/MinaSidor";
@@ -55,6 +56,7 @@ function App() {
               <Route path="/program/:workshopId" element={<PublicAgenda />} />
               <Route path="/ledare/:leaderId/sessioner" element={<LeaderSessions />} />
               <Route path="/utvardering/:workshopId/:sessionId" element={<SessionEvaluationForm />} />
+              <Route path="/nominera/:workshopId" element={<PublicNominationForm />} />
               {/* Member Portal Routes */}
               <Route path="/mina-sidor" element={<MinaSidor />} />
               <Route path="/mina-sidor/profil" element={<MemberProfile />} />
