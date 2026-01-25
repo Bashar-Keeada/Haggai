@@ -5088,10 +5088,10 @@ async def update_current_leader(input: LeaderRegistrationUpdate = None, authoriz
 
 @api_router.post("/leaders/me/documents")
 async def upload_leader_document(
-    authorization: str = None,
     document_type: str = None,
     filename: str = None,
-    file_data: str = None  # Base64 encoded
+    file_data: str = None,  # Base64 encoded
+    authorization: str = Header(None)
 ):
     """Upload a document for the current leader"""
     if not authorization or not authorization.startswith("Bearer "):
