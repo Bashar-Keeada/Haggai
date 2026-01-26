@@ -4245,11 +4245,9 @@ def generate_name_badge_pdf(
     
     # Define colors based on badge type
     if badge_type == "leader":
-        header_color = colors.HexColor('#8B5CF6')  # Purple
         label_bg_color = colors.HexColor('#A78BFA')  # Lighter purple
         badge_label = "LEADER"
     else:  # participant
-        header_color = colors.HexColor('#0891B2')  # Teal
         label_bg_color = colors.HexColor('#22D3EE')  # Lighter teal
         badge_label = "PARTICIPANT"
     
