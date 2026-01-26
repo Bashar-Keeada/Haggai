@@ -48,6 +48,8 @@ import MemberMessages from "./pages/MemberMessages";
 import MemberForum from "./pages/MemberForum";
 import MemberDiplomas from "./pages/MemberDiplomas";
 import MemberNameBadge from "./pages/MemberNameBadge";
+import MemberForgotPassword from "./pages/MemberForgotPassword";
+import MemberResetPassword from "./pages/MemberResetPassword";
 // Participant Portal Pages
 import ParticipantLogin from "./pages/ParticipantLogin";
 import ParticipantPortal from "./pages/ParticipantPortal";
@@ -64,6 +66,8 @@ function App() {
               {/* Public routes - no auth required */}
               <Route path="/registrering/:nominationId" element={<NomineeRegistration />} />
               <Route path="/medlem-login" element={<MemberLogin />} />
+              <Route path="/medlem/glomt-losenord" element={<MemberForgotPassword />} />
+              <Route path="/medlem/aterstall-losenord/:token" element={<MemberResetPassword />} />
               <Route path="/program/:workshopId" element={<PublicAgenda />} />
               <Route path="/ledare/:leaderId/sessioner" element={<LeaderSessions />} />
               <Route path="/utvardering/:workshopId/:sessionId" element={<SessionEvaluationForm />} />
