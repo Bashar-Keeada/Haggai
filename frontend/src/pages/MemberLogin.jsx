@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -156,6 +156,12 @@ const MemberLogin = () => {
                   {loading ? txt.loggingIn : txt.login}
                 </Button>
               </form>
+
+              <div className="mt-6 text-center">
+                <p className="text-sm text-stone-500">
+                  Glömt lösenord? <Link to="/medlem/glomt-losenord" className="text-haggai hover:underline font-medium">Återställ här</Link>
+                </p>
+              </div>
             </CardContent>
           </Card>
         </div>
