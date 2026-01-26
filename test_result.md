@@ -406,6 +406,51 @@ agent_communication:
       5. Test archive functionality (archive a member, check it appears in "Föregående styrelser")
   - agent: "testing"
     message: |
+      🔍 PUBLIC AGENDA PAGE TESTING COMPLETED - CRITICAL BUG FOUND
+      
+      **TESTED URL:** https://community-manager-9.preview.emergentagent.com/program/f60eb66e-3956-428d-8060-181ceeb498f8
+      
+      ❌ CRITICAL ISSUE: DAY HEADERS NOT VISIBLE
+      • Day headers exist in DOM (4 headers found: Dag 1-4)
+      • Headers have correct text content and dates (e.g., "Dag 1, lördag 14 mars 2026")
+      • Text color is white (rgb(255, 255, 255)) ✓
+      • BUT: Background gradient is NOT rendering!
+      • Background shows as transparent (rgba(0, 0, 0, 0)) instead of dark green gradient
+      • Root Cause: Custom Tailwind classes 'from-haggai' and 'to-haggai-dark' are not integrated into Tailwind's gradient system
+      • The classes bg-haggai (#15564e) and bg-haggai-dark (#0f403a) are defined as CSS utilities but NOT in Tailwind's color palette
+      • This prevents gradient utilities (from-{color}, to-{color}) from working
+      
+      ✅ SESSION COLORS - ALL WORKING CORRECTLY:
+      • Blue background (rgba(191, 219, 254, 0.6)) for Atheism (3), Goals (4), Leadership (4) ✓
+      • Orange background (rgba(254, 215, 170, 0.6)) for Mandate (3), Stewardship (4) ✓
+      • Green background (rgba(187, 247, 208, 0.6)) for Next Gen (3) ✓
+      • Purple background (rgba(243, 232, 255, 0.5)) for Evaluation (7) ✓
+      • White background (rgb(255, 255, 255)) for Breaks (17) ✓
+      
+      ✅ PRINT BUTTON - WORKING:
+      • Button exists and is visible: "🖨️ Skriv ut program" ✓
+      • Button is clickable and functional ✓
+      
+      📊 SUMMARY:
+      • Total sessions tested: 46
+      • All session colors match requirements perfectly
+      • Print functionality working
+      • Day headers INVISIBLE due to gradient not rendering
+      
+      🔧 FIX REQUIRED:
+      Add haggai colors to Tailwind config's color palette in tailwind.config.js:
+      ```
+      colors: {
+        haggai: {
+          DEFAULT: '#15564e',
+          dark: '#0f403a',
+          light: '#1a6b61'
+        }
+      }
+      ```
+      This will enable gradient utilities to work: from-haggai to-haggai-dark
+  - agent: "testing"
+    message: |
       🎉 PARTICIPANT PASSWORD RESET FLOW - COMPREHENSIVE TESTING COMPLETE
       
       ✅ ALL CORE FUNCTIONALITY WORKING PERFECTLY:
