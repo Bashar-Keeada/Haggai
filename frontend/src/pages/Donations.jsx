@@ -382,11 +382,50 @@ const Donations = () => {
                 </div>
                 <div className={`flex flex-wrap gap-2 ${isRTL ? 'justify-end' : ''}`}>
                   {suggestedAmounts.map((item) => (
-                    <Badge key={item.amount} variant="outline" className="text-haggai border-haggai-200 hover:bg-haggai-50 cursor-pointer">
+                    <button
+                      key={item.amount}
+                      onClick={() => {
+                        setSelectedOneTime(item.amount);
+                        setCustomOneTime('');
+                        setShowCustomOneTime(false);
+                      }}
+                      className={`px-4 py-2 rounded-full font-medium transition-all ${
+                        selectedOneTime === item.amount
+                          ? 'bg-haggai text-white'
+                          : 'bg-haggai-50 text-haggai hover:bg-haggai-100'
+                      }`}
+                    >
                       {item.amount} kr
-                    </Badge>
+                    </button>
                   ))}
+                  <button
+                    onClick={() => setShowCustomOneTime(!showCustomOneTime)}
+                    className={`px-4 py-2 rounded-full font-medium transition-all ${
+                      showCustomOneTime
+                        ? 'bg-haggai text-white'
+                        : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                    }`}
+                  >
+                    <PenLine className="h-4 w-4 inline mr-2" />
+                    {language === 'sv' ? 'Annat belopp' : language === 'ar' ? 'مبلغ آخر' : 'Custom amount'}
+                  </button>
                 </div>
+                
+                {showCustomOneTime && (
+                  <div className="mt-4">
+                    <Input
+                      type="number"
+                      value={customOneTime}
+                      onChange={(e) => {
+                        setCustomOneTime(e.target.value);
+                        setSelectedOneTime(null);
+                      }}
+                      placeholder={language === 'sv' ? 'Ange belopp (kr)' : language === 'ar' ? 'أدخل المبلغ (كرون)' : 'Enter amount (SEK)'}
+                      className="max-w-xs"
+                      min="1"
+                    />
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -404,11 +443,50 @@ const Donations = () => {
                 </div>
                 <div className={`flex flex-wrap gap-2 ${isRTL ? 'justify-end' : ''}`}>
                   {[100, 250, 500].map((amount) => (
-                    <Badge key={amount} variant="outline" className="text-violet-600 border-violet-200 hover:bg-violet-50 cursor-pointer">
+                    <button
+                      key={amount}
+                      onClick={() => {
+                        setSelectedRecurring(amount);
+                        setCustomRecurring('');
+                        setShowCustomRecurring(false);
+                      }}
+                      className={`px-4 py-2 rounded-full font-medium transition-all ${
+                        selectedRecurring === amount
+                          ? 'bg-violet-600 text-white'
+                          : 'bg-violet-50 text-violet-600 hover:bg-violet-100'
+                      }`}
+                    >
                       {amount} kr{txt.perMonth}
-                    </Badge>
+                    </button>
                   ))}
+                  <button
+                    onClick={() => setShowCustomRecurring(!showCustomRecurring)}
+                    className={`px-4 py-2 rounded-full font-medium transition-all ${
+                      showCustomRecurring
+                        ? 'bg-violet-600 text-white'
+                        : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                    }`}
+                  >
+                    <PenLine className="h-4 w-4 inline mr-2" />
+                    {language === 'sv' ? 'Annat belopp' : language === 'ar' ? 'مبلغ آخر' : 'Custom amount'}
+                  </button>
                 </div>
+                
+                {showCustomRecurring && (
+                  <div className="mt-4">
+                    <Input
+                      type="number"
+                      value={customRecurring}
+                      onChange={(e) => {
+                        setCustomRecurring(e.target.value);
+                        setSelectedRecurring(null);
+                      }}
+                      placeholder={language === 'sv' ? 'Ange belopp (kr)' : language === 'ar' ? 'أدخل المبلغ (كرون)' : 'Enter amount (SEK)'}
+                      className="max-w-xs"
+                      min="1"
+                    />
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
