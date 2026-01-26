@@ -139,7 +139,10 @@ const ParticipantResetPassword = () => {
             </div>
             <h2 className="text-2xl font-bold text-stone-800 mb-2">{t.successTitle}</h2>
             <p className="text-stone-600 mb-6">{t.successMessage}</p>
-            <Button onClick={() => navigate('/deltagare/login')} className="bg-[#0891B2]">
+            <Button 
+              onClick={() => navigate('/deltagare/login')} 
+              className="bg-[#0891B2]"
+            >
               {t.goToLogin}
             </Button>
           </CardContent>
