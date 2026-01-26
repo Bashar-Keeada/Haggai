@@ -1316,7 +1316,7 @@ class NominationUpdate(BaseModel):
 async def send_nomination_email_to_nominee(nomination: Nomination):
     """Send email to the nominated person with registration link"""
     # Get the frontend URL from env or use default
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://community-manager-9.preview.emergentagent.com')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://leadership-hub-34.preview.emergentagent.com')
     registration_link = f"{frontend_url}/registrering/{nomination.id}"
     
     html_content = f"""
@@ -1666,7 +1666,7 @@ async def reject_nomination(nomination_id: str, reason: Optional[str] = None):
 
 async def send_nomination_invitation_to_nominee(nomination: Nomination):
     """Send invitation email to the nominated person after admin approval"""
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://community-manager-9.preview.emergentagent.com')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://leadership-hub-34.preview.emergentagent.com')
     registration_link = f"{frontend_url}/registrering/{nomination.id}"
     
     html_content = f"""
@@ -1922,7 +1922,7 @@ async def create_participant_account(nomination: dict, registration_data: dict):
 
 async def send_participant_approval_email(email: str, name: str, password: str, workshop_title: str):
     """Send approval email to participant with login credentials"""
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://community-manager-9.preview.emergentagent.com')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://leadership-hub-34.preview.emergentagent.com')
     
     html_content = f"""
     <!DOCTYPE html>
@@ -2884,7 +2884,7 @@ async def notify_participants_agenda_published(workshop_id: str, workshop: dict)
         logging.info(f"No participants to notify for workshop {workshop_id}")
         return
     
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://community-manager-9.preview.emergentagent.com')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://leadership-hub-34.preview.emergentagent.com')
     agenda_link = f"{frontend_url}/program/{workshop_id}"
     
     html_content = f"""
@@ -2947,7 +2947,7 @@ async def send_daily_reminder(workshop_id: str, day_data: dict, workshop: dict):
     if not participants:
         return
     
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://community-manager-9.preview.emergentagent.com')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://leadership-hub-34.preview.emergentagent.com')
     agenda_link = f"{frontend_url}/program/{workshop_id}"
     
     # Build session list HTML
@@ -3094,7 +3094,7 @@ async def send_evaluation_to_participants(workshop_id: str, session_id: str):
     if not participants and not members:
         return {"success": False, "message": "No participants found", "sent_count": 0}
     
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://community-manager-9.preview.emergentagent.com')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://leadership-hub-34.preview.emergentagent.com')
     eval_link = f"{frontend_url}/utvardering/{workshop_id}/{session_id}"
     
     # Get workshop title
@@ -4457,7 +4457,7 @@ async def participant_reset_password(request: ResetPasswordRequest):
 
 async def send_password_reset_email(email: str, name: str, token: str, user_type: str):
     """Send password reset email"""
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://community-manager-9.preview.emergentagent.com')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://leadership-hub-34.preview.emergentagent.com')
     
     if user_type == "participant":
         reset_link = f"{frontend_url}/deltagare/aterstall-losenord/{token}"
@@ -5458,18 +5458,16 @@ async def get_leader_invitation_by_token(token: str):
 @api_router.post("/leader-invitations")
 async def create_leader_invitation(input: LeaderInvitationCreate):
     """Create and send a leader invitation"""
-    # Check if email already has pending invitation
-    existing = await db.leader_invitations.find_one({
-        "email": input.email.lower(),
-        "status": "pending"
-    })
-    if existing:
-        raise HTTPException(status_code=400, detail="En inbjudan har redan skickats till denna e-post")
-    
     # Check if leader is already registered
     existing_leader = await db.leader_registrations.find_one({"email": input.email.lower()})
     if existing_leader:
         raise HTTPException(status_code=400, detail="Denna ledare är redan registrerad")
+    
+    # Allow multiple pending invitations - just mark old ones as superseded
+    await db.leader_invitations.update_many(
+        {"email": input.email.lower(), "status": "pending"},
+        {"$set": {"status": "superseded", "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
     
     invitation = LeaderInvitation(**input.model_dump())
     invitation.email = invitation.email.lower()
@@ -5478,7 +5476,7 @@ async def create_leader_invitation(input: LeaderInvitationCreate):
     await db.leader_invitations.insert_one(doc)
     
     # Send invitation email
-    base_url = os.environ.get('FRONTEND_URL', 'https://community-manager-9.preview.emergentagent.com')
+    base_url = os.environ.get('FRONTEND_URL', 'https://leadership-hub-34.preview.emergentagent.com')
     registration_link = f"{base_url}/ledare/registrera/{invitation.token}"
     lang = input.language or "sv"
     
@@ -5654,7 +5652,7 @@ async def resend_leader_invitation(invitation_id: str):
     if invitation.get("status") == "registered":
         raise HTTPException(status_code=400, detail="Denna inbjudan har redan använts")
     
-    base_url = os.environ.get('FRONTEND_URL', 'https://community-manager-9.preview.emergentagent.com')
+    base_url = os.environ.get('FRONTEND_URL', 'https://leadership-hub-34.preview.emergentagent.com')
     registration_link = f"{base_url}/ledare/registrera/{invitation['token']}"
     
     workshop_info = ""
@@ -5869,7 +5867,7 @@ async def approve_leader_registration(registration_id: str):
     
     # Send approval email
     try:
-        base_url = os.environ.get('FRONTEND_URL', 'https://community-manager-9.preview.emergentagent.com')
+        base_url = os.environ.get('FRONTEND_URL', 'https://leadership-hub-34.preview.emergentagent.com')
         login_link = f"{base_url}/ledare/login"
         
         email_html = f"""
