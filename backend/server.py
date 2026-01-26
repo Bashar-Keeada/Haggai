@@ -4227,12 +4227,12 @@ def generate_name_badge_pdf(
     workshop_title: str,
     badge_type: str = "participant"  # "participant" or "leader"
 ) -> BytesIO:
-    """Generate a PDF name badge for participants or leaders - vertical format matching design"""
+    """Generate a PDF name badge for participants or leaders - A6 format (105 x 148 mm)"""
     buffer = BytesIO()
     
-    # Vertical badge size: approximately 10cm x 15cm
-    badge_width = 10 * cm
-    badge_height = 15 * cm
+    # A6 size: 105mm x 148mm (standard postcard size)
+    badge_width = 10.5 * cm
+    badge_height = 14.8 * cm
     
     doc = SimpleDocTemplate(
         buffer,
