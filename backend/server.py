@@ -4578,6 +4578,91 @@ async def get_participant_me(authorization: str = Header(None)):
         
         return participant
         
+
+
+
+@api_router.post("/members/forgot-password")
+async def member_forgot_password(request: ForgotPasswordRequest):
+    """Send password reset email to member"""
+    member = await db.members.find_one(
+        {"email": request.email.lower()},
+        {"_id": 0}
+    )
+    
+    if not member:
+        return {"success": True, "message": "If email exists, reset link sent"}
+    
+    reset_token = secrets.token_urlsafe(32)
+    expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
+    
+    await db.password_resets.insert_one({
+        "id": str(uuid.uuid4()),
+        "user_id": member['id'],
+        "user_type": "member",
+        "token": reset_token,
+        "email": member['email'],
+        "expires_at": expires_at.isoformat(),
+        "used": False,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    await send_password_reset_email(
+        member['email'],
+        member['full_name'],
+        reset_token,
+        "member"
+    )
+    
+    return {"success": True, "message": "Reset link sent"}
+
+
+@api_router.get("/members/validate-reset-token/{token}")
+async def validate_member_reset_token(token: str):
+    """Validate if reset token is valid"""
+    reset_record = await db.password_resets.find_one(
+        {"token": token, "user_type": "member", "used": False},
+        {"_id": 0}
+    )
+    
+    if not reset_record:
+        raise HTTPException(status_code=404, detail="Invalid token")
+    
+    expires_at = datetime.fromisoformat(reset_record['expires_at'].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=410, detail="Token expired")
+    
+    return {"valid": True}
+
+
+@api_router.post("/members/reset-password")
+async def member_reset_password(request: ResetPasswordRequest):
+    """Reset member password using token"""
+    reset_record = await db.password_resets.find_one(
+        {"token": request.token, "user_type": "member", "used": False},
+        {"_id": 0}
+    )
+    
+    if not reset_record:
+        raise HTTPException(status_code=404, detail="Invalid token")
+    
+    expires_at = datetime.fromisoformat(reset_record['expires_at'].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=410, detail="Token expired")
+    
+    password_hash = bcrypt.hashpw(request.new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    
+    await db.members.update_one(
+        {"id": reset_record['user_id']},
+        {"$set": {"password_hash": password_hash, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    await db.password_resets.update_one(
+        {"token": request.token},
+        {"$set": {"used": True, "used_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    return {"success": True, "message": "Password reset successfully"}
+
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token expired")
     except jwt.InvalidTokenError:
