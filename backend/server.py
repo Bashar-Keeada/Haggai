@@ -4316,24 +4316,26 @@ def generate_name_badge_pdf(
     # Build content
     story = []
     
-    # Header with logo and label
-    header_data = [
-        [Paragraph("HAGGAI", logo_style)],
-        [Paragraph(badge_label, label_style)]
-    ]
+    # Add Haggai logo image if available
+    logo_path = Path(__file__).parent / "haggai-logo-white.png"
+    if logo_path.exists():
+        logo_img = Image(str(logo_path), width=3*cm, height=1.2*cm)
+        story.append(logo_img)
+        story.append(Spacer(1, 0.2*cm))
+    else:
+        # Fallback to text logo
+        story.append(Paragraph("HAGGAI", logo_style))
+        story.append(Spacer(1, 0.3*cm))
     
-    header_table = Table(header_data, colWidths=[badge_width - 1*cm])
-    header_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), header_color),
-        ('BACKGROUND', (0, 1), (-1, 1), label_bg_color),
+    # Badge label
+    label_table = Table([[Paragraph(badge_label, label_style)]], colWidths=[badge_width - 1*cm])
+    label_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), label_bg_color),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('TOPPADDING', (0, 0), (-1, 0), 20),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
-        ('TOPPADDING', (0, 1), (-1, 1), 8),
-        ('BOTTOMPADDING', (0, 1), (-1, 1), 8),
+        ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
     ]))
-    
-    story.append(header_table)
+    story.append(label_table)
     story.append(Spacer(1, 30))
     
     # Name
