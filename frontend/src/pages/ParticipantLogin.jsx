@@ -36,7 +36,7 @@ const ParticipantLogin = () => {
       password: 'Password',
       login: 'Log in',
       forgotPassword: 'Forgot password?',
-      contactAdmin: 'Contact administrator',
+      resetHere: 'Reset here',
       loginError: 'Wrong email or password'
     }
   };
