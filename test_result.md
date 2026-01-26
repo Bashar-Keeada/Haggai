@@ -359,6 +359,18 @@ frontend:
         agent: "testing"
         comment: "✅ COMPREHENSIVE TESTING PASSED - Complete password reset flow working perfectly: Login page (/deltagare/login) loads correctly with 'Glömt lösenord?' link that navigates to /deltagare/glomt-losenord. Forgot password page loads with correct title 'Återställ lösenord', email input works, 'Skicka återställningslänk' button functional. Form submission successful with success message 'E-post skickat! Kolla din inkorg för återställningslänk'. Reset password page (/deltagare/aterstall-losenord/:token) loads correctly, token validation working, shows appropriate error message 'Ogiltig eller utgången återställningslänk' for invalid tokens. No JavaScript errors detected. All API endpoints (POST /api/participants/forgot-password, GET /api/participants/validate-reset-token/:token, POST /api/participants/reset-password) working correctly. Minor note: Login page link text says 'Kontakta administratören' instead of 'Återställ här' but functionality is correct."
 
+  - task: "Public Agenda Page - Day Headers and Session Colors"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/pages/PublicAgenda.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL BUG: Day headers are NOT VISIBLE on the page. Tested URL: /program/f60eb66e-3956-428d-8060-181ceeb498f8 for National Seminarium March 2026. Day headers exist in DOM (4 headers: Dag 1-4 with correct dates like 'lördag 14 mars 2026'), text color is white as expected, BUT background gradient is not rendering - shows transparent (rgba(0,0,0,0)) instead of dark green gradient. Root cause: Custom Tailwind classes 'from-haggai' and 'to-haggai-dark' are defined as CSS utilities in index.css but NOT integrated into Tailwind's color palette in tailwind.config.js. This prevents gradient utilities (from-{color}, to-{color}) from working. POSITIVE: All session colors working perfectly - Blue for Atheism/Goals/Leadership (11 sessions), Orange for Mandate/Stewardship (7 sessions), Green for Next Gen (3 sessions), Purple for Evaluation (7 sessions), White for Breaks (17 sessions). Print button '🖨️ Skriv ut program' is visible and functional. FIX: Add haggai colors to Tailwind config's colors object to enable gradient support."
+
 metadata:
   created_by: "main_agent"
   version: "1.1"
