@@ -4581,7 +4581,10 @@ async def get_participant_me(authorization: str = Header(None)):
         
         return participant
         
-
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
 
 
 @api_router.post("/members/forgot-password")
