@@ -661,6 +661,44 @@ agent_communication:
       📝 NOTE: The main "Dela nomineringslänk" button (line 569) works correctly because it passes the whole workshop object. Only the copy button inside the QR dialog has this bug.
   - agent: "testing"
     message: |
+      🎉 SPECIAL TEST REQUEST COMPLETED - LEADER INVITATION REGISTRATION LINK
+      
+      **TESTED URL:** https://community-manager-9.preview.emergentagent.com/ledare/registrera/QmDoiQaNN70QCL1JkvZ0cApNG9nKYorFC1EJsmVCeNM
+      
+      ✅ ALL TESTS PASSED - WORKING PERFECTLY:
+      
+      📋 PAGE LOADING:
+      • Page loads successfully without errors ✓
+      • No error messages displayed ✓
+      • No "Could not load the form" error ✓
+      • No "Invalid invitation link" error ✓
+      
+      📝 REGISTRATION FORM:
+      • Form displays correctly with all required fields ✓
+      • Name input field present and functional ✓
+      • Email input field present and functional ✓
+      • Phone input field present ✓
+      • Password input field present ✓
+      • Confirm password input field present ✓
+      • Submit button present ✓
+      
+      📧 PRE-FILLED VALUES (CRITICAL):
+      • Name field pre-filled with "Test2" ✓ CORRECT
+      • Email field pre-filled with "test2@haggai.se" ✓ CORRECT
+      
+      🌐 API INTEGRATION:
+      • API call to /api/leader-invitations/QmDoiQaNN70QCL1JkvZ0cApNG9nKYorFC1EJsmVCeNM successful ✓
+      • Backend returns 200 status ✓
+      • Invitation data loaded correctly ✓
+      
+      🔍 BROWSER CONSOLE:
+      • No JavaScript errors detected ✓
+      • No React errors ✓
+      • No network errors ✓
+      
+      🎯 CONCLUSION: The leader invitation registration link is working perfectly. The token is valid, the invitation exists in the database with status "pending", and the form loads correctly with pre-filled name and email as expected. No issues found.
+  - agent: "testing"
+    message: |
       🎉 BUG FIX VERIFICATION COMPLETE - "Dela nomineringslänk" NOW WORKING PERFECTLY!
       
       ✅ COMPREHENSIVE TESTING RESULTS:
