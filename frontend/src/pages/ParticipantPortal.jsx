@@ -247,14 +247,14 @@ const ParticipantPortal = () => {
                   {/* Badge Preview - Vertical Format */}
                   <div className="bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-stone-100 mb-6">
                     <div className="bg-gradient-to-br from-[#0891B2] to-[#0e7490] text-white py-8 px-6 text-center">
-                      <div className="text-3xl font-bold tracking-[0.3em] mb-3">HAGGAI</div>
+                      <img src="/haggai-logo-white.png" alt="HAGGAI" className="h-12 mx-auto mb-3" />
                       <div className="bg-[#22D3EE] text-white text-sm font-bold py-2 px-4 rounded-lg inline-block">
                         {t.badge.participant}
                       </div>
                     </div>
 
                     <div className="bg-white py-10 px-6 text-center">
-                      <div className="text-2xl font-bold text-stone-800 mb-2">
+                      <div className="text-3xl font-bold text-stone-800 mb-2">
                         {participant.full_name}
                       </div>
                       <div className="text-stone-500 mb-8">

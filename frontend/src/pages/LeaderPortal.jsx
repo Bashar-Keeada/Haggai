@@ -733,7 +733,7 @@ const LeaderPortal = () => {
                     <div className="bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-stone-100 mb-6">
                       {/* Header */}
                       <div className="bg-gradient-to-br from-[#8B5CF6] to-[#7C3AED] text-white py-8 px-6 text-center">
-                        <div className="text-3xl font-bold tracking-[0.3em] mb-3">HAGGAI</div>
+                        <img src="/haggai-logo-white.png" alt="HAGGAI" className="h-12 mx-auto mb-3" />
                         <div className="bg-[#A78BFA] text-white text-sm font-bold py-2 px-4 rounded-lg inline-block">
                           {txt.badge.leader}
                         </div>
@@ -741,7 +741,7 @@ const LeaderPortal = () => {
 
                       {/* Body */}
                       <div className="bg-white py-10 px-6 text-center">
-                        <div className="text-2xl font-bold text-stone-800 mb-8">
+                        <div className="text-3xl font-bold text-stone-800 mb-8">
                           {leader.name}
                         </div>
 
