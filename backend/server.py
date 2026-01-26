@@ -4666,12 +4666,6 @@ async def member_reset_password(request: ResetPasswordRequest):
     
     return {"success": True, "message": "Password reset successfully"}
 
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
-
-
 
 # ==================== MEMBER SYSTEM ====================
 async def get_participant_name_badge(participant_id: str):
