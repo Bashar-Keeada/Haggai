@@ -26,8 +26,7 @@ const ParticipantLogin = () => {
       password: 'Lösenord',
       login: 'Logga in',
       forgotPassword: 'Glömt lösenord?',
-      resetPassword: 'Återställ här',
-      contactAdmin: 'Kontakta administratören',
+      resetHere: 'Återställ här',
       loginError: 'Fel e-post eller lösenord'
     },
     en: {
@@ -140,7 +139,7 @@ const ParticipantLogin = () => {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-stone-500">
-              {t.forgotPassword} <Link to="/deltagare/glomt-losenord" className="text-haggai hover:underline">{t.contactAdmin}</Link>
+              {t.forgotPassword} <Link to="/deltagare/glomt-losenord" className="text-haggai hover:underline font-medium">{t.resetHere}</Link>
             </p>
           </div>
         </CardContent>
