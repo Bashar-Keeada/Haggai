@@ -100,14 +100,35 @@ const PublicAgenda = () => {
   const getSessionStyle = (type) => {
     switch (type) {
       case 'break':
-        return 'bg-amber-50 border-amber-200';
+        return 'bg-white border-stone-200';
       case 'lunch':
-        return 'bg-orange-50 border-orange-200';
+      case 'meal':
+        return 'bg-white border-stone-200';
+      case 'evaluation':
+        return 'bg-stone-50 border-stone-200';
       case 'registration':
         return 'bg-blue-50 border-blue-200';
       default:
         return 'bg-white border-stone-200';
     }
+  };
+
+  const getSessionColor = (sessionTitle) => {
+    // Assign colors based on session content to match Excel
+    const title = sessionTitle?.toLowerCase() || '';
+    if (title.includes('atheism') || title.includes('goals') || title.includes('leadership')) {
+      return 'bg-blue-200/60';  // Light blue background
+    }
+    if (title.includes('mandate') || title.includes('stewardship')) {
+      return 'bg-orange-200/60';  // Light orange/peach background
+    }
+    if (title.includes('next gen')) {
+      return 'bg-green-200/60';  // Light green background
+    }
+    if (title.includes('evaluation')) {
+      return 'bg-purple-100/50';  // Very light purple
+    }
+    return 'bg-white';  // White for breaks
   };
 
   const formatDate = (dateStr) => {
@@ -193,20 +214,19 @@ const PublicAgenda = () => {
         {/* Days */}
         <div className="space-y-8">
           {days.map((day, dayIndex) => (
-            <Card key={day.id || dayIndex} className="border-0 shadow-xl overflow-hidden print:shadow-none print:border">
-              {/* Day Header */}
+            <Card key={day.id || dayIndex} className="border-0 shadow-xl overflow-hidden print:shadow-none print:border mb-8">
+              {/* Day Header with Dark Background */}
               <div className="bg-gradient-to-r from-haggai to-haggai-dark text-white p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold">
-                      {txt.day} {day.day_number}
-                      {day.title && <span className="font-normal ml-2">- {day.title}</span>}
+                    <h2 className="text-2xl font-bold text-white">
+                      {day.day_title || `${txt.day} ${day.day_number}`}
                     </h2>
                     {day.date && (
-                      <p className="text-white/80 mt-1">{formatDate(day.date)}</p>
+                      <p className="text-white/90 mt-1">{formatDate(day.date)}</p>
                     )}
                   </div>
-                  <div className="text-4xl font-bold opacity-20">
+                  <div className="text-4xl font-bold text-white/20">
                     {day.day_number}
                   </div>
                 </div>
@@ -218,8 +238,8 @@ const PublicAgenda = () => {
                   {day.sessions.map((session, sessionIndex) => (
                     <div 
                       key={session.id || sessionIndex}
-                      className={`p-4 ${getSessionStyle(session.session_type)} ${
-                        session.session_type === 'break' || session.session_type === 'lunch' 
+                      className={`p-4 ${getSessionColor(session.title)} ${
+                        session.session_type === 'break' || session.session_type === 'meal' || session.session_type === 'lunch'
                           ? 'py-3' 
                           : ''
                       }`}
