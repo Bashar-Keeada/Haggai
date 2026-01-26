@@ -4671,6 +4671,9 @@ async def member_reset_password(request: ResetPasswordRequest):
 
 
 # ==================== MEMBER SYSTEM ====================
+
+
+@api_router.get("/participants/{participant_id}/name-badge")
 async def get_participant_name_badge(participant_id: str):
     """Generate and download name badge for an approved participant"""
     participant = await db.nominations.find_one(
