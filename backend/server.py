@@ -4462,6 +4462,9 @@ async def send_password_reset_email(email: str, name: str, token: str, user_type
     if user_type == "participant":
         reset_link = f"{frontend_url}/deltagare/aterstall-losenord/{token}"
         portal_name = "Deltagare Portal"
+    elif user_type == "member":
+        reset_link = f"{frontend_url}/medlem/aterstall-losenord/{token}"
+        portal_name = "Medlemsportalen"
     else:
         reset_link = f"{frontend_url}/ledare/aterstall-losenord/{token}"
         portal_name = "Ledarportalen"
