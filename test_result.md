@@ -382,10 +382,12 @@ test_plan:
     - "Admin Leaders Page"
     - "Leaders Public Page"
     - "Remove Made with Emergent Badge"
+    - "Public Agenda Page - Day Headers and Session Colors"
   stuck_tasks:
     - "Admin Leaders Page"
     - "Leaders Public Page"
     - "Remove Made with Emergent Badge"
+    - "Public Agenda Page - Day Headers and Session Colors"
   test_all: false
   test_priority: "stuck_first"
 
