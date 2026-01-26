@@ -4278,11 +4278,11 @@ def generate_name_badge_pdf(
     name_style = ParagraphStyle(
         'NameBadge',
         parent=styles['Heading1'],
-        fontSize=24,
+        fontSize=32,  # Increased from 24 to 32
         textColor=colors.black,
         alignment=TA_CENTER,
         fontName='Helvetica-Bold',
-        leading=28
+        leading=36
     )
     
     org_style = ParagraphStyle(
