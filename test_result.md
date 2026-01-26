@@ -187,6 +187,18 @@ backend:
         agent: "testing"
         comment: "✅ ALL TESTS PASSED - Tested POST /api/leader-experience-applications (application submission), GET /api/leader-experience-applications (admin view), and GET /api/leader-experience-applications/{program_id} (program-specific applications). All endpoints working correctly with comprehensive application data."
 
+  - task: "Participant Password Reset APIs"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ ALL TESTS PASSED - Tested complete password reset API flow: POST /api/participants/forgot-password (sends reset email with token), GET /api/participants/validate-reset-token/:token (validates token and expiration), POST /api/participants/reset-password (resets password with token). All endpoints working correctly. Token generation, storage in password_resets collection, expiration handling (1 hour), and password hashing all functioning properly. Email sending integrated with Resend API."
+
 frontend:
   - task: "Password Login Page"
     implemented: true
