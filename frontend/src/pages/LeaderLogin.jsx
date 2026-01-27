@@ -22,7 +22,7 @@ const LeaderLogin = () => {
 
   const txt = {
     sv: {
-      title: 'Ledarportalen',
+      title: 'Facilitator/Tränare-portalen',
       subtitle: 'Logga in för att se dina sessioner och hantera din profil',
       email: 'E-postadress',
       password: 'Lösenord',
@@ -36,7 +36,7 @@ const LeaderLogin = () => {
       errorGeneric: 'Något gick fel. Försök igen.'
     },
     en: {
-      title: 'Leader Portal',
+      title: 'Facilitator/Trainer Portal',
       subtitle: 'Log in to view your sessions and manage your profile',
       email: 'Email address',
       password: 'Password',
