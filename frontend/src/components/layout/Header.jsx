@@ -23,9 +23,9 @@ const Header = () => {
   };
 
   const leadersLabel = {
-    sv: 'Ledare',
-    en: 'Leaders',
-    ar: 'القادة'
+    sv: 'Facilitatorer',
+    en: 'Facilitators',
+    ar: 'الميسرين'
   };
 
   const donationsLabel = {
