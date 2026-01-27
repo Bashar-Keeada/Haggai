@@ -6183,6 +6183,62 @@ async def get_current_leader_sessions(authorization: str = Header(None)):
     return sessions_with_workshop
 
 
+# ==================== DONATION SETTINGS ====================
+class DonationSettings(BaseModel):
+    swish_number: str = "070 782 50 82"
+    bank_name: str = "Swedbank"
+    account_number: str = "1234-5 678 901 234-5"
+    iban: str = "SE12 3456 7890 1234 5678 9012"
+    bic: str = "SWEDSESS"
+    reference: str = "Gåva + ditt namn"
+
+class DonationSettingsUpdate(BaseModel):
+    swish_number: Optional[str] = None
+    bank_name: Optional[str] = None
+    account_number: Optional[str] = None
+    iban: Optional[str] = None
+    bic: Optional[str] = None
+    reference: Optional[str] = None
+
+@api_router.get("/donation-settings")
+async def get_donation_settings():
+    """Get current donation settings"""
+    settings = await db.settings.find_one({"type": "donation"})
+    if not settings:
+        # Return default settings
+        return {
+            "swish_number": "070 782 50 82",
+            "bank_name": "Swedbank",
+            "account_number": "1234-5 678 901 234-5",
+            "iban": "SE12 3456 7890 1234 5678 9012",
+            "bic": "SWEDSESS",
+            "reference": "Gåva + ditt namn"
+        }
+    return {
+        "swish_number": settings.get("swish_number", "070 782 50 82"),
+        "bank_name": settings.get("bank_name", "Swedbank"),
+        "account_number": settings.get("account_number", "1234-5 678 901 234-5"),
+        "iban": settings.get("iban", "SE12 3456 7890 1234 5678 9012"),
+        "bic": settings.get("bic", "SWEDSESS"),
+        "reference": settings.get("reference", "Gåva + ditt namn")
+    }
+
+@api_router.put("/donation-settings")
+async def update_donation_settings(settings: DonationSettingsUpdate):
+    """Update donation settings (admin only)"""
+    update_data = {k: v for k, v in settings.model_dump().items() if v is not None}
+    update_data["type"] = "donation"
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.settings.update_one(
+        {"type": "donation"},
+        {"$set": update_data},
+        upsert=True
+    )
+    
+    return {"message": "Settings updated successfully"}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
