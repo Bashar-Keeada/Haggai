@@ -364,6 +364,24 @@ const AdminTrainingParticipants = () => {
     }
   };
 
+  const handleMakeMember = async (participant) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/training-participants/${participant.id}/make-member`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        toast.success(txt.makeMemberSuccess, { description: txt.makeMemberDesc });
+        fetchParticipants();
+      } else {
+        const error = await response.json();
+        toast.error(error.detail || 'Could not create member');
+      }
+    } catch (error) {
+      console.error('Error making member:', error);
+      toast.error('Could not create member');
+    }
+  };
+
   const getStatusBadge = (participant) => {
     if (participant.diploma_sent) {
       return <Badge className="bg-purple-100 text-purple-700">Diplom skickat</Badge>;
