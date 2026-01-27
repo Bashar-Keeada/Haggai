@@ -5429,7 +5429,7 @@ WORKSHOP_TOPICS = [
         "id": "goal_setting",
         "name_sv": "Målsättning",
         "name_en": "Goal Setting",
-        "name_ar": "تحديد الأهداف",
+        "name_ar": "وضع الأهداف",
         "description_sv": "Hur man sätter och uppnår meningsfulla mål",
         "description_en": "How to set and achieve meaningful goals",
         "description_ar": "كيفية وضع وتحقيق أهداف ذات معنى",
