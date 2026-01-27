@@ -102,8 +102,10 @@ const NomineeRegistration = () => {
       notes: 'Övriga kommentarer',
       submit: 'Skicka registrering',
       submitting: 'Skickar...',
-      successTitle: 'Registrering skickad!',
-      successDesc: 'Tack för din registrering. Vi kommer att kontakta dig snart.',
+      successTitle: 'Tack för din registrering!',
+      successDesc: 'Din ansökan har tagits emot.',
+      successMessage: 'Haggai-teamet kommer att gå igenom din ansökan och återkommer till dig inom kort med bekräftelse. Eftersom vi har begränsat antal platser och många ansökningar, ber vi dig ha tålamod under granskningsprocessen.',
+      successNote: 'Vi kontaktar dig via e-post eller telefon.',
       errorTitle: 'Fel',
       errorDesc: 'Kunde inte skicka registreringen. Försök igen.'
     },
