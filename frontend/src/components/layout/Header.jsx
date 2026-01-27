@@ -54,12 +54,6 @@ const Header = () => {
     { code: 'ar', name: 'العربية' },
   ];
 
-  const adminLabel = {
-    sv: 'Admin',
-    en: 'Admin',
-    ar: 'المسؤول'
-  };
-
   const membersLabel = {
     sv: 'Medlemsområde',
     en: 'Members Area',
@@ -70,12 +64,6 @@ const Header = () => {
     sv: 'Mina Sidor',
     en: 'My Pages',
     ar: 'صفحاتي'
-  };
-
-  const logoutLabel = {
-    sv: 'Logga ut',
-    en: 'Log out',
-    ar: 'تسجيل الخروج'
   };
 
   const isActive = (path) => location.pathname === path;
