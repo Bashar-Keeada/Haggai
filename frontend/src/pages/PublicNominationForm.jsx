@@ -140,7 +140,7 @@ const PublicNominationForm = () => {
       date: 'التاريخ',
       location: 'الموقع'
     }
-  }[language] || {};
+  }[formLanguage] || {};
 
   useEffect(() => {
     fetchWorkshop();
