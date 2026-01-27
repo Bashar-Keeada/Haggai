@@ -222,7 +222,49 @@ const NomineeRegistration = () => {
     }
   };
 
-  const txt = translations[language] || translations.sv;
+  const txt = translations[formLanguage] || translations.sv;
+
+  // Language selector component
+  const LanguageSelector = () => (
+    <div className="flex items-center justify-center gap-2 mb-6">
+      <Globe className="h-5 w-5 text-haggai" />
+      <div className="flex bg-stone-100 rounded-lg p-1">
+        <button
+          type="button"
+          onClick={() => setFormLanguage('sv')}
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+            formLanguage === 'sv' 
+              ? 'bg-haggai text-white' 
+              : 'text-stone-600 hover:text-stone-800'
+          }`}
+        >
+          Svenska
+        </button>
+        <button
+          type="button"
+          onClick={() => setFormLanguage('en')}
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+            formLanguage === 'en' 
+              ? 'bg-haggai text-white' 
+              : 'text-stone-600 hover:text-stone-800'
+          }`}
+        >
+          English
+        </button>
+        <button
+          type="button"
+          onClick={() => setFormLanguage('ar')}
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+            formLanguage === 'ar' 
+              ? 'bg-haggai text-white' 
+              : 'text-stone-600 hover:text-stone-800'
+          }`}
+        >
+          العربية
+        </button>
+      </div>
+    </div>
+  );
 
   useEffect(() => {
     fetchNomination();
