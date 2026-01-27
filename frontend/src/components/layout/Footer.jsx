@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, Lock } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { contactInfo } from '../../data/mock';
 
