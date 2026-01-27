@@ -5607,16 +5607,16 @@ async def create_leader_invitation(input: LeaderInvitationCreate):
             </ul>
             
             <div style="text-align: center; margin: 35px 0;">
-                <a href="{registration_link}" 
-                   style="background-color: #014D73; color: #ffffff !important; padding: 18px 40px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold; font-size: 16px; mso-padding-alt: 0; text-align: center;">
-                    <!--[if mso]>
-                    <i style="letter-spacing: 40px; mso-font-width: -100%; mso-text-raise: 30pt;">&nbsp;</i>
-                    <![endif]-->
-                    <span style="mso-text-raise: 15pt; color: #ffffff;">{txt['button']}</span>
-                    <!--[if mso]>
-                    <i style="letter-spacing: 40px; mso-font-width: -100%;">&nbsp;</i>
-                    <![endif]-->
-                </a>
+                <table border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+                    <tr>
+                        <td align="center" bgcolor="#014D73" style="border-radius: 8px;">
+                            <a href="{registration_link}" target="_blank" 
+                               style="display: inline-block; padding: 18px 40px; font-family: Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                                {txt['button']}
+                            </a>
+                        </td>
+                    </tr>
+                </table>
             </div>
             
             <p style="color: #666; font-size: 14px; text-align: center;">
