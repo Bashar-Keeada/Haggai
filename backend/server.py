@@ -1471,17 +1471,27 @@ async def send_nomination_email_to_admin(nomination: Nomination):
 
 @api_router.post("/nominations", response_model=Nomination)
 async def create_nomination(input: NominationCreate):
-    """Create a new nomination - sent to admin for review first"""
+    """Create a new nomination - direct invitations are auto-approved"""
     nomination = Nomination(**input.model_dump())
-    nomination.status = "pending"  # Always starts as pending for admin review
+    
+    # Check if this is a direct invitation (simplified form)
+    if input.direct_invitation or input.status == 'approved':
+        nomination.status = "approved"  # Auto-approve for direct invitations
+        nomination.direct_invitation = True
+    else:
+        nomination.status = "pending"  # Needs admin review
+    
     doc = nomination.model_dump()
     await db.nominations.insert_one(doc)
     
-    # Only notify admin about new nomination - NOT the nominee yet
-    asyncio.create_task(send_nomination_email_to_admin(nomination))
-    
-    # Send confirmation to nominator
-    asyncio.create_task(send_nomination_confirmation_to_nominator(nomination))
+    # Only send emails for traditional nominations (not direct invitations)
+    if not input.direct_invitation and input.status != 'approved':
+        # Notify admin about new nomination
+        asyncio.create_task(send_nomination_email_to_admin(nomination))
+        
+        # Send confirmation to nominator if they provided an email
+        if nomination.nominator_email:
+            asyncio.create_task(send_nomination_confirmation_to_nominator(nomination))
     
     return nomination
 
