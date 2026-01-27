@@ -594,7 +594,7 @@ const NomineeRegistration = () => {
               <div className="border-t pt-6">
                 <h3 className={`font-semibold text-stone-800 mb-4 flex items-center gap-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                   <Briefcase className="h-5 w-5 text-haggai" />
-                  {language === 'ar' ? 'معلومات العمل' : language === 'en' ? 'Work Information' : 'Arbetsinformation'}
+                  {formLanguage === 'ar' ? 'معلومات العمل' : formLanguage === 'en' ? 'Work Information' : 'Arbetsinformation'}
                 </h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
@@ -640,7 +640,7 @@ const NomineeRegistration = () => {
               <div className="border-t pt-6">
                 <h3 className={`font-semibold text-stone-800 mb-4 flex items-center gap-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                   <Church className="h-5 w-5 text-haggai" />
-                  {language === 'ar' ? 'معلومات الكنيسة' : language === 'en' ? 'Church Information' : 'Kyrkoinformation'}
+                  {formLanguage === 'ar' ? 'معلومات الكنيسة' : formLanguage === 'en' ? 'Church Information' : 'Kyrkoinformation'}
                 </h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
