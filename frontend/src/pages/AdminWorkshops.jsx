@@ -328,10 +328,17 @@ const AdminWorkshops = () => {
       price: formData.price ? parseFloat(formData.price) : null
     };
 
+    // Debug log
+    console.log('SAVE WORKSHOP - payload:', JSON.stringify(payload, null, 2));
+    console.log('SAVE WORKSHOP - is_active:', payload.is_active);
+
     try {
       const url = editingWorkshop 
         ? `${BACKEND_URL}/api/workshops/${editingWorkshop.id}`
         : `${BACKEND_URL}/api/workshops`;
+      
+      console.log('SAVE WORKSHOP - URL:', url);
+      console.log('SAVE WORKSHOP - Method:', editingWorkshop ? 'PUT' : 'POST');
       
       const response = await fetch(url, {
         method: editingWorkshop ? 'PUT' : 'POST',
@@ -340,14 +347,21 @@ const AdminWorkshops = () => {
       });
 
       if (response.ok) {
+        const result = await response.json();
+        console.log('SAVE WORKSHOP - Result:', result);
         toast.success(editingWorkshop 
           ? (language === 'sv' ? 'Workshop uppdaterad' : 'Workshop updated')
           : (language === 'sv' ? 'Workshop skapad' : 'Workshop created')
         );
         setShowDialog(false);
         fetchWorkshops();
+      } else {
+        const errorText = await response.text();
+        console.error('SAVE WORKSHOP - Error:', response.status, errorText);
+        toast.error(language === 'sv' ? 'Kunde inte spara' : 'Could not save');
       }
     } catch (error) {
+      console.error('SAVE WORKSHOP - Exception:', error);
       toast.error(language === 'sv' ? 'Något gick fel' : 'Something went wrong');
     }
   };
