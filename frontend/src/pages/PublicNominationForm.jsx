@@ -180,7 +180,7 @@ const PublicNominationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.nominee_name || !formData.nominee_phone) {
+    if (!formData.nominee_name || !formData.nominee_phone || !formData.inviter_name) {
       toast.error(txt.required);
       return;
     }
@@ -194,6 +194,7 @@ const PublicNominationForm = () => {
           event_id: workshopId,
           event_title: getLocalizedText(workshop?.title),
           event_date: workshop?.date,
+          nominator_name: formData.inviter_name,  // Track who invited
           nominee_name: formData.nominee_name,
           nominee_phone: formData.nominee_phone,
           nominee_email: '', // Will be filled in registration
