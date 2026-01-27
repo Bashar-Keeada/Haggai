@@ -333,6 +333,53 @@ const NomineeRegistration = () => {
     );
   }
 
+  // Registration Complete - Success Page
+  if (registrationComplete) {
+    return (
+      <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
+        <div className="max-w-2xl mx-auto px-4 py-16">
+          <div className="text-center">
+            {/* Success Icon */}
+            <div className="bg-green-100 rounded-full w-28 h-28 flex items-center justify-center mx-auto mb-8">
+              <CheckCircle className="h-16 w-16 text-green-600" />
+            </div>
+            
+            {/* Title */}
+            <h1 className="text-3xl font-bold text-stone-800 mb-4">{txt.successTitle}</h1>
+            <p className="text-xl text-stone-600 mb-8">{txt.successDesc}</p>
+            
+            {/* Message Card */}
+            <Card className="border-0 shadow-xl text-left mb-8">
+              <CardContent className="p-8">
+                <p className="text-stone-700 leading-relaxed text-lg">
+                  {txt.successMessage}
+                </p>
+                <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                  <p className="text-blue-800 font-medium">
+                    📧 {txt.successNote}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Back Button */}
+            <Button 
+              onClick={() => navigate('/')} 
+              variant="outline"
+              className="border-haggai text-haggai hover:bg-haggai hover:text-white"
+            >
+              {txt.backHome}
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className={`min-h-screen bg-cream-50 py-12 ${isRTL ? 'rtl' : 'ltr'}`}>
       <div className="max-w-3xl mx-auto px-4">
