@@ -97,7 +97,7 @@ const Header = () => {
               </Link>
             ))}
             
-            {/* Settings Menu (Language + Admin + Logout) */}
+            {/* Settings Menu (Language + Member Areas) */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="ml-2 text-stone-700 hover:bg-haggai-50">
