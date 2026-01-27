@@ -178,7 +178,7 @@ const MemberNameBadge = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('member_token');
-    navigate('/medlem/login');
+    navigate('/medlem-login');
   };
 
   if (loading) {
