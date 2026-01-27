@@ -304,11 +304,11 @@ const Donations = () => {
                 <div className="bg-green-50 rounded-2xl p-6 text-center mb-4">
                   <p className="text-sm text-stone-500 mb-2">{language === 'sv' ? 'Swish-nummer' : language === 'ar' ? 'رقم سويش' : 'Swish Number'}</p>
                   <div className={`flex items-center justify-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <p className="text-3xl font-bold text-green-700 tracking-wider">{txt.swishNumber}</p>
+                    <p className="text-3xl font-bold text-green-700 tracking-wider">{donationSettings.swish_number}</p>
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => copyToClipboard('0707825082', 'swish')}
+                      onClick={() => copyToClipboard(donationSettings.swish_number.replace(/\s/g, ''), 'swish')}
                       className="text-green-600 border-green-300 hover:bg-green-100"
                     >
                       {copiedField === 'swish' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
