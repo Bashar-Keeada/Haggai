@@ -405,10 +405,35 @@ const PublicNominationForm = () => {
       {/* Form */}
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Inviter Info */}
           <Card className="border-0 shadow-lg">
             <CardContent className="p-6">
               <h2 className="text-lg font-bold text-stone-800 mb-6 flex items-center gap-2">
                 <User className="h-5 w-5 text-haggai" />
+                {txt.inviterInfo}
+              </h2>
+              
+              <div className="space-y-2">
+                <Label htmlFor="inviter_name" className="flex items-center gap-1">
+                  {txt.inviterName} <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="inviter_name"
+                  value={formData.inviter_name}
+                  onChange={(e) => handleChange('inviter_name', e.target.value)}
+                  placeholder={txt.inviterNamePlaceholder}
+                  required
+                  className="text-lg"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Nominee Info */}
+          <Card className="border-0 shadow-lg">
+            <CardContent className="p-6">
+              <h2 className="text-lg font-bold text-stone-800 mb-6 flex items-center gap-2">
+                <Users className="h-5 w-5 text-haggai" />
                 {txt.nomineeInfo}
               </h2>
               
