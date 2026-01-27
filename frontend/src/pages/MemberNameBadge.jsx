@@ -284,6 +284,53 @@ const MemberNameBadge = () => {
               </div>
             </CardContent>
           </Card>
+        ) : member?.diplomas?.length > 0 ? (
+          /* Show member badge based on diploma if no active nomination */
+          <Card className="border-0 shadow-xl max-w-md mx-auto">
+            <CardContent className="p-8">
+              {/* Name Badge Preview - Member with Diploma */}
+              <div className="bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-stone-100 mb-6">
+                {/* Header */}
+                <div className="bg-gradient-to-br from-[#1F3D3B] to-[#2A5250] text-white py-8 px-6 text-center">
+                  <img src="/haggai-logo-white.png" alt="HAGGAI" className="h-12 mx-auto mb-3" />
+                  <div className="bg-[#D4AF37] text-white text-sm font-bold py-2 px-4 rounded-lg inline-block">
+                    {language === 'sv' ? 'MEDLEM' : language === 'ar' ? 'عضو' : 'MEMBER'}
+                  </div>
+                </div>
+
+                {/* Body */}
+                <div className="bg-white py-10 px-6 text-center">
+                  <div className="text-3xl font-bold text-stone-800 mb-2">
+                    {member.full_name || member.email}
+                  </div>
+                  <div className="text-stone-500 mb-8">
+                    Haggai Sweden
+                  </div>
+
+                  <div className="border-t pt-6">
+                    <div className="text-xs text-stone-400 tracking-widest mb-2">
+                      {language === 'sv' ? 'DIPLOM' : language === 'ar' ? 'دبلوم' : 'DIPLOMA'}
+                    </div>
+                    <div className="text-lg font-bold text-stone-800">
+                      {member.diplomas[0].event_title}
+                    </div>
+                    <div className="text-sm text-stone-500 mt-1">
+                      {new Date(member.diplomas[0].completed_at).toLocaleDateString()}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Info message */}
+              <p className="text-center text-stone-500 text-sm">
+                {language === 'sv' 
+                  ? 'Som medlem kan du ladda ner din namnbricka när du är registrerad för en kommande workshop.'
+                  : language === 'ar'
+                  ? 'كعضو، يمكنك تنزيل شارة الاسم الخاصة بك عند التسجيل في ورشة عمل قادمة.'
+                  : 'As a member, you can download your name badge when registered for an upcoming workshop.'}
+              </p>
+            </CardContent>
+          </Card>
         ) : (
           <Card className="border-0 shadow-xl max-w-md mx-auto">
             <CardContent className="p-12 text-center">
