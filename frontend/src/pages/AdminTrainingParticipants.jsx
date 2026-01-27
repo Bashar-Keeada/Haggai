@@ -621,6 +621,25 @@ const AdminTrainingParticipants = () => {
                           {participant.diploma_sent ? txt.sendDiploma : txt.generateDiploma}
                         </Button>
                       )}
+                      
+                      {/* Make Member button - show if diploma sent and not already member */}
+                      {participant.diploma_sent && !participant.is_member && (
+                        <Button
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700"
+                          onClick={() => handleMakeMember(participant)}
+                        >
+                          <UserPlus className="h-4 w-4 mr-1" />
+                          {txt.makeMember}
+                        </Button>
+                      )}
+                      
+                      {participant.is_member && (
+                        <Badge className="bg-green-100 text-green-700">
+                          <UserCheck className="h-3 w-3 mr-1" />
+                          {txt.alreadyMember}
+                        </Badge>
+                      )}
                     </div>
                   </div>
                 </CardContent>
