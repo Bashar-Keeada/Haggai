@@ -242,7 +242,11 @@ const AdminTrainingParticipants = () => {
       male: 'ذكر',
       female: 'أنثى',
       yes: 'نعم',
-      no: 'لا'
+      no: 'لا',
+      makeMember: 'جعل عضواً',
+      makeMemberSuccess: 'المشارك أصبح عضواً الآن!',
+      makeMemberDesc: 'تم إنشاء حساب العضوية',
+      alreadyMember: 'عضو بالفعل'
     }
   };
 
