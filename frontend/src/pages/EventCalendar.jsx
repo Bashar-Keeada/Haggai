@@ -239,13 +239,8 @@ const EventCalendar = () => {
 
   const handleNominateClick = (event, e) => {
     e.stopPropagation(); // Prevent event card click
-    setNominationEvent(event);
-    // Set default motivation text
-    setNominationData(prev => ({
-      ...prev,
-      motivation: nomTxt.defaultMotivation || ''
-    }));
-    setIsNominationDialogOpen(true);
+    // Navigate to the new simplified nomination form
+    navigate(`/nominera/${event.id}`);
   };
 
   const handleRegistration = (e) => {
