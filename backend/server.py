@@ -4277,9 +4277,17 @@ def generate_name_badge_pdf(
     name: str,
     organization: str,
     workshop_title: str,
-    badge_type: str = "participant"  # "participant" or "leader"
+    badge_type: str = "participant",  # "participant" or "leader"
+    event_date: str = None,
+    event_location: str = None,
+    person_id: str = None,
+    role_title: str = None,  # For leaders: their specific role
+    primary_topic: str = None  # For leaders: their primary topic
 ) -> BytesIO:
-    """Generate a PDF name badge for participants or leaders - A6 format (105 x 148 mm)"""
+    """Generate a professional PDF name badge for participants or leaders - A6 format (105 x 148 mm)"""
+    import qrcode
+    from PIL import Image as PILImage
+    
     buffer = BytesIO()
     
     # A6 size: 105mm x 148mm (standard postcard size)
@@ -4289,118 +4297,244 @@ def generate_name_badge_pdf(
     doc = SimpleDocTemplate(
         buffer,
         pagesize=(badge_width, badge_height),
-        leftMargin=0.5*cm,
-        rightMargin=0.5*cm,
-        topMargin=0.5*cm,
-        bottomMargin=0.5*cm
+        leftMargin=0.4*cm,
+        rightMargin=0.4*cm,
+        topMargin=0.3*cm,
+        bottomMargin=0.3*cm
     )
     
-    # Define colors based on badge type
+    # Haggai brand colors
+    haggai_dark = colors.HexColor('#1F3D3B')  # Dark teal
+    haggai_gold = colors.HexColor('#D4AF37')  # Gold accent
+    haggai_cream = colors.HexColor('#FDF8F3')  # Cream background
+    
+    # Define colors and labels based on badge type
     if badge_type == "leader":
-        label_bg_color = colors.HexColor('#A78BFA')  # Lighter purple
-        badge_label = "LEADER"
+        label_bg_color = haggai_gold
+        secondary_color = colors.HexColor('#B8860B')  # Darker gold
+        badge_label = "FACILITATOR"
+        badge_label_sv = "FACILITATOR"
     else:  # participant
-        label_bg_color = colors.HexColor('#22D3EE')  # Lighter teal
+        label_bg_color = haggai_dark
+        secondary_color = colors.HexColor('#2A5250')  # Lighter teal
         badge_label = "PARTICIPANT"
+        badge_label_sv = "DELTAGARE"
     
     # Create styles
     styles = getSampleStyleSheet()
     
-    logo_style = ParagraphStyle(
-        'Logo',
-        parent=styles['Heading1'],
-        fontSize=32,
-        textColor=colors.white,
+    header_style = ParagraphStyle(
+        'Header',
+        parent=styles['Normal'],
+        fontSize=8,
+        textColor=colors.HexColor('#666666'),
         alignment=TA_CENTER,
-        fontName='Helvetica-Bold',
-        letterSpacing=4
+        fontName='Helvetica'
     )
     
     label_style = ParagraphStyle(
         'Label',
         parent=styles['Normal'],
-        fontSize=14,
+        fontSize=12,
         textColor=colors.white,
         alignment=TA_CENTER,
-        fontName='Helvetica-Bold'
+        fontName='Helvetica-Bold',
+        leading=14
     )
     
     name_style = ParagraphStyle(
         'NameBadge',
         parent=styles['Heading1'],
-        fontSize=32,  # Increased from 24 to 32
-        textColor=colors.black,
+        fontSize=28,
+        textColor=haggai_dark,
         alignment=TA_CENTER,
         fontName='Helvetica-Bold',
-        leading=36
+        leading=32
     )
     
     org_style = ParagraphStyle(
         'Organization',
         parent=styles['Normal'],
-        fontSize=14,
-        textColor=colors.grey,
+        fontSize=12,
+        textColor=colors.HexColor('#666666'),
         alignment=TA_CENTER,
-        fontName='Helvetica'
+        fontName='Helvetica-Oblique'
+    )
+    
+    role_style = ParagraphStyle(
+        'Role',
+        parent=styles['Normal'],
+        fontSize=10,
+        textColor=haggai_gold if badge_type == "leader" else haggai_dark,
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold'
     )
     
     workshop_label_style = ParagraphStyle(
         'WorkshopLabel',
         parent=styles['Normal'],
-        fontSize=10,
-        textColor=colors.grey,
+        fontSize=8,
+        textColor=colors.HexColor('#888888'),
         alignment=TA_CENTER,
-        fontName='Helvetica',
-        letterSpacing=2
+        fontName='Helvetica'
     )
     
     workshop_style = ParagraphStyle(
         'Workshop',
         parent=styles['Normal'],
-        fontSize=16,
-        textColor=colors.black,
+        fontSize=13,
+        textColor=haggai_dark,
         alignment=TA_CENTER,
-        fontName='Helvetica-Bold'
+        fontName='Helvetica-Bold',
+        leading=16
+    )
+    
+    info_style = ParagraphStyle(
+        'Info',
+        parent=styles['Normal'],
+        fontSize=9,
+        textColor=colors.HexColor('#555555'),
+        alignment=TA_CENTER,
+        fontName='Helvetica'
+    )
+    
+    footer_style = ParagraphStyle(
+        'Footer',
+        parent=styles['Normal'],
+        fontSize=7,
+        textColor=colors.HexColor('#999999'),
+        alignment=TA_CENTER,
+        fontName='Helvetica'
     )
     
     # Build content
     story = []
     
-    # Add Haggai logo image if available
-    logo_path = Path(__file__).parent / "haggai-logo-white.png"
+    # === TOP SECTION: Logo and Haggai branding ===
+    logo_path = Path(__file__).parent / "haggai_logo.png"
     if logo_path.exists():
-        logo_img = Image(str(logo_path), width=3*cm, height=1.2*cm)
+        logo_img = Image(str(logo_path), width=2.5*cm, height=2.5*cm)
         story.append(logo_img)
-        story.append(Spacer(1, 0.2*cm))
     else:
-        # Fallback to text logo
-        story.append(Paragraph("HAGGAI", logo_style))
-        story.append(Spacer(1, 0.3*cm))
+        # Fallback to text
+        logo_text_style = ParagraphStyle(
+            'LogoText',
+            parent=styles['Heading1'],
+            fontSize=24,
+            textColor=haggai_dark,
+            alignment=TA_CENTER,
+            fontName='Helvetica-Bold'
+        )
+        story.append(Paragraph("HAGGAI", logo_text_style))
     
-    # Badge label
-    label_table = Table([[Paragraph(badge_label, label_style)]], colWidths=[badge_width - 1*cm])
+    story.append(Spacer(1, 0.2*cm))
+    story.append(Paragraph("SWEDEN", header_style))
+    story.append(Spacer(1, 0.3*cm))
+    
+    # === ROLE BADGE ===
+    badge_content = f"{badge_label}<br/><font size='8'>{badge_label_sv}</font>"
+    label_table = Table([[Paragraph(badge_content, label_style)]], colWidths=[badge_width - 0.8*cm])
     label_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, -1), label_bg_color),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('TOPPADDING', (0, 0), (-1, -1), 6),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+        ('TOPPADDING', (0, 0), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+        ('LEFTPADDING', (0, 0), (-1, -1), 10),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 10),
     ]))
     story.append(label_table)
-    story.append(Spacer(1, 30))
+    story.append(Spacer(1, 0.5*cm))
     
-    # Name
+    # === NAME (Large and prominent) ===
+    # Handle long names by reducing font size
+    name_font_size = 28 if len(name) < 20 else (24 if len(name) < 25 else 20)
+    name_style.fontSize = name_font_size
+    name_style.leading = name_font_size + 4
     story.append(Paragraph(name, name_style))
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 0.2*cm))
     
-    # Organization
+    # === ORGANIZATION ===
     if organization:
         story.append(Paragraph(organization, org_style))
-    story.append(Spacer(1, 40))
+        story.append(Spacer(1, 0.2*cm))
     
-    # Workshop section
-    story.append(Paragraph("WORKSHOP", workshop_label_style))
-    story.append(Spacer(1, 5))
+    # === ROLE/TOPIC for Leaders ===
+    if badge_type == "leader":
+        if primary_topic:
+            # Map topic keys to display names
+            topic_names = {
+                'leadership': 'Ledarskap',
+                'goal_setting': 'Målsättning',
+                'biblical_mandate': 'Bibliskt Mandat',
+                'time_management': 'Tidshantering',
+                'vision': 'Vision',
+                'communication': 'Kommunikation',
+                'team_building': 'Teambuilding',
+                'conflict_resolution': 'Konflikthantering'
+            }
+            topic_display = topic_names.get(primary_topic, primary_topic.replace('_', ' ').title())
+            story.append(Paragraph(f"📚 {topic_display}", role_style))
+            story.append(Spacer(1, 0.2*cm))
+    
+    story.append(Spacer(1, 0.3*cm))
+    
+    # === WORKSHOP INFO ===
+    story.append(Paragraph("─" * 20, info_style))
+    story.append(Spacer(1, 0.2*cm))
     story.append(Paragraph(workshop_title, workshop_style))
+    
+    # Date and location info
+    if event_date or event_location:
+        story.append(Spacer(1, 0.2*cm))
+        info_parts = []
+        if event_date:
+            # Format date nicely
+            try:
+                date_obj = datetime.fromisoformat(event_date.replace('Z', '+00:00'))
+                formatted_date = date_obj.strftime('%d %b %Y')
+                info_parts.append(f"📅 {formatted_date}")
+            except:
+                info_parts.append(f"📅 {event_date}")
+        if event_location:
+            info_parts.append(f"📍 {event_location}")
+        
+        if info_parts:
+            story.append(Paragraph(" • ".join(info_parts), info_style))
+    
+    story.append(Spacer(1, 0.3*cm))
+    
+    # === QR CODE for check-in (if person_id provided) ===
+    if person_id:
+        try:
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_M,
+                box_size=10,
+                border=2,
+            )
+            qr_data = f"haggai:{badge_type}:{person_id}"
+            qr.add_data(qr_data)
+            qr.make(fit=True)
+            
+            qr_img = qr.make_image(fill_color="#1F3D3B", back_color="white")
+            
+            # Save QR to buffer
+            qr_buffer = BytesIO()
+            qr_img.save(qr_buffer, format='PNG')
+            qr_buffer.seek(0)
+            
+            # Add QR code to story
+            qr_image = Image(qr_buffer, width=1.8*cm, height=1.8*cm)
+            story.append(qr_image)
+            story.append(Spacer(1, 0.1*cm))
+            story.append(Paragraph("Scanna för incheckning", footer_style))
+        except Exception as e:
+            logging.error(f"Failed to generate QR code: {e}")
+    
+    # === FOOTER ===
+    story.append(Spacer(1, 0.2*cm))
+    story.append(Paragraph("─" * 20, info_style))
+    story.append(Paragraph("www.haggai.se", footer_style))
     
     # Build PDF
     doc.build(story)
