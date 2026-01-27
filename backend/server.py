@@ -5711,10 +5711,10 @@ async def create_leader_invitation(input: LeaderInvitationCreate):
     # Multilingual email content
     email_texts = {
         "sv": {
-            "subject": "🎉 Du är inbjuden som ledare - Haggai Sweden Workshop",
-            "header": "Du är inbjuden som ledare!",
+            "subject": "🎉 Du är inbjuden som facilitator/tränare - Haggai Sweden Workshop",
+            "header": "Du är inbjuden som facilitator/tränare!",
             "greeting": f"Hej <strong>{input.name}</strong>,",
-            "intro": "Vi är glada att meddela att du har blivit inbjuden att delta som <strong>ledare/facilitator</strong> i en kommande Haggai Sweden workshop! 🙌",
+            "intro": "Vi är glada att meddela att du har blivit inbjuden att delta som <strong>facilitator/tränare</strong> i en kommande Haggai Sweden workshop! 🙌",
             "workshop_label": "Workshop",
             "form_intro": "För att vi ska kunna planera i god ordning ber vi dig vänligen fylla i registreringsformuläret. Där kan du bland annat:",
             "items": [
@@ -5731,10 +5731,10 @@ async def create_leader_invitation(input: LeaderInvitationCreate):
             "signature": "Med varma hälsningar,"
         },
         "en": {
-            "subject": "🎉 You are invited as a leader - Haggai Sweden Workshop",
-            "header": "You are invited as a leader!",
+            "subject": "🎉 You are invited as a facilitator/trainer - Haggai Sweden Workshop",
+            "header": "You are invited as a facilitator/trainer!",
             "greeting": f"Hello <strong>{input.name}</strong>,",
-            "intro": "We are pleased to inform you that you have been invited to participate as a <strong>leader/facilitator</strong> in an upcoming Haggai Sweden workshop! 🙌",
+            "intro": "We are pleased to inform you that you have been invited to participate as a <strong>facilitator/trainer</strong> in an upcoming Haggai Sweden workshop! 🙌",
             "workshop_label": "Workshop",
             "form_intro": "To help us plan effectively, please fill out the registration form. You can:",
             "items": [
