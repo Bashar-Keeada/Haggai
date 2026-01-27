@@ -2579,8 +2579,13 @@ async def update_workshop(workshop_id: str, input: WorkshopUpdate):
     if not existing:
         raise HTTPException(status_code=404, detail="Workshop not found")
     
+    # Debug: log the input
+    print(f"UPDATE WORKSHOP - Input model_dump: {input.model_dump()}")
+    
     update_data = {k: v for k, v in input.model_dump().items() if v is not None}
     update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    print(f"UPDATE WORKSHOP - Filtered update_data: {update_data}")
     
     await db.workshops.update_one({"id": workshop_id}, {"$set": update_data})
     updated = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
