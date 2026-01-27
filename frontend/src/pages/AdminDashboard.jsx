@@ -296,7 +296,7 @@ const AdminDashboard = () => {
                   </div>
                   <div className={isRTL ? 'text-right' : ''}>
                     <h3 className="text-lg font-bold text-stone-800">
-                      {language === 'sv' ? 'Hantera Ledare' : language === 'ar' ? 'إدارة القادة' : 'Manage Leaders'}
+                      {language === 'sv' ? 'Hantera Facilitatorer/Tränare' : language === 'ar' ? 'إدارة الميسرين/المدربين' : 'Manage Facilitators/Trainers'}
                     </h3>
                     <p className="text-sm text-stone-500">
                       {language === 'sv' ? 'Lägg till och redigera facilitatorer' : language === 'ar' ? 'إضافة وتعديل الميسرين' : 'Add and edit facilitators'}
