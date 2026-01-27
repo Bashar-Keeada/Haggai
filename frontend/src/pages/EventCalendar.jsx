@@ -428,13 +428,13 @@ const EventCalendar = () => {
                               )}
                               {/* Target group badge */}
                               {event.targetGroup === 'women' && (
-                                <Badge className="bg-pink-100 text-pink-700">
-                                  ♀ {language === 'sv' ? 'Kvinnor' : language === 'ar' ? 'نساء' : 'Women'}
+                                <Badge className="bg-pink-100 text-pink-700 flex items-center gap-1">
+                                  <span>♀</span> {language === 'sv' ? 'Kvinnor' : language === 'ar' ? 'نساء' : 'Women'}
                                 </Badge>
                               )}
                               {event.targetGroup === 'men' && (
-                                <Badge className="bg-blue-100 text-blue-700">
-                                  ♂ {language === 'sv' ? 'Män' : language === 'ar' ? 'رجال' : 'Men'}
+                                <Badge className="bg-blue-100 text-blue-700 flex items-center gap-1">
+                                  <span>♂</span> {language === 'sv' ? 'Män' : language === 'ar' ? 'رجال' : 'Men'}
                                 </Badge>
                               )}
                               {isLeaderExperience && (
