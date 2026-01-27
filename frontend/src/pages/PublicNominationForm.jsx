@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Calendar, MapPin, Users, Send, CheckCircle2, AlertCircle, Globe } from 'lucide-react';
+import { Calendar, MapPin, Users, Send, CheckCircle2, AlertCircle, Globe, Phone, User, Copy, Check, MessageCircle } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
 import { Badge } from '../components/ui/badge';
 import { useLanguage } from '../context/LanguageContext';
@@ -15,7 +14,6 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const PublicNominationForm = () => {
   const { workshopId } = useParams();
   const { language: globalLanguage } = useLanguage();
-  // Local language state - user can choose their preferred language
   const [formLanguage, setFormLanguage] = useState(globalLanguage);
   const isRTL = formLanguage === 'ar';
   
@@ -23,120 +21,113 @@ const PublicNominationForm = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [registrationLink, setRegistrationLink] = useState('');
+  const [nominationId, setNominationId] = useState(null);
   const [error, setError] = useState(null);
+  const [copied, setCopied] = useState(false);
 
   const [formData, setFormData] = useState({
-    nominator_name: '',
-    nominator_email: '',
-    nominator_phone: '',
-    nominator_church: '',
-    nominator_relation: '',
     nominee_name: '',
-    nominee_email: '',
-    nominee_phone: '',
-    nominee_church: '',
-    nominee_role: '',
-    nominee_activities: '',
-    motivation: ''
+    nominee_phone: ''
   });
 
   const txt = {
     sv: {
-      title: 'Nominera en deltagare',
-      subtitle: 'Rekommendera någon till denna utbildning',
+      title: 'Bjud in en deltagare',
+      subtitle: 'Skicka en inbjudan till någon som du vill rekommendera',
       workshopInfo: 'Utbildningsinformation',
-      yourInfo: 'Dina uppgifter (du som nominerar)',
-      nomineeInfo: 'Den du nominerar',
-      yourName: 'Ditt namn',
-      yourEmail: 'Din e-post',
-      yourPhone: 'Ditt telefonnummer',
-      yourChurch: 'Din kyrka/församling',
-      yourRelation: 'Din relation till den nominerade',
-      relationPlaceholder: 'T.ex. pastor, mentor, kollega...',
+      nomineeInfo: 'Personens uppgifter',
       nomineeName: 'Personens namn',
-      nomineeEmail: 'Personens e-post',
-      nomineePhone: 'Personens telefonnummer',
-      nomineeChurch: 'Personens kyrka/församling',
-      nomineeRole: 'Roll/ansvar i kyrkan',
-      rolePlaceholder: 'T.ex. ungdomsledare, diakon, söndagsskoleledare...',
-      nomineeActivities: 'Aktiviteter och engagemang',
-      activitiesPlaceholder: 'Beskriv personens aktiviteter och engagemang i kyrkan och samhället...',
-      motivation: 'Motivering till nomineringen',
-      motivationPlaceholder: 'Varför rekommenderar du denna person? Vad gör personen lämplig för programmet?',
-      submit: 'Skicka nominering',
-      submitting: 'Skickar...',
-      required: 'Obligatoriskt fält',
-      thankYou: 'Tack för din nominering!',
-      thankYouMessage: 'Vi har tagit emot din nominering och kommer att granska den. Du kommer få ett bekräftelsemejl.',
-      errorTitle: 'Kunde inte ladda formuläret',
-      errorMessage: 'Kontrollera länken eller försök igen senare.',
-      pendingNote: 'Din nominering granskas av admin innan den skickas vidare till den nominerade.',
+      nomineeNamePlaceholder: 'Förnamn Efternamn',
+      nomineePhone: 'Telefonnummer (WhatsApp)',
+      nomineePhonePlaceholder: '+46 70 123 45 67',
+      phoneHint: 'Vi skickar registreringslänken via WhatsApp',
+      submit: 'Skapa inbjudan',
+      submitting: 'Skapar...',
+      required: 'Vänligen fyll i alla obligatoriska fält',
+      errorTitle: 'Utbildning hittades inte',
+      errorMessage: 'Denna utbildning finns inte längre eller länken är felaktig.',
+      
+      // Success page
+      successTitle: 'Inbjudan skapad!',
+      successMessage: 'En registreringslänk har skapats för',
+      registrationLink: 'Registreringslänk',
+      copyLink: 'Kopiera länk',
+      copied: 'Kopierad!',
+      sendViaWhatsApp: 'Skicka via WhatsApp',
+      whatsAppMessage: 'Hej! Du har blivit inbjuden att delta i {workshop}. Fyll i registreringsformuläret här: {link}',
+      instructionTitle: 'Vad händer nu?',
+      instruction1: '1. Kopiera länken eller skicka via WhatsApp',
+      instruction2: '2. Personen fyller i registreringsformuläret',
+      instruction3: '3. Haggai-teamet granskar ansökan',
+      instruction4: '4. Personen får besked om antagning',
+      
       date: 'Datum',
       location: 'Plats'
     },
     en: {
-      title: 'Nominate a participant',
-      subtitle: 'Recommend someone for this training',
+      title: 'Invite a participant',
+      subtitle: 'Send an invitation to someone you want to recommend',
       workshopInfo: 'Training information',
-      yourInfo: 'Your information (nominator)',
-      nomineeInfo: 'Person you are nominating',
-      yourName: 'Your name',
-      yourEmail: 'Your email',
-      yourPhone: 'Your phone number',
-      yourChurch: 'Your church/congregation',
-      yourRelation: 'Your relation to the nominee',
-      relationPlaceholder: 'E.g. pastor, mentor, colleague...',
+      nomineeInfo: 'Person details',
       nomineeName: 'Person\'s name',
-      nomineeEmail: 'Person\'s email',
-      nomineePhone: 'Person\'s phone number',
-      nomineeChurch: 'Person\'s church/congregation',
-      nomineeRole: 'Role/responsibility in church',
-      rolePlaceholder: 'E.g. youth leader, deacon, Sunday school teacher...',
-      nomineeActivities: 'Activities and engagement',
-      activitiesPlaceholder: 'Describe the person\'s activities and engagement in church and community...',
-      motivation: 'Motivation for nomination',
-      motivationPlaceholder: 'Why do you recommend this person? What makes them suitable for the program?',
-      submit: 'Submit nomination',
-      submitting: 'Submitting...',
-      required: 'Required field',
-      thankYou: 'Thank you for your nomination!',
-      thankYouMessage: 'We have received your nomination and will review it. You will receive a confirmation email.',
-      errorTitle: 'Could not load the form',
-      errorMessage: 'Please check the link or try again later.',
-      pendingNote: 'Your nomination will be reviewed by admin before being sent to the nominee.',
+      nomineeNamePlaceholder: 'First name Last name',
+      nomineePhone: 'Phone number (WhatsApp)',
+      nomineePhonePlaceholder: '+46 70 123 45 67',
+      phoneHint: 'We will send the registration link via WhatsApp',
+      submit: 'Create invitation',
+      submitting: 'Creating...',
+      required: 'Please fill in all required fields',
+      errorTitle: 'Training not found',
+      errorMessage: 'This training no longer exists or the link is incorrect.',
+      
+      // Success page
+      successTitle: 'Invitation created!',
+      successMessage: 'A registration link has been created for',
+      registrationLink: 'Registration link',
+      copyLink: 'Copy link',
+      copied: 'Copied!',
+      sendViaWhatsApp: 'Send via WhatsApp',
+      whatsAppMessage: 'Hi! You have been invited to participate in {workshop}. Fill in the registration form here: {link}',
+      instructionTitle: 'What happens next?',
+      instruction1: '1. Copy the link or send via WhatsApp',
+      instruction2: '2. The person fills in the registration form',
+      instruction3: '3. The Haggai team reviews the application',
+      instruction4: '4. The person will be notified about admission',
+      
       date: 'Date',
       location: 'Location'
     },
     ar: {
-      title: 'ترشيح مشارك',
-      subtitle: 'أوصِ بشخص لهذا التدريب',
+      title: 'دعوة مشارك',
+      subtitle: 'أرسل دعوة لشخص تريد ترشيحه',
       workshopInfo: 'معلومات التدريب',
-      yourInfo: 'معلوماتك (المُرشِّح)',
-      nomineeInfo: 'الشخص الذي ترشحه',
-      yourName: 'اسمك',
-      yourEmail: 'بريدك الإلكتروني',
-      yourPhone: 'رقم هاتفك',
-      yourChurch: 'كنيستك/جماعتك',
-      yourRelation: 'علاقتك بالمرشح',
-      relationPlaceholder: 'مثل: قس، مرشد، زميل...',
+      nomineeInfo: 'بيانات الشخص',
       nomineeName: 'اسم الشخص',
-      nomineeEmail: 'بريد الشخص الإلكتروني',
-      nomineePhone: 'رقم هاتف الشخص',
-      nomineeChurch: 'كنيسة/جماعة الشخص',
-      nomineeRole: 'الدور/المسؤولية في الكنيسة',
-      rolePlaceholder: 'مثل: قائد شباب، شماس، معلم مدرسة الأحد...',
-      nomineeActivities: 'الأنشطة والمشاركة',
-      activitiesPlaceholder: 'صف أنشطة الشخص ومشاركته في الكنيسة والمجتمع...',
-      motivation: 'دافع الترشيح',
-      motivationPlaceholder: 'لماذا توصي بهذا الشخص؟ ما الذي يجعله مناسبًا للبرنامج؟',
-      submit: 'إرسال الترشيح',
-      submitting: 'جاري الإرسال...',
-      required: 'حقل مطلوب',
-      thankYou: 'شكرًا لترشيحك!',
-      thankYouMessage: 'لقد تلقينا ترشيحك وسنراجعه. ستتلقى بريدًا إلكترونيًا للتأكيد.',
-      errorTitle: 'تعذر تحميل النموذج',
-      errorMessage: 'يرجى التحقق من الرابط أو المحاولة مرة أخرى لاحقًا.',
-      pendingNote: 'سيتم مراجعة ترشيحك من قبل المسؤول قبل إرساله إلى المرشح.',
+      nomineeNamePlaceholder: 'الاسم الأول الاسم الأخير',
+      nomineePhone: 'رقم الهاتف (واتساب)',
+      nomineePhonePlaceholder: '+46 70 123 45 67',
+      phoneHint: 'سنرسل رابط التسجيل عبر واتساب',
+      submit: 'إنشاء دعوة',
+      submitting: 'جاري الإنشاء...',
+      required: 'يرجى ملء جميع الحقول المطلوبة',
+      errorTitle: 'التدريب غير موجود',
+      errorMessage: 'هذا التدريب لم يعد موجودًا أو الرابط غير صحيح.',
+      
+      // Success page
+      successTitle: 'تم إنشاء الدعوة!',
+      successMessage: 'تم إنشاء رابط التسجيل لـ',
+      registrationLink: 'رابط التسجيل',
+      copyLink: 'نسخ الرابط',
+      copied: 'تم النسخ!',
+      sendViaWhatsApp: 'إرسال عبر واتساب',
+      whatsAppMessage: 'مرحبًا! لقد تمت دعوتك للمشاركة في {workshop}. املأ نموذج التسجيل هنا: {link}',
+      instructionTitle: 'ماذا يحدث الآن؟',
+      instruction1: '١. انسخ الرابط أو أرسله عبر واتساب',
+      instruction2: '٢. يملأ الشخص نموذج التسجيل',
+      instruction3: '٣. فريق حجاي يراجع الطلب',
+      instruction4: '٤. سيتم إبلاغ الشخص بالقبول',
+      
       date: 'التاريخ',
       location: 'الموقع'
     }
@@ -179,10 +170,7 @@ const PublicNominationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate required fields
-    if (!formData.nominator_name || !formData.nominator_email || 
-        !formData.nominee_name || !formData.nominee_email ||
-        !formData.nominee_church || !formData.nominee_role || !formData.motivation) {
+    if (!formData.nominee_name || !formData.nominee_phone) {
       toast.error(txt.required);
       return;
     }
@@ -196,21 +184,52 @@ const PublicNominationForm = () => {
           event_id: workshopId,
           event_title: getLocalizedText(workshop?.title),
           event_date: workshop?.date,
-          ...formData
+          nominee_name: formData.nominee_name,
+          nominee_phone: formData.nominee_phone,
+          nominee_email: '', // Will be filled in registration
+          status: 'approved', // Auto-approve for direct registration
+          direct_invitation: true
         })
       });
 
       if (response.ok) {
+        const result = await response.json();
+        setNominationId(result.id);
+        const link = `${window.location.origin}/registrering/${result.id}`;
+        setRegistrationLink(link);
         setSubmitted(true);
       } else {
         throw new Error('Failed to submit');
       }
     } catch (error) {
       console.error('Error submitting nomination:', error);
-      toast.error('Kunde inte skicka nomineringen');
+      toast.error('Kunde inte skapa inbjudan');
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(registrationLink);
+    setCopied(true);
+    toast.success(txt.copied);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const sendViaWhatsApp = () => {
+    const workshopTitle = getLocalizedText(workshop?.title);
+    const message = txt.whatsAppMessage
+      .replace('{workshop}', workshopTitle)
+      .replace('{link}', registrationLink);
+    
+    // Format phone number for WhatsApp
+    let phone = formData.nominee_phone.replace(/\s+/g, '').replace(/^0/, '46');
+    if (!phone.startsWith('+')) {
+      phone = '+' + phone;
+    }
+    
+    const whatsappUrl = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   if (loading) {
@@ -233,15 +252,65 @@ const PublicNominationForm = () => {
     );
   }
 
+  // Success page with registration link
   if (submitted) {
     return (
       <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
-        <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-          <div className="bg-green-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
-            <CheckCircle2 className="h-12 w-12 text-green-600" />
+        <div className="max-w-2xl mx-auto px-4 py-16">
+          {/* Success Header */}
+          <div className="text-center mb-8">
+            <div className="bg-green-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+              <CheckCircle2 className="h-12 w-12 text-green-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-stone-800 mb-2">{txt.successTitle}</h1>
+            <p className="text-stone-600 text-lg">
+              {txt.successMessage} <strong>{formData.nominee_name}</strong>
+            </p>
           </div>
-          <h1 className="text-3xl font-bold text-stone-800 mb-4">{txt.thankYou}</h1>
-          <p className="text-stone-600">{txt.thankYouMessage}</p>
+
+          {/* Registration Link Card */}
+          <Card className="border-0 shadow-xl mb-6">
+            <CardContent className="p-6">
+              <Label className="text-sm text-stone-500 mb-2 block">{txt.registrationLink}</Label>
+              <div className="flex gap-2">
+                <Input 
+                  value={registrationLink} 
+                  readOnly 
+                  className="bg-stone-50 font-mono text-sm"
+                />
+                <Button 
+                  onClick={copyToClipboard}
+                  variant="outline"
+                  className="shrink-0"
+                >
+                  {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                  <span className="ml-2">{copied ? txt.copied : txt.copyLink}</span>
+                </Button>
+              </div>
+              
+              {/* WhatsApp Button */}
+              <Button 
+                onClick={sendViaWhatsApp}
+                className="w-full mt-4 bg-green-500 hover:bg-green-600 text-white"
+              >
+                <MessageCircle className="h-5 w-5 mr-2" />
+                {txt.sendViaWhatsApp}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Instructions */}
+          <Card className="border-0 shadow-lg bg-blue-50">
+            <CardContent className="p-6">
+              <h3 className="font-semibold text-blue-800 mb-4">{txt.instructionTitle}</h3>
+              <ul className="space-y-2 text-blue-700">
+                <li>{txt.instruction1}</li>
+                <li>{txt.instruction2}</li>
+                <li>{txt.instruction3}</li>
+                <li>{txt.instruction4}</li>
+              </ul>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
@@ -322,174 +391,59 @@ const PublicNominationForm = () => {
 
       {/* Form */}
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Pending Note */}
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
-          <p className="text-amber-800 text-sm">
-            ℹ️ {txt.pendingNote}
-          </p>
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Nominator Info */}
           <Card className="border-0 shadow-lg">
             <CardContent className="p-6">
-              <h2 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
-                <Users className="h-5 w-5 text-haggai" />
-                {txt.yourInfo}
-              </h2>
-              
-              <div className="grid gap-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>{txt.yourName} *</Label>
-                    <Input
-                      value={formData.nominator_name}
-                      onChange={(e) => handleChange('nominator_name', e.target.value)}
-                      required
-                      data-testid="nominator-name-input"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>{txt.yourEmail} *</Label>
-                    <Input
-                      type="email"
-                      value={formData.nominator_email}
-                      onChange={(e) => handleChange('nominator_email', e.target.value)}
-                      required
-                      data-testid="nominator-email-input"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>{txt.yourPhone}</Label>
-                    <Input
-                      value={formData.nominator_phone}
-                      onChange={(e) => handleChange('nominator_phone', e.target.value)}
-                      data-testid="nominator-phone-input"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>{txt.yourChurch}</Label>
-                    <Input
-                      value={formData.nominator_church}
-                      onChange={(e) => handleChange('nominator_church', e.target.value)}
-                      data-testid="nominator-church-input"
-                    />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>{txt.yourRelation}</Label>
-                  <Input
-                    value={formData.nominator_relation}
-                    onChange={(e) => handleChange('nominator_relation', e.target.value)}
-                    placeholder={txt.relationPlaceholder}
-                    data-testid="nominator-relation-input"
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Nominee Info */}
-          <Card className="border-0 shadow-lg">
-            <CardContent className="p-6">
-              <h2 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
-                <Users className="h-5 w-5 text-haggai" />
+              <h2 className="text-lg font-bold text-stone-800 mb-6 flex items-center gap-2">
+                <User className="h-5 w-5 text-haggai" />
                 {txt.nomineeInfo}
               </h2>
               
-              <div className="grid gap-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>{txt.nomineeName} *</Label>
-                    <Input
-                      value={formData.nominee_name}
-                      onChange={(e) => handleChange('nominee_name', e.target.value)}
-                      required
-                      data-testid="nominee-name-input"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>{txt.nomineeEmail} *</Label>
-                    <Input
-                      type="email"
-                      value={formData.nominee_email}
-                      onChange={(e) => handleChange('nominee_email', e.target.value)}
-                      required
-                      data-testid="nominee-email-input"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>{txt.nomineePhone}</Label>
-                    <Input
-                      value={formData.nominee_phone}
-                      onChange={(e) => handleChange('nominee_phone', e.target.value)}
-                      data-testid="nominee-phone-input"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>{txt.nomineeChurch} *</Label>
-                    <Input
-                      value={formData.nominee_church}
-                      onChange={(e) => handleChange('nominee_church', e.target.value)}
-                      required
-                      data-testid="nominee-church-input"
-                    />
-                  </div>
-                </div>
-                
+              <div className="space-y-4">
+                {/* Name */}
                 <div className="space-y-2">
-                  <Label>{txt.nomineeRole} *</Label>
+                  <Label htmlFor="nominee_name" className="flex items-center gap-1">
+                    {txt.nomineeName} <span className="text-red-500">*</span>
+                  </Label>
                   <Input
-                    value={formData.nominee_role}
-                    onChange={(e) => handleChange('nominee_role', e.target.value)}
-                    placeholder={txt.rolePlaceholder}
+                    id="nominee_name"
+                    value={formData.nominee_name}
+                    onChange={(e) => handleChange('nominee_name', e.target.value)}
+                    placeholder={txt.nomineeNamePlaceholder}
                     required
-                    data-testid="nominee-role-input"
+                    className="text-lg"
                   />
                 </div>
-                
+
+                {/* Phone */}
                 <div className="space-y-2">
-                  <Label>{txt.nomineeActivities}</Label>
-                  <Textarea
-                    value={formData.nominee_activities}
-                    onChange={(e) => handleChange('nominee_activities', e.target.value)}
-                    placeholder={txt.activitiesPlaceholder}
-                    rows={3}
-                    data-testid="nominee-activities-input"
+                  <Label htmlFor="nominee_phone" className="flex items-center gap-1">
+                    <Phone className="h-4 w-4" />
+                    {txt.nomineePhone} <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="nominee_phone"
+                    type="tel"
+                    value={formData.nominee_phone}
+                    onChange={(e) => handleChange('nominee_phone', e.target.value)}
+                    placeholder={txt.nomineePhonePlaceholder}
+                    required
+                    className="text-lg"
                   />
+                  <p className="text-sm text-stone-500 flex items-center gap-1">
+                    <MessageCircle className="h-4 w-4 text-green-500" />
+                    {txt.phoneHint}
+                  </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Motivation */}
-          <Card className="border-0 shadow-lg">
-            <CardContent className="p-6">
-              <h2 className="text-lg font-bold text-stone-800 mb-4">{txt.motivation} *</h2>
-              <Textarea
-                value={formData.motivation}
-                onChange={(e) => handleChange('motivation', e.target.value)}
-                placeholder={txt.motivationPlaceholder}
-                rows={4}
-                required
-                data-testid="motivation-input"
-              />
             </CardContent>
           </Card>
 
           {/* Submit Button */}
-          <Button
-            type="submit"
+          <Button 
+            type="submit" 
+            className="w-full bg-haggai hover:bg-haggai-dark text-white py-6 text-lg"
             disabled={submitting}
-            className="w-full h-14 bg-haggai hover:bg-haggai-dark text-white text-lg"
-            data-testid="submit-nomination-btn"
           >
             {submitting ? (
               <>
@@ -504,11 +458,6 @@ const PublicNominationForm = () => {
             )}
           </Button>
         </form>
-
-        {/* Footer */}
-        <div className="mt-8 text-center text-stone-400 text-sm">
-          <p>Haggai Sweden | <a href="https://haggai.se" className="text-haggai hover:underline">haggai.se</a> <span className="text-stone-300">(By Keeada)</span></p>
-        </div>
       </div>
     </div>
   );
