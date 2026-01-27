@@ -4223,7 +4223,7 @@ async def send_training_participant_diploma(participant_id: str):
         {"$set": {
             "diploma_sent": True,
             "diploma_sent_at": datetime.now(timezone.utc).isoformat(),
-            "member_created": member is not None,
+            "is_member": member is not None,
             "member_id": member['id'] if member else None,
             "updated_at": datetime.now(timezone.utc).isoformat()
         }}
