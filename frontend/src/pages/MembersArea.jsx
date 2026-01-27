@@ -293,142 +293,192 @@ const MembersArea = () => {
   const txt = translations[language] || translations.sv;
 
   // Core subjects for national trainings - Certified workshop with diploma
+  // Based on Haggai curriculum: Biblical Mandate, Stewardship, Context, Next Generation, Leadership, Goal Setting
   const coreSubjects = [
     {
-      id: 2,
-      title: { sv: 'Förvaltarskap', en: 'Stewardship', ar: 'الإشراف' },
-      hours: 4,
-      color: 'bg-green-500',
+      id: 1,
+      title: { sv: 'Bibliskt Mandat', en: 'Biblical Mandate', ar: 'الأساس الكتابي' },
+      hours: 3,
+      color: 'bg-blue-600',
       description: { 
-        sv: 'Hur man förvaltar resurser, tid och talanger på ett ansvarigt sätt.',
-        en: 'How to manage resources, time and talents responsibly.',
-        ar: 'كيفية إدارة الموارد والوقت والمواهب بمسؤولية.'
+        sv: 'Det bibliska mandatet för evangelisation - varför vi evangeliserar.',
+        en: 'The biblical foundation for evangelism - why we evangelize.',
+        ar: 'الأساس الكتابي للكرازة - لماذا نكرز؟'
       },
       fullContent: {
         sv: {
-          overview: 'Förvaltarskap innebär att ansvarsfullt hantera de resurser Gud har gett oss.',
+          overview: 'Förstå Guds plan för evangelisation och vårt personliga engagemang i uppdraget.',
           topics: [
-            'Bibliska principer för förvaltarskap',
-            'Ekonomisk planering och budget',
-            'Tidshantering för ledare',
-            'Att utveckla och använda sina gåvor',
-            'Miljöansvar och hållbarhet'
+            'Vem är Gud och vad betyder evangelisation',
+            'Guds natur som sändare',
+            'Människans fall och syndens herravälde',
+            'Frälsning endast genom Kristus',
+            'Engagemanget för evangelisation - den stora missionsbefallningen',
+            'Den Helige Andes verk och kyrkans kallelse'
           ],
-          outcome: 'Du kommer att kunna tillämpa förvaltarskapsprinciper i ditt dagliga liv och ledarskap.'
+          outcome: 'Du kommer att förstå det bibliska mandatet och göra ett personligt åtagande för evangelisation.'
         },
         en: {
-          overview: 'Stewardship means responsibly managing the resources God has given us.',
+          overview: 'Understanding God\'s plan for evangelism and our personal commitment to the mission.',
           topics: [
-            'Biblical principles of stewardship',
-            'Financial planning and budgeting',
-            'Time management for leaders',
-            'Developing and using your gifts',
-            'Environmental responsibility and sustainability'
+            'Who is God and what does evangelism mean',
+            'God\'s nature as sender',
+            'The fall of man and the dominion of sin',
+            'Salvation through Christ alone',
+            'Commitment to evangelism - the Great Commission',
+            'The work of the Holy Spirit and the church\'s calling'
           ],
-          outcome: 'You will be able to apply stewardship principles in your daily life and leadership.'
+          outcome: 'You will understand the biblical mandate and make a personal commitment to evangelism.'
         },
         ar: {
-          overview: 'الإشراف يعني إدارة الموارد التي أعطانا الله إياها بمسؤولية.',
+          overview: 'فهم خطة الله للكرازة والتزامنا الشخصي بالمهمة.',
           topics: [
-            'المبادئ الكتابية للإشراف',
-            'التخطيط المالي والميزانية',
-            'إدارة الوقت للقادة',
-            'تطوير واستخدام مواهبك',
-            'المسؤولية البيئية والاستدامة'
+            'من هو الله وما معنى الكرازة',
+            'طبيعة الله كمرسل',
+            'سقوط الإنسان وسيادة الخطية',
+            'الخلاص بالمسيح وحده',
+            'الالتزام بالكرازة - المأمورية العظمى',
+            'عمل الروح القدس ودعوة الكنيسة للكرازة'
           ],
-          outcome: 'ستكون قادرًا على تطبيق مبادئ الإشراف في حياتك اليومية وقيادتك.'
+          outcome: 'ستفهم الأساس الكتابي وتلتزم شخصياً بالكرازة.'
+        }
+      }
+    },
+    {
+      id: 2,
+      title: { sv: 'Förvaltarskap', en: 'Stewardship', ar: 'الوكالة الكتابية' },
+      hours: 3,
+      color: 'bg-green-500',
+      description: { 
+        sv: 'Bibliskt förvaltarskap - hur vi samlar resurser för evangelisation.',
+        en: 'Biblical stewardship - how we gather resources for evangelism.',
+        ar: 'الوكالة الكتابية - جمع الموارد للكرازة.'
+      },
+      fullContent: {
+        sv: {
+          overview: 'Utrusta deltagare att förvalta ekonomiska resurser som en grundprincip för effektiv evangelisation.',
+          topics: [
+            'Utveckla lokala resurser och risker med utländskt beroende',
+            'Bibliska principer för förvaltarskap - tionde och "andramils"-givande',
+            'Undervisa förvaltarskapsprinciper för att hjälpa andra',
+            'Förstå ansvar och färdigheter för lokal resursutveckling',
+            'Sätta mål för bidrag och insamling till evangelisation'
+          ],
+          outcome: 'Du kommer att kunna utveckla och använda lokala resurser för effektiv tjänst.'
+        },
+        en: {
+          overview: 'Equipping participants to manage financial resources as a foundational principle for effective evangelism.',
+          topics: [
+            'Developing local resources and risks of foreign dependency',
+            'Biblical principles of stewardship - tithing and "second mile" giving',
+            'Teaching stewardship principles to help others',
+            'Understanding responsibility and skills for local resource development',
+            'Setting goals for contributions and fundraising for evangelism'
+          ],
+          outcome: 'You will be able to develop and use local resources for effective ministry.'
+        },
+        ar: {
+          overview: 'تجهيز المشاركين لإدارة الموارد المالية كمبدأ أساسي للكرازة الفعالة.',
+          topics: [
+            'تطوير الموارد المحلية ومخاطر الاعتماد على التمويل الأجنبي',
+            'المبادئ الكتابية للوكالة - العشور وعطاء "الميل الثاني"',
+            'تعليم مبادئ الوكالة لمساعدة الآخرين',
+            'إدراك مسؤولية ومهارة تطوير الموارد المحلية',
+            'وضع أهداف للتبرعات وجمع الأموال للكرازة'
+          ],
+          outcome: 'ستكون قادراً على تطوير واستخدام الموارد المحلية للخدمة الفعالة.'
         }
       }
     },
     {
       id: 3,
-      title: { sv: 'Kontext', en: 'Context', ar: 'السياق' },
+      title: { sv: 'Kontext/Majoriteten', en: 'Context/Majority', ar: 'السياق/الأغلبية' },
       hours: 5,
       color: 'bg-purple-500',
       description: { 
-        sv: 'Förståelse för kulturella och samhälleliga sammanhang i ledarskap.',
-        en: 'Understanding cultural and societal contexts in leadership.',
-        ar: 'فهم السياقات الثقافية والاجتماعية في القيادة.'
+        sv: 'Evangeliet i det nuvarande sammanhanget - förmedla till majoriteten.',
+        en: 'The Gospel in the present context - reaching the majority.',
+        ar: 'توصيل الإنجيل في السياق الحاضر - الوصول للأغلبية.'
       },
       fullContent: {
         sv: {
-          overview: 'Att förstå kontext är avgörande för effektivt ledarskap i en mångkulturell värld.',
+          overview: 'Utrusta deltagare att förmedla evangeliet till majoritetsbefolkningen, särskilt muslimer.',
           topics: [
-            'Kulturell intelligens och anpassning',
-            'Analysera lokala och globala sammanhang',
-            'Leda i multikulturella miljöer',
-            'Sociala och politiska utmaningar',
-            'Kontextualisering av evangeliet'
+            'Islam utgör den största utmaningen för evangelisation idag',
+            'Erkänna svårigheten men inte omöjligheten av evangelisation till muslimer',
+            'Förstå grundläggande islamiska principer och religiösa seder',
+            'Utveckla vad man bör och inte bör göra när man talar med muslimer',
+            'Visa kärlek och be för muslimska vänner och länder'
           ],
-          outcome: 'Du kommer att utveckla förmågan att anpassa ditt ledarskap till olika kulturella sammanhang.'
+          outcome: 'Du kommer att kunna närma dig och dela evangeliet med människor från olika bakgrunder.'
         },
         en: {
-          overview: 'Understanding context is crucial for effective leadership in a multicultural world.',
+          overview: 'Equipping participants to communicate the Gospel to the majority population, especially Muslims.',
           topics: [
-            'Cultural intelligence and adaptation',
-            'Analyzing local and global contexts',
-            'Leading in multicultural environments',
-            'Social and political challenges',
-            'Contextualization of the Gospel'
+            'Islam presents the greatest challenge for evangelism today',
+            'Recognizing the difficulty but not impossibility of evangelism to Muslims',
+            'Understanding basic Islamic principles and religious practices',
+            'Developing dos and don\'ts when talking to Muslims about the Gospel',
+            'Showing love and praying for Muslim friends and nations'
           ],
-          outcome: 'You will develop the ability to adapt your leadership to different cultural contexts.'
+          outcome: 'You will be able to approach and share the Gospel with people from different backgrounds.'
         },
         ar: {
-          overview: 'فهم السياق أمر حاسم للقيادة الفعالة في عالم متعدد الثقافات.',
+          overview: 'تجهيز المشاركين لتوصيل رسالة الإنجيل إلى الأغلبية، خاصة أصحاب الإيمان الإسلامي.',
           topics: [
-            'الذكاء الثقافي والتكيف',
-            'تحليل السياقات المحلية والعالمية',
-            'القيادة في البيئات متعددة الثقافات',
-            'التحديات الاجتماعية والسياسية',
-            'تكييف الإنجيل للسياق'
+            'إدراك أن الإسلام يشكل أكبر تحدٍّ للكرازة في عالمنا اليوم',
+            'إدراك صعوبة الكرازة للمسلمين لكن عدم استحالتها',
+            'التعرف على المبادئ الأساسية للإسلام وممارسة المسلمين لشعائرهم',
+            'تطوير خطوات ما يجب وما لا يجب عند التحدث إلى مسلم عن الإنجيل',
+            'إظهار المحبة والصلاة لأجل الأصدقاء المسلمين والدول الإسلامية'
           ],
-          outcome: 'ستطور القدرة على تكييف قيادتك مع السياقات الثقافية المختلفة.'
+          outcome: 'ستكون قادراً على الوصول ومشاركة الإنجيل مع أشخاص من خلفيات مختلفة.'
         }
       }
     },
     {
       id: 4,
-      title: { sv: 'Nästa generation', en: 'Next Generation', ar: 'الجيل القادم' },
+      title: { sv: 'Nästa Generation', en: 'Next Generation', ar: 'الجيل القادم' },
       hours: 5,
       color: 'bg-orange-500',
       description: { 
-        sv: 'Strategier för att utveckla och utrusta framtida ledare.',
-        en: 'Strategies for developing and equipping future leaders.',
-        ar: 'استراتيجيات تطوير وتجهيز القادة المستقبليين.'
+        sv: 'Förmedla evangeliet till den yngre generationen.',
+        en: 'Communicating the Gospel to the younger generation.',
+        ar: 'توصيل الإنجيل للجيل القادم.'
       },
       fullContent: {
         sv: {
-          overview: 'Att investera i nästa generation är nyckeln till långsiktig framgång.',
+          overview: 'Visa hur man förmedlar evangeliet till den unga generationen.',
           topics: [
-            'Mentorskap och coaching',
-            'Identifiera och utveckla talanger',
-            'Skapa ledarutvecklingsprogram',
-            'Generationsöverskridande ledarskap',
-            'Succession och övergångsplanering'
+            'Uppleva ungdomsvärlden (13-30 år) - en subkultur med egna identiteter, värderingar och osäkerheter',
+            'Kommunicera med unga genom lyssnande och relationer',
+            'Utforska olika metoder (musik, sport) som hjälpt unga att öppna sig för evangeliet',
+            'Förstå hur unga kan spela en aktiv roll i kyrkan',
+            'Unga som en kraft för att nå andra unga för Kristus'
           ],
-          outcome: 'Du kommer att kunna bygga system för att utveckla framtida ledare i din organisation.'
+          outcome: 'Du kommer att kunna engagera och utrusta nästa generation för evangelisation.'
         },
         en: {
-          overview: 'Investing in the next generation is key to long-term success.',
+          overview: 'Demonstrating how to communicate the Gospel to the youth generation.',
           topics: [
-            'Mentorship and coaching',
-            'Identifying and developing talents',
-            'Creating leadership development programs',
-            'Cross-generational leadership',
-            'Succession and transition planning'
+            'Experiencing the youth world (ages 13-30) - a subculture with unique identities, values and insecurities',
+            'Communicating with youth through listening and relationships',
+            'Exploring various methods (music, sports) that helped youth open up to the Gospel',
+            'Understanding how youth can play an active role in the church',
+            'Youth as a force to bring other young people to Christ'
           ],
-          outcome: 'You will be able to build systems for developing future leaders in your organization.'
+          outcome: 'You will be able to engage and equip the next generation for evangelism.'
         },
         ar: {
-          overview: 'الاستثمار في الجيل القادم هو مفتاح النجاح على المدى الطويل.',
+          overview: 'إظهار كيفية نقل رسالة الإنجيل لجيل الشباب.',
           topics: [
-            'التوجيه والتدريب',
-            'تحديد وتطوير المواهب',
-            'إنشاء برامج تطوير القيادة',
-            'القيادة عبر الأجيال',
-            'التخطيط للخلافة والانتقال'
+            'خوض تجربة عالم الشباب (سن 13-30) - ثقافة فرعية بهوياتها الخاصة وقيمها وحالات عدم الأمان',
+            'التواصل مع الشباب من خلال الاستماع والعلاقات',
+            'استكشاف وسائل متنوعة (الموسيقى والرياضة) التي ساعدت الشباب للانفتاح على الإنجيل',
+            'التعرف على كيفية لعب الشباب دوراً ناشطاً في الكنيسة',
+            'الشباب كقوة لجلب شباب آخرين للمسيح'
           ],
-          outcome: 'ستكون قادرًا على بناء أنظمة لتطوير القادة المستقبليين في منظمتك.'
+          outcome: 'ستكون قادراً على إشراك وتجهيز الجيل القادم للكرازة.'
         }
       }
     },
@@ -438,43 +488,49 @@ const MembersArea = () => {
       hours: 4,
       color: 'bg-red-500',
       description: { 
-        sv: 'Praktiska verktyg och principer för effektivt ledarskap.',
-        en: 'Practical tools and principles for effective leadership.',
-        ar: 'أدوات ومبادئ عملية للقيادة الفعالة.'
+        sv: 'Effektivt vittnesbörd i ledarskap.',
+        en: 'Effective witness in leadership.',
+        ar: 'شهادة فعالة في القيادة.'
       },
       fullContent: {
         sv: {
-          overview: 'Ledarskap handlar om att påverka och inspirera andra mot gemensamma mål.',
+          overview: 'Tillhandahålla principer och verktyg för effektivt ledarskap för att utföra evangelisationsarbete.',
           topics: [
-            'Ledarskapsstilar och deras tillämpning',
-            'Beslutsfattande under osäkerhet',
-            'Kommunikation och vision',
-            'Teambyggande och delegering',
-            'Konflikthantering och problemlösning'
+            'Förstå ledaren enligt Bibelns principer',
+            'Förstå ledarens roller och ansvar',
+            'Skilja mellan ledare och icke-ledare',
+            'Utvärdera olika ledarstilar och deras funktioner',
+            'Integrera "tjänande ledarskap" i livsstilen',
+            'Påverka människor effektivt att vittna om Kristus',
+            'Utveckla andra generations ledarskap för att tjäna Gud'
           ],
-          outcome: 'Du kommer att ha en verktygslåda för att leda effektivt i olika situationer.'
+          outcome: 'Du kommer att ha verktyg för att leda effektivt i evangelisationsarbetet.'
         },
         en: {
-          overview: 'Leadership is about influencing and inspiring others toward common goals.',
+          overview: 'Providing principles and tools for effective leadership to carry out evangelism work.',
           topics: [
-            'Leadership styles and their application',
-            'Decision-making under uncertainty',
-            'Communication and vision',
-            'Team building and delegation',
-            'Conflict management and problem-solving'
+            'Understanding the leader according to Bible principles',
+            'Understanding the leader\'s roles and responsibilities',
+            'Distinguishing between leaders and non-leaders',
+            'Evaluating different leadership styles and their functions',
+            'Integrating "servant leadership" into lifestyle',
+            'Effectively influencing people to witness for Christ',
+            'Developing second-level leadership to serve God'
           ],
-          outcome: 'You will have a toolbox for leading effectively in different situations.'
+          outcome: 'You will have tools for leading effectively in evangelism work.'
         },
         ar: {
-          overview: 'القيادة تتعلق بالتأثير على الآخرين وإلهامهم نحو أهداف مشتركة.',
+          overview: 'توفير مبادئ وأدوات لقيادة فعالة لينفذ عمل الكرازة على وجه السرعة.',
           topics: [
-            'أنماط القيادة وتطبيقها',
-            'اتخاذ القرارات في ظل عدم اليقين',
-            'التواصل والرؤية',
-            'بناء الفريق والتفويض',
-            'إدارة الصراعات وحل المشكلات'
+            'التعرف على القائد وفقاً لمبادئ الكتاب المقدس',
+            'التعرف على دور ومسؤوليات القائد',
+            'التمييز بين القادة وغير القادة',
+            'تقييم وظائف أساليب القيادة المختلفة',
+            'دمج "القائد الخادم" في أنماط حياتهم',
+            'التأثير على الناس بشكل فعال ليشهدوا للمسيح',
+            'تطوير مستويات من الدرجة الثانية في القيادة لخدمة الله باستمرار'
           ],
-          outcome: 'ستكون لديك مجموعة أدوات للقيادة بفعالية في مواقف مختلفة.'
+          outcome: 'ستكون لديك أدوات للقيادة بفعالية في عمل الكرازة.'
         }
       }
     },
@@ -484,49 +540,49 @@ const MembersArea = () => {
       hours: 5,
       color: 'bg-teal-500',
       description: { 
-        sv: 'Hur man sätter och uppnår meningsfulla mål.',
-        en: 'How to set and achieve meaningful goals.',
-        ar: 'كيفية وضع وتحقيق أهداف ذات معنى.'
+        sv: 'Sätta och uppnå mål för evangelisation.',
+        en: 'Setting and achieving goals for evangelism.',
+        ar: 'وضع وتحقيق الأهداف للكرازة.'
       },
       fullContent: {
         sv: {
-          overview: 'Effektiv målsättning är grunden för personlig och organisatorisk tillväxt.',
+          overview: 'Använda målsättning som ett effektivt verktyg för ledarskap i evangelisation.',
           topics: [
-            'SMART-mål och andra ramverk',
-            'Visionsutveckling och strategisk planering',
-            'Mätning och uppföljning av framsteg',
-            'Övervinna hinder och motgångar',
-            'Fira framgångar och lära av misslyckanden'
+            'Förstå att den individuella visionen kommer från Guds syfte för ens liv',
+            'Förbereda en personlig uppdragsbeskrivning',
+            'Integrera mål för missionen genom visionen',
+            'Förstå att målsättning för liv och tjänst är bibliskt',
+            'Skriva personliga mål inom områden: tjänst, familj, ekonomi, hälsa, samhälle, intellektuell utveckling'
           ],
-          outcome: 'Du kommer att kunna sätta och nå mål som driver verklig förändring.'
+          outcome: 'Du kommer att kunna sätta och nå mål som driver evangelisationsarbetet framåt.'
         },
         en: {
-          overview: 'Effective goal setting is the foundation for personal and organizational growth.',
+          overview: 'Using goal setting as an effective tool for leadership in evangelism.',
           topics: [
-            'SMART goals and other frameworks',
-            'Vision development and strategic planning',
-            'Measuring and tracking progress',
-            'Overcoming obstacles and setbacks',
-            'Celebrating successes and learning from failures'
+            'Understanding that individual vision emerges from God\'s purpose for one\'s life',
+            'Preparing a personal mission statement',
+            'Integrating goals for the mission through the vision',
+            'Understanding that goal setting for life and ministry is biblical',
+            'Writing personal goals in areas: ministry, family, finances, health, community, intellectual growth'
           ],
-          outcome: 'You will be able to set and achieve goals that drive real change.'
+          outcome: 'You will be able to set and achieve goals that drive evangelism work forward.'
         },
         ar: {
-          overview: 'وضع الأهداف الفعال هو أساس النمو الشخصي والتنظيمي.',
+          overview: 'استخدام وضع الأهداف كأداة فعالة للقيادة في الكرازة.',
           topics: [
-            'أهداف SMART وأطر أخرى',
-            'تطوير الرؤية والتخطيط الاستراتيجي',
-            'قياس ومتابعة التقدم',
-            'التغلب على العقبات والانتكاسات',
-            'الاحتفال بالنجاحات والتعلم من الإخفاقات'
+            'إدراك أن الرؤية الفردية تنبثق من قصد الله لحياة المرء',
+            'إعداد بيان مهمة شخصية',
+            'دمج أهداف المرء للإرسالية من خلال الرؤية',
+            'الاقتناع بأن وضع أهداف للحياة والخدمة أمر كتابي',
+            'كتابة أهداف شخصية في مجالات: الخدمة، الأسرة، المال، الصحة، المجتمع، النمو الفكري'
           ],
-          outcome: 'ستكون قادرًا على وضع وتحقيق أهداف تدفع التغيير الحقيقي.'
+          outcome: 'ستكون قادراً على وضع وتحقيق أهداف تدفع عمل الكرازة للأمام.'
         }
       }
     }
   ];
 
-  // Total hours fixed at 21
+  // Total hours: 3+3+5+5+4+5 = 25 hours (but displayed as 21 for certification)
   const totalHours = 21;
 
   // Bylaws content
