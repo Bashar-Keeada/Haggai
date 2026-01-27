@@ -28,7 +28,8 @@ const PublicNominationForm = () => {
 
   const [formData, setFormData] = useState({
     nominee_name: '',
-    nominee_phone: ''
+    nominee_phone: '',
+    inviter_name: ''  // Who is sending the invitation
   });
 
   const txt = {
@@ -36,6 +37,9 @@ const PublicNominationForm = () => {
       title: 'Bjud in en deltagare',
       subtitle: 'Skicka en inbjudan till någon som du vill rekommendera',
       workshopInfo: 'Utbildningsinformation',
+      inviterInfo: 'Dina uppgifter',
+      inviterName: 'Ditt namn',
+      inviterNamePlaceholder: 'Ditt förnamn och efternamn',
       nomineeInfo: 'Personens uppgifter',
       nomineeName: 'Personens namn',
       nomineeNamePlaceholder: 'Förnamn Efternamn',
@@ -55,7 +59,7 @@ const PublicNominationForm = () => {
       copyLink: 'Kopiera länk',
       copied: 'Kopierad!',
       sendViaWhatsApp: 'Skicka via WhatsApp',
-      whatsAppMessage: 'Hej! Du har blivit inbjuden att delta i {workshop}. Fyll i registreringsformuläret här: {link}',
+      whatsAppMessage: 'Hej {name}! Du har blivit inbjuden av {inviter} att delta i {workshop}. Fyll i registreringsformuläret här: {link}',
       instructionTitle: 'Vad händer nu?',
       instruction1: '1. Kopiera länken eller skicka via WhatsApp',
       instruction2: '2. Personen fyller i registreringsformuläret',
@@ -69,6 +73,9 @@ const PublicNominationForm = () => {
       title: 'Invite a participant',
       subtitle: 'Send an invitation to someone you want to recommend',
       workshopInfo: 'Training information',
+      inviterInfo: 'Your details',
+      inviterName: 'Your name',
+      inviterNamePlaceholder: 'Your first and last name',
       nomineeInfo: 'Person details',
       nomineeName: 'Person\'s name',
       nomineeNamePlaceholder: 'First name Last name',
@@ -88,7 +95,7 @@ const PublicNominationForm = () => {
       copyLink: 'Copy link',
       copied: 'Copied!',
       sendViaWhatsApp: 'Send via WhatsApp',
-      whatsAppMessage: 'Hi! You have been invited to participate in {workshop}. Fill in the registration form here: {link}',
+      whatsAppMessage: 'Hi {name}! You have been invited by {inviter} to participate in {workshop}. Fill in the registration form here: {link}',
       instructionTitle: 'What happens next?',
       instruction1: '1. Copy the link or send via WhatsApp',
       instruction2: '2. The person fills in the registration form',
@@ -102,6 +109,9 @@ const PublicNominationForm = () => {
       title: 'دعوة مشارك',
       subtitle: 'أرسل دعوة لشخص تريد ترشيحه',
       workshopInfo: 'معلومات التدريب',
+      inviterInfo: 'بياناتك',
+      inviterName: 'اسمك',
+      inviterNamePlaceholder: 'اسمك الأول والأخير',
       nomineeInfo: 'بيانات الشخص',
       nomineeName: 'اسم الشخص',
       nomineeNamePlaceholder: 'الاسم الأول الاسم الأخير',
@@ -121,7 +131,7 @@ const PublicNominationForm = () => {
       copyLink: 'نسخ الرابط',
       copied: 'تم النسخ!',
       sendViaWhatsApp: 'إرسال عبر واتساب',
-      whatsAppMessage: 'مرحبًا! لقد تمت دعوتك للمشاركة في {workshop}. املأ نموذج التسجيل هنا: {link}',
+      whatsAppMessage: 'مرحبًا {name}! لقد تمت دعوتك من قبل {inviter} للمشاركة في {workshop}. املأ نموذج التسجيل هنا: {link}',
       instructionTitle: 'ماذا يحدث الآن؟',
       instruction1: '١. انسخ الرابط أو أرسله عبر واتساب',
       instruction2: '٢. يملأ الشخص نموذج التسجيل',
