@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, MapPin, Clock, Users, Star, Globe, Home, UserPlus } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
@@ -11,7 +11,6 @@ import { Badge } from '../components/ui/badge';
 import { toast } from 'sonner';
 import { useLanguage } from '../context/LanguageContext';
 import { eventsTranslations } from '../data/translations';
-import { events } from '../data/mock';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -23,6 +22,8 @@ const EventCalendar = () => {
   const [isNominationDialogOpen, setIsNominationDialogOpen] = useState(false);
   const [nominationEvent, setNominationEvent] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
   
   const [registrationData, setRegistrationData] = useState({
     name: '',
