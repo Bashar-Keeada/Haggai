@@ -97,9 +97,9 @@ const AdminLeaders = () => {
       }
     },
     en: {
-      title: 'Manage Leaders & Facilitators',
-      subtitle: 'Add, edit or remove leaders and facilitators',
-      addNew: 'Add new leader',
+      title: 'Manage Facilitators/Trainers',
+      subtitle: 'Add, edit or remove facilitators and trainers',
+      addNew: 'Add new facilitator/trainer',
       sendInvite: 'Send invitation',
       name: 'Name',
       role: 'Role/Title',
@@ -112,23 +112,23 @@ const AdminLeaders = () => {
       cancel: 'Cancel',
       edit: 'Edit',
       delete: 'Delete',
-      noLeaders: 'No leaders have been added yet.',
-      confirmDelete: 'Are you sure you want to delete this leader?',
+      noLeaders: 'No facilitators/trainers have been added yet.',
+      confirmDelete: 'Are you sure you want to delete this facilitator/trainer?',
       swedish: 'Swedish',
       english: 'English',
       arabic: 'Arabic',
       active: 'Active',
       inactive: 'Inactive',
       tabs: {
-        leaders: 'Leaders',
+        leaders: 'Facilitators/Trainers',
         invitations: 'Invitations',
         registrations: 'Registrations'
       },
       invite: {
-        title: 'Send leader invitation',
-        subtitle: 'Send an email invitation so the leader can register',
-        namePlaceholder: 'Leader name',
-        emailPlaceholder: 'leader@email.com',
+        title: 'Send facilitator/trainer invitation',
+        subtitle: 'Send an email invitation so the facilitator/trainer can register',
+        namePlaceholder: 'Facilitator/trainer name',
+        emailPlaceholder: 'facilitator@email.com',
         workshopOptional: 'Workshop (optional)',
         send: 'Send invitation',
         sending: 'Sending...'
