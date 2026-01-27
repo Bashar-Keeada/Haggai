@@ -140,20 +140,6 @@ const Header = () => {
                     {membersLabel[language]}
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/admin" className="cursor-pointer">
-                    <Settings className="h-4 w-4 mr-2" />
-                    {adminLabel[language]}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem 
-                  onClick={logout}
-                  className="cursor-pointer text-red-600 focus:text-red-600"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  {logoutLabel[language]}
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </nav>
