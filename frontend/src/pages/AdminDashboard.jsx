@@ -387,6 +387,26 @@ const AdminDashboard = () => {
             </Card>
           </Link>
           
+          <Link to="/admin/donationer">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all cursor-pointer hover:bg-red-50">
+              <CardContent className="p-6">
+                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-14 h-14 bg-red-500 rounded-2xl flex items-center justify-center">
+                    <Heart className="h-7 w-7 text-white" />
+                  </div>
+                  <div className={isRTL ? 'text-right' : ''}>
+                    <h3 className="text-lg font-bold text-stone-800">
+                      {language === 'sv' ? 'Donationsinställningar' : language === 'ar' ? 'إعدادات التبرعات' : 'Donation Settings'}
+                    </h3>
+                    <p className="text-sm text-stone-500">
+                      {language === 'sv' ? 'Swish & Bankuppgifter' : language === 'ar' ? 'سويش والبنك' : 'Swish & Bank details'}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+          
           <Link to="/admin/nomineringar">
             <Card className="border-0 shadow-lg hover:shadow-xl transition-all cursor-pointer hover:bg-teal-50">
               <CardContent className="p-6">
