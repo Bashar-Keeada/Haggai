@@ -3,7 +3,7 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   User, Mail, Phone, Calendar, CreditCard, Upload, FileText, 
   Plane, Building2, CheckCircle2, AlertCircle, Eye, EyeOff,
-  Utensils, MessageSquare, BookOpen, CheckSquare
+  Utensils, MessageSquare, BookOpen, CheckSquare, Globe
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
