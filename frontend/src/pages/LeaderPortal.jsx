@@ -166,12 +166,12 @@ const LeaderPortal = () => {
       badge: {
         title: 'Name Badge',
         subtitle: 'Download or print your name badge for the workshop',
-        leader: 'LEADER',
+        leader: 'FACILITATOR',
         workshop: 'WORKSHOP',
         download: 'Download',
         print: 'Print',
         notAvailable: 'Name badge not available',
-        notApproved: 'You need to be an approved leader to see your name badge.'
+        notApproved: 'You need to be an approved facilitator/trainer to see your name badge.'
       }
     }
   }[language] || {};
