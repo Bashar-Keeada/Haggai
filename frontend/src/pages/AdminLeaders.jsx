@@ -299,7 +299,7 @@ const AdminLeaders = () => {
       if (response.ok) {
         toast.success(language === 'sv' ? 'Inbjudan skickad!' : 'Invitation sent!');
         setShowInviteDialog(false);
-        setInviteData({ name: '', email: '', workshop_id: '', workshop_title: '' });
+        setInviteData({ name: '', email: '', workshop_id: '', workshop_title: '', language: 'sv' });
         fetchInvitations();
       } else {
         const errorData = await response.json();
