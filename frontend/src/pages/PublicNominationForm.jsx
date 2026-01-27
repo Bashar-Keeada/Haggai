@@ -230,6 +230,8 @@ const PublicNominationForm = () => {
   const sendViaWhatsApp = () => {
     const workshopTitle = getLocalizedText(workshop?.title);
     const message = txt.whatsAppMessage
+      .replace('{name}', formData.nominee_name)
+      .replace('{inviter}', formData.inviter_name)
       .replace('{workshop}', workshopTitle)
       .replace('{link}', registrationLink);
     
