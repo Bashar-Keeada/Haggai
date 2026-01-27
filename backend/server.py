@@ -4461,11 +4461,14 @@ def generate_name_badge_pdf(
     # === ROLE/TOPIC for Leaders ===
     if badge_type == "leader":
         if primary_topic:
-            # Map topic keys to display names
+            # Map topic keys to display names (matching WORKSHOP_TOPICS)
             topic_names = {
+                'biblical_mandate': 'Bibliskt Mandat',
+                'stewardship': 'Förvaltarskap',
+                'context': 'Sammanhang',
+                'next_generation': 'Nästa Generation',
                 'leadership': 'Ledarskap',
                 'goal_setting': 'Målsättning',
-                'biblical_mandate': 'Bibliskt Mandat',
                 'time_management': 'Tidshantering',
                 'vision': 'Vision',
                 'communication': 'Kommunikation',
