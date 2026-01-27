@@ -405,31 +405,7 @@ const PublicNominationForm = () => {
       {/* Form */}
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Inviter Info */}
-          <Card className="border-0 shadow-lg">
-            <CardContent className="p-6">
-              <h2 className="text-lg font-bold text-stone-800 mb-6 flex items-center gap-2">
-                <User className="h-5 w-5 text-haggai" />
-                {txt.inviterInfo}
-              </h2>
-              
-              <div className="space-y-2">
-                <Label htmlFor="inviter_name" className="flex items-center gap-1">
-                  {txt.inviterName} <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="inviter_name"
-                  value={formData.inviter_name}
-                  onChange={(e) => handleChange('inviter_name', e.target.value)}
-                  placeholder={txt.inviterNamePlaceholder}
-                  required
-                  className="text-lg"
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Nominee Info */}
+          {/* Nominee Info - FIRST */}
           <Card className="border-0 shadow-lg">
             <CardContent className="p-6">
               <h2 className="text-lg font-bold text-stone-800 mb-6 flex items-center gap-2">
@@ -438,7 +414,7 @@ const PublicNominationForm = () => {
               </h2>
               
               <div className="space-y-4">
-                {/* Name */}
+                {/* Nominee Name */}
                 <div className="space-y-2">
                   <Label htmlFor="nominee_name" className="flex items-center gap-1">
                     {txt.nomineeName} <span className="text-red-500">*</span>
@@ -453,7 +429,7 @@ const PublicNominationForm = () => {
                   />
                 </div>
 
-                {/* Phone */}
+                {/* Nominee Phone */}
                 <div className="space-y-2">
                   <Label htmlFor="nominee_phone" className="flex items-center gap-1">
                     <Phone className="h-4 w-4" />
@@ -472,6 +448,50 @@ const PublicNominationForm = () => {
                     <MessageCircle className="h-4 w-4 text-green-500" />
                     {txt.phoneHint}
                   </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Inviter Info - LAST */}
+          <Card className="border-0 shadow-lg">
+            <CardContent className="p-6">
+              <h2 className="text-lg font-bold text-stone-800 mb-6 flex items-center gap-2">
+                <User className="h-5 w-5 text-haggai" />
+                {txt.inviterInfo}
+              </h2>
+              
+              <div className="space-y-4">
+                {/* Inviter Name */}
+                <div className="space-y-2">
+                  <Label htmlFor="inviter_name" className="flex items-center gap-1">
+                    {txt.inviterName} <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="inviter_name"
+                    value={formData.inviter_name}
+                    onChange={(e) => handleChange('inviter_name', e.target.value)}
+                    placeholder={txt.inviterNamePlaceholder}
+                    required
+                    className="text-lg"
+                  />
+                </div>
+
+                {/* Inviter Phone */}
+                <div className="space-y-2">
+                  <Label htmlFor="inviter_phone" className="flex items-center gap-1">
+                    <Phone className="h-4 w-4" />
+                    {txt.inviterPhone} <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="inviter_phone"
+                    type="tel"
+                    value={formData.inviter_phone}
+                    onChange={(e) => handleChange('inviter_phone', e.target.value)}
+                    placeholder={txt.inviterPhonePlaceholder}
+                    required
+                    className="text-lg"
+                  />
                 </div>
               </div>
             </CardContent>
