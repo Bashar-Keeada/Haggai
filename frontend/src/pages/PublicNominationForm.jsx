@@ -369,6 +369,46 @@ const PublicNominationForm = () => {
       {/* Form */}
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Language Selector - Above first card */}
+          <div className="flex items-center justify-center gap-2">
+            <Globe className="h-5 w-5 text-stone-400" />
+            <div className="flex bg-stone-100 rounded-lg p-1">
+              <button
+                type="button"
+                onClick={() => setFormLanguage('sv')}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  formLanguage === 'sv' 
+                    ? 'bg-haggai text-white' 
+                    : 'text-stone-600 hover:text-stone-800'
+                }`}
+              >
+                Svenska
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormLanguage('en')}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  formLanguage === 'en' 
+                    ? 'bg-haggai text-white' 
+                    : 'text-stone-600 hover:text-stone-800'
+                }`}
+              >
+                English
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormLanguage('ar')}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  formLanguage === 'ar' 
+                    ? 'bg-haggai text-white' 
+                    : 'text-stone-600 hover:text-stone-800'
+                }`}
+              >
+                العربية
+              </button>
+            </div>
+          </div>
+
           {/* Nominee Info - FIRST */}
           <Card className="border-0 shadow-lg">
             <CardContent className="p-6">
