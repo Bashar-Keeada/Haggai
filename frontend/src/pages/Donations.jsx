@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Heart, Smartphone, Building2, Repeat, Gift, Users, BookOpen, Target, Globe, CheckCircle, Copy, Check, PenLine } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -6,6 +6,8 @@ import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
 import { useLanguage } from '../context/LanguageContext';
 import { toast } from 'sonner';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Donations = () => {
   const { language, isRTL } = useLanguage();
@@ -16,6 +18,32 @@ const Donations = () => {
   const [customRecurring, setCustomRecurring] = useState('');
   const [showCustomOneTime, setShowCustomOneTime] = useState(false);
   const [showCustomRecurring, setShowCustomRecurring] = useState(false);
+  
+  // Dynamic donation settings from database
+  const [donationSettings, setDonationSettings] = useState({
+    swish_number: '070 782 50 82',
+    bank_name: 'Swedbank',
+    account_number: '1234-5 678 901 234-5',
+    iban: 'SE12 3456 7890 1234 5678 9012',
+    bic: 'SWEDSESS',
+    reference: 'Gåva + ditt namn'
+  });
+
+  useEffect(() => {
+    fetchDonationSettings();
+  }, []);
+
+  const fetchDonationSettings = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/donation-settings`);
+      if (response.ok) {
+        const data = await response.json();
+        setDonationSettings(data);
+      }
+    } catch (error) {
+      console.error('Error fetching donation settings:', error);
+    }
+  };
 
   const txt = {
     sv: {
@@ -33,21 +61,15 @@ const Donations = () => {
       paymentMethods: 'Betalningsalternativ',
       swish: 'Swish',
       swishDesc: 'Snabbt och enkelt via din mobil',
-      swishNumber: '070 782 50 82',
       swishInstructions: 'Öppna Swish-appen och ange numret ovan',
       
       bankTransfer: 'Banköverföring',
       bankTransferDesc: 'För större gåvor eller regelbundna överföringar',
       bankName: 'Banknamn',
-      bankNameValue: 'Swedbank',
       accountNumber: 'Kontonummer',
-      accountNumberValue: '1234-5 678 901 234-5',
       iban: 'IBAN',
-      ibanValue: 'SE12 3456 7890 1234 5678 9012',
       bic: 'BIC/SWIFT',
-      bicValue: 'SWEDSESS',
       reference: 'Referens',
-      referenceValue: 'Gåva + ditt namn',
       
       copyToClipboard: 'Kopiera',
       copied: 'Kopierat!',
