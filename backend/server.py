@@ -1291,18 +1291,20 @@ class NominationCreate(BaseModel):
     event_id: str
     event_title: str
     event_date: Optional[str] = None
-    nominator_name: str
-    nominator_email: str
+    nominator_name: Optional[str] = None  # Optional for direct invitations
+    nominator_email: Optional[str] = None  # Optional for direct invitations
     nominator_phone: Optional[str] = None
     nominator_church: Optional[str] = None
     nominator_relation: Optional[str] = None
     nominee_name: str
-    nominee_email: str
+    nominee_email: Optional[str] = None  # Optional - can be filled during registration
     nominee_phone: Optional[str] = None
     nominee_church: Optional[str] = None
     nominee_role: Optional[str] = None
     nominee_activities: Optional[str] = None
     motivation: Optional[str] = None
+    status: Optional[str] = None  # Allow setting status on creation
+    direct_invitation: Optional[bool] = False  # Flag for direct invitations
 
 
 class NominationUpdate(BaseModel):
