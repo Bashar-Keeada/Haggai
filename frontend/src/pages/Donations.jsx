@@ -298,7 +298,7 @@ const Donations = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => copyToClipboard('1234567890', 'swish')}
+                      onClick={() => copyToClipboard('0707825082', 'swish')}
                       className="text-green-600 border-green-300 hover:bg-green-100"
                     >
                       {copiedField === 'swish' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
