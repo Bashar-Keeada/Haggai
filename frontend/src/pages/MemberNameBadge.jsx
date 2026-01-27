@@ -71,7 +71,7 @@ const MemberNameBadge = () => {
   const fetchMemberData = async () => {
     const token = localStorage.getItem('member_token');
     if (!token) {
-      navigate('/medlem/login');
+      navigate('/medlem-login');
       return;
     }
 
@@ -92,7 +92,7 @@ const MemberNameBadge = () => {
         }
       } else if (response.status === 401) {
         localStorage.removeItem('member_token');
-        navigate('/medlem/login');
+        navigate('/medlem-login');
       }
     } catch (err) {
       console.error('Error fetching member data:', err);
