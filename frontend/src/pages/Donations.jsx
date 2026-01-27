@@ -346,11 +346,11 @@ const Donations = () => {
               <CardContent className={isRTL ? 'text-right' : ''}>
                 <div className="space-y-3">
                   {[
-                    { label: txt.bankName, value: txt.bankNameValue, key: 'bank' },
-                    { label: txt.accountNumber, value: txt.accountNumberValue, key: 'account' },
-                    { label: txt.iban, value: txt.ibanValue, key: 'iban' },
-                    { label: txt.bic, value: txt.bicValue, key: 'bic' },
-                    { label: txt.reference, value: txt.referenceValue, key: 'ref' }
+                    { label: txt.bankName, value: donationSettings.bank_name, key: 'bank' },
+                    { label: txt.accountNumber, value: donationSettings.account_number, key: 'account' },
+                    { label: txt.iban, value: donationSettings.iban, key: 'iban' },
+                    { label: txt.bic, value: donationSettings.bic, key: 'bic' },
+                    { label: txt.reference, value: donationSettings.reference, key: 'ref' }
                   ].map((item) => (
                     <div key={item.key} className={`flex items-center justify-between p-3 bg-stone-50 rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
                       <div className={isRTL ? 'text-right' : ''}>
