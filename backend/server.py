@@ -1241,15 +1241,15 @@ class Nomination(BaseModel):
     event_id: str
     event_title: str
     event_date: Optional[str] = None
-    # Nominator info (the person nominating)
-    nominator_name: str
-    nominator_email: str
+    # Nominator info (the person nominating) - Optional for direct invitations
+    nominator_name: Optional[str] = None
+    nominator_email: Optional[str] = None
     nominator_phone: Optional[str] = None
     nominator_church: Optional[str] = None
     nominator_relation: Optional[str] = None
     # Nominee info (the person being nominated)
     nominee_name: str
-    nominee_email: str
+    nominee_email: Optional[str] = None  # Can be filled during registration
     nominee_phone: Optional[str] = None
     nominee_church: Optional[str] = None
     nominee_role: Optional[str] = None
@@ -1262,6 +1262,7 @@ class Nomination(BaseModel):
     approved_by: Optional[str] = None
     registration_completed: bool = False
     registration_data: Optional[dict] = None
+    direct_invitation: bool = False  # True if created via simplified form
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
