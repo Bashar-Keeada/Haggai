@@ -4232,6 +4232,45 @@ async def send_training_participant_diploma(participant_id: str):
     return {"success": True, "message": "Diploma sent successfully", "member_created": member is not None}
 
 
+@api_router.post("/training-participants/{participant_id}/make-member")
+async def make_participant_member(participant_id: str):
+    """Manually create a member account from a training participant"""
+    participant = await db.nominations.find_one(
+        {"id": participant_id, "registration_completed": True},
+        {"_id": 0}
+    )
+    if not participant:
+        raise HTTPException(status_code=404, detail="Training participant not found")
+    
+    # Check if already a member
+    registration_data = participant.get("registration_data", {})
+    email = registration_data.get("email", participant.get("nominee_email"))
+    
+    if not email:
+        raise HTTPException(status_code=400, detail="Participant has no email address")
+    
+    existing = await db.members.find_one({"email": email})
+    if existing:
+        raise HTTPException(status_code=400, detail="This participant is already a member")
+    
+    # Create member
+    member = await create_member_from_participant(participant)
+    
+    if member:
+        # Update participant record
+        await db.nominations.update_one(
+            {"id": participant_id},
+            {"$set": {
+                "is_member": True,
+                "member_id": member['id'],
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        return {"success": True, "message": "Member account created successfully", "member_id": member['id']}
+    else:
+        raise HTTPException(status_code=500, detail="Failed to create member account")
+
+
 # ==================== NAME BADGE GENERATION ====================
 
 def generate_name_badge_pdf(
