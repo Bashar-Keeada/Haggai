@@ -5376,6 +5376,16 @@ async def seed_categories():
 # Predefined workshop topics that leaders can choose from (based on Haggai curriculum)
 WORKSHOP_TOPICS = [
     {
+        "id": "biblical_mandate",
+        "name_sv": "Bibliskt Mandat",
+        "name_en": "Biblical Mandate",
+        "name_ar": "الأساس الكتابي",
+        "description_sv": "Det bibliska mandatet för evangelisation och ledarskap",
+        "description_en": "The biblical mandate for evangelism and leadership",
+        "description_ar": "الأساس الكتابي للتبشير والقيادة",
+        "hours": 3
+    },
+    {
         "id": "stewardship",
         "name_sv": "Förvaltarskap",
         "name_en": "Stewardship",
@@ -5383,7 +5393,7 @@ WORKSHOP_TOPICS = [
         "description_sv": "Hur man förvaltar resurser, tid och talanger ansvarsfullt",
         "description_en": "How to manage resources, time and talents responsibly",
         "description_ar": "كيفية إدارة الموارد والوقت والمواهب بمسؤولية",
-        "hours": 4
+        "hours": 3
     },
     {
         "id": "context",
