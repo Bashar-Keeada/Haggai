@@ -82,6 +82,14 @@ const Footer = () => {
           <p className="text-cream-500 text-xs mt-2">
             © {new Date().getFullYear()} Haggai Sweden. {t('footer.copyright')}
           </p>
+          {/* Admin login icon - discrete */}
+          <Link 
+            to="/admin" 
+            className="inline-flex items-center justify-center mt-4 p-2 text-cream-600 hover:text-cream-400 transition-colors opacity-50 hover:opacity-100"
+            title="Admin"
+          >
+            <Lock className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </footer>
