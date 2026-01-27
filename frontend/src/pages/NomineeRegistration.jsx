@@ -383,7 +383,7 @@ const NomineeRegistration = () => {
           </CardHeader>
           <CardContent className={`p-6 ${isRTL ? 'text-right' : ''}`}>
             <p className="text-stone-700 leading-relaxed mb-4">{txt.introText}</p>
-            <p className="text-haggai-dark font-semibold italic">"{txt.introCall}"</p>
+            <p className="text-haggai-dark font-semibold italic">&ldquo;{txt.introCall}&rdquo;</p>
             
             {/* Nomination info */}
             <div className="mt-6 p-4 bg-haggai-50 rounded-xl">
