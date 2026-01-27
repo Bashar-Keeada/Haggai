@@ -346,7 +346,7 @@ const MembersArea = () => {
     },
     {
       id: 2,
-      title: { sv: 'Förvaltarskap', en: 'Stewardship', ar: 'الوكالة الكتابية' },
+      title: { sv: 'Förvaltarskap', en: 'Stewardship', ar: 'الوكالة' },
       hours: 3,
       color: 'bg-green-500',
       description: { 
@@ -392,7 +392,7 @@ const MembersArea = () => {
     },
     {
       id: 3,
-      title: { sv: 'Kontext/Majoriteten', en: 'Context/Majority', ar: 'السياق/الأغلبية' },
+      title: { sv: 'Kontext/Majoriteten', en: 'Context', ar: 'السياق' },
       hours: 5,
       color: 'bg-purple-500',
       description: { 
