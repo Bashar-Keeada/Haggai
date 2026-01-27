@@ -33,7 +33,7 @@ const Donations = () => {
       paymentMethods: 'Betalningsalternativ',
       swish: 'Swish',
       swishDesc: 'Snabbt och enkelt via din mobil',
-      swishNumber: '123 456 78 90',
+      swishNumber: '070 782 50 82',
       swishInstructions: 'Öppna Swish-appen och ange numret ovan',
       
       bankTransfer: 'Banköverföring',
@@ -102,7 +102,7 @@ const Donations = () => {
       paymentMethods: 'Payment Options',
       swish: 'Swish',
       swishDesc: 'Quick and easy via your mobile',
-      swishNumber: '123 456 78 90',
+      swishNumber: '070 782 50 82',
       swishInstructions: 'Open the Swish app and enter the number above',
       
       bankTransfer: 'Bank Transfer',
@@ -167,7 +167,7 @@ const Donations = () => {
       paymentMethods: 'خيارات الدفع',
       swish: 'سويش',
       swishDesc: 'سريع وسهل عبر هاتفك المحمول',
-      swishNumber: '123 456 78 90',
+      swishNumber: '070 782 50 82',
       swishInstructions: 'افتح تطبيق سويش وأدخل الرقم أعلاه',
       
       bankTransfer: 'تحويل بنكي',
