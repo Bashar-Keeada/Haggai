@@ -372,6 +372,9 @@ const NomineeRegistration = () => {
   return (
     <div className={`min-h-screen bg-cream-50 py-12 ${isRTL ? 'rtl' : 'ltr'}`}>
       <div className="max-w-3xl mx-auto px-4">
+        {/* Language Selector */}
+        <LanguageSelector />
+
         {/* Header */}
         <div className="text-center mb-8">
           <img src="/haggai-logo.png" alt="Haggai" className="h-16 mx-auto mb-4" onError={(e) => e.target.style.display = 'none'} />
