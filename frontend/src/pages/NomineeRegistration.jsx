@@ -331,7 +331,44 @@ const NomineeRegistration = () => {
     <div className={`min-h-screen bg-cream-50 py-12 ${isRTL ? 'rtl' : 'ltr'}`}>
       <div className="max-w-3xl mx-auto px-4">
         {/* Language Selector */}
-        <LanguageSelector />
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <Globe className="h-5 w-5 text-haggai" />
+          <div className="flex bg-stone-100 rounded-lg p-1">
+            <button
+              type="button"
+              onClick={() => setFormLanguage('sv')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                formLanguage === 'sv' 
+                  ? 'bg-haggai text-white' 
+                  : 'text-stone-600 hover:text-stone-800'
+              }`}
+            >
+              Svenska
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormLanguage('en')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                formLanguage === 'en' 
+                  ? 'bg-haggai text-white' 
+                  : 'text-stone-600 hover:text-stone-800'
+              }`}
+            >
+              English
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormLanguage('ar')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                formLanguage === 'ar' 
+                  ? 'bg-haggai text-white' 
+                  : 'text-stone-600 hover:text-stone-800'
+              }`}
+            >
+              العربية
+            </button>
+          </div>
+        </div>
 
         {/* Header */}
         <div className="text-center mb-8">
