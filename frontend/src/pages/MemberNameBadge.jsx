@@ -87,7 +87,8 @@ const MemberNameBadge = () => {
           fetchParticipantData(data.nomination_id);
         }
       } else if (response.status === 401) {
-        localStorage.removeItem('member_token');
+        localStorage.removeItem('memberToken');
+        localStorage.removeItem('memberData');
         navigate('/medlem-login');
       }
     } catch (err) {
