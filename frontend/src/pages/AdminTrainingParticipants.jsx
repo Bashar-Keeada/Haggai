@@ -169,7 +169,11 @@ const AdminTrainingParticipants = () => {
       male: 'Male',
       female: 'Female',
       yes: 'Yes',
-      no: 'No'
+      no: 'No',
+      makeMember: 'Make member',
+      makeMemberSuccess: 'Participant is now a member!',
+      makeMemberDesc: 'A member account has been created',
+      alreadyMember: 'Already member'
     },
     ar: {
       title: 'المشاركون في التدريب',
