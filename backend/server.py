@@ -5155,13 +5155,19 @@ async def member_login(input: MemberLogin):
 
 
 @api_router.get("/members/me")
-async def get_current_member(token: str = None):
+async def get_current_member(token: str = None, authorization: str = Header(None)):
     """Get current logged in member"""
-    if not token:
+    # Support both query param and Authorization header
+    auth_token = token
+    if not auth_token and authorization:
+        if authorization.startswith('Bearer '):
+            auth_token = authorization[7:]
+    
+    if not auth_token:
         raise HTTPException(status_code=401, detail="Token required")
     
     try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        payload = jwt.decode(auth_token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         if payload.get('type') != 'member':
             raise HTTPException(status_code=401, detail="Invalid token type")
         
