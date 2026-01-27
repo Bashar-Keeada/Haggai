@@ -23,6 +23,7 @@ const NomineeRegistration = () => {
   const [submitting, setSubmitting] = useState(false);
   const [nomination, setNomination] = useState(null);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+  const [registrationComplete, setRegistrationComplete] = useState(false);
   const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
