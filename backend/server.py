@@ -4920,24 +4920,41 @@ async def get_leader_name_badge(leader_id: str):
     leader_name = leader.get("name", "Unknown")
     # For leader, we'll use their organization or leave blank
     organization = leader.get("employer_name", leader.get("church_name", ""))
+    primary_topic = leader.get("primary_topic")
+    role_title = leader.get("role_sv") or leader.get("role_en")
     
     # Try to get workshop info from invitation if available
     invitation_id = leader.get("invitation_id")
     workshop_title = "Haggai Workshop"
+    event_date = None
+    event_location = None
+    
     if invitation_id:
         invitation = await db.leader_invitations.find_one(
             {"id": invitation_id},
             {"_id": 0}
         )
-        if invitation and invitation.get("workshop_title"):
-            workshop_title = invitation.get("workshop_title")
+        if invitation:
+            if invitation.get("workshop_title"):
+                workshop_title = invitation.get("workshop_title")
+            workshop_id = invitation.get("workshop_id")
+            if workshop_id:
+                workshop = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
+                if workshop:
+                    event_date = workshop.get("date")
+                    event_location = workshop.get("location")
     
-    # Generate PDF
+    # Generate PDF with enhanced info
     pdf_buffer = generate_name_badge_pdf(
         name=leader_name,
         organization=organization,
         workshop_title=workshop_title,
-        badge_type="leader"
+        badge_type="leader",
+        event_date=event_date,
+        event_location=event_location,
+        person_id=leader_id,
+        role_title=role_title,
+        primary_topic=primary_topic
     )
     
     return StreamingResponse(
