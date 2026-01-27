@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Calendar, MapPin, Users, Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Calendar, MapPin, Users, Send, CheckCircle2, AlertCircle, Globe } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -14,7 +14,10 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const PublicNominationForm = () => {
   const { workshopId } = useParams();
-  const { language, isRTL } = useLanguage();
+  const { language: globalLanguage } = useLanguage();
+  // Local language state - user can choose their preferred language
+  const [formLanguage, setFormLanguage] = useState(globalLanguage);
+  const isRTL = formLanguage === 'ar';
   
   const [workshop, setWorkshop] = useState(null);
   const [loading, setLoading] = useState(true);
