@@ -521,6 +521,46 @@ const LeaderRegistrationForm = () => {
 
       {/* Form */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8" translate="no">
+        {/* Language Selector */}
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <Globe className="h-5 w-5 text-haggai" />
+          <div className="flex bg-stone-100 rounded-lg p-1">
+            <button
+              type="button"
+              onClick={() => setPageLanguage('sv')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                language === 'sv' 
+                  ? 'bg-haggai text-white' 
+                  : 'text-stone-600 hover:text-stone-800'
+              }`}
+            >
+              Svenska
+            </button>
+            <button
+              type="button"
+              onClick={() => setPageLanguage('en')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                language === 'en' 
+                  ? 'bg-haggai text-white' 
+                  : 'text-stone-600 hover:text-stone-800'
+              }`}
+            >
+              English
+            </button>
+            <button
+              type="button"
+              onClick={() => setPageLanguage('ar')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                language === 'ar' 
+                  ? 'bg-haggai text-white' 
+                  : 'text-stone-600 hover:text-stone-800'
+              }`}
+            >
+              العربية
+            </button>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-6">
           
           {/* Personal Info */}
