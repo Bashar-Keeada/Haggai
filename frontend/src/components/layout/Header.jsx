@@ -15,7 +15,6 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const { language, setLanguage, t, isRTL } = useLanguage();
-  const { logout } = useAuth();
 
   const leaderExpLabel = {
     sv: 'Leader Experience',
