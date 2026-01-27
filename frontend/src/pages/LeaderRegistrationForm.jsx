@@ -71,8 +71,8 @@ const LeaderRegistrationForm = () => {
 
   const txt = {
     sv: {
-      title: 'Ledarregistrering',
-      subtitle: 'Slutför din registrering som ledare hos Haggai Sweden',
+      title: 'Facilitator/Tränare-registrering',
+      subtitle: 'Slutför din registrering som facilitator/tränare hos Haggai Sweden',
       workshopLabel: 'Workshop',
       personalInfo: 'Personuppgifter',
       name: 'Fullständigt namn',
@@ -97,7 +97,7 @@ const LeaderRegistrationForm = () => {
       bioPlaceholder: 'Berätta kort om dig själv, din bakgrund och erfarenhet...',
       roleLabel: 'Roll/Titel (Svenska)',
       roleLabelEn: 'Roll/Titel (Engelska)',
-      rolePlaceholder: 'T.ex. Pastor, Ledare, Lärare...',
+      rolePlaceholder: 'T.ex. Pastor, Facilitator, Lärare...',
       topicsLabel: 'Expertområden (Svenska)',
       topicsLabelEn: 'Expertområden (Engelska)',
       topicsPlaceholder: 'Separera med komma: Ledarskap, Kommunikation, Vision...',
@@ -137,8 +137,8 @@ const LeaderRegistrationForm = () => {
       required: 'Obligatoriskt fält'
     },
     en: {
-      title: 'Leader Registration',
-      subtitle: 'Complete your registration as a leader at Haggai Sweden',
+      title: 'Facilitator/Trainer Registration',
+      subtitle: 'Complete your registration as a facilitator/trainer at Haggai Sweden',
       workshopLabel: 'Workshop',
       personalInfo: 'Personal Information',
       name: 'Full name',
@@ -163,7 +163,7 @@ const LeaderRegistrationForm = () => {
       bioPlaceholder: 'Tell us briefly about yourself, your background and experience...',
       roleLabel: 'Role/Title (Swedish)',
       roleLabelEn: 'Role/Title (English)',
-      rolePlaceholder: 'E.g. Pastor, Leader, Teacher...',
+      rolePlaceholder: 'E.g. Pastor, Facilitator, Teacher...',
       topicsLabel: 'Areas of expertise (Swedish)',
       topicsLabelEn: 'Areas of expertise (English)',
       topicsPlaceholder: 'Separate with comma: Leadership, Communication, Vision...',
