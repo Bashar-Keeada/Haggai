@@ -375,10 +375,6 @@ const NomineeRegistration = () => {
       </div>
     );
   }
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className={`min-h-screen bg-cream-50 py-12 ${isRTL ? 'rtl' : 'ltr'}`}>
