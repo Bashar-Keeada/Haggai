@@ -204,7 +204,7 @@ const LeaderRegistrationForm = () => {
     },
     ar: {
       title: 'تسجيل القائد',
-      subtitle: 'أكمل تسجيلك كقائد في هاجاي السويد',
+      subtitle: 'أكمل تسجيلك كميسر / مدرب في هاجاي السويد',
       workshopLabel: 'ورشة العمل',
       personalInfo: 'المعلومات الشخصية',
       name: 'الاسم الكامل',
