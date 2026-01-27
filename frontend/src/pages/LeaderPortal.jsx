@@ -35,7 +35,7 @@ const LeaderPortal = () => {
 
   const txt = {
     sv: {
-      title: 'Ledarportalen',
+      title: 'Facilitator/Tränare-portalen',
       welcome: 'Välkommen',
       logout: 'Logga ut',
       tabs: {
@@ -96,16 +96,16 @@ const LeaderPortal = () => {
       badge: {
         title: 'Namnskylt',
         subtitle: 'Ladda ner eller skriv ut din namnskylt för workshopen',
-        leader: 'LEADER',
+        leader: 'FACILITATOR',
         workshop: 'WORKSHOP',
         download: 'Ladda ner',
         print: 'Skriv ut',
         notAvailable: 'Namnbricka ej tillgänglig',
-        notApproved: 'Du behöver vara godkänd ledare för att se din namnbricka.'
+        notApproved: 'Du behöver vara godkänd facilitator/tränare för att se din namnbricka.'
       }
     },
     en: {
-      title: 'Leader Portal',
+      title: 'Facilitator/Trainer Portal',
       welcome: 'Welcome',
       logout: 'Log out',
       tabs: {
