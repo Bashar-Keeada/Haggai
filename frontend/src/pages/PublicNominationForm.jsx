@@ -167,7 +167,7 @@ const PublicNominationForm = () => {
     if (!value) return '';
     if (typeof value === 'string') return value;
     if (typeof value === 'object') {
-      return value[language] || value.sv || value.en || Object.values(value)[0] || '';
+      return value[formLanguage] || value.sv || value.en || Object.values(value)[0] || '';
     }
     return String(value);
   };
