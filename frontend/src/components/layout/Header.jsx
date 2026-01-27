@@ -10,7 +10,6 @@ import {
   DropdownMenuSeparator,
 } from '../ui/dropdown-menu';
 import { useLanguage } from '../../context/LanguageContext';
-import { useAuth } from '../../context/AuthContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
