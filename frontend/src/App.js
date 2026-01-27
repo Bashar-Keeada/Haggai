@@ -146,6 +146,7 @@ const ProtectedAppContent = () => {
         <Route path="/admin/utbildning" element={<AdminTrainingParticipants />} />
         <Route path="/admin/utvardering/fragor" element={<AdminEvaluationQuestions />} />
         <Route path="/admin/utvardering" element={<AdminEvaluationResults />} />
+        <Route path="/admin/donationer" element={<AdminDonationSettings />} />
       </Routes>
     </Layout>
   );
