@@ -13,30 +13,30 @@ const Leaders = () => {
 
   const translations = {
     sv: {
-      pageTitle: 'Våra Ledare & Facilitatorer',
-      pageSubtitle: 'Erfarna ledare som guidar och inspirerar',
-      pageDescription: 'Möt de dedikerade ledarna och facilitatorerna som driver våra program och utbildningar. Varje ledare bidrar med unik erfarenhet och expertis.',
+      pageTitle: 'Våra Facilitatorer/Tränare',
+      pageSubtitle: 'Erfarna facilitatorer som guidar och inspirerar',
+      pageDescription: 'Möt de dedikerade facilitatorerna och tränarna som driver våra program och utbildningar. Varje facilitator bidrar med unik erfarenhet och expertis.',
       topics: 'Specialområden',
       contact: 'Kontakt',
-      noLeaders: 'Information om ledare kommer snart.',
+      noLeaders: 'Information om facilitatorer kommer snart.',
       loading: 'Laddar...'
     },
     en: {
-      pageTitle: 'Our Leaders & Facilitators',
-      pageSubtitle: 'Experienced leaders who guide and inspire',
-      pageDescription: 'Meet the dedicated leaders and facilitators who drive our programs and training. Each leader brings unique experience and expertise.',
+      pageTitle: 'Our Facilitators/Trainers',
+      pageSubtitle: 'Experienced facilitators who guide and inspire',
+      pageDescription: 'Meet the dedicated facilitators and trainers who drive our programs and training. Each facilitator brings unique experience and expertise.',
       topics: 'Areas of Expertise',
       contact: 'Contact',
-      noLeaders: 'Information about leaders coming soon.',
+      noLeaders: 'Information about facilitators coming soon.',
       loading: 'Loading...'
     },
     ar: {
-      pageTitle: 'قادتنا والميسرون',
-      pageSubtitle: 'قادة ذوو خبرة يوجهون ويلهمون',
-      pageDescription: 'تعرف على القادة والميسرين المتفانين الذين يقودون برامجنا وتدريباتنا. يجلب كل قائد خبرة فريدة ومهارات متميزة.',
+      pageTitle: 'ميسرونا ومدربونا',
+      pageSubtitle: 'ميسرون ذوو خبرة يوجهون ويلهمون',
+      pageDescription: 'تعرف على الميسرين والمدربين المتفانين الذين يقودون برامجنا وتدريباتنا. يجلب كل ميسر خبرة فريدة ومهارات متميزة.',
       topics: 'مجالات الخبرة',
       contact: 'اتصل',
-      noLeaders: 'معلومات عن القادة قريباً.',
+      noLeaders: 'معلومات عن الميسرين قريباً.',
       loading: 'جاري التحميل...'
     }
   };
