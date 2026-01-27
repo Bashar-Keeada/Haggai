@@ -8,14 +8,17 @@ import { Textarea } from '../components/ui/textarea';
 import { Badge } from '../components/ui/badge';
 import { toast } from 'sonner';
 import { useLanguage } from '../context/LanguageContext';
-import { Calendar, User, Mail, Phone, MapPin, Briefcase, Church, GraduationCap, CheckCircle, AlertCircle, Loader2, Upload } from 'lucide-react';
+import { Calendar, User, Mail, Phone, MapPin, Briefcase, Church, GraduationCap, CheckCircle, AlertCircle, Loader2, Upload, Globe } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const NomineeRegistration = () => {
   const { nominationId } = useParams();
   const navigate = useNavigate();
-  const { language, isRTL } = useLanguage();
+  const { language: globalLanguage } = useLanguage();
+  // Local language state for this form - user can choose their preferred language
+  const [formLanguage, setFormLanguage] = useState(globalLanguage);
+  const isRTL = formLanguage === 'ar';
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [nomination, setNomination] = useState(null);
