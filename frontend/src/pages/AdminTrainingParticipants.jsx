@@ -96,7 +96,11 @@ const AdminTrainingParticipants = () => {
       male: 'Man',
       female: 'Kvinna',
       yes: 'Ja',
-      no: 'Nej'
+      no: 'Nej',
+      makeMember: 'Gör till medlem',
+      makeMemberSuccess: 'Deltagaren är nu medlem!',
+      makeMemberDesc: 'Ett medlemskonto har skapats',
+      alreadyMember: 'Redan medlem'
     },
     en: {
       title: 'Training Participants',
