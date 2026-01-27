@@ -84,7 +84,7 @@
       "Error handling for non-existent workshop shows 'Kunde inte ladda formuläret' ✓"
     ]
   },
-  "nomination_link_format": "https://leadership-hub-34.preview.emergentagent.com/nominera/{workshopId}",
+  "nomination_link_format": "https://team-dashboard-100.preview.emergentagent.com/nominera/{workshopId}",
   "qr_code_implementation": {
     "library": "qrcode.react (QRCodeSVG)",
     "size": "200x200",
