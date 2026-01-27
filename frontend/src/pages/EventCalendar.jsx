@@ -149,6 +149,60 @@ const EventCalendar = () => {
 
   const nomTxt = nominationTranslations[language] || nominationTranslations.sv;
 
+  // Fetch workshops from API
+  useEffect(() => {
+    const fetchWorkshops = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/workshops?active_only=true`);
+        if (response.ok) {
+          const workshops = await response.json();
+          // Transform workshops to event format
+          const transformedEvents = workshops.map(w => ({
+            id: w.id,
+            type: 'leader-experience',
+            programType: w.workshop_type === 'international' ? 'international' : 'national',
+            targetGroup: w.target_gender || 'all',
+            title: {
+              sv: w.title || '',
+              en: w.title_en || w.title || '',
+              ar: w.title_ar || w.title || ''
+            },
+            date: w.date,
+            endDate: w.end_date,
+            time: {
+              sv: w.date ? new Date(w.date).toLocaleDateString('sv-SE', { month: 'long', year: 'numeric' }) : '',
+              en: w.date ? new Date(w.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '',
+              ar: w.date ? new Date(w.date).toLocaleDateString('ar-SA', { month: 'long', year: 'numeric' }) : ''
+            },
+            location: {
+              sv: w.location || '',
+              en: w.location_en || w.location || '',
+              ar: w.location_ar || w.location || ''
+            },
+            description: {
+              sv: w.description || '',
+              en: w.description_en || w.description || '',
+              ar: w.description_ar || w.description || ''
+            },
+            spots: w.spots,
+            spotsLeft: w.spots, // TODO: Calculate from registrations
+            price: w.price,
+            currency: w.currency || 'SEK',
+            isOnline: w.is_online,
+            isTot: w.is_tot
+          }));
+          setEvents(transformedEvents);
+        }
+      } catch (error) {
+        console.error('Error fetching workshops:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWorkshops();
+  }, []);
+
   const translatedEvents = eventsTranslations[language] || eventsTranslations.sv;
   
   // Helper to get localized text from object or string
