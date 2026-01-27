@@ -278,21 +278,29 @@ const AdminWorkshops = () => {
   };
 
   const openEditDialog = (workshop) => {
+    // Handle title that might be string or object
+    const getTitle = (titleField) => {
+      if (!titleField) return '';
+      if (typeof titleField === 'string') return titleField;
+      if (typeof titleField === 'object') return titleField.sv || titleField.en || '';
+      return String(titleField);
+    };
+    
     setFormData({
-      title: workshop.title || '',
-      title_en: workshop.title_en || '',
-      title_ar: workshop.title_ar || '',
-      description: workshop.description || '',
-      description_en: workshop.description_en || '',
-      description_ar: workshop.description_ar || '',
+      title: getTitle(workshop.title),
+      title_en: workshop.title_en || (typeof workshop.title === 'object' ? workshop.title.en : '') || '',
+      title_ar: workshop.title_ar || (typeof workshop.title === 'object' ? workshop.title.ar : '') || '',
+      description: typeof workshop.description === 'object' ? workshop.description.sv || '' : workshop.description || '',
+      description_en: workshop.description_en || (typeof workshop.description === 'object' ? workshop.description.en : '') || '',
+      description_ar: workshop.description_ar || (typeof workshop.description === 'object' ? workshop.description.ar : '') || '',
       workshop_type: workshop.workshop_type || 'national',
       target_gender: workshop.target_gender || 'all',
       language: workshop.language || '',
       date: workshop.date || '',
       end_date: workshop.end_date || '',
-      location: workshop.location || '',
-      location_en: workshop.location_en || '',
-      location_ar: workshop.location_ar || '',
+      location: typeof workshop.location === 'object' ? workshop.location.sv || '' : workshop.location || '',
+      location_en: workshop.location_en || (typeof workshop.location === 'object' ? workshop.location.en : '') || '',
+      location_ar: workshop.location_ar || (typeof workshop.location === 'object' ? workshop.location.ar : '') || '',
       spots: workshop.spots || '',
       age_min: workshop.age_min || '',
       age_max: workshop.age_max || '',
