@@ -187,7 +187,7 @@ const PublicNominationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.nominee_name || !formData.nominee_phone || !formData.inviter_name) {
+    if (!formData.nominee_name || !formData.nominee_phone || !formData.inviter_name || !formData.inviter_phone) {
       toast.error(txt.required);
       return;
     }
@@ -201,11 +201,12 @@ const PublicNominationForm = () => {
           event_id: workshopId,
           event_title: getLocalizedText(workshop?.title),
           event_date: workshop?.date,
-          nominator_name: formData.inviter_name,  // Track who invited
+          nominator_name: formData.inviter_name,
+          nominator_phone: formData.inviter_phone,
           nominee_name: formData.nominee_name,
           nominee_phone: formData.nominee_phone,
-          nominee_email: '', // Will be filled in registration
-          status: 'approved', // Auto-approve for direct registration
+          nominee_email: '',
+          status: 'approved',
           direct_invitation: true
         })
       });
