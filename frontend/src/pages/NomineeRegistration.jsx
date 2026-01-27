@@ -277,8 +277,7 @@ const NomineeRegistration = () => {
       });
 
       if (response.ok) {
-        toast.success(txt.successTitle, { description: txt.successDesc });
-        setAlreadyRegistered(true);
+        setRegistrationComplete(true);
       } else {
         throw new Error('Failed');
       }
