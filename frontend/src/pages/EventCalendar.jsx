@@ -372,7 +372,18 @@ const EventCalendar = () => {
             <div className={`lg:col-span-2 ${isRTL ? 'order-1 lg:order-2 text-right' : ''}`}>
               <h2 className="text-2xl font-bold text-stone-800 mb-8">{t('calendar.allEvents')}</h2>
               <div className="space-y-6">
-                {localizedEvents.map((event) => {
+                {loading ? (
+                  <div className="flex justify-center py-12">
+                    <div className="w-8 h-8 border-4 border-haggai border-t-transparent rounded-full animate-spin" />
+                  </div>
+                ) : localizedEvents.length === 0 ? (
+                  <Card className="border-0 shadow-lg">
+                    <CardContent className="p-12 text-center">
+                      <CalendarIcon className="h-12 w-12 text-stone-300 mx-auto mb-4" />
+                      <p className="text-stone-500">{language === 'sv' ? 'Inga kommande evenemang' : 'No upcoming events'}</p>
+                    </CardContent>
+                  </Card>
+                ) : localizedEvents.map((event) => {
                   const dateInfo = getLocaleDateString(event.date);
                   const isLeaderExperience = event.type === 'leader-experience';
                   const isInternational = event.programType === 'international';
