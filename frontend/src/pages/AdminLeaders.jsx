@@ -38,9 +38,9 @@ const AdminLeaders = () => {
 
   const translations = {
     sv: {
-      title: 'Hantera Ledare & Facilitatorer',
-      subtitle: 'Lägg till, redigera eller ta bort ledare och facilitatorer',
-      addNew: 'Lägg till ny ledare',
+      title: 'Hantera Facilitatorer/Tränare',
+      subtitle: 'Lägg till, redigera eller ta bort facilitatorer och tränare',
+      addNew: 'Lägg till ny facilitator/tränare',
       sendInvite: 'Skicka inbjudan',
       name: 'Namn',
       role: 'Roll/Titel',
@@ -53,23 +53,23 @@ const AdminLeaders = () => {
       cancel: 'Avbryt',
       edit: 'Redigera',
       delete: 'Ta bort',
-      noLeaders: 'Inga ledare har lagts till ännu.',
-      confirmDelete: 'Är du säker på att du vill ta bort denna ledare?',
+      noLeaders: 'Inga facilitatorer/tränare har lagts till ännu.',
+      confirmDelete: 'Är du säker på att du vill ta bort denna facilitator/tränare?',
       swedish: 'Svenska',
       english: 'Engelska',
       arabic: 'Arabiska',
       active: 'Aktiv',
       inactive: 'Inaktiv',
       tabs: {
-        leaders: 'Ledare',
+        leaders: 'Facilitatorer/Tränare',
         invitations: 'Inbjudningar',
         registrations: 'Registreringar'
       },
       invite: {
-        title: 'Skicka ledarinbjudan',
-        subtitle: 'Skicka en inbjudan via e-post så att ledaren kan registrera sig',
-        namePlaceholder: 'Ledarens namn',
-        emailPlaceholder: 'ledare@email.se',
+        title: 'Skicka inbjudan till facilitator/tränare',
+        subtitle: 'Skicka en inbjudan via e-post så att facilitatorn/tränaren kan registrera sig',
+        namePlaceholder: 'Namn på facilitator/tränare',
+        emailPlaceholder: 'facilitator@email.se',
         workshopOptional: 'Workshop (valfritt)',
         send: 'Skicka inbjudan',
         sending: 'Skickar...'
