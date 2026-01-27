@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 // Passwords from environment variables
-const SITE_PASSWORD = process.env.REACT_APP_SITE_PASSWORD || 'Haggai2030';
+// Site password removed - public access allowed
 const MEMBERS_PASSWORD = process.env.REACT_APP_MEMBERS_PASSWORD || 'Haggai2030!';
 
 export const useAuth = () => {
@@ -15,16 +15,12 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Site is now publicly accessible - always authenticated
+  const [isAuthenticated] = useState(true);
   const [isMembersAuthenticated, setIsMembersAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already authenticated
-    const authStatus = localStorage.getItem('haggai-auth');
-    if (authStatus === 'true') {
-      setIsAuthenticated(true);
-    }
     // Check if user has members area access
     const membersAuthStatus = localStorage.getItem('haggai-members-auth');
     if (membersAuthStatus === 'true') {
@@ -33,13 +29,9 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = (password) => {
-    if (password === SITE_PASSWORD) {
-      setIsAuthenticated(true);
-      localStorage.setItem('haggai-auth', 'true');
-      return true;
-    }
-    return false;
+  // Site login not needed anymore - always return true
+  const login = () => {
+    return true;
   };
 
   const loginMembers = (password) => {
@@ -52,9 +44,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    setIsAuthenticated(false);
     setIsMembersAuthenticated(false);
-    localStorage.removeItem('haggai-auth');
     localStorage.removeItem('haggai-members-auth');
   };
 
