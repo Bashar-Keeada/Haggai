@@ -159,8 +159,10 @@ const NomineeRegistration = () => {
       notes: 'Additional comments',
       submit: 'Submit registration',
       submitting: 'Submitting...',
-      successTitle: 'Registration submitted!',
-      successDesc: 'Thank you for your registration. We will contact you soon.',
+      successTitle: 'Thank you for your registration!',
+      successDesc: 'Your application has been received.',
+      successMessage: 'The Haggai team will review your application and get back to you shortly with confirmation. As we have limited spots and many applications, we ask for your patience during the review process.',
+      successNote: 'We will contact you via email or phone.',
       errorTitle: 'Error',
       errorDesc: 'Could not submit registration. Please try again.'
     },
