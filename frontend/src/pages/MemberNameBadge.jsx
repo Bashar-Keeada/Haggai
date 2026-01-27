@@ -69,18 +69,14 @@ const MemberNameBadge = () => {
   }, []);
 
   const fetchMemberData = async () => {
-    const token = localStorage.getItem('member_token');
+    const token = localStorage.getItem('memberToken');
     if (!token) {
       navigate('/medlem-login');
       return;
     }
 
     try {
-      const response = await fetch(`${BACKEND_URL}/api/members/me`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await fetch(`${BACKEND_URL}/api/members/me?token=${token}`);
 
       if (response.ok) {
         const data = await response.json();
