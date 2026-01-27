@@ -4875,13 +4875,25 @@ async def get_participant_name_badge(participant_id: str):
     participant_name = registration_data.get("full_name") or participant.get("nominee_name", "Unknown")
     organization = registration_data.get("church_name") or participant.get("nominee_church", "")
     workshop_title = participant.get("event_title", "Haggai Workshop")
+    event_date = participant.get("event_date")
     
-    # Generate PDF
+    # Try to get location from workshop
+    event_location = None
+    event_id = participant.get("event_id")
+    if event_id:
+        workshop = await db.workshops.find_one({"id": event_id}, {"_id": 0, "location": 1})
+        if workshop:
+            event_location = workshop.get("location")
+    
+    # Generate PDF with enhanced info
     pdf_buffer = generate_name_badge_pdf(
         name=participant_name,
         organization=organization,
         workshop_title=workshop_title,
-        badge_type="participant"
+        badge_type="participant",
+        event_date=event_date,
+        event_location=event_location,
+        person_id=participant_id
     )
     
     return StreamingResponse(
