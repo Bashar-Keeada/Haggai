@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Plus, Edit, Archive, X, Save, User, Mail, Phone, Calendar,
-  Users, ChevronDown, ChevronUp, RotateCcw
+  Users, ChevronDown, ChevronUp, RotateCcw, ArrowLeft
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
