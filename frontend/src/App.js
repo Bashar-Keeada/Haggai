@@ -52,6 +52,11 @@ import MemberNameBadge from "./pages/MemberNameBadge";
 import MemberForgotPassword from "./pages/MemberForgotPassword";
 import MemberResetPassword from "./pages/MemberResetPassword";
 import MemberFacilitators from "./pages/MemberFacilitators";
+import MemberUnity from "./pages/MemberUnity";
+import MemberWorkshops from "./pages/MemberWorkshops";
+import MemberKnowledge from "./pages/MemberKnowledge";
+import MemberBylaws from "./pages/MemberBylaws";
+import MemberBoard from "./pages/MemberBoard";
 // Participant Portal Pages
 import ParticipantLogin from "./pages/ParticipantLogin";
 import ParticipantPortal from "./pages/ParticipantPortal";
