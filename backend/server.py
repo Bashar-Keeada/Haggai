@@ -5894,36 +5894,75 @@ async def resend_leader_invitation(invitation_id: str):
     
     base_url = os.environ.get('FRONTEND_URL', 'https://haggai-training.preview.emergentagent.com')
     registration_link = f"{base_url}/ledare/registrera/{invitation['token']}"
+    lang = invitation.get("language", "ar")  # Default to Arabic
+    
+    # Multilingual email content for resend
+    email_texts = {
+        "sv": {
+            "subject": "Påminnelse: Facilitator/Tränare-registrering - Haggai Sweden",
+            "header": "Påminnelse: Facilitator/Tränare-registrering",
+            "greeting": f"Hej <strong>{invitation['name']}</strong>,",
+            "intro": "Detta är en påminnelse om din inbjudan att registrera dig som facilitator/tränare hos Haggai Sweden.",
+            "workshop_label": "Workshop",
+            "button": "Registrera dig nu",
+            "closing": "Vi ser fram emot att höra från dig!"
+        },
+        "en": {
+            "subject": "Reminder: Facilitator/Trainer Registration - Haggai Sweden",
+            "header": "Reminder: Facilitator/Trainer Registration",
+            "greeting": f"Hello <strong>{invitation['name']}</strong>,",
+            "intro": "This is a reminder about your invitation to register as a facilitator/trainer with Haggai Sweden.",
+            "workshop_label": "Workshop",
+            "button": "Register now",
+            "closing": "We look forward to hearing from you!"
+        },
+        "ar": {
+            "subject": "تذكير: تسجيل الميسر/المدرب - هاجاي السويد",
+            "header": "تذكير: تسجيل الميسر/المدرب",
+            "greeting": f"مرحباً <strong>{invitation['name']}</strong>،",
+            "intro": "هذا تذكير بدعوتك للتسجيل كميسر/مدرب في هاجاي السويد.",
+            "workshop_label": "ورشة العمل",
+            "button": "سجل الآن",
+            "closing": "نتطلع للسماع منك!"
+        }
+    }
+    
+    txt = email_texts.get(lang, email_texts["ar"])
+    is_rtl = lang == "ar"
+    dir_attr = 'dir="rtl"' if is_rtl else ''
+    text_align = "right" if is_rtl else "left"
     
     workshop_info = ""
     if invitation.get("workshop_title"):
-        workshop_info = f"<p><strong>Workshop:</strong> {invitation['workshop_title']}</p>"
+        workshop_info = f"<p><strong>{txt['workshop_label']}:</strong> {invitation['workshop_title']}</p>"
     
     email_html = f"""
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;" {dir_attr}>
         <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; text-align: center;">
             <h1 style="color: white; margin: 0;">Haggai Sweden</h1>
-            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Påminnelse: Ledarregistrering</p>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">{txt['header']}</p>
         </div>
         
-        <div style="padding: 30px; background: #f8f9fa;">
-            <p>Hej <strong>{invitation['name']}</strong>,</p>
+        <div style="padding: 30px; background: #f8f9fa; text-align: {text_align};">
+            <p>{txt['greeting']}</p>
             
-            <p>Detta är en påminnelse om din inbjudan att registrera dig som ledare hos Haggai Sweden.</p>
+            <p>{txt['intro']}</p>
             
             {workshop_info}
             
             <div style="text-align: center; margin: 30px 0;">
                 <a href="{registration_link}" 
                    style="background: #014D73; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold;">
-                    Registrera dig nu
+                    {txt['button']}
                 </a>
             </div>
             
+            <p>{txt['closing']}</p>
+            
             <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
             
-            <p style="color: #888; font-size: 12px;">
-                Haggai Sweden | <a href="https://haggai.se" style="color: #014D73;">haggai.se</a> (By Keeada)
+            <p style="color: #888; font-size: 12px; text-align: center;">
+                Haggai Sweden | <a href="https://haggai.se" style="color: #014D73;">haggai.se</a>
             </p>
         </div>
     </div>
@@ -5933,7 +5972,7 @@ async def resend_leader_invitation(invitation_id: str):
         resend.Emails.send({
             "from": SENDER_EMAIL,
             "to": [invitation['email']],
-            "subject": "Påminnelse: Ledarregistrering - Haggai Sweden",
+            "subject": txt['subject'],
             "html": email_html
         })
         
