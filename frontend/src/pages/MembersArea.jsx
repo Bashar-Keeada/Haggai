@@ -168,18 +168,18 @@ const MembersArea = () => {
 
   return (
     <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
-      {/* Compact Header */}
-      <section className="pt-16 pb-2 bg-gradient-to-br from-haggai-50 via-cream-50 to-cream-100">
+      {/* Header */}
+      <section className="pt-16 pb-3 bg-gradient-to-br from-haggai-50 via-cream-50 to-cream-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-            <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-              <Badge className="bg-haggai text-cream-50 text-[10px]">
-                <Lock className="h-2.5 w-2.5 mr-0.5" />
+            <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <Badge className="bg-haggai text-cream-50 text-xs px-2 py-1">
+                <Lock className="h-3 w-3 mr-1" />
                 {language === 'sv' ? 'Medlem' : language === 'ar' ? 'عضو' : 'Member'}
               </Badge>
-              <h1 className="text-base font-semibold text-stone-800">{txt.pageTitle}</h1>
+              <h1 className="text-xl font-bold text-stone-800">{txt.pageTitle}</h1>
             </div>
-            <Button variant="outline" size="sm" onClick={logoutMembers} className="text-stone-600 hover:text-stone-800 text-[10px] h-7 px-2">
+            <Button variant="outline" size="sm" onClick={logoutMembers} className="text-stone-600 hover:text-stone-800 text-sm">
               {txt.logout}
             </Button>
           </div>
@@ -187,10 +187,10 @@ const MembersArea = () => {
       </section>
 
       {/* Main Content */}
-      <section className="py-3 bg-white">
+      <section className="py-4 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Navigation Grid - All as links to separate pages */}
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
             
             {/* Vår Enhet */}
             <Card 
@@ -198,9 +198,9 @@ const MembersArea = () => {
               onClick={() => navigate('/medlemmar/enhet')}
               data-testid="unity-card"
             >
-              <div className="bg-gradient-to-br from-rose-500 to-rose-600 p-2.5 text-center">
-                <Heart className="h-5 w-5 text-white mx-auto mb-1" />
-                <p className="text-white font-medium text-[10px]">{txt.ourUnity}</p>
+              <div className="bg-gradient-to-br from-rose-500 to-rose-600 p-4 text-center">
+                <Heart className="h-8 w-8 text-white mx-auto mb-2" />
+                <p className="text-white font-semibold text-sm">{txt.ourUnity}</p>
               </div>
             </Card>
 
@@ -210,10 +210,10 @@ const MembersArea = () => {
               onClick={() => navigate('/medlemmar/utbildningar')}
               data-testid="workshops-card"
             >
-              <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-2.5 text-center">
-                <Calendar className="h-5 w-5 text-white mx-auto mb-1" />
-                <p className="text-white font-medium text-[10px]">{txt.upcomingWorkshops}</p>
-                <Badge className="bg-white/20 text-white text-[8px] mt-0.5">{workshops.length}</Badge>
+              <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-4 text-center">
+                <Calendar className="h-8 w-8 text-white mx-auto mb-2" />
+                <p className="text-white font-semibold text-sm">{txt.upcomingWorkshops}</p>
+                <Badge className="bg-white/20 text-white text-xs mt-1">{workshops.length}</Badge>
               </div>
             </Card>
 
@@ -223,10 +223,10 @@ const MembersArea = () => {
               onClick={() => navigate('/medlemmar/facilitatorer')}
               data-testid="facilitators-card"
             >
-              <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-2.5 text-center">
-                <Users className="h-5 w-5 text-white mx-auto mb-1" />
-                <p className="text-white font-medium text-[10px]">{txt.facilitatorsTitle}</p>
-                <Badge className="bg-white/20 text-white text-[8px] mt-0.5">{facilitators.length}</Badge>
+              <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-4 text-center">
+                <Users className="h-8 w-8 text-white mx-auto mb-2" />
+                <p className="text-white font-semibold text-sm">{txt.facilitatorsTitle}</p>
+                <Badge className="bg-white/20 text-white text-xs mt-1">{facilitators.length}</Badge>
               </div>
             </Card>
 
@@ -236,10 +236,10 @@ const MembersArea = () => {
               onClick={() => navigate('/medlemmar/karnamnen')}
               data-testid="knowledge-card"
             >
-              <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-2.5 text-center">
-                <BookOpen className="h-5 w-5 text-white mx-auto mb-1" />
-                <p className="text-white font-medium text-[10px]">{txt.coreSubjectsTitle}</p>
-                <Badge className="bg-white/20 text-white text-[8px] mt-0.5">21h</Badge>
+              <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-4 text-center">
+                <BookOpen className="h-8 w-8 text-white mx-auto mb-2" />
+                <p className="text-white font-semibold text-sm">{txt.coreSubjectsTitle}</p>
+                <Badge className="bg-white/20 text-white text-xs mt-1">21h</Badge>
               </div>
             </Card>
 
@@ -249,9 +249,9 @@ const MembersArea = () => {
               onClick={() => navigate('/medlemmar/stadgar')}
               data-testid="bylaws-card"
             >
-              <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 p-2.5 text-center">
-                <FileText className="h-5 w-5 text-white mx-auto mb-1" />
-                <p className="text-white font-medium text-[10px]">{txt.bylaws}</p>
+              <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 p-4 text-center">
+                <FileText className="h-8 w-8 text-white mx-auto mb-2" />
+                <p className="text-white font-semibold text-sm">{txt.bylaws}</p>
               </div>
             </Card>
 
@@ -261,10 +261,10 @@ const MembersArea = () => {
               onClick={() => navigate('/medlemmar/styrelse')}
               data-testid="board-card"
             >
-              <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-2.5 text-center">
-                <Building2 className="h-5 w-5 text-white mx-auto mb-1" />
-                <p className="text-white font-medium text-[10px]">{txt.boardMembers}</p>
-                <Badge className="bg-white/20 text-white text-[8px] mt-0.5">{currentBoard.length || 5}</Badge>
+              <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-4 text-center">
+                <Building2 className="h-8 w-8 text-white mx-auto mb-2" />
+                <p className="text-white font-semibold text-sm">{txt.boardMembers}</p>
+                <Badge className="bg-white/20 text-white text-xs mt-1">{currentBoard.length || 5}</Badge>
               </div>
             </Card>
           </div>
