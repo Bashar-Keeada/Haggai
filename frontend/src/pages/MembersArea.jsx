@@ -278,7 +278,7 @@ const MembersArea = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4">
-              <BoardMeetings />
+              <BoardMeetings language={language} isRTL={isRTL} />
             </CardContent>
           </Card>
         </div>
