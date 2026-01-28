@@ -237,14 +237,20 @@ const PublicNominationForm = () => {
   };
 
   const sendViaWhatsApp = () => {
-    const workshopTitle = getLocalizedText(workshop?.title);
-    // Always use Arabic for WhatsApp message
-    const arabicMessage = 'مرحبًا {name}! لقد تمت دعوتك من قبل {inviter} للمشاركة في {workshop}. املأ نموذج التسجيل هنا: {link}';
-    const message = arabicMessage
-      .replace('{name}', formData.nominee_name)
-      .replace('{inviter}', formData.inviter_name)
-      .replace('{workshop}', workshopTitle)
-      .replace('{link}', registrationLink); // link already has ?lang=ar
+    // Get Arabic workshop title if available
+    const workshopTitleAr = workshop?.title_ar || workshop?.title || '';
+    
+    // Create message with better RTL/LTR structure
+    // Put names and link on separate lines to avoid mixing issues
+    const arabicMessage = `السلام عليكم
+
+لقد تمت دعوتك للمشاركة في برنامج قيادي:
+📚 ${workshopTitleAr}
+
+المرسل: ${formData.inviter_name}
+
+للتسجيل، اضغط على الرابط:
+${registrationLink}`;
     
     // Format phone number for WhatsApp
     let phone = formData.nominee_phone.replace(/\s+/g, '').replace(/^0/, '46');
@@ -252,7 +258,7 @@ const PublicNominationForm = () => {
       phone = '+' + phone;
     }
     
-    const whatsappUrl = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent(arabicMessage)}`;
     window.open(whatsappUrl, '_blank');
   };
 
