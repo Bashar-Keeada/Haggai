@@ -292,25 +292,6 @@ const EventCalendar = () => {
     navigate(`/nominera/${event.id}`);
   };
 
-  const handleRegistration = (e) => {
-    e.preventDefault();
-    // Mock registration - store in localStorage
-    const registrations = JSON.parse(localStorage.getItem('eventRegistrations') || '[]');
-    registrations.push({
-      ...registrationData,
-      eventId: selectedEvent.id,
-      eventTitle: getLocalizedText(selectedEvent.title),
-      registeredAt: new Date().toISOString()
-    });
-    localStorage.setItem('eventRegistrations', JSON.stringify(registrations));
-    
-    toast.success(t('calendar.successTitle'), {
-      description: `${t('calendar.successDesc')} ${getLocalizedText(selectedEvent.title)}`
-    });
-    setIsDialogOpen(false);
-    setRegistrationData({ name: '', email: '', phone: '', organization: '', message: '' });
-  };
-
   const handleNominationSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
