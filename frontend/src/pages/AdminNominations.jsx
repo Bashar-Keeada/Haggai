@@ -450,14 +450,24 @@ const AdminNominations = () => {
             {txt.back}
           </Link>
           
-          <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-            <div className="w-16 h-16 bg-haggai rounded-2xl flex items-center justify-center">
-              <UserPlus className="h-8 w-8 text-white" />
+          <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <div className="w-16 h-16 bg-haggai rounded-2xl flex items-center justify-center">
+                <UserPlus className="h-8 w-8 text-white" />
+              </div>
+              <div className={isRTL ? 'text-right' : ''}>
+                <h1 className="text-3xl font-bold text-stone-800">{txt.title}</h1>
+                <p className="text-stone-600">{txt.subtitle}</p>
+              </div>
             </div>
-            <div className={isRTL ? 'text-right' : ''}>
-              <h1 className="text-3xl font-bold text-stone-800">{txt.title}</h1>
-              <p className="text-stone-600">{txt.subtitle}</p>
-            </div>
+            <Button
+              onClick={() => setShowCreateDialog(true)}
+              className="bg-haggai hover:bg-haggai-dark text-white"
+              data-testid="create-nomination-btn"
+            >
+              <Plus className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+              {txt.createNomination || 'Skapa nominering'}
+            </Button>
           </div>
         </div>
       </section>
