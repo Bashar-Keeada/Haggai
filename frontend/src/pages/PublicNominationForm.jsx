@@ -244,7 +244,7 @@ const PublicNominationForm = () => {
       .replace('{name}', formData.nominee_name)
       .replace('{inviter}', formData.inviter_name)
       .replace('{workshop}', workshopTitle)
-      .replace('{link}', registrationLink + '?lang=ar');
+      .replace('{link}', registrationLink); // link already has ?lang=ar
     
     // Format phone number for WhatsApp
     let phone = formData.nominee_phone.replace(/\s+/g, '').replace(/^0/, '46');
