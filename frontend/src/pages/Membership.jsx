@@ -167,24 +167,26 @@ const Membership = () => {
                 <form onSubmit={handleSubmit} className={`space-y-4 ${isRTL ? 'text-right' : ''}`}>
                   <div className="grid md:grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <Label htmlFor="firstName" className="text-sm">{t('membership.firstName') || 'Förnamn'} *</Label>
+                      <Label htmlFor="firstName" className="text-sm">
+                        {language === 'sv' ? 'Förnamn' : language === 'ar' ? 'الاسم الأول' : 'First name'} *
+                      </Label>
                       <Input
                         id="firstName"
                         value={formData.firstName}
                         onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                         required
-                        placeholder={language === 'sv' ? 'Förnamn' : 'First name'}
                         className={`rounded-lg h-9 ${isRTL ? 'text-right' : ''}`}
                       />
                     </div>
                     <div className="space-y-1">
-                      <Label htmlFor="lastName" className="text-sm">{t('membership.lastName') || 'Efternamn'} *</Label>
+                      <Label htmlFor="lastName" className="text-sm">
+                        {language === 'sv' ? 'Efternamn' : language === 'ar' ? 'اسم العائلة' : 'Last name'} *
+                      </Label>
                       <Input
                         id="lastName"
                         value={formData.lastName}
                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                         required
-                        placeholder={language === 'sv' ? 'Efternamn' : 'Last name'}
                         className={`rounded-lg h-9 ${isRTL ? 'text-right' : ''}`}
                       />
                     </div>
@@ -192,7 +194,9 @@ const Membership = () => {
 
                   <div className="grid md:grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <Label htmlFor="email" className="text-sm">{t('membership.email')} *</Label>
+                      <Label htmlFor="email" className="text-sm">
+                        {language === 'sv' ? 'E-post' : language === 'ar' ? 'البريد الإلكتروني' : 'Email'} *
+                      </Label>
                       <Input
                         id="email"
                         type="email"
@@ -204,7 +208,9 @@ const Membership = () => {
                       />
                     </div>
                     <div className="space-y-1">
-                      <Label htmlFor="phone" className="text-sm">{t('membership.phone')} *</Label>
+                      <Label htmlFor="phone" className="text-sm">
+                        {language === 'sv' ? 'Telefon' : language === 'ar' ? 'الهاتف' : 'Phone'} *
+                      </Label>
                       <Input
                         id="phone"
                         value={formData.phone}
@@ -218,7 +224,9 @@ const Membership = () => {
 
                   <div className="grid md:grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <Label htmlFor="city" className="text-sm">{t('membership.city') || 'Stad'} *</Label>
+                      <Label htmlFor="city" className="text-sm">
+                        {language === 'sv' ? 'Stad' : language === 'ar' ? 'المدينة' : 'City'} *
+                      </Label>
                       <Input
                         id="city"
                         value={formData.city}
@@ -229,7 +237,10 @@ const Membership = () => {
                     </div>
                     <div className="space-y-1">
                       <Label htmlFor="organization" className="text-sm">
-                        {selectedType === 'individual' ? t('membership.churchOrg') : `${t('membership.orgName')} *`}
+                        {selectedType === 'individual' 
+                          ? (language === 'sv' ? 'Kyrka/Organisation' : language === 'ar' ? 'الكنيسة/المنظمة' : 'Church/Org')
+                          : (language === 'sv' ? 'Organisationsnamn' : language === 'ar' ? 'اسم المنظمة' : 'Org name')
+                        } {selectedType !== 'individual' && '*'}
                       </Label>
                       <Input
                         id="organization"
@@ -237,13 +248,15 @@ const Membership = () => {
                         onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
                         required={selectedType !== 'individual'}
                         className={`rounded-lg h-9 ${isRTL ? 'text-right' : ''}`}
-                        placeholder={selectedType === 'individual' ? t('membership.optional') : ''}
+                        placeholder={selectedType === 'individual' ? (language === 'sv' ? 'Valfritt' : 'Optional') : ''}
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1">
-                    <Label htmlFor="message" className="text-sm">{t('calendar.message')}</Label>
+                    <Label htmlFor="message" className="text-sm">
+                      {language === 'sv' ? 'Meddelande' : language === 'ar' ? 'رسالة' : 'Message'}
+                    </Label>
                     <Textarea
                       id="message"
                       value={formData.message}
