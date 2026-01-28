@@ -462,7 +462,7 @@ const MembersArea = () => {
                   <div className={`p-4 bg-rose-50 rounded-lg ${isRTL ? 'text-right' : ''}`}>
                     <h3 className="text-base font-bold text-rose-800 mb-2">{txt.unityTitle}</h3>
                     <p className="text-stone-700 text-sm leading-relaxed mb-2">{txt.unityText}</p>
-                    <p className="text-rose-700 font-medium italic text-sm">"{txt.unityCall}"</p>
+                    <p className="text-rose-700 font-medium italic text-sm">&ldquo;{txt.unityCall}&rdquo;</p>
                   </div>
                   <div className={`mt-3 p-3 bg-stone-50 rounded-lg ${isRTL ? 'text-right' : ''}`}>
                     <div className={`flex items-center gap-2 mb-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
