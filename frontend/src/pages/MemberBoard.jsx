@@ -261,7 +261,8 @@ const MemberBoard = () => {
         treasurer: 'Treasurer',
         secretary: 'Secretary',
         member: 'Member',
-        deputy: 'Deputy'
+        deputy: 'Deputy',
+        ended: 'Ended'
       }
     },
     ar: {
@@ -292,7 +293,8 @@ const MemberBoard = () => {
         treasurer: 'أمين الصندوق',
         secretary: 'السكرتير',
         member: 'عضو',
-        deputy: 'نائب'
+        deputy: 'نائب',
+        ended: 'انتهى'
       }
     }
   };
