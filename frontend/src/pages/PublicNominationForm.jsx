@@ -242,7 +242,7 @@ const PublicNominationForm = () => {
     
     // Create message with better RTL/LTR structure
     // Put names and link on separate lines to avoid mixing issues
-    const arabicMessage = `السلام عليكم
+    const arabicMessage = `تحية طيبة
 
 لقد تمت دعوتك للمشاركة في برنامج قيادي:
 📚 ${workshopTitleAr}
