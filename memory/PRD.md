@@ -26,6 +26,8 @@ Multi-page website for "Haggai Sweden" - a comprehensive full-stack application 
   - Frontend UI now properly saves new members and displays them
 - [x] **Meeting Attendee Selection** - Board members shown as checkboxes when creating meetings
 - [x] **External Attendee Email** - "Lägg till annan deltagare" now includes email field for non-board meeting invitees
+- [x] **WhatsApp Invitations in Arabic** - WhatsApp messages are now ALWAYS in Arabic regardless of UI language
+- [x] **Registration Links Default to Arabic** - All registration links now include `?lang=ar` to open in Arabic by default
 
 ### Previous Session (2026-01-27)
 - [x] **Member Area Pages Redesign** - All 6 section buttons now navigate to separate pages:
