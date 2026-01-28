@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -14,10 +14,15 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const NomineeRegistration = () => {
   const { nominationId } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { language: globalLanguage } = useLanguage();
-  // Local language state for this form - user can choose their preferred language
-  const [formLanguage, setFormLanguage] = useState(globalLanguage);
+  
+  // Check URL param for language, default to Arabic if ?lang=ar is present
+  const urlLang = searchParams.get('lang');
+  const initialLang = urlLang || globalLanguage || 'ar';
+  
+  const [formLanguage, setFormLanguage] = useState(initialLang);
   const isRTL = formLanguage === 'ar';
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
