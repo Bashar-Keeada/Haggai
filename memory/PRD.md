@@ -1,118 +1,88 @@
 # Haggai Sweden - Product Requirements Document
 
 ## Original Problem Statement
-Create a multi-page, password-protected website for "Haggai Sweden" with comprehensive admin panels, member portal, and workshop management features.
+Multi-page website for "Haggai Sweden" - a comprehensive full-stack application with React frontend, FastAPI backend, and MongoDB database. Features admin panels for content management, member portal, and workflows for nominating/registering workshop participants and facilitators.
 
-## Core Features Implemented
+## Core Architecture
+- **Frontend**: React with Tailwind CSS, Shadcn/UI components
+- **Backend**: FastAPI (Python)
+- **Database**: MongoDB
+- **Email**: Resend API
+- **PDF Generation**: ReportLab, Pillow, PyMuPDF
 
-### Authentication & Access Control
-- [x] Password-protected website (password: Haggai2030)
-- [x] Member Portal ("Mina Sidor") with JWT authentication
-- [x] Leader Portal with separate authentication
-- [x] Participant Portal with approval workflow
-- [x] Board Member Admin access (password: Haggai2030!)
+## User Personas
+1. **Admin/Board Members** - Manage workshops, nominations, facilitators, members
+2. **Members** - Access knowledge support, view facilitators, attend meetings
+3. **Participants** - Register for workshops, complete training
+4. **Facilitators/Trainers** - Lead workshops, access session materials
 
-### Admin Panels
-- [x] Leaders management
-- [x] Board Members management
-- [x] Form submissions management
-- [x] Organization members management
-- [x] Partners management
-- [x] Testimonials management
-- [x] Workshops management (CRUD operations)
-- [x] Nominations management with approval workflow
-- [x] Name badges management (A6 PDF format)
+## Completed Features (as of 2025-01-28)
 
-### Workshop System
-- [x] Create/Edit/Delete workshops
+### This Session
+- [x] **MembersArea Redesign** - Compact horizontal grid layout with 6 clickable cards, reduced whitespace, smaller title
+- [x] **Admin Create Nomination** - New "Skapa nominering" button in AdminNominations with full form dialog
+- [x] **Name Badge Redesign** - Role-specific designs with QR codes, Haggai branding
+- [x] **"Leader" to "Facilitator" Terminology** - Updated throughout codebase
+- [x] **Member-Only Facilitator Page** - `/medlemmar/facilitatorer` for logged-in members only
+- [x] **Member Badge Bug Fix** - Fixed token handling, database references
+- [x] **Email Language Default** - Arabic as default for all invitation emails
+- [x] **Admin Back Buttons** - Consistent navigation across admin pages
+
+### Previous Sessions
+- [x] Workshop management system
+- [x] Nomination workflow (public form + admin approval)
+- [x] Facilitator/Leader registration and management
+- [x] Member portal with authentication
+- [x] Board meetings management
+- [x] PDF name badge generation
 - [x] Multi-language support (Swedish, English, Arabic)
-- [x] Shareable nomination links with QR codes
-- [x] Workshop agenda system with multi-day schedules
-- [x] Session evaluation system with anonymous ratings
-
-### Member Features
-- [x] Profile editing
-- [x] Member directory
-- [x] Private messaging
-- [x] Forum
-- [x] Password reset functionality
-
-### Participant Workflow
-- [x] Public nomination form
-- [x] Admin-moderated approval workflow
-- [x] Registration link sent upon approval
-- [x] Participant Portal access after registration
-- [x] Name badge generation
-- [x] Password reset functionality
-
-### Leader Workflow
-- [x] Email invitation system
-- [x] Multi-lingual registration form
-- [x] Document upload capabilities
-- [x] Expertise selection from predefined list
-- [x] Leader Portal with profile management
-- [x] Name badge generation
-
-## Tech Stack
-- **Frontend:** React, React Router, TailwindCSS, Shadcn/UI, Lucide React
-- **Backend:** FastAPI, Pydantic, ReportLab (PDFs)
-- **Database:** MongoDB
-- **Email:** Resend API
-- **QR Codes:** qrcode.react
-
-## Recent Changes (January 2026)
-
-### Bug Fixes
-- [x] **Calendar sync issue** - EventCalendar.jsx now fetches from API instead of mock data
-- [x] Participant login endpoint fixed
-- [x] Share nomination link functionality fixed
-- [x] Agenda display colors fixed
-- [x] Backend syntax/indentation errors resolved
-
-### Features Added
-- [x] Name badge system (A6 PDF format)
-- [x] Participant Portal with approval workflow
-- [x] Password reset for Members and Participants
-- [x] Photo upload for leader/nominee registration
-
-## Pending Issues
-
-### P0 (Critical)
-1. **Allow multiple leader invitations to same email** - NOT STARTED
-2. **Deployment blocked** - Production has empty database, needs data migration
-
-### P1 (High Priority)
-3. **Custom donation amount** - Add input field on /donations page (IN PROGRESS)
-4. **Gender icon alignment** - Minor UI fix (NOT STARTED)
-
-### P2 (Medium Priority)
-5. Implement LeaderSessions.jsx (leader-specific view)
-6. Admin panel for Expertise/Interest categories
-7. Refactor LeaderExperience.jsx to use API instead of mock data
-
-## Technical Debt
-- **CRITICAL:** `backend/server.py` is over 5000 lines - needs to be split into APIRouter modules
-- Frontend linting warnings should be addressed
-- Hardcoded URL fallbacks in server.py should be removed
-
-## Database Collections
-- `members` - Full organization members
-- `participants` - Training participants (approved nominees)
-- `nominations` - Nomination records with status workflow
-- `workshops` - Workshop definitions
-- `agendas` - Workshop schedules
-- `leaders` - Certified leaders
-- `leader_invitations` - Pending leader invitations
-- `leader_registrations` - Leader registration data
-- `password_resets` - Password reset tokens
-
-## Credentials for Testing
-- Website: `Haggai2030`
-- Board Admin: `Haggai2030!`
-- Test Member: `bashar@officeo.se` / `test123`
-- Test Member: `test@haggai.se` / `test123`
+- [x] Email notifications via Resend
 
 ## Known Issues
-- Deployment to production fails due to empty database
-- Production environment needs data migration from preview
-- User should contact Emergent support on Discord for assistance
+
+### P0 - Critical
+- **Deployment Database Separation**: Production (`haggai.se`) and preview (`haggai-members.preview.emergentagent.com`) use separate databases. Data entered on production is NOT visible in preview environment. **Requires Emergent Support for data migration.**
+
+### P1 - High
+- None currently
+
+### P2 - Medium
+- Workshop deactivation perceived as not working (likely browser cache - advise hard refresh)
+
+## Upcoming Tasks (P1)
+
+1. **LeaderSessions.jsx** - Implement facilitator-specific view showing assigned sessions
+2. **Admin Categories Panel** - UI for managing "Expertise" and "Interest" options
+3. **LeaderExperience.jsx Refactor** - Migrate from mock.js to `/api/workshops` endpoint
+
+## Future/Backlog Tasks (P2-P3)
+
+- Agenda notifications for participants
+- Email reminders for board meetings
+- PDF export for meeting agendas/minutes
+- Online payment integration (Stripe)
+
+## Key API Endpoints
+- `GET /api/nominations` - List all nominations
+- `POST /api/nominations` - Create new nomination
+- `POST /api/nominations/{id}/approve` - Approve and send invitation
+- `GET /api/workshops` - List workshops
+- `GET /api/leader-registrations?status=approved` - Get active facilitators
+- `GET /api/members/me` - Get current member (supports Bearer token)
+
+## Database Collections
+- `nominations` - Workshop participant nominations
+- `workshops` - Training workshops
+- `leader_registrations` - Approved facilitators
+- `members` - Portal members
+- `board_meetings` - Meeting schedules
+- `board_members` - Board composition
+
+## Test Credentials
+- **Board Admin Password**: `Haggai2030!`
+- **Member Test User**: `bashar@officeo.se` / `test123`
+
+## Notes
+- Member token stored in localStorage as `memberToken` (not `member_token`)
+- Facilitators fetched from `leader_registrations` collection, NOT `leaders`
+- All nomination emails default to Arabic language
