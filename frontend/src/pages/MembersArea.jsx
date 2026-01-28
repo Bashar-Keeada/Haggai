@@ -208,6 +208,12 @@ const MembersArea = () => {
       viewCalendar: 'View full calendar',
       noWorkshops: 'No upcoming trainings at the moment',
       spotsLeft: 'spots left',
+      // Facilitators section
+      facilitatorsTitle: 'Facilitators/Trainers',
+      facilitatorsDesc: 'Our experienced facilitators who guide and inspire',
+      noFacilitators: 'No facilitators registered yet',
+      facilitatorTopic: 'Area of expertise',
+      facilitatorContact: 'Contact',
       // Haggai global
       haggaiGlobal: 'Haggai International',
       haggaiGlobalDesc: 'Our global vision',
