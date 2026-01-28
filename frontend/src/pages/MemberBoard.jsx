@@ -229,7 +229,8 @@ const MemberBoard = () => {
         treasurer: 'Kassör',
         secretary: 'Sekreterare',
         member: 'Ledamot',
-        deputy: 'Suppleant'
+        deputy: 'Suppleant',
+        ended: 'Slutat'
       }
     },
     en: {
