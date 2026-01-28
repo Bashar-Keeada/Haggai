@@ -38,7 +38,6 @@ const Header = () => {
     { path: '/', label: t('nav.home') },
     { path: '/om-oss', label: t('nav.about') },
     { path: '/leader-experience', label: leaderExpLabel[language] || 'Leader Experience' },
-    { path: '/ledare', label: leadersLabel[language] || 'Ledare' },
     { path: '/partners', label: language === 'sv' ? 'Partners' : language === 'ar' ? 'الشركاء' : 'Partners' },
     { path: '/kalender', label: t('nav.calendar') },
     { path: '/bli-medlem', label: t('nav.membership') },
