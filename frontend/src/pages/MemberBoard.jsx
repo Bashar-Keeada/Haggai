@@ -376,7 +376,7 @@ const MemberBoard = () => {
 
         {/* Current Board Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-4">
-          {displayBoard.map((member, idx) => (
+          {displayBoard.filter(m => m.role !== txt.roles.ended && m.role !== 'Slutat').map((member, idx) => (
             <Card 
               key={member.id || idx} 
               className="border-0 shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden bg-white group"
@@ -424,6 +424,53 @@ const MemberBoard = () => {
             </Card>
           ))}
         </div>
+
+        {/* Former Members (Slutat) - Smaller cards */}
+        {displayBoard.filter(m => m.role === txt.roles.ended || m.role === 'Slutat').length > 0 && (
+          <div className="mb-4">
+            <h2 className="text-sm font-semibold text-stone-500 mb-2">
+              {language === 'sv' ? 'Tidigare styrelsemedlemmar' : language === 'ar' ? 'أعضاء المجلس السابقين' : 'Former board members'}
+            </h2>
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2">
+              {displayBoard.filter(m => m.role === txt.roles.ended || m.role === 'Slutat').map((member, idx) => (
+                <Card 
+                  key={member.id || idx} 
+                  className="border-0 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden bg-stone-50 group"
+                >
+                  <CardContent className="p-0">
+                    <div className="bg-gradient-to-br from-stone-400 to-stone-500 p-2 text-center relative">
+                      {isLoggedIn && (
+                        <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button 
+                            onClick={() => openEditDialog(member)}
+                            className="p-0.5 bg-white/20 rounded hover:bg-white/40"
+                          >
+                            <Edit2 className="h-2.5 w-2.5 text-white" />
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteMember(member)}
+                            className="p-0.5 bg-white/20 rounded hover:bg-red-400/60"
+                          >
+                            <Trash2 className="h-2.5 w-2.5 text-white" />
+                          </button>
+                        </div>
+                      )}
+                      <div className="w-8 h-8 rounded-full mx-auto bg-white/20 flex items-center justify-center border border-white/30">
+                        <User className="h-4 w-4 text-white/80" />
+                      </div>
+                      <h3 className="text-xs font-medium text-white mt-1 truncate">{member.name}</h3>
+                    </div>
+                    <div className="p-1.5 text-center">
+                      <Badge className="bg-stone-200 text-stone-600 text-[10px] px-1.5 py-0">
+                        {txt.roles.ended}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Previous Boards */}
         {previousBoard.length > 0 && (
