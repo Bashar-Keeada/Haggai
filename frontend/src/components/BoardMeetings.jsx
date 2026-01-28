@@ -964,28 +964,78 @@ const BoardMeetings = ({ language, isRTL }) => {
               </div>
             )}
 
-            {/* Attendees */}
+            {/* Attendees - Select from board members */}
             <div className="space-y-2">
               <Label>{txt.attendees}</Label>
+              
+              {/* Board members checkboxes */}
+              {boardMembers.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-3 bg-stone-50 rounded-lg">
+                  {boardMembers.map((member) => {
+                    const isSelected = formData.attendees.includes(member.name);
+                    return (
+                      <label 
+                        key={member.id || member.name} 
+                        className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors ${
+                          isSelected ? 'bg-haggai text-white' : 'bg-white hover:bg-stone-100'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFormData(prev => ({
+                                ...prev,
+                                attendees: [...prev.attendees, member.name]
+                              }));
+                            } else {
+                              setFormData(prev => ({
+                                ...prev,
+                                attendees: prev.attendees.filter(a => a !== member.name)
+                              }));
+                            }
+                          }}
+                          className="sr-only"
+                        />
+                        <User className={`h-4 w-4 ${isSelected ? 'text-white' : 'text-stone-400'}`} />
+                        <span className="text-sm font-medium">{member.name}</span>
+                        {member.role && (
+                          <span className={`text-xs ${isSelected ? 'text-white/70' : 'text-stone-400'}`}>
+                            ({member.role})
+                          </span>
+                        )}
+                      </label>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Manual add */}
               <div className={`flex gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <Input
                   value={newAttendee}
                   onChange={(e) => setNewAttendee(e.target.value)}
-                  placeholder={txt.addAttendee}
+                  placeholder={language === 'sv' ? 'Lägg till annan deltagare...' : 'Add other attendee...'}
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddAttendee())}
                 />
-                <Button type="button" onClick={handleAddAttendee} size="sm">
+                <Button type="button" onClick={handleAddAttendee} size="sm" variant="outline">
                   <Plus className="h-4 w-4" />
                 </Button>
               </div>
-              {formData.attendees.length > 0 && (
+
+              {/* Selected attendees (for manually added ones) */}
+              {formData.attendees.filter(a => !boardMembers.find(m => m.name === a)).length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {formData.attendees.map((attendee, idx) => (
+                  {formData.attendees.filter(a => !boardMembers.find(m => m.name === a)).map((attendee, idx) => (
                     <Badge key={idx} variant="secondary" className="flex items-center gap-1">
                       {attendee}
                       <X 
                         className="h-3 w-3 cursor-pointer hover:text-red-500" 
-                        onClick={() => handleRemoveAttendee(idx)}
+                        onClick={() => setFormData(prev => ({
+                          ...prev,
+                          attendees: prev.attendees.filter(a => a !== attendee)
+                        }))}
                       />
                     </Badge>
                   ))}
