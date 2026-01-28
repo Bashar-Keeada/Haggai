@@ -1317,52 +1317,52 @@ class NominationUpdate(BaseModel):
 # ==================== EMAIL FUNCTIONS ====================
 
 async def send_nomination_email_to_nominee(nomination: Nomination):
-    """Send email to the nominated person with registration link"""
+    """Send email to the nominated person with registration link - Always in Arabic"""
     # Get the frontend URL from env or use default
     frontend_url = os.environ.get('FRONTEND_URL', 'https://haggai-training.preview.emergentagent.com')
     registration_link = f"{frontend_url}/registrering/{nomination.id}"
     
     html_content = f"""
     <!DOCTYPE html>
-    <html>
+    <html dir="rtl">
     <head>
         <meta charset="UTF-8">
     </head>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #15564e 0%, #0f403a 100%); padding: 30px; border-radius: 10px 10px 0 0;">
-            <h1 style="color: white; margin: 0; font-size: 24px;">Du har blivit nominerad!</h1>
-            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Haggai Sweden Leadership Program</p>
+    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl; text-align: right;">
+        <div style="background: linear-gradient(135deg, #15564e 0%, #0f403a 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">لقد تم ترشيحك!</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">برنامج هاجاي السويد للقيادة</p>
         </div>
         
         <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none;">
-            <p style="font-size: 16px;">Hej <strong>{nomination.nominee_name}</strong>,</p>
+            <p style="font-size: 16px;">مرحباً <strong>{nomination.nominee_name}</strong>،</p>
             
-            <p>Vi vill informera dig om att <strong>{nomination.nominator_name}</strong> har nominerat dig till följande ledarprogram:</p>
+            <p>نود إعلامك بأن <strong>{nomination.nominator_name}</strong> قد رشحك لبرنامج القيادة التالي:</p>
             
-            <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #15564e; margin: 20px 0;">
+            <div style="background: white; padding: 20px; border-radius: 8px; border-right: 4px solid #15564e; margin: 20px 0;">
                 <h3 style="color: #15564e; margin: 0 0 10px 0;">{nomination.event_title}</h3>
-                {f'<p style="color: #666; margin: 0;"><strong>Datum:</strong> {nomination.event_date}</p>' if nomination.event_date else ''}
+                {f'<p style="color: #666; margin: 0;"><strong>التاريخ:</strong> {nomination.event_date}</p>' if nomination.event_date else ''}
             </div>
             
-            <h3 style="color: #15564e;">Motivering från {nomination.nominator_name}:</h3>
+            <h3 style="color: #15564e;">سبب الترشيح من {nomination.nominator_name}:</h3>
             <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #eee; white-space: pre-wrap;">
-{nomination.motivation if nomination.motivation else 'Ingen motivering angavs.'}
+{nomination.motivation if nomination.motivation else 'لم يتم تقديم سبب.'}
             </div>
             
             <div style="margin-top: 30px; text-align: center;">
-                <p style="font-size: 18px; font-weight: bold; color: #15564e;">Registrera dig för programmet</p>
-                <p>Klicka på knappen nedan för att fylla i registreringsformuläret:</p>
+                <p style="font-size: 18px; font-weight: bold; color: #15564e;">سجّل في البرنامج</p>
+                <p>انقر على الزر أدناه لملء نموذج التسجيل:</p>
                 <a href="{registration_link}" style="display: inline-block; background: linear-gradient(135deg, #15564e 0%, #0f403a 100%); color: white; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: bold; margin: 20px 0;">
-                    Registrera dig nu →
+                    سجّل الآن ←
                 </a>
                 <p style="font-size: 12px; color: #999; margin-top: 10px;">
-                    Eller kopiera denna länk:<br>
+                    أو انسخ هذا الرابط:<br>
                     <a href="{registration_link}" style="color: #15564e; word-break: break-all;">{registration_link}</a>
                 </p>
             </div>
             
             <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
-                <p style="color: #666; font-size: 14px; margin: 0;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+                <p style="color: #666; font-size: 14px; margin: 0;">مع أطيب التحيات،<br><strong>هاجاي السويد</strong></p>
                 <p style="color: #999; font-size: 12px; margin-top: 10px;">
                     <a href="https://peoplepotential.se" style="color: #15564e;">peoplepotential.se</a> | 
                     <a href="mailto:info@haggai.se" style="color: #15564e;">info@haggai.se</a>
@@ -1376,7 +1376,7 @@ async def send_nomination_email_to_nominee(nomination: Nomination):
     params = {
         "from": SENDER_EMAIL,
         "to": [nomination.nominee_email],
-        "subject": f"Du har blivit nominerad till {nomination.event_title}",
+        "subject": f"لقد تم ترشيحك لـ {nomination.event_title}",
         "html": html_content
     }
     
