@@ -420,44 +420,14 @@ const NomineeRegistration = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Profile Photo Upload */}
-              <div className="md:col-span-2">
-                <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                  <User className="h-4 w-4" />
-                  {txt.profilePhoto}
-                </Label>
-                <div className="flex items-center gap-4">
-                  <label className="flex-1">
-                    <div className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-stone-300 rounded-lg cursor-pointer hover:border-haggai hover:bg-haggai/5 transition-colors">
-                      <Upload className="h-5 w-5 text-stone-400" />
-                      <span className="text-sm text-stone-600">
-                        {formData.profile_image ? txt.photoSelected : txt.uploadPhoto}
-                      </span>
-                    </div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files[0];
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.onload = (event) => {
-                            handleChange('profile_image', event.target.result);
-                          };
-                          reader.readAsDataURL(file);
-                        }
-                      }}
-                    />
-                  </label>
-                  {formData.profile_image && (
-                    <img 
-                      src={formData.profile_image} 
-                      alt="Profile preview" 
-                      className="h-20 w-20 rounded-full object-cover border-2 border-haggai"
-                    />
-                  )}
-                </div>
+              {/* Session Dates Info */}
+              <div className="p-4 bg-blue-50 rounded-xl">
+                <h4 className={`font-semibold text-blue-800 mb-2 ${isRTL ? 'text-right' : ''}`}>
+                  📅 {txt.sessionDates}
+                </h4>
+                <p className={`text-blue-700 whitespace-pre-line ${isRTL ? 'text-right' : ''}`}>
+                  {txt.sessionInfo}
+                </p>
               </div>
 
               {/* Personal Information */}
@@ -510,18 +480,33 @@ const NomineeRegistration = () => {
                   </div>
                 </div>
 
-                {/* Date of Birth */}
+                {/* Country of Residence */}
                 <div>
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                    <Calendar className="h-4 w-4" />
-                    {txt.dateOfBirth}
+                    <MapPin className="h-4 w-4" />
+                    {txt.countryOfResidence}
                     <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
                   </Label>
                   <Input
-                    type="date"
                     required
-                    value={formData.date_of_birth}
-                    onChange={(e) => handleChange('date_of_birth', e.target.value)}
+                    value={formData.country_of_residence}
+                    onChange={(e) => handleChange('country_of_residence', e.target.value)}
+                    className={isRTL ? 'text-right' : ''}
+                  />
+                </div>
+
+                {/* Nationality */}
+                <div>
+                  <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                    <Globe className="h-4 w-4" />
+                    {txt.nationality}
+                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                  </Label>
+                  <Input
+                    required
+                    value={formData.nationality}
+                    onChange={(e) => handleChange('nationality', e.target.value)}
+                    className={isRTL ? 'text-right' : ''}
                   />
                 </div>
 
@@ -557,26 +542,56 @@ const NomineeRegistration = () => {
                   />
                 </div>
 
-                {/* Full Address */}
+                {/* Job Title */}
                 <div className="md:col-span-2">
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                    <MapPin className="h-4 w-4" />
-                    {txt.fullAddress}
+                    <Briefcase className="h-4 w-4" />
+                    {txt.jobTitle}
+                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                  </Label>
+                  <Input
+                    required
+                    value={formData.job_title}
+                    onChange={(e) => handleChange('job_title', e.target.value)}
+                    className={isRTL ? 'text-right' : ''}
+                  />
+                </div>
+
+                {/* Church/Organization */}
+                <div className="md:col-span-2">
+                  <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                    <Church className="h-4 w-4" />
+                    {txt.churchOrganization}
+                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                  </Label>
+                  <Input
+                    required
+                    value={formData.church_organization}
+                    onChange={(e) => handleChange('church_organization', e.target.value)}
+                    className={isRTL ? 'text-right' : ''}
+                  />
+                </div>
+
+                {/* Ministry Participation */}
+                <div className="md:col-span-2">
+                  <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                    {txt.ministryParticipation}
                     <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
                   </Label>
                   <Textarea
                     required
-                    value={formData.full_address}
-                    onChange={(e) => handleChange('full_address', e.target.value)}
+                    value={formData.ministry_participation}
+                    onChange={(e) => handleChange('ministry_participation', e.target.value)}
                     className={isRTL ? 'text-right' : ''}
+                    rows={3}
                   />
                 </div>
 
                 {/* Marital Status */}
                 <div>
-                  <Label className={`mb-2 block ${isRTL ? 'text-right' : ''}`}>
+                  <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     {txt.maritalStatus}
-                    <Badge variant="destructive" className="text-xs ml-2">{txt.required}</Badge>
+                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
                   </Label>
                   <Input
                     required
@@ -586,98 +601,51 @@ const NomineeRegistration = () => {
                   />
                 </div>
 
-                {/* Place of Birth */}
+                {/* Address */}
                 <div>
-                  <Label className={`mb-2 block ${isRTL ? 'text-right' : ''}`}>
-                    {txt.placeOfBirth}
-                    <Badge variant="destructive" className="text-xs ml-2">{txt.required}</Badge>
+                  <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                    <MapPin className="h-4 w-4" />
+                    {txt.address}
+                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
                   </Label>
                   <Input
                     required
-                    value={formData.place_of_birth}
-                    onChange={(e) => handleChange('place_of_birth', e.target.value)}
+                    value={formData.address}
+                    onChange={(e) => handleChange('address', e.target.value)}
                     className={isRTL ? 'text-right' : ''}
                   />
                 </div>
-              </div>
 
-              {/* Work Information */}
-              <div className="border-t pt-6">
-                <h3 className={`font-semibold text-stone-800 mb-4 flex items-center gap-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                  <Briefcase className="h-5 w-5 text-haggai" />
-                  {formLanguage === 'ar' ? 'معلومات العمل' : formLanguage === 'en' ? 'Work Information' : 'Arbetsinformation'}
-                </h3>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <Label className={`mb-2 block ${isRTL ? 'text-right' : ''}`}>
-                      {txt.workField}
-                      <Badge variant="destructive" className="text-xs ml-2">{txt.required}</Badge>
-                    </Label>
-                    <Input
-                      required
-                      value={formData.work_field}
-                      onChange={(e) => handleChange('work_field', e.target.value)}
-                      className={isRTL ? 'text-right' : ''}
-                    />
-                  </div>
-                  <div>
-                    <Label className={`mb-2 block ${isRTL ? 'text-right' : ''}`}>
-                      {txt.currentProfession}
-                      <Badge variant="destructive" className="text-xs ml-2">{txt.required}</Badge>
-                    </Label>
-                    <Input
-                      required
-                      value={formData.current_profession}
-                      onChange={(e) => handleChange('current_profession', e.target.value)}
-                      className={isRTL ? 'text-right' : ''}
-                    />
-                  </div>
-                  <div className="md:col-span-2">
-                    <Label className={`mb-2 block ${isRTL ? 'text-right' : ''}`}>
-                      {txt.employerName}
-                      <Badge variant="destructive" className="text-xs ml-2">{txt.required}</Badge>
-                    </Label>
-                    <Input
-                      required
-                      value={formData.employer_name}
-                      onChange={(e) => handleChange('employer_name', e.target.value)}
-                      className={isRTL ? 'text-right' : ''}
-                    />
-                  </div>
+                {/* Age */}
+                <div>
+                  <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                    {txt.age}
+                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                  </Label>
+                  <Input
+                    type="number"
+                    required
+                    min="18"
+                    max="99"
+                    value={formData.age}
+                    onChange={(e) => handleChange('age', e.target.value)}
+                    className={isRTL ? 'text-right' : ''}
+                  />
                 </div>
-              </div>
 
-              {/* Church Information */}
-              <div className="border-t pt-6">
-                <h3 className={`font-semibold text-stone-800 mb-4 flex items-center gap-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                  <Church className="h-5 w-5 text-haggai" />
-                  {formLanguage === 'ar' ? 'معلومات الكنيسة' : formLanguage === 'en' ? 'Church Information' : 'Kyrkoinformation'}
-                </h3>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <Label className={`mb-2 block ${isRTL ? 'text-right' : ''}`}>
-                      {txt.churchName}
-                      <Badge variant="destructive" className="text-xs ml-2">{txt.required}</Badge>
-                    </Label>
-                    <Input
-                      required
-                      value={formData.church_name}
-                      onChange={(e) => handleChange('church_name', e.target.value)}
-                      className={isRTL ? 'text-right' : ''}
-                    />
-                  </div>
-                  <div className="md:col-span-2">
-                    <Label className={`mb-2 block ${isRTL ? 'text-right' : ''}`}>
-                      {txt.churchRole}
-                      <Badge variant="destructive" className="text-xs ml-2">{txt.required}</Badge>
-                    </Label>
-                    <Textarea
-                      required
-                      value={formData.church_role}
-                      onChange={(e) => handleChange('church_role', e.target.value)}
-                      className={isRTL ? 'text-right' : ''}
-                    />
-                  </div>
+                {/* Date of Birth */}
+                <div>
+                  <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                    <Calendar className="h-4 w-4" />
+                    {txt.dateOfBirth}
+                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                  </Label>
+                  <Input
+                    type="date"
+                    required
+                    value={formData.date_of_birth}
+                    onChange={(e) => handleChange('date_of_birth', e.target.value)}
+                  />
                 </div>
               </div>
 
@@ -693,9 +661,6 @@ const NomineeRegistration = () => {
                     {txt.commitmentAttendance}
                     <Badge variant="destructive" className="text-xs ml-2">{txt.required}</Badge>
                   </Label>
-                  <p className={`text-sm text-amber-700 mb-3 ${isRTL ? 'text-right' : ''}`}>
-                    ⚠️ {txt.commitmentAttendanceNote}
-                  </p>
                   <div className={`flex gap-4 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -706,7 +671,7 @@ const NomineeRegistration = () => {
                         onChange={(e) => handleChange('commitment_attendance', e.target.value)}
                         required
                       />
-                      {txt.iCommit}
+                      {txt.yesCommit}
                     </label>
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -716,7 +681,7 @@ const NomineeRegistration = () => {
                         checked={formData.commitment_attendance === 'no'}
                         onChange={(e) => handleChange('commitment_attendance', e.target.value)}
                       />
-                      {txt.iDoNotCommit}
+                      {txt.noCommit}
                     </label>
                   </div>
                 </div>
@@ -737,7 +702,7 @@ const NomineeRegistration = () => {
                         onChange={(e) => handleChange('commitment_active_role', e.target.value)}
                         required
                       />
-                      {txt.yes}
+                      {txt.iCommit}
                     </label>
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -747,36 +712,9 @@ const NomineeRegistration = () => {
                         checked={formData.commitment_active_role === 'no'}
                         onChange={(e) => handleChange('commitment_active_role', e.target.value)}
                       />
-                      {txt.no}
+                      {txt.iDoNotCommit}
                     </label>
                   </div>
-                </div>
-              </div>
-
-              {/* Fee Information */}
-              <div className="border-t pt-6">
-                <h3 className={`font-semibold text-stone-800 mb-4 ${isRTL ? 'text-right' : ''}`}>
-                  {txt.feeTitle}: <span className="text-haggai">{txt.feeAmount}</span>
-                </h3>
-                <div className={`p-4 bg-emerald-50 rounded-xl mb-4 ${isRTL ? 'text-right' : ''}`}>
-                  <p className="font-medium text-emerald-800 mb-2">{txt.feeIncludes}</p>
-                  <ul className={`text-sm text-emerald-700 space-y-1 ${isRTL ? 'pr-4' : 'pl-4'}`}>
-                    <li>✓ {txt.feeItem1}</li>
-                    <li>✓ {txt.feeItem2}</li>
-                    <li>✓ {txt.feeItem3}</li>
-                    <li>✓ {txt.feeItem4}</li>
-                    <li>✓ {txt.feeItem5}</li>
-                  </ul>
-                </div>
-                <div>
-                  <Label className={`mb-2 block ${isRTL ? 'text-right' : ''}`}>
-                    {txt.feeSupportRequest}
-                  </Label>
-                  <Input
-                    value={formData.fee_support_request}
-                    onChange={(e) => handleChange('fee_support_request', e.target.value)}
-                    className={isRTL ? 'text-right' : ''}
-                  />
                 </div>
               </div>
 
