@@ -1993,32 +1993,32 @@ async def send_participant_approval_email(email: str, name: str, password: str, 
 
 
 async def send_participant_rejection_email(email: str, name: str, reason: str, workshop_title: str):
-    """Send rejection email to participant"""
+    """Send rejection email to participant - Always in Arabic"""
     html_content = f"""
     <!DOCTYPE html>
-    <html>
+    <html dir="rtl">
     <head><meta charset="UTF-8"></head>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl; text-align: right;">
         <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 24px;">Angående din registrering</h1>
+            <h1 style="color: white; margin: 0; font-size: 24px;">بخصوص تسجيلك</h1>
             <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">{workshop_title}</p>
         </div>
         
         <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
-            <p>Hej <strong>{name}</strong>,</p>
+            <p>تحية طيبة <strong>{name}</strong>،</p>
             
-            <p>Tack för din registrering för <strong>{workshop_title}</strong>.</p>
+            <p>شكراً لتسجيلك في <strong>{workshop_title}</strong>.</p>
             
-            <p>Tyvärr kan vi just nu inte godkänna din registrering.</p>
+            <p>للأسف، لا يمكننا في الوقت الحالي الموافقة على تسجيلك.</p>
             
-            <div style="background: #fee; padding: 20px; border-radius: 8px; border-left: 4px solid #dc2626; margin: 20px 0;">
-                <h4 style="color: #dc2626; margin-top: 0;">Anledning:</h4>
+            <div style="background: #fee; padding: 20px; border-radius: 8px; border-right: 4px solid #dc2626; margin: 20px 0;">
+                <h4 style="color: #dc2626; margin-top: 0;">السبب:</h4>
                 <p style="margin: 0;">{reason}</p>
             </div>
             
-            <p>Om du har frågor eller vill diskutera detta vidare, tveka inte att kontakta oss.</p>
+            <p>إذا كان لديك أي أسئلة أو ترغب في مناقشة هذا الأمر، لا تتردد في التواصل معنا.</p>
             
-            <p style="margin-top: 30px;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+            <p style="margin-top: 30px;">مع أطيب التحيات،<br><strong>هاجاي السويد</strong></p>
         </div>
     </body>
     </html>
@@ -2028,7 +2028,7 @@ async def send_participant_rejection_email(email: str, name: str, reason: str, w
         await asyncio.to_thread(resend.Emails.send, {
             "from": SENDER_EMAIL,
             "to": [email],
-            "subject": f"Angående din registrering för {workshop_title}",
+            "subject": f"بخصوص تسجيلك في {workshop_title}",
             "html": html_content
         })
         logging.info(f"Rejection email sent to {email}")
