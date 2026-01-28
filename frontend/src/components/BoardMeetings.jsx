@@ -261,6 +261,9 @@ const BoardMeetings = ({ language, isRTL }) => {
     }
   }[language] || {};
 
+  // Board members for attendee selection
+  const [boardMembers, setBoardMembers] = useState([]);
+
   // Check for existing login on mount
   useEffect(() => {
     const token = localStorage.getItem('boardMemberToken');
@@ -269,7 +272,20 @@ const BoardMeetings = ({ language, isRTL }) => {
       setCurrentMember({ name: 'Styrelsemedlem' });
     }
     fetchMeetings();
+    fetchBoardMembers();
   }, []);
+
+  const fetchBoardMembers = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/board-members?current_only=true`);
+      if (response.ok) {
+        const data = await response.json();
+        setBoardMembers(data);
+      }
+    } catch (error) {
+      console.error('Error fetching board members:', error);
+    }
+  };
 
   const fetchMeetings = async () => {
     try {
