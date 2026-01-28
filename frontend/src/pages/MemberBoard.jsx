@@ -532,6 +532,7 @@ const MemberBoard = () => {
                     <SelectItem value={txt.roles.secretary}>{txt.roles.secretary}</SelectItem>
                     <SelectItem value={txt.roles.member}>{txt.roles.member}</SelectItem>
                     <SelectItem value={txt.roles.deputy}>{txt.roles.deputy}</SelectItem>
+                    <SelectItem value={txt.roles.ended}>{txt.roles.ended}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
