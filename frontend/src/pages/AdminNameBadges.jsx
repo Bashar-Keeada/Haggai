@@ -220,6 +220,15 @@ const AdminNameBadges = () => {
   return (
     <div className="min-h-screen bg-cream-50 p-6">
       <div className="max-w-7xl mx-auto">
+        {/* Back Button */}
+        <Link 
+          to="/admin" 
+          className="inline-flex items-center text-stone-600 hover:text-haggai mb-6 transition-colors"
+        >
+          <ArrowLeft className="h-5 w-5 mr-2" />
+          {language === 'sv' ? 'Tillbaka till Admin' : language === 'ar' ? 'العودة إلى الإدارة' : 'Back to Admin'}
+        </Link>
+
         {/* Header */}
         <Card className="border-0 shadow-lg mb-6">
           <CardHeader>
