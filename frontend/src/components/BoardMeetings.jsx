@@ -315,56 +315,15 @@ const BoardMeetings = ({ language, isRTL }) => {
     setAuthLoading(false);
   };
 
-  const handleSetupAccount = async (e) => {
-    e.preventDefault();
-    
-    if (loginPassword !== confirmPassword) {
-      toast.error(txt.passwordMismatch);
-      return;
-    }
-    
-    if (loginPassword.length < 6) {
-      toast.error(language === 'sv' ? 'Lösenordet måste vara minst 6 tecken' : 'Password must be at least 6 characters');
-      return;
-    }
-    
-    setAuthLoading(true);
-    
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/board-auth/set-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: loginEmail.toLowerCase(), password: loginPassword })
-      });
-      
-      if (res.ok) {
-        toast.success(txt.accountCreated);
-        setLoginMode('login');
-        setConfirmPassword('');
-      } else {
-        const error = await res.json();
-        toast.error(error.detail || 'Setup failed');
-      }
-    } catch (error) {
-      toast.error('Network error');
-    } finally {
-      setAuthLoading(false);
-    }
-  };
-
   const handleLogout = () => {
     localStorage.removeItem('boardMemberToken');
-    localStorage.removeItem('boardMemberData');
     setIsLoggedIn(false);
     setCurrentMember(null);
     toast.info(language === 'sv' ? 'Du har loggat ut' : 'You have been logged out');
   };
 
   const resetLoginForm = () => {
-    setLoginEmail('');
     setLoginPassword('');
-    setConfirmPassword('');
-    setLoginMode('login');
     setShowPassword(false);
   };
 
