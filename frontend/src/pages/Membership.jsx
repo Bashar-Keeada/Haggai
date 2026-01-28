@@ -94,28 +94,28 @@ const Membership = () => {
 
   return (
     <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
-      {/* Hero */}
-      <section className="py-24 bg-gradient-to-br from-cream-100 via-cream-50 to-amber-50">
+      {/* Hero - Compact */}
+      <section className="pt-20 pb-8 bg-gradient-to-br from-cream-100 via-cream-50 to-amber-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`max-w-3xl ${isRTL ? 'mr-auto text-right' : ''}`}>
-            <span className="text-haggai font-medium text-sm tracking-wider uppercase mb-4 block">{t('membership.title')}</span>
-            <h1 className="text-5xl font-bold text-stone-800 mb-6">{t('membership.heading')}</h1>
-            <p className="text-xl text-stone-600 leading-relaxed">
+            <span className="text-haggai font-medium text-sm tracking-wider uppercase mb-2 block">{t('membership.title')}</span>
+            <h1 className="text-3xl font-bold text-stone-800 mb-3">{t('membership.heading')}</h1>
+            <p className="text-base text-stone-600 leading-relaxed">
               {t('membership.description')}
             </p>
           </div>
         </div>
       </section>
 
-      {/* Membership Types */}
-      <section className="py-24 bg-white">
+      {/* Membership Types - Compact */}
+      <section className="py-8 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
-            <h2 className="text-4xl font-bold text-stone-800 mb-4">{t('membership.chooseType')}</h2>
-            <p className="text-lg text-stone-600">{t('membership.chooseTypeSubtitle')}</p>
+          <div className={`text-center mb-6 ${isRTL ? 'text-right' : ''}`}>
+            <h2 className="text-2xl font-bold text-stone-800 mb-2">{t('membership.chooseType')}</h2>
+            <p className="text-sm text-stone-600">{t('membership.chooseTypeSubtitle')}</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="grid md:grid-cols-3 gap-4 mb-8">
             {memberTypes.map((type) => {
               const Icon = type.icon;
               const isSelected = selectedType === type.id;
