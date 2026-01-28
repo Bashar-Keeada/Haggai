@@ -922,17 +922,9 @@ const BoardMeetings = ({ language, isRTL }) => {
               {authLoading ? (
                 <RefreshCw className="h-4 w-4 animate-spin" />
               ) : (
-                loginMode === 'login' ? txt.loginButton : txt.setupButton
+                language === 'sv' ? 'Logga in' : 'Log in'
               )}
             </Button>
-
-            <button
-              type="button"
-              onClick={() => setLoginMode(loginMode === 'login' ? 'setup' : 'login')}
-              className="w-full text-sm text-haggai hover:underline"
-            >
-              {loginMode === 'login' ? txt.noAccount : txt.hasAccount}
-            </button>
           </form>
         </DialogContent>
       </Dialog>
