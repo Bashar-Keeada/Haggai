@@ -1934,47 +1934,47 @@ async def create_participant_account(nomination: dict, registration_data: dict):
 
 
 async def send_participant_approval_email(email: str, name: str, password: str, workshop_title: str):
-    """Send approval email to participant with login credentials"""
+    """Send approval email to participant with login credentials - Always in Arabic"""
     frontend_url = os.environ.get('FRONTEND_URL', 'https://membership-hub-30.preview.emergentagent.com')
     
     html_content = f"""
     <!DOCTYPE html>
-    <html>
+    <html dir="rtl">
     <head><meta charset="UTF-8"></head>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl; text-align: right;">
         <div style="background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 24px;">🎉 Din registrering är godkänd!</h1>
-            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Välkommen till {workshop_title}</p>
+            <h1 style="color: white; margin: 0; font-size: 24px;">🎉 تمت الموافقة على تسجيلك!</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">مرحباً بك في {workshop_title}</p>
         </div>
         
         <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
-            <p>Hej <strong>{name}</strong>,</p>
+            <p>تحية طيبة <strong>{name}</strong>،</p>
             
-            <p>Grattis! Din registrering för <strong>{workshop_title}</strong> har godkänts.</p>
+            <p>مبروك! تمت الموافقة على تسجيلك في <strong>{workshop_title}</strong>.</p>
             
-            <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border-left: 4px solid #2e7d32; margin: 20px 0;">
-                <h3 style="color: #2e7d32; margin-top: 0;">Dina inloggningsuppgifter</h3>
-                <p style="margin: 5px 0;"><strong>E-post:</strong> {email}</p>
-                <p style="margin: 5px 0;"><strong>Lösenord:</strong> <code style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 16px;">{password}</code></p>
+            <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border-right: 4px solid #2e7d32; margin: 20px 0;">
+                <h3 style="color: #2e7d32; margin-top: 0;">بيانات تسجيل الدخول الخاصة بك</h3>
+                <p style="margin: 5px 0;"><strong>البريد الإلكتروني:</strong> {email}</p>
+                <p style="margin: 5px 0;"><strong>كلمة المرور:</strong> <code style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 16px;">{password}</code></p>
             </div>
             
-            <p><strong>Som deltagare kan du nu:</strong></p>
-            <ul>
-                <li>📛 Ladda ner din namnbricka</li>
-                <li>📅 Se workshop-agenda och schema</li>
-                <li>ℹ️ Få tillgång till workshop-information</li>
-                <li>👤 Hantera din profil</li>
+            <p><strong>كمشارك، يمكنك الآن:</strong></p>
+            <ul style="padding-right: 20px;">
+                <li>📛 تحميل بطاقة اسمك</li>
+                <li>📅 عرض جدول وبرنامج الورشة</li>
+                <li>ℹ️ الوصول إلى معلومات الورشة</li>
+                <li>👤 إدارة ملفك الشخصي</li>
             </ul>
             
             <div style="text-align: center; margin: 30px 0;">
-                <a href="{frontend_url}/deltagare/login" style="display: inline-block; background: #15564e; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
-                    Logga in till din portal →
+                <a href="{frontend_url}/deltagare/login?lang=ar" style="display: inline-block; background: #15564e; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                    تسجيل الدخول إلى البوابة ←
                 </a>
             </div>
             
-            <p style="color: #666; font-size: 14px; margin-top: 30px;">Vi ser fram emot att ha dig med på workshopen!</p>
+            <p style="color: #666; font-size: 14px; margin-top: 30px;">نتطلع إلى رؤيتك في الورشة!</p>
             
-            <p>Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+            <p>مع أطيب التحيات،<br><strong>هاجاي السويد</strong></p>
         </div>
     </body>
     </html>
@@ -1984,7 +1984,7 @@ async def send_participant_approval_email(email: str, name: str, password: str, 
         await asyncio.to_thread(resend.Emails.send, {
             "from": SENDER_EMAIL,
             "to": [email],
-            "subject": f"✅ Godkänd för {workshop_title} - Dina inloggningsuppgifter",
+            "subject": f"✅ تمت الموافقة على تسجيلك في {workshop_title}",
             "html": html_content
         })
         logging.info(f"Approval email sent to participant {email}")
