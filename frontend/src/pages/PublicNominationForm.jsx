@@ -237,11 +237,13 @@ const PublicNominationForm = () => {
 
   const sendViaWhatsApp = () => {
     const workshopTitle = getLocalizedText(workshop?.title);
-    const message = txt.whatsAppMessage
+    // Always use Arabic for WhatsApp message
+    const arabicMessage = 'مرحبًا {name}! لقد تمت دعوتك من قبل {inviter} للمشاركة في {workshop}. املأ نموذج التسجيل هنا: {link}';
+    const message = arabicMessage
       .replace('{name}', formData.nominee_name)
       .replace('{inviter}', formData.inviter_name)
       .replace('{workshop}', workshopTitle)
-      .replace('{link}', registrationLink);
+      .replace('{link}', registrationLink + '?lang=ar');
     
     // Format phone number for WhatsApp
     let phone = formData.nominee_phone.replace(/\s+/g, '').replace(/^0/, '46');
