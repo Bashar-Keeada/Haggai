@@ -730,6 +730,103 @@ async def delete_board_member(member_id: str):
     return {"message": "Board member deleted successfully"}
 
 
+# ==================== BYLAWS (STADGAR) ENDPOINTS ====================
+
+class BylawItem(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    section: str  # e.g., "§1", "§2"
+    title_sv: str
+    title_en: Optional[str] = None
+    title_ar: Optional[str] = None
+    content_sv: str
+    content_en: Optional[str] = None
+    content_ar: Optional[str] = None
+    order: int = 0
+
+class BylawsUpdate(BaseModel):
+    items: List[BylawItem]
+    adopted_date: Optional[str] = None
+
+@router.get("/bylaws")
+async def get_bylaws():
+    """Get all bylaws/stadgar"""
+    bylaws = await db.bylaws.find_one({"type": "main"})
+    if not bylaws:
+        # Return default bylaws if none exist
+        default_items = [
+            {"id": str(uuid.uuid4()), "section": "§1", "title_sv": "Föreningens namn", "content_sv": "Föreningens namn är Haggai Sweden.", "order": 1},
+            {"id": str(uuid.uuid4()), "section": "§2", "title_sv": "Syfte", "content_sv": "Syftet är att stärka och utrusta kristna ledare genom utbildning, mentorskap och nätverkande. Föreningen främjar etisk och samhällelig utveckling baserat på kristna värderingar.", "order": 2},
+            {"id": str(uuid.uuid4()), "section": "§3", "title_sv": "Säte", "content_sv": "Föreningen har sitt säte i Stockholm. Adress: Modulvägen 6, 141 75 Kungens Kurva.", "order": 3},
+            {"id": str(uuid.uuid4()), "section": "§4", "title_sv": "Medlemskap", "content_sv": "Medlemskap är öppet för alla som delar föreningens syfte. Medlemsavgiften är 1200 kr per år. Medlemskap erhålls genom att betala avgiften och godkänna stadgarna.", "order": 4},
+            {"id": str(uuid.uuid4()), "section": "§5", "title_sv": "Styrelse", "content_sv": "Styrelsen består av minst tre personer: Ordförande (Bashar), Kassör (Ravi) och Ledamöter (Mazin, Peter, Alen). Styrelsen ansvarar för verksamhet, ekonomi och beslut.", "order": 5},
+            {"id": str(uuid.uuid4()), "section": "§6", "title_sv": "Årsmöte", "content_sv": "Årsmötet hålls årligen och är föreningens högsta beslutande organ. Beslut fattas med enkel majoritet. Vid lika röstetal har ordföranden utslagsröst.", "order": 6},
+            {"id": str(uuid.uuid4()), "section": "§7", "title_sv": "Ekonomi", "content_sv": "Kassören ansvarar för föreningens ekonomi. Föreningens ekonomi granskas av en revisor utsedd av årsmötet.", "order": 7},
+            {"id": str(uuid.uuid4()), "section": "§8", "title_sv": "Upplösning", "content_sv": "Vid upplösning av föreningen ska eventuella tillgångar användas enligt föreningens syfte eller skänkas till en ideell organisation med liknande ändamål.", "order": 8},
+            {"id": str(uuid.uuid4()), "section": "§9", "title_sv": "Styrelsearbete", "content_sv": "Styrelsens mandatperiod är tre år. Styrelsen sammanträder minst 4 gånger per år och är beslutsmässig när mer än hälften är närvarande.", "order": 9},
+        ]
+        return {"items": default_items, "adopted_date": "16 april 2025"}
+    
+    # Remove MongoDB _id
+    bylaws.pop('_id', None)
+    return bylaws
+
+@router.put("/bylaws")
+async def update_bylaws(data: BylawsUpdate):
+    """Update all bylaws/stadgar"""
+    bylaws_doc = {
+        "type": "main",
+        "items": [item.model_dump() for item in data.items],
+        "adopted_date": data.adopted_date or "16 april 2025",
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.bylaws.update_one(
+        {"type": "main"},
+        {"$set": bylaws_doc},
+        upsert=True
+    )
+    
+    return {"message": "Bylaws updated successfully", "items": bylaws_doc["items"]}
+
+@router.post("/bylaws/item")
+async def add_bylaw_item(item: BylawItem):
+    """Add a new bylaw item"""
+    bylaws = await db.bylaws.find_one({"type": "main"})
+    
+    if not bylaws:
+        bylaws = {"type": "main", "items": [], "adopted_date": "16 april 2025"}
+    
+    new_item = item.model_dump()
+    bylaws_items = bylaws.get("items", [])
+    bylaws_items.append(new_item)
+    
+    await db.bylaws.update_one(
+        {"type": "main"},
+        {"$set": {"items": bylaws_items, "updated_at": datetime.now(timezone.utc).isoformat()}},
+        upsert=True
+    )
+    
+    return new_item
+
+@router.delete("/bylaws/item/{item_id}")
+async def delete_bylaw_item(item_id: str):
+    """Delete a bylaw item"""
+    bylaws = await db.bylaws.find_one({"type": "main"})
+    
+    if not bylaws:
+        raise HTTPException(status_code=404, detail="Bylaws not found")
+    
+    items = bylaws.get("items", [])
+    items = [i for i in items if i.get("id") != item_id]
+    
+    await db.bylaws.update_one(
+        {"type": "main"},
+        {"$set": {"items": items, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    return {"message": "Bylaw item deleted"}
+
+
 # ==================== BOARD MEMBER AUTHENTICATION ====================
 
 class BoardMemberLogin(BaseModel):
