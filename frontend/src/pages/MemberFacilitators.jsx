@@ -141,15 +141,24 @@ const MemberFacilitators = () => {
             <ArrowLeft className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
             {txt.back}
           </Link>
-          <div className="relative w-48">
-            <Search className={`absolute top-1/2 transform -translate-y-1/2 h-4 w-4 text-stone-400 ${isRTL ? 'right-3' : 'left-3'}`} />
-            <Input
-              type="text"
-              placeholder={txt.search}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={`${isRTL ? 'pr-9' : 'pl-9'} py-1 text-sm bg-white border-stone-200 rounded-lg h-8`}
-            />
+          <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <div className="relative w-40">
+              <Search className={`absolute top-1/2 transform -translate-y-1/2 h-4 w-4 text-stone-400 ${isRTL ? 'right-3' : 'left-3'}`} />
+              <Input
+                type="text"
+                placeholder={txt.search}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={`${isRTL ? 'pr-9' : 'pl-9'} py-1 text-sm bg-white border-stone-200 rounded-lg h-8`}
+              />
+            </div>
+            <Link 
+              to="/admin/ledare"
+              className="inline-flex items-center gap-1 bg-amber-600 hover:bg-amber-700 text-white text-sm px-3 py-1.5 rounded-lg transition-colors"
+            >
+              <UserPlus className="h-4 w-4" />
+              {language === 'sv' ? 'Lägg till' : language === 'ar' ? 'إضافة' : 'Add'}
+            </Link>
           </div>
         </div>
 
