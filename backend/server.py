@@ -1678,54 +1678,54 @@ async def reject_nomination(nomination_id: str, reason: Optional[str] = None):
 
 
 async def send_nomination_invitation_to_nominee(nomination: Nomination):
-    """Send invitation email to the nominated person after admin approval"""
+    """Send invitation email to the nominated person after admin approval - Always in Arabic"""
     frontend_url = os.environ.get('FRONTEND_URL', 'https://haggai-training.preview.emergentagent.com')
     registration_link = f"{frontend_url}/registrering/{nomination.id}"
     
     html_content = f"""
     <!DOCTYPE html>
-    <html>
+    <html dir="rtl">
     <head><meta charset="UTF-8"></head>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl; text-align: right;">
         <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 24px;">🎓 Du har blivit nominerad!</h1>
+            <h1 style="color: white; margin: 0; font-size: 24px;">🎓 لقد تم ترشيحك!</h1>
         </div>
         
         <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-radius: 0 0 10px 10px;">
-            <p style="font-size: 16px;">Hej <strong>{nomination.nominee_name}</strong>,</p>
+            <p style="font-size: 16px;">مرحباً <strong>{nomination.nominee_name}</strong>،</p>
             
-            <p><strong>{nomination.nominator_name}</strong> har nominerat och rekommenderat dig att delta i ett värdefullt ledarprogram:</p>
+            <p>قام <strong>{nomination.nominator_name}</strong> بترشيحك والتوصية بك للمشاركة في برنامج قيادي قيّم:</p>
             
-            <div style="background: white; padding: 20px; border-radius: 10px; border-left: 4px solid #014D73; margin: 20px 0;">
+            <div style="background: white; padding: 20px; border-radius: 10px; border-right: 4px solid #014D73; margin: 20px 0;">
                 <h2 style="color: #014D73; margin: 0 0 10px 0; font-size: 20px;">{nomination.event_title}</h2>
-                {f'<p style="color: #666; margin: 0;"><strong>Datum:</strong> {nomination.event_date}</p>' if nomination.event_date else ''}
+                {f'<p style="color: #666; margin: 0;"><strong>التاريخ:</strong> {nomination.event_date}</p>' if nomination.event_date else ''}
             </div>
             
-            <h3 style="color: #014D73;">Om Haggai International</h3>
-            <p>Haggai International är en global organisation som utbildar kristna ledare från hela världen. Programmet utmärker sig genom sin ekumeniska karaktär, där det samlar ledare från olika kyrkor och samfund utan att tillhöra någon specifik kyrka.</p>
+            <h3 style="color: #014D73;">عن هاجاي الدولية</h3>
+            <p>هاجاي الدولية هي منظمة عالمية تدرب القادة المسيحيين من جميع أنحاء العالم. يتميز البرنامج بطابعه المسكوني، حيث يجمع القادة من مختلف الكنائس والطوائف دون الانتماء إلى كنيسة معينة.</p>
             
-            <p>Målet är att utrusta dig med:</p>
-            <ul>
-                <li>Praktiska ledarskapsverktyg</li>
-                <li>En bredare vision för din tjänst</li>
-                <li>Ett internationellt nätverk av kristna ledare</li>
-                <li>Personlig och andlig tillväxt</li>
+            <p>الهدف هو تزويدك بـ:</p>
+            <ul style="padding-right: 20px;">
+                <li>أدوات قيادية عملية</li>
+                <li>رؤية أوسع لخدمتك</li>
+                <li>شبكة دولية من القادة المسيحيين</li>
+                <li>نمو شخصي وروحي</li>
             </ul>
             
             {f'''<div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                <p style="margin: 0; font-weight: bold; color: #2e7d32;">Motivering från {nomination.nominator_name}:</p>
+                <p style="margin: 0; font-weight: bold; color: #2e7d32;">سبب الترشيح من {nomination.nominator_name}:</p>
                 <p style="margin: 10px 0 0 0; font-style: italic; color: #555;">{nomination.motivation}</p>
             </div>''' if nomination.motivation else ''}
             
             <div style="text-align: center; margin: 30px 0;">
                 <a href="{registration_link}" style="display: inline-block; background: #014D73; color: white; padding: 15px 40px; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 16px;">
-                    Registrera dig nu
+                    سجّل الآن
                 </a>
             </div>
             
-            <p style="color: #666; font-size: 14px;">Om du har frågor om programmet, kontakta oss gärna.</p>
+            <p style="color: #666; font-size: 14px;">إذا كان لديك أي أسئلة حول البرنامج، لا تتردد في التواصل معنا.</p>
             
-            <p style="margin-top: 30px;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+            <p style="margin-top: 30px;">مع أطيب التحيات،<br><strong>هاجاي السويد</strong></p>
             
             <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; font-size: 12px; color: #999;">
                 <p><a href="https://peoplepotential.se" style="color: #014D73;">peoplepotential.se</a> | <a href="mailto:info@haggai.se" style="color: #014D73;">info@haggai.se</a></p>
@@ -1739,7 +1739,7 @@ async def send_nomination_invitation_to_nominee(nomination: Nomination):
         await asyncio.to_thread(resend.Emails.send, {
             "from": SENDER_EMAIL,
             "to": [nomination.nominee_email],
-            "subject": f"🎓 {nomination.nominator_name} har nominerat dig till {nomination.event_title}",
+            "subject": f"🎓 {nomination.nominator_name} قام بترشيحك لـ {nomination.event_title}",
             "html": html_content
         })
         logging.info(f"Invitation email sent to nominee: {nomination.nominee_email}")
