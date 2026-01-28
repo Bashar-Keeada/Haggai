@@ -8,7 +8,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { 
   User, MessageSquare, GraduationCap, Users, Settings, LogOut, 
   Bell, Edit, Mail, Phone, MapPin, Award, Heart, Briefcase,
-  MessageCircle, ArrowLeft, ClipboardCheck, IdCard
+  MessageCircle, ArrowLeft, ClipboardCheck, IdCard, UserCog
 } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
