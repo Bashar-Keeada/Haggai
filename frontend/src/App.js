@@ -140,6 +140,12 @@ const ProtectedAppContent = () => {
         <Route path="/partners" element={<Partners />} />
         <Route path="/donera" element={<Donations />} />
         <Route path="/medlemmar" element={<MembersArea />} />
+        <Route path="/medlemmar/facilitatorer" element={<MemberFacilitators />} />
+        <Route path="/medlemmar/enhet" element={<MemberUnity />} />
+        <Route path="/medlemmar/utbildningar" element={<MemberWorkshops />} />
+        <Route path="/medlemmar/karnamnen" element={<MemberKnowledge />} />
+        <Route path="/medlemmar/stadgar" element={<MemberBylaws />} />
+        <Route path="/medlemmar/styrelse" element={<MemberBoard />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/ledare" element={<AdminLeaders />} />
         <Route path="/admin/namnbrickor" element={<AdminNameBadges />} />
