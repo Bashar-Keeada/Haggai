@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Calendar, Plus, Edit2, Archive, Trash2, Save, X, Clock, MapPin, 
   Users, FileText, ChevronDown, ChevronUp, CheckCircle, AlertCircle,
-  RefreshCw, ClipboardList, LogIn, LogOut, Mail, Lock, Bell, Send, Eye, EyeOff
+  RefreshCw, ClipboardList, LogIn, LogOut, Lock, Bell, Send, Eye, EyeOff
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -24,14 +24,11 @@ const BoardMeetings = ({ language, isRTL }) => {
   const [editingMeeting, setEditingMeeting] = useState(null);
   const [expandedMeeting, setExpandedMeeting] = useState(null);
   
-  // Auth states
+  // Auth states - simplified
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentMember, setCurrentMember] = useState(null);
-  const [loginMode, setLoginMode] = useState('login'); // 'login' or 'setup'
-  const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
 
