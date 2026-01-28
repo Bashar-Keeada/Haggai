@@ -335,6 +335,52 @@ const AdminNominations = () => {
     }
   };
 
+  const resetCreateForm = () => {
+    setCreateForm({
+      nominee_name: '',
+      nominee_email: '',
+      nominee_phone: '',
+      nominee_church: '',
+      nominee_role: '',
+      nominee_activities: '',
+      nominator_name: 'Admin',
+      nominator_email: 'admin@haggai.se',
+      event_id: '',
+      event_title: '',
+      motivation: ''
+    });
+  };
+
+  const createNomination = async () => {
+    if (!createForm.nominee_name || !createForm.nominee_email || !createForm.event_id) {
+      toast.error(language === 'sv' ? 'Fyll i alla obligatoriska fält' : 'Fill in all required fields');
+      return;
+    }
+
+    setCreating(true);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/nominations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(createForm)
+      });
+      
+      if (response.ok) {
+        toast.success(txt.nominationCreated || 'Nominering skapad!');
+        setShowCreateDialog(false);
+        resetCreateForm();
+        fetchNominations();
+        fetchStats();
+      } else {
+        const error = await response.json();
+        toast.error(error.detail || 'Kunde inte skapa nominering');
+      }
+    } catch (error) {
+      toast.error('Kunde inte skapa nominering');
+    } finally {
+      setCreating(false);
+    }
+  };
 
   const deleteNomination = async (id) => {
     if (!window.confirm(txt.confirmDelete)) return;
