@@ -732,44 +732,61 @@ const BoardMeetings = ({ language, isRTL }) => {
   }
 
   return (
-    <div className={`space-y-8 ${isRTL ? 'rtl' : 'ltr'}`}>
+    <div className={`space-y-6 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <div className={`flex items-center justify-between flex-wrap gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
         <div className={isRTL ? 'text-right' : ''}>
-          <h2 className="text-2xl font-bold text-stone-800">{txt.title}</h2>
-          <p className="text-stone-600">{txt.subtitle}</p>
+          <h2 className="text-xl font-bold text-stone-800">{txt.title}</h2>
+          <p className="text-stone-600 text-sm">{txt.subtitle}</p>
         </div>
         
-        <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+        <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
           {isLoggedIn ? (
             <>
-              <div className="flex items-center gap-2 px-3 py-2 bg-green-50 rounded-lg">
-                <div className="w-8 h-8 bg-haggai rounded-full flex items-center justify-center text-white text-sm font-bold">
-                  {currentMember?.name?.charAt(0) || 'S'}
-                </div>
-                <div className="text-sm">
-                  <p className="text-stone-500 text-xs">{txt.loggedInAs}</p>
-                  <p className="font-medium text-stone-800">{currentMember?.name}</p>
-                </div>
-              </div>
-              <Button variant="ghost" size="sm" onClick={handleLogout}>
-                <LogOut className="h-4 w-4 mr-1" />
-                {txt.logout}
+              <Badge className="bg-green-100 text-green-700 px-3 py-1">
+                <CheckCircle className="h-3 w-3 mr-1" />
+                {language === 'sv' ? 'Inloggad' : 'Logged in'}
+              </Badge>
+              <Button variant="ghost" size="sm" onClick={handleLogout} className="text-stone-500 hover:text-stone-700">
+                <LogOut className="h-4 w-4" />
+              </Button>
+              <Button onClick={openCreateDialog} className="bg-haggai hover:bg-haggai-dark text-sm">
+                <Plus className="h-4 w-4 mr-1" />
+                {txt.newMeeting}
               </Button>
             </>
           ) : (
-            <Button variant="outline" onClick={() => setShowLoginDialog(true)}>
-              <LogIn className="h-4 w-4 mr-2" />
-              {txt.login}
-            </Button>
+            <>
+              <Button 
+                onClick={() => setShowLoginDialog(true)} 
+                className="bg-blue-600 hover:bg-blue-700 text-white text-sm"
+              >
+                <LogIn className="h-4 w-4 mr-1" />
+                {language === 'sv' ? 'Logga in för att redigera' : 'Login to edit'}
+              </Button>
+            </>
           )}
-          
-          <Button onClick={openCreateDialog} className="bg-haggai hover:bg-haggai-dark">
-            <Plus className="h-4 w-4 mr-2" />
-            {txt.newMeeting}
-          </Button>
         </div>
       </div>
+
+      {/* Help text when not logged in */}
+      {!isLoggedIn && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <div className={`flex items-start gap-2 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
+            <AlertCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+            <div className="text-sm">
+              <p className="text-blue-800 font-medium">
+                {language === 'sv' ? 'Vill du skapa eller redigera möten?' : 'Want to create or edit meetings?'}
+              </p>
+              <p className="text-blue-600">
+                {language === 'sv' 
+                  ? 'Klicka på "Logga in för att redigera" och använd styrelselösenordet.' 
+                  : 'Click "Login to edit" and use the board password.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Active Meetings */}
       <div>
