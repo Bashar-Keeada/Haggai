@@ -42,7 +42,7 @@ const BoardMeetings = ({ language, isRTL }) => {
   });
 
   const [newAgendaItem, setNewAgendaItem] = useState({ title: '', description: '', responsible: '' });
-  const [newAttendee, setNewAttendee] = useState('');
+  const [newAttendee, setNewAttendee] = useState({ name: '', email: '' });
 
   const txt = {
     sv: {
@@ -383,12 +383,15 @@ const BoardMeetings = ({ language, isRTL }) => {
   };
 
   const handleAddAttendee = () => {
-    if (newAttendee.trim()) {
+    if (newAttendee.name.trim()) {
+      const attendeeStr = newAttendee.email.trim() 
+        ? `${newAttendee.name.trim()} (${newAttendee.email.trim()})` 
+        : newAttendee.name.trim();
       setFormData(prev => ({
         ...prev,
-        attendees: [...prev.attendees, newAttendee.trim()]
+        attendees: [...prev.attendees, attendeeStr]
       }));
-      setNewAttendee('');
+      setNewAttendee({ name: '', email: '' });
     }
   };
 
