@@ -237,6 +237,55 @@ const EventCalendar = () => {
     setIsDialogOpen(true);
   };
 
+  const handleContactRequest = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/contact-requests`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: registrationData.name,
+          email: registrationData.email,
+          phone: registrationData.phone,
+          message: registrationData.message,
+          workshop_id: selectedEvent?.id,
+          workshop_title: getLocalizedText(selectedEvent?.title),
+          type: 'interest'
+        })
+      });
+
+      if (response.ok) {
+        toast.success(
+          language === 'sv' ? 'Tack!' : language === 'ar' ? 'شكراً!' : 'Thank you!',
+          { description: language === 'sv' 
+            ? 'Vi kontaktar dig snart.' 
+            : language === 'ar' 
+              ? 'سنتواصل معك قريباً.'
+              : 'We will contact you soon.' 
+          }
+        );
+        setIsDialogOpen(false);
+        setRegistrationData({ name: '', email: '', phone: '', organization: '', message: '' });
+      } else {
+        throw new Error('Failed');
+      }
+    } catch (error) {
+      toast.error(
+        language === 'sv' ? 'Fel' : language === 'ar' ? 'خطأ' : 'Error',
+        { description: language === 'sv' 
+          ? 'Kunde inte skicka. Försök igen.' 
+          : language === 'ar' 
+            ? 'تعذر الإرسال. حاول مرة أخرى.'
+            : 'Could not send. Please try again.' 
+        }
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleNominateClick = (event, e) => {
     e.stopPropagation(); // Prevent event card click
     // Navigate to the new simplified nomination form
