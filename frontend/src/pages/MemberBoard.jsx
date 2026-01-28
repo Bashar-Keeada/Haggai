@@ -105,6 +105,7 @@ const MemberBoard = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          term_start: new Date().getFullYear().toString(),
           is_current: true
         })
       });
@@ -150,8 +151,9 @@ const MemberBoard = () => {
       : `Archive ${member.name}?`)) return;
 
     try {
-      const response = await fetch(`${BACKEND_URL}/api/board-members/${member.id}/archive`, {
-        method: 'POST'
+      const currentYear = new Date().getFullYear().toString();
+      const response = await fetch(`${BACKEND_URL}/api/board-members/${member.id}/archive?term_end=${currentYear}`, {
+        method: 'PUT'
       });
 
       if (response.ok) {
