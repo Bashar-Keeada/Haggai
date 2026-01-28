@@ -275,6 +275,12 @@ const MembersArea = () => {
       viewCalendar: 'عرض التقويم الكامل',
       noWorkshops: 'لا توجد تدريبات قادمة حالياً',
       spotsLeft: 'أماكن متبقية',
+      // Facilitators section
+      facilitatorsTitle: 'الميسرين/المدربين',
+      facilitatorsDesc: 'ميسرونا ذوو الخبرة الذين يوجهون ويلهمون',
+      noFacilitators: 'لم يتم تسجيل ميسرين بعد',
+      facilitatorTopic: 'مجال الخبرة',
+      facilitatorContact: 'اتصل',
       // Haggai global
       haggaiGlobal: 'حجاي الدولية',
       haggaiGlobalDesc: 'رؤيتنا العالمية',
