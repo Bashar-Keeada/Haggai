@@ -21,6 +21,7 @@ const MembersArea = () => {
   const [openSections, setOpenSections] = useState({
     unity: true,
     workshops: false,
+    facilitators: false,
     bylaws: false,
     knowledge: false,
     board: false,
@@ -32,6 +33,8 @@ const MembersArea = () => {
   const [loadingBoard, setLoadingBoard] = useState(true);
   const [workshops, setWorkshops] = useState([]);
   const [loadingWorkshops, setLoadingWorkshops] = useState(true);
+  const [facilitators, setFacilitators] = useState([]);
+  const [loadingFacilitators, setLoadingFacilitators] = useState(true);
   
   // Members login state
   const [membersPassword, setMembersPassword] = useState('');
