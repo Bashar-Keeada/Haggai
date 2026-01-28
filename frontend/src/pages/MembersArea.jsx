@@ -980,6 +980,87 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
             </Collapsible>
           </Card>
 
+          {/* Section: Facilitators/Trainers */}
+          <Card className="border-0 shadow-xl overflow-hidden">
+            <Collapsible open={openSections.facilitators} onOpenChange={() => toggleSection('facilitators')}>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="bg-gradient-to-r from-amber-500 to-amber-600 text-white cursor-pointer hover:from-amber-600 hover:to-amber-700 transition-all">
+                  <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                        <Users className="h-6 w-6" />
+                      </div>
+                      <div className={isRTL ? 'text-right' : ''}>
+                        <CardTitle className="text-xl text-white">{txt.facilitatorsTitle}</CardTitle>
+                        <p className="text-white/80 text-sm">{txt.facilitatorsDesc}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge className="bg-white/20 text-white">{facilitators.length}</Badge>
+                      {openSections.facilitators ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+                    </div>
+                  </div>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="p-6 bg-gradient-to-br from-amber-50 to-white">
+                  {loadingFacilitators ? (
+                    <div className="flex justify-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
+                    </div>
+                  ) : facilitators.length === 0 ? (
+                    <p className="text-center text-stone-500 py-8">{txt.noFacilitators}</p>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {facilitators.map((facilitator) => (
+                        <Card key={facilitator.id} className="border border-amber-100 hover:shadow-lg transition-shadow">
+                          <CardContent className="p-4">
+                            <div className={`flex items-center gap-3 mb-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                              {facilitator.profile_photo_url ? (
+                                <img 
+                                  src={facilitator.profile_photo_url} 
+                                  alt={facilitator.name}
+                                  className="w-12 h-12 rounded-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
+                                  <User className="h-6 w-6 text-amber-600" />
+                                </div>
+                              )}
+                              <div className={isRTL ? 'text-right' : ''}>
+                                <h4 className="font-semibold text-stone-800">{facilitator.name}</h4>
+                                {facilitator.role_sv && (
+                                  <p className="text-sm text-stone-500">{facilitator.role_sv}</p>
+                                )}
+                              </div>
+                            </div>
+                            {facilitator.primary_topic && (
+                              <div className={`mb-2 ${isRTL ? 'text-right' : ''}`}>
+                                <span className="text-xs text-stone-500">{txt.facilitatorTopic}:</span>
+                                <Badge className="ml-2 bg-amber-100 text-amber-800 hover:bg-amber-100">
+                                  {facilitator.primary_topic.replace(/_/g, ' ')}
+                                </Badge>
+                              </div>
+                            )}
+                            {facilitator.email && (
+                              <a 
+                                href={`mailto:${facilitator.email}`}
+                                className={`flex items-center text-sm text-amber-600 hover:underline ${isRTL ? 'flex-row-reverse' : ''}`}
+                              >
+                                <Mail className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                                {facilitator.email}
+                              </a>
+                            )}
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </CollapsibleContent>
+            </Collapsible>
+          </Card>
+
           {/* Section 2: Core Subjects (Kärnämnen) */}
           <Card className="border-0 shadow-xl overflow-hidden">
             <Collapsible open={openSections.knowledge} onOpenChange={() => toggleSection('knowledge')}>
