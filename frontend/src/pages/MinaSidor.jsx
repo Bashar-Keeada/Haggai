@@ -43,7 +43,8 @@ const MinaSidor = () => {
       backToHome: 'Tillbaka till startsidan',
       pendingEvaluations: 'Väntande utvärderingar',
       evaluateNow: 'Utvärdera nu',
-      noEvaluations: 'Inga väntande utvärderingar'
+      noEvaluations: 'Inga väntande utvärderingar',
+      facilitators: 'Facilitatorer/Tränare'
     },
     en: {
       title: 'My Pages',
