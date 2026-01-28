@@ -50,6 +50,7 @@ const MembersArea = () => {
     if (isMembersAuthenticated) {
       fetchBoardMembers();
       fetchWorkshops();
+      fetchFacilitators();
     }
   }, [isMembersAuthenticated]);
 
@@ -64,6 +65,20 @@ const MembersArea = () => {
       console.error('Failed to fetch workshops:', error);
     } finally {
       setLoadingWorkshops(false);
+    }
+  };
+
+  const fetchFacilitators = async () => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/leader-registrations?status=approved`);
+      if (res.ok) {
+        const data = await res.json();
+        setFacilitators(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch facilitators:', error);
+    } finally {
+      setLoadingFacilitators(false);
     }
   };
 
