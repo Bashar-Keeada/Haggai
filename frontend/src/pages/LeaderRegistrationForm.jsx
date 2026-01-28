@@ -203,7 +203,7 @@ const LeaderRegistrationForm = () => {
       required: 'Required field'
     },
     ar: {
-      title: 'تسجيل القائد',
+      title: 'تسجيل ميسر/مدرب',
       subtitle: 'أكمل تسجيلك كميسر / مدرب في هاجاي السويد',
       workshopLabel: 'ورشة العمل',
       personalInfo: 'المعلومات الشخصية',
