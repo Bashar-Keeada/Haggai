@@ -489,6 +489,15 @@ const AdminLeaders = () => {
   return (
     <div className={`min-h-screen bg-cream-50 py-24 ${isRTL ? 'rtl' : 'ltr'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Back Button */}
+        <Link 
+          to="/admin" 
+          className={`inline-flex items-center text-stone-600 hover:text-haggai mb-6 transition-colors ${isRTL ? 'flex-row-reverse' : ''}`}
+        >
+          <ArrowLeft className={`h-5 w-5 ${isRTL ? 'ml-2 rotate-180' : 'mr-2'}`} />
+          {language === 'sv' ? 'Tillbaka till Admin' : language === 'ar' ? 'العودة إلى الإدارة' : 'Back to Admin'}
+        </Link>
+
         {/* Header */}
         <div className={`mb-8 ${isRTL ? 'text-right' : ''}`}>
           <h1 className="text-4xl font-bold text-stone-800 mb-4">{txt.title}</h1>
