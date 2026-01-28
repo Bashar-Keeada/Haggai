@@ -747,7 +747,7 @@ class BylawsUpdate(BaseModel):
     items: List[BylawItem]
     adopted_date: Optional[str] = None
 
-@router.get("/bylaws")
+@api_router.get("/bylaws")
 async def get_bylaws():
     """Get all bylaws/stadgar"""
     bylaws = await db.bylaws.find_one({"type": "main"})
@@ -770,7 +770,7 @@ async def get_bylaws():
     bylaws.pop('_id', None)
     return bylaws
 
-@router.put("/bylaws")
+@api_router.put("/bylaws")
 async def update_bylaws(data: BylawsUpdate):
     """Update all bylaws/stadgar"""
     bylaws_doc = {
@@ -788,7 +788,7 @@ async def update_bylaws(data: BylawsUpdate):
     
     return {"message": "Bylaws updated successfully", "items": bylaws_doc["items"]}
 
-@router.post("/bylaws/item")
+@api_router.post("/bylaws/item")
 async def add_bylaw_item(item: BylawItem):
     """Add a new bylaw item"""
     bylaws = await db.bylaws.find_one({"type": "main"})
@@ -808,7 +808,7 @@ async def add_bylaw_item(item: BylawItem):
     
     return new_item
 
-@router.delete("/bylaws/item/{item_id}")
+@api_router.delete("/bylaws/item/{item_id}")
 async def delete_bylaw_item(item_id: str):
     """Delete a bylaw item"""
     bylaws = await db.bylaws.find_one({"type": "main"})
