@@ -1014,17 +1014,30 @@ const BoardMeetings = ({ language, isRTL }) => {
                 </div>
               )}
 
-              {/* Manual add */}
-              <div className={`flex gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <Input
-                  value={newAttendee}
-                  onChange={(e) => setNewAttendee(e.target.value)}
-                  placeholder={language === 'sv' ? 'Lägg till annan deltagare...' : 'Add other attendee...'}
-                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddAttendee())}
-                />
-                <Button type="button" onClick={handleAddAttendee} size="sm" variant="outline">
-                  <Plus className="h-4 w-4" />
-                </Button>
+              {/* Manual add - with email */}
+              <div className="space-y-2 p-3 bg-stone-100 rounded-lg">
+                <Label className="text-sm text-stone-600">
+                  {language === 'sv' ? 'Lägg till annan deltagare (ej styrelsemedlem):' : 'Add other attendee (non-board member):'}
+                </Label>
+                <div className={`flex gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <Input
+                    value={newAttendee.name}
+                    onChange={(e) => setNewAttendee(prev => ({ ...prev, name: e.target.value }))}
+                    placeholder={language === 'sv' ? 'Namn' : 'Name'}
+                    className="flex-1"
+                  />
+                  <Input
+                    type="email"
+                    value={newAttendee.email}
+                    onChange={(e) => setNewAttendee(prev => ({ ...prev, email: e.target.value }))}
+                    placeholder={language === 'sv' ? 'E-post (för kallelse)' : 'Email (for invitation)'}
+                    className="flex-1"
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddAttendee())}
+                  />
+                  <Button type="button" onClick={handleAddAttendee} size="sm" variant="outline">
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
 
               {/* Selected attendees (for manually added ones) */}
