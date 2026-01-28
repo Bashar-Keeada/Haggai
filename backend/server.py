@@ -1680,7 +1680,7 @@ async def reject_nomination(nomination_id: str, reason: Optional[str] = None):
 async def send_nomination_invitation_to_nominee(nomination: Nomination):
     """Send invitation email to the nominated person after admin approval - Always in Arabic"""
     frontend_url = os.environ.get('FRONTEND_URL', 'https://haggai-members.preview.emergentagent.com')
-    registration_link = f"{frontend_url}/registrering/{nomination.id}"
+    registration_link = f"{frontend_url}/registrering/{nomination.id}?lang=ar"
     
     html_content = f"""
     <!DOCTYPE html>
