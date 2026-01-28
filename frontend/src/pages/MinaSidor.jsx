@@ -93,7 +93,8 @@ const MinaSidor = () => {
       backToHome: 'العودة للصفحة الرئيسية',
       pendingEvaluations: 'التقييمات المعلقة',
       evaluateNow: 'قيم الآن',
-      noEvaluations: 'لا توجد تقييمات معلقة'
+      noEvaluations: 'لا توجد تقييمات معلقة',
+      facilitators: 'الميسرين/المدربين'
     }
   };
 
