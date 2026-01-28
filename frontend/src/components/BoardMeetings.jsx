@@ -838,40 +838,24 @@ const BoardMeetings = ({ language, isRTL }) => {
         </div>
       )}
 
-      {/* Login Dialog */}
+      {/* Login Dialog - Simple password */}
       <Dialog open={showLoginDialog} onOpenChange={(open) => { setShowLoginDialog(open); if (!open) resetLoginForm(); }}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-sm">
           <DialogHeader className={isRTL ? 'text-right' : ''}>
             <DialogTitle className="flex items-center gap-2">
-              <LogIn className="h-5 w-5 text-haggai" />
-              {loginMode === 'login' ? txt.loginTitle : txt.setupTitle}
+              <Lock className="h-5 w-5 text-haggai" />
+              {language === 'sv' ? 'Styrelseinloggning' : 'Board Login'}
             </DialogTitle>
             <DialogDescription>
-              {loginMode === 'login' ? txt.loginSubtitle : txt.setupSubtitle}
+              {language === 'sv' 
+                ? 'Ange styrelselösenordet för att redigera möten' 
+                : 'Enter the board password to edit meetings'}
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={loginMode === 'login' ? handleLogin : handleSetupAccount} className="space-y-4 mt-4">
+          <form onSubmit={handleLogin} className="space-y-4 mt-4">
             <div className="space-y-2">
-              <Label htmlFor="email">{txt.email}</Label>
-              <div className="relative">
-                <Mail className={`absolute top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 ${isRTL ? 'right-3' : 'left-3'}`} />
-                <Input
-                  id="email"
-                  type="email"
-                  value={loginEmail}
-                  onChange={(e) => setLoginEmail(e.target.value)}
-                  onBlur={handleCheckEmail}
-                  className={`${isRTL ? 'pr-10' : 'pl-10'}`}
-                  placeholder="din.email@example.com"
-                  required
-                  dir="ltr"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">{txt.password}</Label>
+              <Label htmlFor="password">{txt.password || 'Lösenord'}</Label>
               <div className="relative">
                 <Lock className={`absolute top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 ${isRTL ? 'right-3' : 'left-3'}`} />
                 <Input
@@ -879,14 +863,31 @@ const BoardMeetings = ({ language, isRTL }) => {
                   type={showPassword ? 'text' : 'password'}
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
-                  className={`${isRTL ? 'pr-10' : 'pl-10'} pr-10`}
+                  className={`${isRTL ? 'pr-10 pl-10' : 'pl-10 pr-10'}`}
                   placeholder="••••••••"
                   required
-                  minLength={6}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  className={`absolute top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 ${isRTL ? 'left-3' : 'right-3'}`}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+
+            <Button type="submit" className="w-full bg-haggai hover:bg-haggai-dark" disabled={authLoading}>
+              {authLoading ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+              ) : (
+                <LogIn className="h-4 w-4 mr-2" />
+              )}
+              {language === 'sv' ? 'Logga in' : 'Log in'}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
