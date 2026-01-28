@@ -150,7 +150,7 @@ const NomineeRegistration = () => {
       errorDesc: 'Could not submit application. Please try again.'
     },
     ar: {
-      pageTitle: 'طلب المشاركة في تدريب خبرة قادة حجاي الوطني - سودرتاليا 2026',
+      pageTitle: 'طلب المشاركة في تدريب خبرة قادة حجاي الوطني - ستوكهولم 2026',
       loading: 'جاري التحميل...',
       invalidLink: 'رابط غير صالح أو منتهي الصلاحية',
       invalidLinkDesc: 'رابط التسجيل هذا غير صالح. يرجى الاتصال بالشخص الذي رشحك.',
