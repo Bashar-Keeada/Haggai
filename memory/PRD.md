@@ -56,7 +56,10 @@ Multi-page website for "Haggai Sweden" - a comprehensive full-stack application 
 ## Known Issues
 
 ### P0 - Critical
-- **Deployment Database Separation**: Production (`haggai.se`) and preview (`haggai-members.preview.emergentagent.com`) use separate databases. Data entered on production is NOT visible in preview environment. **Requires Emergent Support for data migration.**
+- **Deployment Database Separation**: Production and preview environments use separate databases. Data entered on production is NOT visible in preview environment. **Requires Emergent Support for data migration.**
+
+### P1 - Fixed This Session
+- ~~**Board Member Management Not Working**~~ - FIXED: Backend endpoints existed but frontend had wrong HTTP methods and missing required fields
 
 ### P1 - High
 - None currently
