@@ -99,12 +99,6 @@ function App() {
               <Route path="/mina-sidor/diplom" element={<MemberDiplomas />} />
               <Route path="/mina-sidor/namnskylt" element={<MemberNameBadge />} />
               <Route path="/mina-sidor/facilitatorer" element={<MemberFacilitators />} />
-              <Route path="/medlemmar/facilitatorer" element={<MemberFacilitators />} />
-              <Route path="/medlemmar/enhet" element={<MemberUnity />} />
-              <Route path="/medlemmar/utbildningar" element={<MemberWorkshops />} />
-              <Route path="/medlemmar/karnamnen" element={<MemberKnowledge />} />
-              <Route path="/medlemmar/stadgar" element={<MemberBylaws />} />
-              <Route path="/medlemmar/styrelse" element={<MemberBoard />} />
               {/* All other routes handled by ProtectedApp */}
               <Route path="/*" element={<ProtectedAppContent />} />
             </Routes>
