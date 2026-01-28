@@ -5712,7 +5712,7 @@ async def create_leader_invitation(input: LeaderInvitationCreate):
     # Send invitation email
     base_url = os.environ.get('FRONTEND_URL', 'https://haggai-training.preview.emergentagent.com')
     registration_link = f"{base_url}/ledare/registrera/{invitation.token}"
-    lang = input.language or "sv"
+    lang = input.language or "ar"  # Default to Arabic
     
     # Multilingual email content
     email_texts = {
