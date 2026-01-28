@@ -214,7 +214,8 @@ const PublicNominationForm = () => {
       if (response.ok) {
         const result = await response.json();
         setNominationId(result.id);
-        const link = `${window.location.origin}/registrering/${result.id}`;
+        // Always append ?lang=ar to open in Arabic by default
+        const link = `${window.location.origin}/registrering/${result.id}?lang=ar`;
         setRegistrationLink(link);
         setSubmitted(true);
       } else {
