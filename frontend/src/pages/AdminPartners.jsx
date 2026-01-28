@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Handshake, Plus, Edit, Trash2, Globe, Star, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Handshake, Plus, Edit, Trash2, Globe, Star, X, ArrowLeft } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
