@@ -506,89 +506,120 @@ const EventCalendar = () => {
         </div>
       </section>
 
-      {/* Registration Dialog */}
+      {/* Registration Info & Contact Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader className={isRTL ? 'text-right' : ''}>
-            <DialogTitle className="text-2xl text-stone-800">{t('calendar.registerTitle')}</DialogTitle>
+            <DialogTitle className="text-2xl text-stone-800">
+              {language === 'sv' ? 'Hur man deltar' : language === 'ar' ? 'كيفية المشاركة' : 'How to Participate'}
+            </DialogTitle>
             <DialogDescription className="text-stone-600">
-              {getLocalizedText(selectedEvent?.title)} - {selectedEvent && new Date(selectedEvent.date).toLocaleDateString(language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'sv-SE')}
+              {getLocalizedText(selectedEvent?.title)}
             </DialogDescription>
           </DialogHeader>
           
-          <form onSubmit={handleRegistration} className={`space-y-4 mt-4 ${isRTL ? 'text-right' : ''}`}>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="reg-name">{t('calendar.name')} *</Label>
-                <Input
-                  id="reg-name"
-                  value={registrationData.name}
-                  onChange={(e) => setRegistrationData({ ...registrationData, name: e.target.value })}
-                  required
-                  className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
-                />
+          {/* Info Section */}
+          <div className={`p-4 bg-amber-50 rounded-xl mb-4 ${isRTL ? 'text-right' : ''}`}>
+            <h4 className="font-semibold text-amber-800 mb-2">
+              {language === 'sv' ? '📋 Så här går det till:' : language === 'ar' ? '📋 كيف تتم العملية:' : '📋 How it works:'}
+            </h4>
+            <ol className={`text-sm text-amber-700 space-y-2 ${isRTL ? 'pr-4' : 'pl-4'}`}>
+              <li>
+                {language === 'sv' 
+                  ? '1. Du måste bli nominerad av någon som känner dig' 
+                  : language === 'ar' 
+                    ? '1. يجب أن يتم ترشيحك من قبل شخص يعرفك'
+                    : '1. You must be nominated by someone who knows you'}
+              </li>
+              <li>
+                {language === 'sv' 
+                  ? '2. Efter godkänd nominering får du en inbjudan via e-post' 
+                  : language === 'ar' 
+                    ? '2. بعد الموافقة على الترشيح، ستتلقى دعوة عبر البريد الإلكتروني'
+                    : '2. After approved nomination, you receive an invitation via email'}
+              </li>
+              <li>
+                {language === 'sv' 
+                  ? '3. Fyll i registreringsformuläret och vänta på bekräftelse' 
+                  : language === 'ar' 
+                    ? '3. املأ استمارة التسجيل وانتظر التأكيد'
+                    : '3. Complete the registration form and wait for confirmation'}
+              </li>
+            </ol>
+          </div>
+
+          {/* Contact Form */}
+          <div className={`${isRTL ? 'text-right' : ''}`}>
+            <h4 className="font-semibold text-stone-800 mb-3">
+              {language === 'sv' 
+                ? '📞 Vill du veta mer? Lämna dina uppgifter:' 
+                : language === 'ar' 
+                  ? '📞 هل تريد معرفة المزيد؟ اترك بياناتك:'
+                  : '📞 Want to know more? Leave your details:'}
+            </h4>
+            <form onSubmit={handleContactRequest} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>{language === 'sv' ? 'Namn' : language === 'ar' ? 'الاسم' : 'Name'} *</Label>
+                  <Input
+                    value={registrationData.name}
+                    onChange={(e) => setRegistrationData({ ...registrationData, name: e.target.value })}
+                    required
+                    className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{language === 'sv' ? 'E-post' : language === 'ar' ? 'البريد الإلكتروني' : 'Email'} *</Label>
+                  <Input
+                    type="email"
+                    value={registrationData.email}
+                    onChange={(e) => setRegistrationData({ ...registrationData, email: e.target.value })}
+                    required
+                    className="rounded-lg"
+                    dir="ltr"
+                  />
+                </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="reg-email">{t('calendar.email')} *</Label>
+                <Label>{language === 'sv' ? 'Telefon' : language === 'ar' ? 'الهاتف' : 'Phone'}</Label>
                 <Input
-                  id="reg-email"
-                  type="email"
-                  value={registrationData.email}
-                  onChange={(e) => setRegistrationData({ ...registrationData, email: e.target.value })}
-                  required
-                  className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
-                  dir="ltr"
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="reg-phone">{t('calendar.phone')}</Label>
-                <Input
-                  id="reg-phone"
                   value={registrationData.phone}
                   onChange={(e) => setRegistrationData({ ...registrationData, phone: e.target.value })}
-                  className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                  className="rounded-lg"
                   dir="ltr"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="reg-org">{t('calendar.organization')}</Label>
-                <Input
-                  id="reg-org"
-                  value={registrationData.organization}
-                  onChange={(e) => setRegistrationData({ ...registrationData, organization: e.target.value })}
+                <Label>{language === 'sv' ? 'Meddelande (valfritt)' : language === 'ar' ? 'رسالة (اختياري)' : 'Message (optional)'}</Label>
+                <Textarea
+                  value={registrationData.message}
+                  onChange={(e) => setRegistrationData({ ...registrationData, message: e.target.value })}
+                  rows={2}
+                  placeholder={language === 'sv' ? 'Har du frågor eller vill berätta mer om dig själv?' : language === 'ar' ? 'هل لديك أسئلة أو تريد إخبارنا المزيد عن نفسك؟' : 'Have questions or want to tell us more about yourself?'}
                   className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
                 />
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="reg-message">{t('calendar.message')}</Label>
-              <Textarea
-                id="reg-message"
-                value={registrationData.message}
-                onChange={(e) => setRegistrationData({ ...registrationData, message: e.target.value })}
-                rows={3}
-                className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
-              />
-            </div>
-            <div className={`flex gap-3 pt-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setIsDialogOpen(false)}
-                className="flex-1 rounded-xl"
-              >
-                {t('calendar.cancel')}
-              </Button>
-              <Button
-                type="submit"
-                className="flex-1 bg-haggai hover:bg-haggai-dark text-cream-50 rounded-xl"
-              >
-                {t('calendar.submit')}
-              </Button>
-            </div>
-          </form>
+              <div className={`flex gap-3 pt-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsDialogOpen(false)}
+                  className="flex-1 rounded-xl"
+                >
+                  {language === 'sv' ? 'Stäng' : language === 'ar' ? 'إغلاق' : 'Close'}
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-haggai hover:bg-haggai-dark text-cream-50 rounded-xl"
+                >
+                  {isSubmitting 
+                    ? (language === 'sv' ? 'Skickar...' : language === 'ar' ? 'جاري الإرسال...' : 'Sending...') 
+                    : (language === 'sv' ? 'Kontakta mig' : language === 'ar' ? 'تواصل معي' : 'Contact me')}
+                </Button>
+              </div>
+            </form>
+          </div>
         </DialogContent>
       </Dialog>
 
