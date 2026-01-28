@@ -1748,28 +1748,28 @@ async def send_nomination_invitation_to_nominee(nomination: Nomination):
 
 
 async def send_nomination_approved_to_nominator(nomination: Nomination):
-    """Notify nominator that their nomination was approved"""
+    """Notify nominator that their nomination was approved - Always in Arabic"""
     html_content = f"""
     <!DOCTYPE html>
-    <html>
+    <html dir="rtl">
     <head><meta charset="UTF-8"></head>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl; text-align: right;">
         <div style="background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 24px;">✅ Nominering godkänd!</h1>
+            <h1 style="color: white; margin: 0; font-size: 24px;">✅ تمت الموافقة على الترشيح!</h1>
         </div>
         
         <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-radius: 0 0 10px 10px;">
-            <p>Hej <strong>{nomination.nominator_name}</strong>,</p>
+            <p>مرحباً <strong>{nomination.nominator_name}</strong>،</p>
             
-            <p>Goda nyheter! Din nominering av <strong>{nomination.nominee_name}</strong> till <strong>{nomination.event_title}</strong> har godkänts.</p>
+            <p>أخبار سارة! تمت الموافقة على ترشيحك لـ <strong>{nomination.nominee_name}</strong> للمشاركة في <strong>{nomination.event_title}</strong>.</p>
             
-            <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border-left: 4px solid #2e7d32; margin: 20px 0;">
-                <p style="margin: 0;">Vi har nu skickat en inbjudan till {nomination.nominee_name} med information om programmet och en länk för att registrera sig.</p>
+            <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border-right: 4px solid #2e7d32; margin: 20px 0;">
+                <p style="margin: 0;">لقد أرسلنا الآن دعوة إلى {nomination.nominee_name} تتضمن معلومات عن البرنامج ورابط للتسجيل.</p>
             </div>
             
-            <p>Tack för att du hjälper till att identifiera och uppmuntra framtida ledare!</p>
+            <p>شكراً لمساعدتك في تحديد وتشجيع القادة المستقبليين!</p>
             
-            <p style="margin-top: 30px;">Med vänliga hälsningar,<br><strong>Haggai Sweden</strong></p>
+            <p style="margin-top: 30px;">مع أطيب التحيات،<br><strong>هاجاي السويد</strong></p>
         </div>
     </body>
     </html>
@@ -1779,7 +1779,7 @@ async def send_nomination_approved_to_nominator(nomination: Nomination):
         await asyncio.to_thread(resend.Emails.send, {
             "from": SENDER_EMAIL,
             "to": [nomination.nominator_email],
-            "subject": f"✅ Din nominering av {nomination.nominee_name} har godkänts!",
+            "subject": f"✅ تمت الموافقة على ترشيحك لـ {nomination.nominee_name}!",
             "html": html_content
         })
     except Exception as e:
