@@ -125,27 +125,27 @@ const Membership = () => {
                   key={type.id}
                   className={`cursor-pointer transition-all duration-300 border-2 ${
                     isSelected 
-                      ? 'border-haggai shadow-xl scale-105' 
-                      : 'border-transparent shadow-lg hover:shadow-xl hover:border-haggai-100'
+                      ? 'border-haggai shadow-lg scale-[1.02]' 
+                      : 'border-transparent shadow-md hover:shadow-lg hover:border-haggai-100'
                   }`}
                   onClick={() => setSelectedType(type.id)}
                 >
-                  <CardHeader className={`text-center pb-4 ${isRTL ? 'text-right' : ''}`}>
-                    <div className={`w-16 h-16 mb-4 rounded-2xl flex items-center justify-center transition-colors ${
+                  <CardHeader className={`text-center pb-2 ${isRTL ? 'text-right' : ''}`}>
+                    <div className={`w-12 h-12 mb-2 rounded-xl flex items-center justify-center transition-colors ${
                       isSelected ? 'bg-haggai' : 'bg-haggai-100'
                     } ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
-                      <Icon className={`h-8 w-8 ${
+                      <Icon className={`h-6 w-6 ${
                         isSelected ? 'text-cream-50' : 'text-haggai'
                       }`} />
                     </div>
-                    <CardTitle className="text-xl text-stone-800">{type.title}</CardTitle>
-                    <CardDescription className="text-stone-600">{type.description}</CardDescription>
+                    <CardTitle className="text-base text-stone-800">{type.title}</CardTitle>
+                    <CardDescription className="text-stone-600 text-sm">{type.description}</CardDescription>
                   </CardHeader>
-                  <CardContent className={`text-center ${isRTL ? 'text-right' : ''}`}>
+                  <CardContent className={`text-center pt-0 ${isRTL ? 'text-right' : ''}`}>
                     {isSelected && (
                       <div className={`flex items-center justify-center text-haggai ${isRTL ? 'flex-row-reverse' : ''}`}>
-                        <Check className={`h-5 w-5 ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                        <span className="text-sm font-medium">{t('membership.selected')}</span>
+                        <Check className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                        <span className="text-xs font-medium">{t('membership.selected')}</span>
                       </div>
                     )}
                   </CardContent>
