@@ -51,6 +51,7 @@ import MemberDiplomas from "./pages/MemberDiplomas";
 import MemberNameBadge from "./pages/MemberNameBadge";
 import MemberForgotPassword from "./pages/MemberForgotPassword";
 import MemberResetPassword from "./pages/MemberResetPassword";
+import MemberFacilitators from "./pages/MemberFacilitators";
 // Participant Portal Pages
 import ParticipantLogin from "./pages/ParticipantLogin";
 import ParticipantPortal from "./pages/ParticipantPortal";
