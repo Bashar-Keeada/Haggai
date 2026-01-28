@@ -16,9 +16,18 @@ Multi-page website for "Haggai Sweden" - a comprehensive full-stack application 
 3. **Participants** - Register for workshops, complete training
 4. **Facilitators/Trainers** - Lead workshops, access session materials
 
-## Completed Features (as of 2025-01-28)
+## Completed Features (as of 2026-01-28)
 
-### This Session
+### This Session (2026-01-28)
+- [x] **Board Member Management - FIXED** - Backend API endpoints now properly connected to frontend:
+  - `POST /api/board-members` - Create new board member (with term_start)
+  - `PUT /api/board-members/{id}/archive` - Archive existing member (with term_end query param)
+  - `GET /api/board-members` - Fetch current board members
+  - Frontend UI now properly saves new members and displays them
+- [x] **Meeting Attendee Selection** - Board members shown as checkboxes when creating meetings
+- [x] **External Attendee Email** - "Lägg till annan deltagare" now includes email field for non-board meeting invitees
+
+### Previous Session (2026-01-27)
 - [x] **Member Area Pages Redesign** - All 6 section buttons now navigate to separate pages:
   - `/medlemmar/enhet` - Vår Enhet (rose color)
   - `/medlemmar/utbildningar` - Utbildningar (blue color)
