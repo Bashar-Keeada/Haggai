@@ -25,12 +25,6 @@ const MembersArea = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
 
-  useEffect(() => {
-    if (isMembersAuthenticated) {
-      fetchData();
-    }
-  }, [isMembersAuthenticated]);
-
   const fetchData = async () => {
     try {
       const [workshopsRes, facilitatorsRes, boardRes] = await Promise.all([
@@ -46,6 +40,12 @@ const MembersArea = () => {
       console.error('Error fetching data:', error);
     }
   };
+
+  useEffect(() => {
+    if (isMembersAuthenticated) {
+      fetchData();
+    }
+  }, [isMembersAuthenticated]);
 
   const translations = {
     sv: {
