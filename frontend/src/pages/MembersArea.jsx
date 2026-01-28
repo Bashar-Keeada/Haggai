@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap, ChevronDown, ChevronUp, ChevronRight, User, Phone, Eye, EyeOff, LogIn, Info, X, Briefcase, Heart, Globe, MapPin, UserPlus, Sparkles } from 'lucide-react';
+import { FileText, Users, Building2, Calendar, Lock, BookOpen, Clock, GraduationCap, ChevronRight, User, Eye, EyeOff, LogIn, X, Heart, Globe, MapPin, UserPlus, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../components/ui/collapsible';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
@@ -18,15 +17,7 @@ const MembersArea = () => {
   const { language, isRTL } = useLanguage();
   const { isMembersAuthenticated, loginMembers, logoutMembers } = useAuth();
   const navigate = useNavigate();
-  const [openSections, setOpenSections] = useState({
-    unity: true,
-    workshops: false,
-    facilitators: false,
-    bylaws: false,
-    knowledge: false,
-    board: false,
-    meetings: false
-  });
+  const [expandedSection, setExpandedSection] = useState(null);
   const [showPreviousBoard, setShowPreviousBoard] = useState(false);
   const [currentBoard, setCurrentBoard] = useState([]);
   const [previousBoard, setPreviousBoard] = useState([]);
@@ -43,7 +34,7 @@ const MembersArea = () => {
   const [selectedSubject, setSelectedSubject] = useState(null);
 
   const toggleSection = (section) => {
-    setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
+    setExpandedSection(expandedSection === section ? null : section);
   };
 
   useEffect(() => {
@@ -82,7 +73,6 @@ const MembersArea = () => {
     }
   };
 
-  // Helper to get localized text from object or string
   const getLocalizedText = (field) => {
     if (!field) return '';
     if (typeof field === 'string') return field;
@@ -111,7 +101,6 @@ const MembersArea = () => {
     }
   };
 
-  // Fallback data if no board members in database
   const defaultBoard = [
     { name: 'Bashar', role: language === 'sv' ? 'Ordförande' : language === 'ar' ? 'الرئيس' : 'Chairman' },
     { name: 'Ravi', role: language === 'sv' ? 'Kassör' : language === 'ar' ? 'أمين الصندوق' : 'Treasurer' },
@@ -125,582 +114,167 @@ const MembersArea = () => {
   const translations = {
     sv: {
       pageTitle: 'Kunskapsstöd',
-      pageSubtitle: 'Exklusivt för Haggai Sweden medlemmar',
-      welcome: 'Välkommen till kunskapsstöd',
-      welcomeDesc: 'Här hittar du information som är exklusiv för våra medlemmar.',
-      // Our Unity section
       ourUnity: 'Vår Enhet',
-      ourUnityDesc: 'Tillsammans gör vi skillnad i Sverige',
+      ourUnityDesc: 'Tillsammans gör vi skillnad',
       unityTitle: 'Var med och förändra Sverige',
-      unityText: 'Som medlem i Haggai Sweden har du möjlighet att vara en del av något större än dig själv. Ditt engagemang, din tid och ditt ansvar är avgörande för att vi tillsammans ska kunna göra en positiv påverkan i vårt samhälle. Varje ledarskapsutbildning, varje mentorsrelation och varje steg vi tar tillsammans bidrar till att bygga ett starkare Sverige – och i förlängningen en bättre värld.',
+      unityText: 'Som medlem i Haggai Sweden har du möjlighet att vara en del av något större än dig själv. Ditt engagemang, din tid och ditt ansvar är avgörande för att vi tillsammans ska kunna göra en positiv påverkan i vårt samhälle.',
       unityCall: 'Ta ansvar. Engagera dig. Ge av din tid. Tillsammans kan vi förändra världen – en ledare i taget.',
-      // Workshops section
-      upcomingWorkshops: 'Kommande Utbildningar',
-      upcomingWorkshopsDesc: 'Se planerade workshops och nominera deltagare',
-      nominateBtn: 'Nominera någon',
-      viewCalendar: 'Se hela kalendern',
-      noWorkshops: 'Inga kommande utbildningar just nu',
-      spotsLeft: 'platser kvar',
-      // Facilitators section
-      facilitatorsTitle: 'Facilitatorer/Tränare',
-      facilitatorsDesc: 'Våra erfarna facilitatorer som guidar och inspirerar',
-      noFacilitators: 'Inga facilitatorer registrerade än',
-      facilitatorTopic: 'Specialområde',
-      facilitatorContact: 'Kontakt',
-      // Haggai global
+      upcomingWorkshops: 'Utbildningar',
+      nominateBtn: 'Nominera',
+      noWorkshops: 'Inga kommande utbildningar',
+      spotsLeft: 'platser',
+      facilitatorsTitle: 'Facilitatorer',
+      facilitatorsDesc: 'Våra erfarna facilitatorer',
+      noFacilitators: 'Inga facilitatorer än',
       haggaiGlobal: 'Haggai International',
-      haggaiGlobalDesc: 'Vår globala vision',
-      haggaiVision: 'Haggai Internationals vision är att utrusta kristna ledare världen över att göra lärjungar av alla folk.',
-      haggaiMission: 'Genom att utbilda ledare som multiplicerar sig själva, strävar vi efter att nå varje nation med evangeliet.',
-      // Rest of translations
-      bylaws: 'Föreningens Stadgar',
-      bylawsDesc: 'Läs om föreningens regler och riktlinjer',
-      adoptedDate: 'Antagna den 16 april 2025',
-      downloadPdf: 'Ladda ner PDF',
-      showBylaws: 'Visa stadgar',
-      hideBylaws: 'Dölj stadgar',
+      haggaiVision: 'Haggai Internationals vision är att utrusta kristna ledare världen över.',
+      bylaws: 'Stadgar',
+      adoptedDate: 'Antagna 16 april 2025',
       coreSubjectsTitle: 'Kärnämnen',
-      coreSubjectsDesc: 'Kärnämnen i våra nationella utbildningar',
-      coreSubjects: 'Kärnämnen',
+      coreSubjectsDesc: '21 timmars utbildning',
       hours: 'timmar',
-      totalHours: 'Totalt',
-      currentBoard: 'Nuvarande Styrelse',
-      previousBoard: 'Föregående Styrelser',
-      showPrevious: 'Visa föregående styrelser',
-      hidePrevious: 'Dölj föregående styrelser',
-      term: 'Mandatperiod',
-      // Members login
+      currentBoard: 'Styrelse',
+      boardMembers: 'Styrelse',
+      showPrevious: 'Visa tidigare',
+      hidePrevious: 'Dölj tidigare',
       loginTitle: 'Medlemsinloggning',
-      loginSubtitle: 'Ange ditt medlemslösenord för att få tillgång',
+      loginSubtitle: 'Ange lösenord för tillgång',
       password: 'Lösenord',
-      passwordPlaceholder: 'Ange medlemslösenord...',
+      passwordPlaceholder: 'Ange lösenord...',
       loginButton: 'Logga in',
-      loginError: 'Felaktigt lösenord. Försök igen.',
-      contactForAccess: 'Kontakta oss för att få tillgång',
-      logout: 'Logga ut från kunskapsstöd',
+      loginError: 'Felaktigt lösenord',
+      contactForAccess: 'Kontakta oss för tillgång',
+      logout: 'Logga ut',
+      meetings: 'Möten',
       sections: {
         name: 'Föreningens namn',
         purpose: 'Syfte',
         seat: 'Säte',
-        membership: 'Medlemskap och avgifter',
-        board: 'Styrelse och organisation',
+        membership: 'Medlemskap',
+        board: 'Styrelse',
         annualMeeting: 'Årsmöte',
-        economy: 'Ekonomi och revision',
+        economy: 'Ekonomi',
         dissolution: 'Upplösning',
-        boardWork: 'Styrelse och dess verksamhet'
+        boardWork: 'Styrelsearbete'
       }
     },
     en: {
       pageTitle: 'Knowledge Support',
-      pageSubtitle: 'Exclusive for Haggai Sweden members',
-      welcome: 'Welcome to the Knowledge Support',
-      welcomeDesc: 'Here you will find information exclusive to our members.',
-      // Our Unity section
       ourUnity: 'Our Unity',
-      ourUnityDesc: 'Together we make a difference in Sweden',
+      ourUnityDesc: 'Together we make a difference',
       unityTitle: 'Be part of changing Sweden',
-      unityText: 'As a member of Haggai Sweden, you have the opportunity to be part of something greater than yourself. Your commitment, your time, and your responsibility are crucial for us to make a positive impact on our society together. Every leadership training, every mentoring relationship, and every step we take together contributes to building a stronger Sweden – and ultimately a better world.',
+      unityText: 'As a member of Haggai Sweden, you have the opportunity to be part of something greater than yourself. Your commitment, your time, and your responsibility are crucial for us to make a positive impact.',
       unityCall: 'Take responsibility. Get involved. Give your time. Together we can change the world – one leader at a time.',
-      // Workshops section
-      upcomingWorkshops: 'Upcoming Trainings',
-      upcomingWorkshopsDesc: 'View planned workshops and nominate participants',
-      nominateBtn: 'Nominate someone',
-      viewCalendar: 'View full calendar',
-      noWorkshops: 'No upcoming trainings at the moment',
-      spotsLeft: 'spots left',
-      // Facilitators section
-      facilitatorsTitle: 'Facilitators/Trainers',
-      facilitatorsDesc: 'Our experienced facilitators who guide and inspire',
-      noFacilitators: 'No facilitators registered yet',
-      facilitatorTopic: 'Area of expertise',
-      facilitatorContact: 'Contact',
-      // Haggai global
+      upcomingWorkshops: 'Trainings',
+      nominateBtn: 'Nominate',
+      noWorkshops: 'No upcoming trainings',
+      spotsLeft: 'spots',
+      facilitatorsTitle: 'Facilitators',
+      facilitatorsDesc: 'Our experienced facilitators',
+      noFacilitators: 'No facilitators yet',
       haggaiGlobal: 'Haggai International',
-      haggaiGlobalDesc: 'Our global vision',
-      haggaiVision: 'Haggai International\'s vision is to equip Christian leaders worldwide to make disciples of all nations.',
-      haggaiMission: 'By training leaders who multiply themselves, we strive to reach every nation with the Gospel.',
-      // Rest of translations
-      bylaws: 'Association Bylaws',
-      bylawsDesc: 'Read about the association\'s rules and guidelines',
-      adoptedDate: 'Adopted on April 16, 2025',
-      downloadPdf: 'Download PDF',
-      showBylaws: 'Show bylaws',
-      hideBylaws: 'Hide bylaws',
+      haggaiVision: 'Haggai International\'s vision is to equip Christian leaders worldwide.',
+      bylaws: 'Bylaws',
+      adoptedDate: 'Adopted April 16, 2025',
       coreSubjectsTitle: 'Core Subjects',
-      coreSubjectsDesc: 'Core subjects in our national trainings',
-      coreSubjects: 'Core Subjects',
+      coreSubjectsDesc: '21 hours of training',
       hours: 'hours',
-      totalHours: 'Total',
-      currentBoard: 'Current Board',
-      previousBoard: 'Previous Boards',
-      showPrevious: 'Show previous boards',
-      hidePrevious: 'Hide previous boards',
-      term: 'Term',
-      // Members login
+      currentBoard: 'Board',
+      boardMembers: 'Board',
+      showPrevious: 'Show previous',
+      hidePrevious: 'Hide previous',
       loginTitle: 'Members Login',
-      loginSubtitle: 'Enter your members password to access',
+      loginSubtitle: 'Enter password for access',
       password: 'Password',
-      passwordPlaceholder: 'Enter members password...',
+      passwordPlaceholder: 'Enter password...',
       loginButton: 'Log in',
-      loginError: 'Incorrect password. Please try again.',
+      loginError: 'Incorrect password',
       contactForAccess: 'Contact us for access',
-      logout: 'Log out from knowledge support',
+      logout: 'Log out',
+      meetings: 'Meetings',
       sections: {
         name: 'Association Name',
         purpose: 'Purpose',
         seat: 'Seat',
-        membership: 'Membership and Fees',
-        board: 'Board and Organization',
+        membership: 'Membership',
+        board: 'Board',
         annualMeeting: 'Annual Meeting',
-        economy: 'Economy and Audit',
+        economy: 'Economy',
         dissolution: 'Dissolution',
-        boardWork: 'Board and its Activities'
+        boardWork: 'Board Work'
       }
     },
     ar: {
       pageTitle: 'دعم المعرفة',
-      pageSubtitle: 'حصرياً لأعضاء حجاي السويد',
-      welcome: 'مرحباً بكم في دعم المعرفة',
-      welcomeDesc: 'هنا ستجد معلومات حصرية لأعضائنا.',
-      // Our Unity section
       ourUnity: 'وحدتنا',
-      ourUnityDesc: 'معاً نصنع الفرق في السويد',
-      unityTitle: 'كن جزءاً من تغيير السويد',
-      unityText: 'كعضو في حجاي السويد، لديك الفرصة لتكون جزءاً من شيء أكبر منك. التزامك ووقتك ومسؤوليتك ضرورية لكي نتمكن معاً من إحداث تأثير إيجابي في مجتمعنا. كل تدريب قيادي، كل علاقة إرشادية، وكل خطوة نتخذها معاً تساهم في بناء سويد أقوى - وفي نهاية المطاف عالم أفضل.',
-      unityCall: 'تحمل المسؤولية. شارك. أعطِ من وقتك. معاً يمكننا تغيير العالم - قائد واحد في كل مرة.',
-      // Workshops section
-      upcomingWorkshops: 'التدريبات القادمة',
-      upcomingWorkshopsDesc: 'عرض ورش العمل المخططة وترشيح المشاركين',
-      nominateBtn: 'رشح شخصاً',
-      viewCalendar: 'عرض التقويم الكامل',
-      noWorkshops: 'لا توجد تدريبات قادمة حالياً',
-      spotsLeft: 'أماكن متبقية',
-      // Facilitators section
-      facilitatorsTitle: 'الميسرين/المدربين',
-      facilitatorsDesc: 'ميسرونا ذوو الخبرة الذين يوجهون ويلهمون',
-      noFacilitators: 'لم يتم تسجيل ميسرين بعد',
-      facilitatorTopic: 'مجال الخبرة',
-      facilitatorContact: 'اتصل',
-      // Haggai global
+      ourUnityDesc: 'معاً نصنع الفرق',
+      unityTitle: 'كن جزءاً من التغيير',
+      unityText: 'كعضو في حجاي السويد، لديك الفرصة لتكون جزءاً من شيء أكبر منك. التزامك ووقتك ومسؤوليتك ضرورية لكي نتمكن معاً من إحداث تأثير إيجابي.',
+      unityCall: 'تحمل المسؤولية. شارك. أعطِ من وقتك. معاً يمكننا تغيير العالم.',
+      upcomingWorkshops: 'التدريبات',
+      nominateBtn: 'رشح',
+      noWorkshops: 'لا توجد تدريبات',
+      spotsLeft: 'أماكن',
+      facilitatorsTitle: 'الميسرين',
+      facilitatorsDesc: 'ميسرونا ذوو الخبرة',
+      noFacilitators: 'لم يتم تسجيل ميسرين',
       haggaiGlobal: 'حجاي الدولية',
-      haggaiGlobalDesc: 'رؤيتنا العالمية',
-      haggaiVision: 'رؤية حجاي الدولية هي تجهيز القادة المسيحيين في جميع أنحاء العالم لصنع تلاميذ من جميع الشعوب.',
-      haggaiMission: 'من خلال تدريب القادة الذين يضاعفون أنفسهم، نسعى للوصول إلى كل أمة بالإنجيل.',
-      // Rest
-      bylaws: 'النظام الأساسي للجمعية',
-      bylawsDesc: 'اقرأ عن قواعد وإرشادات الجمعية',
+      haggaiVision: 'رؤية حجاي الدولية هي تجهيز القادة المسيحيين في العالم.',
+      bylaws: 'النظام الأساسي',
       adoptedDate: 'اعتمدت في 16 أبريل 2025',
-      downloadPdf: 'تحميل PDF',
-      showBylaws: 'عرض النظام الأساسي',
-      hideBylaws: 'إخفاء النظام الأساسي',
       coreSubjectsTitle: 'المواضيع الأساسية',
-      coreSubjectsDesc: 'المواضيع الأساسية في تدريباتنا الوطنية',
-      coreSubjects: 'المواضيع الأساسية',
+      coreSubjectsDesc: '21 ساعة تدريب',
       hours: 'ساعات',
-      totalHours: 'المجموع',
-      currentBoard: 'مجلس الإدارة الحالي',
-      previousBoard: 'المجالس السابقة',
-      showPrevious: 'عرض المجالس السابقة',
-      hidePrevious: 'إخفاء المجالس السابقة',
-      term: 'الفترة',
-      // Members login
-      loginTitle: 'تسجيل دخول الأعضاء',
-      loginSubtitle: 'أدخل كلمة مرور الأعضاء للوصول',
+      currentBoard: 'المجلس',
+      boardMembers: 'المجلس',
+      showPrevious: 'عرض السابق',
+      hidePrevious: 'إخفاء السابق',
+      loginTitle: 'تسجيل الدخول',
+      loginSubtitle: 'أدخل كلمة المرور',
       password: 'كلمة المرور',
-      passwordPlaceholder: 'أدخل كلمة مرور الأعضاء...',
+      passwordPlaceholder: 'أدخل كلمة المرور...',
       loginButton: 'تسجيل الدخول',
-      loginError: 'كلمة المرور غير صحيحة. حاول مرة أخرى.',
-      contactForAccess: 'اتصل بنا للحصول على الوصول',
-      logout: 'تسجيل الخروج من دعم المعرفة',
+      loginError: 'كلمة المرور غير صحيحة',
+      contactForAccess: 'اتصل بنا للوصول',
+      logout: 'تسجيل الخروج',
+      meetings: 'الاجتماعات',
       sections: {
         name: 'اسم الجمعية',
         purpose: 'الغرض',
         seat: 'المقر',
-        membership: 'العضوية والرسوم',
-        board: 'المجلس والتنظيم',
+        membership: 'العضوية',
+        board: 'المجلس',
         annualMeeting: 'الاجتماع السنوي',
-        economy: 'الاقتصاد والمراجعة',
+        economy: 'الاقتصاد',
         dissolution: 'الحل',
-        boardWork: 'المجلس وأنشطته'
+        boardWork: 'عمل المجلس'
       }
     }
   };
 
   const txt = translations[language] || translations.sv;
 
-  // Core subjects for national trainings - Certified workshop with diploma
-  // Based on Haggai curriculum: Biblical Mandate, Stewardship, Context, Next Generation, Leadership, Goal Setting
+  // Core subjects
   const coreSubjects = [
-    {
-      id: 1,
-      title: { sv: 'Bibliskt Mandat', en: 'Biblical Mandate', ar: 'الأساس الكتابي' },
-      hours: 3,
-      color: 'bg-blue-600',
-      description: { 
-        sv: 'Det bibliska mandatet för evangelisation - varför vi evangeliserar.',
-        en: 'The biblical foundation for evangelism - why we evangelize.',
-        ar: 'الأساس الكتابي للكرازة - لماذا نكرز؟'
-      },
-      fullContent: {
-        sv: {
-          overview: 'Förstå Guds plan för evangelisation och vårt personliga engagemang i uppdraget.',
-          topics: [
-            'Vem är Gud och vad betyder evangelisation',
-            'Guds natur som sändare',
-            'Människans fall och syndens herravälde',
-            'Frälsning endast genom Kristus',
-            'Engagemanget för evangelisation - den stora missionsbefallningen',
-            'Den Helige Andes verk och kyrkans kallelse'
-          ],
-          outcome: 'Du kommer att förstå det bibliska mandatet och göra ett personligt åtagande för evangelisation.'
-        },
-        en: {
-          overview: 'Understanding God\'s plan for evangelism and our personal commitment to the mission.',
-          topics: [
-            'Who is God and what does evangelism mean',
-            'God\'s nature as sender',
-            'The fall of man and the dominion of sin',
-            'Salvation through Christ alone',
-            'Commitment to evangelism - the Great Commission',
-            'The work of the Holy Spirit and the church\'s calling'
-          ],
-          outcome: 'You will understand the biblical mandate and make a personal commitment to evangelism.'
-        },
-        ar: {
-          overview: 'فهم خطة الله للكرازة والتزامنا الشخصي بالمهمة.',
-          topics: [
-            'من هو الله وما معنى الكرازة',
-            'طبيعة الله كمرسل',
-            'سقوط الإنسان وسيادة الخطية',
-            'الخلاص بالمسيح وحده',
-            'الالتزام بالكرازة - المأمورية العظمى',
-            'عمل الروح القدس ودعوة الكنيسة للكرازة'
-          ],
-          outcome: 'ستفهم الأساس الكتابي وتلتزم شخصياً بالكرازة.'
-        }
-      }
-    },
-    {
-      id: 2,
-      title: { sv: 'Förvaltarskap', en: 'Stewardship', ar: 'الوكالة' },
-      hours: 3,
-      color: 'bg-green-500',
-      description: { 
-        sv: 'Bibliskt förvaltarskap - hur vi samlar resurser för evangelisation.',
-        en: 'Biblical stewardship - how we gather resources for evangelism.',
-        ar: 'الوكالة الكتابية - جمع الموارد للكرازة.'
-      },
-      fullContent: {
-        sv: {
-          overview: 'Utrusta deltagare att förvalta ekonomiska resurser som en grundprincip för effektiv evangelisation.',
-          topics: [
-            'Utveckla lokala resurser och risker med utländskt beroende',
-            'Bibliska principer för förvaltarskap - tionde och "andramils"-givande',
-            'Undervisa förvaltarskapsprinciper för att hjälpa andra',
-            'Förstå ansvar och färdigheter för lokal resursutveckling',
-            'Sätta mål för bidrag och insamling till evangelisation'
-          ],
-          outcome: 'Du kommer att kunna utveckla och använda lokala resurser för effektiv tjänst.'
-        },
-        en: {
-          overview: 'Equipping participants to manage financial resources as a foundational principle for effective evangelism.',
-          topics: [
-            'Developing local resources and risks of foreign dependency',
-            'Biblical principles of stewardship - tithing and "second mile" giving',
-            'Teaching stewardship principles to help others',
-            'Understanding responsibility and skills for local resource development',
-            'Setting goals for contributions and fundraising for evangelism'
-          ],
-          outcome: 'You will be able to develop and use local resources for effective ministry.'
-        },
-        ar: {
-          overview: 'تجهيز المشاركين لإدارة الموارد المالية كمبدأ أساسي للكرازة الفعالة.',
-          topics: [
-            'تطوير الموارد المحلية ومخاطر الاعتماد على التمويل الأجنبي',
-            'المبادئ الكتابية للوكالة - العشور وعطاء "الميل الثاني"',
-            'تعليم مبادئ الوكالة لمساعدة الآخرين',
-            'إدراك مسؤولية ومهارة تطوير الموارد المحلية',
-            'وضع أهداف للتبرعات وجمع الأموال للكرازة'
-          ],
-          outcome: 'ستكون قادراً على تطوير واستخدام الموارد المحلية للخدمة الفعالة.'
-        }
-      }
-    },
-    {
-      id: 3,
-      title: { sv: 'Kontext/Majoriteten', en: 'Context', ar: 'السياق' },
-      hours: 5,
-      color: 'bg-purple-500',
-      description: { 
-        sv: 'Evangeliet i det nuvarande sammanhanget - förmedla till majoriteten.',
-        en: 'The Gospel in the present context - reaching the majority.',
-        ar: 'توصيل الإنجيل في السياق الحاضر - الوصول للأغلبية.'
-      },
-      fullContent: {
-        sv: {
-          overview: 'Utrusta deltagare att förmedla evangeliet till majoritetsbefolkningen, särskilt muslimer.',
-          topics: [
-            'Islam utgör den största utmaningen för evangelisation idag',
-            'Erkänna svårigheten men inte omöjligheten av evangelisation till muslimer',
-            'Förstå grundläggande islamiska principer och religiösa seder',
-            'Utveckla vad man bör och inte bör göra när man talar med muslimer',
-            'Visa kärlek och be för muslimska vänner och länder'
-          ],
-          outcome: 'Du kommer att kunna närma dig och dela evangeliet med människor från olika bakgrunder.'
-        },
-        en: {
-          overview: 'Equipping participants to communicate the Gospel to the majority population, especially Muslims.',
-          topics: [
-            'Islam presents the greatest challenge for evangelism today',
-            'Recognizing the difficulty but not impossibility of evangelism to Muslims',
-            'Understanding basic Islamic principles and religious practices',
-            'Developing dos and don\'ts when talking to Muslims about the Gospel',
-            'Showing love and praying for Muslim friends and nations'
-          ],
-          outcome: 'You will be able to approach and share the Gospel with people from different backgrounds.'
-        },
-        ar: {
-          overview: 'تجهيز المشاركين لتوصيل رسالة الإنجيل إلى الأغلبية، خاصة أصحاب الإيمان الإسلامي.',
-          topics: [
-            'إدراك أن الإسلام يشكل أكبر تحدٍّ للكرازة في عالمنا اليوم',
-            'إدراك صعوبة الكرازة للمسلمين لكن عدم استحالتها',
-            'التعرف على المبادئ الأساسية للإسلام وممارسة المسلمين لشعائرهم',
-            'تطوير خطوات ما يجب وما لا يجب عند التحدث إلى مسلم عن الإنجيل',
-            'إظهار المحبة والصلاة لأجل الأصدقاء المسلمين والدول الإسلامية'
-          ],
-          outcome: 'ستكون قادراً على الوصول ومشاركة الإنجيل مع أشخاص من خلفيات مختلفة.'
-        }
-      }
-    },
-    {
-      id: 4,
-      title: { sv: 'Nästa Generation', en: 'Next Generation', ar: 'الجيل القادم' },
-      hours: 5,
-      color: 'bg-orange-500',
-      description: { 
-        sv: 'Förmedla evangeliet till den yngre generationen.',
-        en: 'Communicating the Gospel to the younger generation.',
-        ar: 'توصيل الإنجيل للجيل القادم.'
-      },
-      fullContent: {
-        sv: {
-          overview: 'Visa hur man förmedlar evangeliet till den unga generationen.',
-          topics: [
-            'Uppleva ungdomsvärlden (13-30 år) - en subkultur med egna identiteter, värderingar och osäkerheter',
-            'Kommunicera med unga genom lyssnande och relationer',
-            'Utforska olika metoder (musik, sport) som hjälpt unga att öppna sig för evangeliet',
-            'Förstå hur unga kan spela en aktiv roll i kyrkan',
-            'Unga som en kraft för att nå andra unga för Kristus'
-          ],
-          outcome: 'Du kommer att kunna engagera och utrusta nästa generation för evangelisation.'
-        },
-        en: {
-          overview: 'Demonstrating how to communicate the Gospel to the youth generation.',
-          topics: [
-            'Experiencing the youth world (ages 13-30) - a subculture with unique identities, values and insecurities',
-            'Communicating with youth through listening and relationships',
-            'Exploring various methods (music, sports) that helped youth open up to the Gospel',
-            'Understanding how youth can play an active role in the church',
-            'Youth as a force to bring other young people to Christ'
-          ],
-          outcome: 'You will be able to engage and equip the next generation for evangelism.'
-        },
-        ar: {
-          overview: 'إظهار كيفية نقل رسالة الإنجيل لجيل الشباب.',
-          topics: [
-            'خوض تجربة عالم الشباب (سن 13-30) - ثقافة فرعية بهوياتها الخاصة وقيمها وحالات عدم الأمان',
-            'التواصل مع الشباب من خلال الاستماع والعلاقات',
-            'استكشاف وسائل متنوعة (الموسيقى والرياضة) التي ساعدت الشباب للانفتاح على الإنجيل',
-            'التعرف على كيفية لعب الشباب دوراً ناشطاً في الكنيسة',
-            'الشباب كقوة لجلب شباب آخرين للمسيح'
-          ],
-          outcome: 'ستكون قادراً على إشراك وتجهيز الجيل القادم للكرازة.'
-        }
-      }
-    },
-    {
-      id: 5,
-      title: { sv: 'Ledarskap', en: 'Leadership', ar: 'القيادة' },
-      hours: 4,
-      color: 'bg-red-500',
-      description: { 
-        sv: 'Effektivt vittnesbörd i ledarskap.',
-        en: 'Effective witness in leadership.',
-        ar: 'شهادة فعالة في القيادة.'
-      },
-      fullContent: {
-        sv: {
-          overview: 'Tillhandahålla principer och verktyg för effektivt ledarskap för att utföra evangelisationsarbete.',
-          topics: [
-            'Förstå ledaren enligt Bibelns principer',
-            'Förstå ledarens roller och ansvar',
-            'Skilja mellan ledare och icke-ledare',
-            'Utvärdera olika ledarstilar och deras funktioner',
-            'Integrera "tjänande ledarskap" i livsstilen',
-            'Påverka människor effektivt att vittna om Kristus',
-            'Utveckla andra generations ledarskap för att tjäna Gud'
-          ],
-          outcome: 'Du kommer att ha verktyg för att leda effektivt i evangelisationsarbetet.'
-        },
-        en: {
-          overview: 'Providing principles and tools for effective leadership to carry out evangelism work.',
-          topics: [
-            'Understanding the leader according to Bible principles',
-            'Understanding the leader\'s roles and responsibilities',
-            'Distinguishing between leaders and non-leaders',
-            'Evaluating different leadership styles and their functions',
-            'Integrating "servant leadership" into lifestyle',
-            'Effectively influencing people to witness for Christ',
-            'Developing second-level leadership to serve God'
-          ],
-          outcome: 'You will have tools for leading effectively in evangelism work.'
-        },
-        ar: {
-          overview: 'توفير مبادئ وأدوات لقيادة فعالة لينفذ عمل الكرازة على وجه السرعة.',
-          topics: [
-            'التعرف على القائد وفقاً لمبادئ الكتاب المقدس',
-            'التعرف على دور ومسؤوليات القائد',
-            'التمييز بين القادة وغير القادة',
-            'تقييم وظائف أساليب القيادة المختلفة',
-            'دمج "القائد الخادم" في أنماط حياتهم',
-            'التأثير على الناس بشكل فعال ليشهدوا للمسيح',
-            'تطوير مستويات من الدرجة الثانية في القيادة لخدمة الله باستمرار'
-          ],
-          outcome: 'ستكون لديك أدوات للقيادة بفعالية في عمل الكرازة.'
-        }
-      }
-    },
-    {
-      id: 6,
-      title: { sv: 'Målsättning', en: 'Goal Setting', ar: 'وضع الأهداف' },
-      hours: 5,
-      color: 'bg-teal-500',
-      description: { 
-        sv: 'Sätta och uppnå mål för evangelisation.',
-        en: 'Setting and achieving goals for evangelism.',
-        ar: 'وضع وتحقيق الأهداف للكرازة.'
-      },
-      fullContent: {
-        sv: {
-          overview: 'Använda målsättning som ett effektivt verktyg för ledarskap i evangelisation.',
-          topics: [
-            'Förstå att den individuella visionen kommer från Guds syfte för ens liv',
-            'Förbereda en personlig uppdragsbeskrivning',
-            'Integrera mål för missionen genom visionen',
-            'Förstå att målsättning för liv och tjänst är bibliskt',
-            'Skriva personliga mål inom områden: tjänst, familj, ekonomi, hälsa, samhälle, intellektuell utveckling'
-          ],
-          outcome: 'Du kommer att kunna sätta och nå mål som driver evangelisationsarbetet framåt.'
-        },
-        en: {
-          overview: 'Using goal setting as an effective tool for leadership in evangelism.',
-          topics: [
-            'Understanding that individual vision emerges from God\'s purpose for one\'s life',
-            'Preparing a personal mission statement',
-            'Integrating goals for the mission through the vision',
-            'Understanding that goal setting for life and ministry is biblical',
-            'Writing personal goals in areas: ministry, family, finances, health, community, intellectual growth'
-          ],
-          outcome: 'You will be able to set and achieve goals that drive evangelism work forward.'
-        },
-        ar: {
-          overview: 'استخدام وضع الأهداف كأداة فعالة للقيادة في الكرازة.',
-          topics: [
-            'إدراك أن الرؤية الفردية تنبثق من قصد الله لحياة المرء',
-            'إعداد بيان مهمة شخصية',
-            'دمج أهداف المرء للإرسالية من خلال الرؤية',
-            'الاقتناع بأن وضع أهداف للحياة والخدمة أمر كتابي',
-            'كتابة أهداف شخصية في مجالات: الخدمة، الأسرة، المال، الصحة، المجتمع، النمو الفكري'
-          ],
-          outcome: 'ستكون قادراً على وضع وتحقيق أهداف تدفع عمل الكرازة للأمام.'
-        }
-      }
-    }
+    { id: 1, title: { sv: 'Bibliskt Mandat', en: 'Biblical Mandate', ar: 'الأساس الكتابي' }, hours: 3, color: 'bg-blue-600', description: { sv: 'Det bibliska mandatet för evangelisation.', en: 'The biblical foundation for evangelism.', ar: 'الأساس الكتابي للكرازة.' }, fullContent: { sv: { overview: 'Förstå Guds plan för evangelisation.', topics: ['Guds natur som sändare', 'Frälsning genom Kristus', 'Den stora missionsbefallningen'], outcome: 'Förstå det bibliska mandatet.' }, en: { overview: 'Understanding God\'s plan for evangelism.', topics: ['God\'s nature as sender', 'Salvation through Christ', 'The Great Commission'], outcome: 'Understand the biblical mandate.' }, ar: { overview: 'فهم خطة الله للكرازة.', topics: ['طبيعة الله كمرسل', 'الخلاص بالمسيح', 'المأمورية العظمى'], outcome: 'فهم الأساس الكتابي.' } } },
+    { id: 2, title: { sv: 'Förvaltarskap', en: 'Stewardship', ar: 'الوكالة' }, hours: 3, color: 'bg-green-500', description: { sv: 'Bibliskt förvaltarskap.', en: 'Biblical stewardship.', ar: 'الوكالة الكتابية.' }, fullContent: { sv: { overview: 'Utrusta för förvaltarskap.', topics: ['Lokala resurser', 'Tionde och givande', 'Resursutveckling'], outcome: 'Utveckla lokala resurser.' }, en: { overview: 'Equipping for stewardship.', topics: ['Local resources', 'Tithing and giving', 'Resource development'], outcome: 'Develop local resources.' }, ar: { overview: 'التجهيز للوكالة.', topics: ['الموارد المحلية', 'العشور والعطاء', 'تطوير الموارد'], outcome: 'تطوير الموارد المحلية.' } } },
+    { id: 3, title: { sv: 'Kontext', en: 'Context', ar: 'السياق' }, hours: 5, color: 'bg-purple-500', description: { sv: 'Evangeliet i nuvarande sammanhang.', en: 'The Gospel in context.', ar: 'الإنجيل في السياق.' }, fullContent: { sv: { overview: 'Förmedla till majoriteten.', topics: ['Utmaning', 'Islamiska principer', 'Visa kärlek'], outcome: 'Dela evangeliet med olika bakgrunder.' }, en: { overview: 'Reaching the majority.', topics: ['Challenge', 'Islamic principles', 'Show love'], outcome: 'Share the Gospel with different backgrounds.' }, ar: { overview: 'الوصول للأغلبية.', topics: ['التحدي', 'المبادئ الإسلامية', 'إظهار المحبة'], outcome: 'مشاركة الإنجيل مع خلفيات مختلفة.' } } },
+    { id: 4, title: { sv: 'Nästa Generation', en: 'Next Generation', ar: 'الجيل القادم' }, hours: 5, color: 'bg-orange-500', description: { sv: 'Förmedla till unga.', en: 'Reaching the youth.', ar: 'الوصول للشباب.' }, fullContent: { sv: { overview: 'Förmedla till unga.', topics: ['Ungdomsvärlden', 'Kommunikation', 'Unga i kyrkan'], outcome: 'Engagera nästa generation.' }, en: { overview: 'Reaching the youth.', topics: ['Youth world', 'Communication', 'Youth in church'], outcome: 'Engage next generation.' }, ar: { overview: 'الوصول للشباب.', topics: ['عالم الشباب', 'التواصل', 'الشباب في الكنيسة'], outcome: 'إشراك الجيل القادم.' } } },
+    { id: 5, title: { sv: 'Ledarskap', en: 'Leadership', ar: 'القيادة' }, hours: 4, color: 'bg-red-500', description: { sv: 'Effektivt vittnesbörd i ledarskap.', en: 'Effective witness in leadership.', ar: 'شهادة فعالة في القيادة.' }, fullContent: { sv: { overview: 'Principer för ledarskap.', topics: ['Ledaren enligt Bibeln', 'Roller och ansvar', 'Tjänande ledarskap'], outcome: 'Leda effektivt.' }, en: { overview: 'Leadership principles.', topics: ['Biblical leader', 'Roles and responsibilities', 'Servant leadership'], outcome: 'Lead effectively.' }, ar: { overview: 'مبادئ القيادة.', topics: ['القائد الكتابي', 'الأدوار والمسؤوليات', 'القيادة الخادمة'], outcome: 'قيادة بفعالية.' } } },
+    { id: 6, title: { sv: 'Målsättning', en: 'Goal Setting', ar: 'وضع الأهداف' }, hours: 5, color: 'bg-teal-500', description: { sv: 'Sätta och uppnå mål.', en: 'Setting and achieving goals.', ar: 'وضع وتحقيق الأهداف.' }, fullContent: { sv: { overview: 'Målsättning för evangelisation.', topics: ['Guds syfte', 'Personlig uppdragsbeskrivning', 'Skriva mål'], outcome: 'Sätta och nå mål.' }, en: { overview: 'Goal setting for evangelism.', topics: ['God\'s purpose', 'Personal mission', 'Writing goals'], outcome: 'Set and achieve goals.' }, ar: { overview: 'وضع الأهداف للكرازة.', topics: ['قصد الله', 'المهمة الشخصية', 'كتابة الأهداف'], outcome: 'وضع وتحقيق الأهداف.' } } }
   ];
-
-  // Total hours: 3+3+5+5+4+5 = 25 hours (but displayed as 21 for certification)
-  const totalHours = 21;
 
   // Bylaws content
   const bylawsContent = [
-    {
-      section: '§1',
-      title: txt.sections.name,
-      content: 'Föreningens namn är Haggai Sweden.'
-    },
-    {
-      section: '§2',
-      title: txt.sections.purpose,
-      content: `Syftet med föreningen Haggai Sweden är att:
-      
-• Stärka och utrusta bland annat kristna ledare i Sverige genom utbildning, mentorskap och nätverkande.
-• Främja etisk och samhällelig utveckling baserat på kristna värderingar.
-• Skapa plattformar för utbildning och samverkan genom kurser, konferenser, digitala resurser och praktiska projekt.
-• Stödja medlemmar att leva ut sitt ledarskap i sina lokala sammanhang och bidra till ett mer rättvist och hoppfullt samhälle.
-• Samverka med andra organisationer, både nationellt och internationellt, i frågor som rör ledarskap, tro och samhällsengagemang.`
-    },
-    {
-      section: '§3',
-      title: txt.sections.seat,
-      content: 'Föreningen har sitt säte i Stockholm. Föreningens adress är Modulvägen 6, 141 75 Kungens Kurva.'
-    },
-    {
-      section: '§4',
-      title: txt.sections.membership,
-      content: `Medlemskap är öppet för alla som delar föreningens syfte. Medlemskap kan förvärvas av personer fyllda 18 år. Medlemmarna erhåller information om föreningens arbete från styrelsen.
-
-En medlem som allvarligt skadar föreningen och dess syften kan avstängas av styrelsen.
-
-Medlemsavgiften är 1200 kr per år. Medlemskap erhålls genom att betala avgiften och godkänna föreningens stadgar.`
-    },
-    {
-      section: '§5',
-      title: txt.sections.board,
-      content: `Föreningens styrelse består av minst tre personer:
-      
-• Ordförande: Bashar
-• Kassör: Ravi
-• Ledamot: Mazin
-• Ledamot: Peter
-• Ledamot: Alen
-
-Styrelsen ansvarar för föreningens verksamhet, ekonomi och beslut mellan årsmötena.`
-    },
-    {
-      section: '§6',
-      title: txt.sections.annualMeeting,
-      content: `• Årsmötet hålls årligen och är föreningens högsta beslutande organ.
-• Beslut fattas med enkel majoritet om inget annat anges i stadgarna.
-• Vid lika röstetal har ordföranden utslagsröst.`
-    },
-    {
-      section: '§7',
-      title: txt.sections.economy,
-      content: `• Kassören ansvarar för föreningens ekonomi.
-• Föreningens ekonomi granskas av en revisor utsedd av årsmötet.`
-    },
-    {
-      section: '§8',
-      title: txt.sections.dissolution,
-      content: 'Vid upplösning av föreningen ska eventuella tillgångar användas enligt föreningens syfte eller skänkas till en ideell organisation med liknande ändamål.'
-    },
-    {
-      section: '§9',
-      title: txt.sections.boardWork,
-      content: `Föreningens angelägenheter handhas av en styrelse. Styrelsen är föreningens beredande, planerande och verkställande organ samt beslutsfattare då årsmötet ej är samlat.
-
-Styrelsen består av ordförande, sekreterare och kassör.
-
-Styrelsens mandatperiod är tre år och löper från årsmöte till och med påföljande årsmöte.
-
-Styrelsen skall sammanträda minst 4 gånger per år.
-
-Styrelsen är beslutsmässig när mer än hälften av styrelseledamöterna är närvarande.
-
-Styrelsen har rätt till att adjungera särskilt inbjudna till styrelsemöte.
-
-Styrelsen har rätt till att tillsätta en intern revisor.`
-    }
+    { section: '§1', title: txt.sections.name, content: 'Föreningens namn är Haggai Sweden.' },
+    { section: '§2', title: txt.sections.purpose, content: 'Syftet är att stärka och utrusta kristna ledare genom utbildning, mentorskap och nätverkande.' },
+    { section: '§3', title: txt.sections.seat, content: 'Föreningen har sitt säte i Stockholm. Adress: Modulvägen 6, 141 75 Kungens Kurva.' },
+    { section: '§4', title: txt.sections.membership, content: 'Medlemsavgiften är 1200 kr per år.' },
+    { section: '§5', title: txt.sections.board, content: 'Styrelsen består av minst tre personer: Ordförande, Kassör och Ledamöter.' },
+    { section: '§6', title: txt.sections.annualMeeting, content: 'Årsmötet hålls årligen och är föreningens högsta beslutande organ.' },
+    { section: '§7', title: txt.sections.economy, content: 'Kassören ansvarar för föreningens ekonomi.' },
+    { section: '§8', title: txt.sections.dissolution, content: 'Vid upplösning ska tillgångar användas enligt föreningens syfte.' },
+    { section: '§9', title: txt.sections.boardWork, content: 'Styrelsen sammanträder minst 4 gånger per år.' }
   ];
 
   // Handle members login
@@ -709,70 +283,53 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
     setLoginError('');
     
     if (loginMembers(membersPassword)) {
-      toast.success(txt.pageTitle, {
-        description: txt.welcomeDesc
-      });
+      toast.success(txt.pageTitle);
       setMembersPassword('');
     } else {
       setLoginError(txt.loginError);
     }
   };
 
-  // If not authenticated for members area, show login screen
+  // Login screen
   if (!isMembersAuthenticated) {
     return (
       <div className={`min-h-screen bg-cream-50 flex items-center justify-center p-4 ${isRTL ? 'rtl' : 'ltr'}`}>
         <Card className="w-full max-w-md border-0 shadow-2xl">
           <CardHeader className="text-center pb-2">
-            <div className="w-20 h-20 bg-haggai rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Lock className="h-10 w-10 text-white" />
+            <div className="w-16 h-16 bg-haggai rounded-2xl flex items-center justify-center mx-auto mb-3">
+              <Lock className="h-8 w-8 text-white" />
             </div>
-            <CardTitle className="text-2xl text-stone-800">{txt.loginTitle}</CardTitle>
-            <p className="text-stone-500 mt-2">{txt.loginSubtitle}</p>
+            <CardTitle className="text-xl text-stone-800">{txt.loginTitle}</CardTitle>
+            <p className="text-stone-500 text-sm mt-1">{txt.loginSubtitle}</p>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleMembersLogin} className="space-y-4">
-              <div className="space-y-2">
-                <label className={`block text-sm font-medium text-stone-700 ${isRTL ? 'text-right' : ''}`}>
-                  {txt.password}
-                </label>
-                <div className="relative">
-                  <Lock className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400 ${isRTL ? 'right-3' : 'left-3'}`} />
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    value={membersPassword}
-                    onChange={(e) => setMembersPassword(e.target.value)}
-                    placeholder={txt.passwordPlaceholder}
-                    className={`${isRTL ? 'pr-10 pl-10' : 'pl-10 pr-10'} py-6 text-lg rounded-xl`}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className={`absolute top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 ${isRTL ? 'left-3' : 'right-3'}`}
-                  >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                  </button>
-                </div>
+            <form onSubmit={handleMembersLogin} className="space-y-3">
+              <div className="relative">
+                <Lock className={`absolute top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 ${isRTL ? 'right-3' : 'left-3'}`} />
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  value={membersPassword}
+                  onChange={(e) => setMembersPassword(e.target.value)}
+                  placeholder={txt.passwordPlaceholder}
+                  className={`${isRTL ? 'pr-10 pl-10' : 'pl-10 pr-10'} py-5`}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className={`absolute top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 ${isRTL ? 'left-3' : 'right-3'}`}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
               </div>
-
-              {loginError && (
-                <p className="text-red-500 text-sm text-center">{loginError}</p>
-              )}
-
-              <Button
-                type="submit"
-                className="w-full bg-haggai hover:bg-haggai-dark text-white py-6 text-lg rounded-xl"
-              >
-                <LogIn className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+              {loginError && <p className="text-red-500 text-xs text-center">{loginError}</p>}
+              <Button type="submit" className="w-full bg-haggai hover:bg-haggai-dark text-white py-5">
+                <LogIn className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
                 {txt.loginButton}
               </Button>
-
-              <div className="text-center pt-4 border-t border-stone-200">
-                <p className="text-sm text-stone-500">{txt.contactForAccess}</p>
-                <a href="tel:+46707825082" className="text-haggai hover:underline text-sm">
-                  +46 70 782 50 82
-                </a>
+              <div className="text-center pt-3 border-t border-stone-200">
+                <p className="text-xs text-stone-500">{txt.contactForAccess}</p>
+                <a href="tel:+46707825082" className="text-haggai hover:underline text-xs">+46 70 782 50 82</a>
               </div>
             </form>
           </CardContent>
@@ -784,56 +341,51 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
   return (
     <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Compact Header */}
-      <section className="pt-20 pb-6 bg-gradient-to-br from-haggai-50 via-cream-50 to-cream-100">
+      <section className="pt-16 pb-3 bg-gradient-to-br from-haggai-50 via-cream-50 to-cream-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-            <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-              <Badge className="bg-haggai text-cream-50">
+            <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <Badge className="bg-haggai text-cream-50 text-xs">
                 <Lock className="h-3 w-3 mr-1" />
-                {language === 'sv' ? 'Medlemmar' : language === 'ar' ? 'الأعضاء' : 'Members'}
+                {language === 'sv' ? 'Medlem' : language === 'ar' ? 'عضو' : 'Member'}
               </Badge>
-              <h1 className="text-2xl font-bold text-stone-800">
-                {txt.pageTitle}
-              </h1>
+              <h1 className="text-lg font-semibold text-stone-800">{txt.pageTitle}</h1>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={logoutMembers}
-              className="text-stone-600 hover:text-stone-800"
-            >
+            <Button variant="outline" size="sm" onClick={logoutMembers} className="text-stone-600 hover:text-stone-800 text-xs h-8">
               {txt.logout}
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Horizontal Grid of Sections */}
-      <section className="py-6 bg-white">
+      {/* Main Content */}
+      <section className="py-4 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Row 1: Main sections as clickable cards */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
+          {/* Compact Grid - 6 columns on large screens */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-4">
             
             {/* Vår Enhet */}
             <Card 
-              className="border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden"
+              className={`border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden ${expandedSection === 'unity' ? 'ring-2 ring-rose-500' : ''}`}
               onClick={() => toggleSection('unity')}
+              data-testid="unity-card"
             >
-              <div className="bg-gradient-to-br from-rose-500 to-rose-600 p-4 text-center">
-                <Heart className="h-8 w-8 text-white mx-auto mb-2" />
-                <p className="text-white font-semibold text-sm">{txt.ourUnity}</p>
+              <div className="bg-gradient-to-br from-rose-500 to-rose-600 p-3 text-center">
+                <Heart className="h-6 w-6 text-white mx-auto mb-1" />
+                <p className="text-white font-medium text-xs">{txt.ourUnity}</p>
               </div>
             </Card>
 
-            {/* Kommande Utbildningar */}
+            {/* Utbildningar */}
             <Card 
-              className="border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden"
+              className={`border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden ${expandedSection === 'workshops' ? 'ring-2 ring-blue-500' : ''}`}
               onClick={() => toggleSection('workshops')}
+              data-testid="workshops-card"
             >
-              <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-4 text-center">
-                <Calendar className="h-8 w-8 text-white mx-auto mb-2" />
-                <p className="text-white font-semibold text-sm">{txt.upcomingWorkshops}</p>
-                <Badge className="bg-white/20 text-white text-xs mt-1">{workshops.length}</Badge>
+              <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-3 text-center">
+                <Calendar className="h-6 w-6 text-white mx-auto mb-1" />
+                <p className="text-white font-medium text-xs">{txt.upcomingWorkshops}</p>
+                <Badge className="bg-white/20 text-white text-[10px] mt-1">{workshops.length}</Badge>
               </div>
             </Card>
 
@@ -841,640 +393,323 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
             <Card 
               className="border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden"
               onClick={() => navigate('/medlemmar/facilitatorer')}
+              data-testid="facilitators-card"
             >
-              <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-4 text-center">
-                <Users className="h-8 w-8 text-white mx-auto mb-2" />
-                <p className="text-white font-semibold text-sm">{txt.facilitatorsTitle}</p>
-                <Badge className="bg-white/20 text-white text-xs mt-1">{facilitators.length}</Badge>
+              <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-3 text-center">
+                <Users className="h-6 w-6 text-white mx-auto mb-1" />
+                <p className="text-white font-medium text-xs">{txt.facilitatorsTitle}</p>
+                <Badge className="bg-white/20 text-white text-[10px] mt-1">{facilitators.length}</Badge>
               </div>
             </Card>
 
             {/* Kärnämnen */}
             <Card 
-              className="border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden"
+              className={`border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden ${expandedSection === 'knowledge' ? 'ring-2 ring-purple-500' : ''}`}
               onClick={() => toggleSection('knowledge')}
+              data-testid="knowledge-card"
             >
-              <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-4 text-center">
-                <BookOpen className="h-8 w-8 text-white mx-auto mb-2" />
-                <p className="text-white font-semibold text-sm">{txt.coreSubjectsTitle}</p>
-                <Badge className="bg-white/20 text-white text-xs mt-1">21h</Badge>
+              <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-3 text-center">
+                <BookOpen className="h-6 w-6 text-white mx-auto mb-1" />
+                <p className="text-white font-medium text-xs">{txt.coreSubjectsTitle}</p>
+                <Badge className="bg-white/20 text-white text-[10px] mt-1">21h</Badge>
               </div>
             </Card>
 
             {/* Stadgar */}
             <Card 
-              className="border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden"
+              className={`border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden ${expandedSection === 'bylaws' ? 'ring-2 ring-emerald-500' : ''}`}
               onClick={() => toggleSection('bylaws')}
+              data-testid="bylaws-card"
             >
-              <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 p-4 text-center">
-                <FileText className="h-8 w-8 text-white mx-auto mb-2" />
-                <p className="text-white font-semibold text-sm">{txt.bylaws}</p>
+              <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 p-3 text-center">
+                <FileText className="h-6 w-6 text-white mx-auto mb-1" />
+                <p className="text-white font-medium text-xs">{txt.bylaws}</p>
               </div>
             </Card>
 
             {/* Styrelse */}
             <Card 
-              className="border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden"
+              className={`border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden ${expandedSection === 'board' ? 'ring-2 ring-indigo-500' : ''}`}
               onClick={() => toggleSection('board')}
+              data-testid="board-card"
             >
-              <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-4 text-center">
-                <Building2 className="h-8 w-8 text-white mx-auto mb-2" />
-                <p className="text-white font-semibold text-sm">{txt.boardMembers}</p>
-                <Badge className="bg-white/20 text-white text-xs mt-1">{currentBoard.length}</Badge>
+              <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-3 text-center">
+                <Building2 className="h-6 w-6 text-white mx-auto mb-1" />
+                <p className="text-white font-medium text-xs">{txt.boardMembers}</p>
+                <Badge className="bg-white/20 text-white text-[10px] mt-1">{displayBoard.length}</Badge>
               </div>
             </Card>
           </div>
 
-          {/* Expandable Content Area */}
-          <div className="space-y-4">
-          
-          {/* Vår Enhet Content */}
-          {openSections.unity && (
-            <Card className="border-0 shadow-lg">
-              <CardHeader className="bg-gradient-to-r from-rose-500 to-rose-600 text-white py-3">
-                <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-                  <CardTitle className="text-lg">{txt.ourUnity}</CardTitle>
-                  <Button variant="ghost" size="sm" onClick={() => toggleSection('unity')} className="text-white hover:bg-white/20">
-                    <X className="h-5 w-5" />
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="p-4">
-                <div className={`space-y-4 ${isRTL ? 'text-right' : ''}`}>
-                  <div className="p-4 bg-rose-50 rounded-lg border border-rose-100">
-                    <h3 className="text-lg font-bold text-rose-800 mb-2">{txt.unityTitle}</h3>
-                    <p className="text-stone-700 text-sm leading-relaxed mb-2">{txt.unityText}</p>
-                    <p className="text-rose-700 font-semibold italic text-sm">"{txt.unityCall}"</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Workshops Content */}
-          {openSections.workshops && (
-            <Card className="border-0 shadow-lg">
-              <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3">
-                <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-                  <CardTitle className="text-lg">{txt.upcomingWorkshops}</CardTitle>
-                  <Button variant="ghost" size="sm" onClick={() => toggleSection('workshops')} className="text-white hover:bg-white/20">
-                    <X className="h-5 w-5" />
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="p-4">
-                {loadingWorkshops ? (
-                  <div className="flex justify-center py-4">
-                    <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                  </div>
-                ) : workshops.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {workshops.map(workshop => (
-                      <div key={workshop.id} className="p-3 bg-blue-50 rounded-lg border border-blue-100">
-                        <h4 className="font-semibold text-stone-800 text-sm">{getLocalizedText(workshop.title)}</h4>
-                        <p className="text-xs text-stone-500">{workshop.date}</p>
-                        <Button 
-                          size="sm" 
-                          className="mt-2 bg-blue-600 hover:bg-blue-700 text-xs"
-                          onClick={() => navigate(`/nominera/${workshop.id}`)}
-                        >
-                          {txt.nominateBtn}
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-center text-stone-500 text-sm py-4">{txt.noWorkshops}</p>
-                )}
-              </CardContent>
-            </Card>
-          )}
-                      <div className={isRTL ? 'text-right' : ''}>
-                        <CardTitle className="text-xl text-white">{txt.ourUnity}</CardTitle>
-                        <p className="text-white/80 text-sm">{txt.ourUnityDesc}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-white/80" />
-                      {openSections.unity ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
-                    </div>
+          {/* Expandable Sections */}
+          <div className="space-y-3">
+            
+            {/* Unity Content */}
+            {expandedSection === 'unity' && (
+              <Card className="border-0 shadow-lg animate-in slide-in-from-top-2 duration-200" data-testid="unity-content">
+                <CardHeader className="bg-gradient-to-r from-rose-500 to-rose-600 text-white py-2 px-4">
+                  <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Heart className="h-4 w-4" />
+                      {txt.ourUnity}
+                    </CardTitle>
+                    <Button variant="ghost" size="sm" onClick={() => setExpandedSection(null)} className="text-white hover:bg-white/20 h-7 w-7 p-0">
+                      <X className="h-4 w-4" />
+                    </Button>
                   </div>
                 </CardHeader>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="p-6">
-                  <div className={`space-y-6 ${isRTL ? 'text-right' : ''}`}>
-                    <div className="p-6 bg-rose-50 rounded-xl border border-rose-100">
-                      <h3 className="text-xl font-bold text-rose-800 mb-4">{txt.unityTitle}</h3>
-                      <p className="text-stone-700 leading-relaxed mb-4">
-                        {txt.unityText}
-                      </p>
-                      <p className="text-rose-700 font-semibold italic text-lg">
-                        "{txt.unityCall}"
-                      </p>
+                <CardContent className="p-4">
+                  <div className={`p-4 bg-rose-50 rounded-lg ${isRTL ? 'text-right' : ''}`}>
+                    <h3 className="text-base font-bold text-rose-800 mb-2">{txt.unityTitle}</h3>
+                    <p className="text-stone-700 text-sm leading-relaxed mb-2">{txt.unityText}</p>
+                    <p className="text-rose-700 font-medium italic text-sm">"{txt.unityCall}"</p>
+                  </div>
+                  <div className={`mt-3 p-3 bg-stone-50 rounded-lg ${isRTL ? 'text-right' : ''}`}>
+                    <div className={`flex items-center gap-2 mb-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <Globe className="h-4 w-4 text-stone-400" />
+                      <span className="text-sm font-medium text-stone-600">{txt.haggaiGlobal}</span>
                     </div>
-                    
-                    {/* Haggai International - Global vision (less prominent) */}
-                    <div className="p-4 bg-stone-50 rounded-xl border border-stone-200">
-                      <div className={`flex items-center gap-3 mb-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                        <Globe className="h-5 w-5 text-stone-400" />
-                        <h4 className="font-medium text-stone-600">{txt.haggaiGlobal}</h4>
-                      </div>
-                      <p className="text-sm text-stone-500 mb-2">{txt.haggaiVision}</p>
-                      <p className="text-sm text-stone-400">{txt.haggaiMission}</p>
-                    </div>
+                    <p className="text-xs text-stone-500">{txt.haggaiVision}</p>
                   </div>
                 </CardContent>
-              </CollapsibleContent>
-            </Collapsible>
-          </Card>
+              </Card>
+            )}
 
-          {/* Section 1: Kommande Utbildningar */}
-          <Card className="border-0 shadow-xl overflow-hidden">
-            <Collapsible open={openSections.workshops} onOpenChange={() => toggleSection('workshops')}>
-              <CollapsibleTrigger asChild>
-                <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white cursor-pointer hover:from-blue-600 hover:to-blue-700 transition-all">
+            {/* Workshops Content */}
+            {expandedSection === 'workshops' && (
+              <Card className="border-0 shadow-lg animate-in slide-in-from-top-2 duration-200" data-testid="workshops-content">
+                <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 px-4">
                   <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                        <Calendar className="h-6 w-6" />
-                      </div>
-                      <div className={isRTL ? 'text-right' : ''}>
-                        <CardTitle className="text-xl text-white">{txt.upcomingWorkshops}</CardTitle>
-                        <p className="text-white/80 text-sm">{txt.upcomingWorkshopsDesc}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-white/20 text-white">{workshops.length}</Badge>
-                      {openSections.workshops ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
-                    </div>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Calendar className="h-4 w-4" />
+                      {txt.upcomingWorkshops}
+                    </CardTitle>
+                    <Button variant="ghost" size="sm" onClick={() => setExpandedSection(null)} className="text-white hover:bg-white/20 h-7 w-7 p-0">
+                      <X className="h-4 w-4" />
+                    </Button>
                   </div>
                 </CardHeader>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="p-6">
+                <CardContent className="p-4">
                   {loadingWorkshops ? (
-                    <div className="flex justify-center py-8">
-                      <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                    <div className="flex justify-center py-4">
+                      <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                     </div>
                   ) : workshops.length > 0 ? (
-                    <div className="space-y-4">
-                      {workshops.map((workshop) => (
-                        <div key={workshop.id} className={`p-4 bg-stone-50 rounded-xl hover:bg-stone-100 transition-colors ${isRTL ? 'text-right' : ''}`}>
-                          <div className={`flex items-start justify-between gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                            <div className="flex-1">
-                              <div className={`flex items-center gap-2 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                                <h4 className="font-semibold text-stone-800">
-                                  {getLocalizedText(workshop.title)}
-                                </h4>
-                                {workshop.is_online && (
-                                  <Badge className="bg-blue-100 text-blue-700 text-xs">Online</Badge>
-                                )}
-                                {workshop.type === 'tot' && (
-                                  <Badge className="bg-purple-100 text-purple-700 text-xs">ToT</Badge>
-                                )}
-                              </div>
-                              <div className={`flex flex-wrap gap-3 text-sm text-stone-500 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                                {workshop.date && (
-                                  <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                    <Calendar className="h-4 w-4" />
-                                    {new Date(workshop.date).toLocaleDateString('sv-SE')}
-                                    {workshop.end_date && ` - ${new Date(workshop.end_date).toLocaleDateString('sv-SE')}`}
-                                  </span>
-                                )}
-                                {workshop.location && (
-                                  <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                    <MapPin className="h-4 w-4" />
-                                    {workshop.location}
-                                  </span>
-                                )}
-                                {workshop.spots && (
-                                  <span className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                    <Users className="h-4 w-4" />
-                                    {workshop.spots} {txt.spotsLeft}
-                                  </span>
-                                )}
-                              </div>
-                              {workshop.price && (
-                                <Badge className="mt-2 bg-emerald-100 text-emerald-700">
-                                  {workshop.price} {workshop.currency || 'SEK'}
-                                </Badge>
-                              )}
-                            </div>
-                            <Button
-                              size="sm"
-                              onClick={() => navigate('/kalender')}
-                              className="bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2"
-                            >
-                              <UserPlus className="h-4 w-4" />
-                              {txt.nominateBtn}
-                            </Button>
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      {workshops.map(workshop => (
+                        <div key={workshop.id} className={`p-3 bg-blue-50 rounded-lg ${isRTL ? 'text-right' : ''}`}>
+                          <h4 className="font-semibold text-stone-800 text-sm">{getLocalizedText(workshop.title)}</h4>
+                          <div className="flex items-center gap-2 text-xs text-stone-500 mt-1">
+                            <Calendar className="h-3 w-3" />
+                            {workshop.date && new Date(workshop.date).toLocaleDateString('sv-SE')}
+                            {workshop.location && (
+                              <>
+                                <MapPin className="h-3 w-3 ml-2" />
+                                {workshop.location}
+                              </>
+                            )}
                           </div>
+                          <Button 
+                            size="sm" 
+                            className="mt-2 bg-blue-600 hover:bg-blue-700 text-xs h-7"
+                            onClick={(e) => { e.stopPropagation(); navigate(`/nominera/${workshop.id}`); }}
+                          >
+                            <UserPlus className="h-3 w-3 mr-1" />
+                            {txt.nominateBtn}
+                          </Button>
                         </div>
                       ))}
-                      <div className="pt-4 border-t border-stone-200">
-                        <Button
-                          variant="outline"
-                          onClick={() => navigate('/kalender')}
-                          className="w-full"
-                        >
-                          <Calendar className="h-4 w-4 mr-2" />
-                          {txt.viewCalendar}
-                        </Button>
-                      </div>
                     </div>
                   ) : (
-                    <div className={`text-center py-8 ${isRTL ? 'text-right' : ''}`}>
-                      <Calendar className="h-12 w-12 text-stone-300 mx-auto mb-4" />
-                      <p className="text-stone-500">{txt.noWorkshops}</p>
-                      <Button
-                        variant="outline"
-                        onClick={() => navigate('/kalender')}
-                        className="mt-4"
-                      >
-                        {txt.viewCalendar}
-                      </Button>
-                    </div>
+                    <p className="text-center text-stone-500 text-sm py-4">{txt.noWorkshops}</p>
                   )}
                 </CardContent>
-              </CollapsibleContent>
-            </Collapsible>
-          </Card>
+              </Card>
+            )}
 
-          {/* Section: Facilitators/Trainers - Link to dedicated page */}
-          <Card 
-            className="border-0 shadow-xl overflow-hidden cursor-pointer hover:shadow-2xl transition-all"
-            onClick={() => navigate('/medlemmar/facilitatorer')}
-          >
-            <CardHeader className="bg-gradient-to-r from-amber-500 to-amber-600 text-white">
-              <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <Users className="h-6 w-6" />
-                  </div>
-                  <div className={isRTL ? 'text-right' : ''}>
-                    <CardTitle className="text-xl text-white">{txt.facilitatorsTitle}</CardTitle>
-                    <p className="text-white/80 text-sm">{txt.facilitatorsDesc}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Badge className="bg-white/20 text-white">{facilitators.length}</Badge>
-                  <ChevronRight className="h-6 w-6" />
-                </div>
-              </div>
-            </CardHeader>
-          </Card>
-
-          {/* Section 2: Core Subjects (Kärnämnen) */}
-          <Card className="border-0 shadow-xl overflow-hidden">
-            <Collapsible open={openSections.knowledge} onOpenChange={() => toggleSection('knowledge')}>
-              <CollapsibleTrigger asChild>
-                <CardHeader className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white cursor-pointer hover:from-emerald-600 hover:to-emerald-700 transition-all">
+            {/* Knowledge/Core Subjects Content */}
+            {expandedSection === 'knowledge' && (
+              <Card className="border-0 shadow-lg animate-in slide-in-from-top-2 duration-200" data-testid="knowledge-content">
+                <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-600 text-white py-2 px-4">
                   <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                        <GraduationCap className="h-6 w-6" />
-                      </div>
-                      <div className={isRTL ? 'text-right' : ''}>
-                        <CardTitle className="text-xl text-white">{txt.coreSubjectsTitle}</CardTitle>
-                        <p className="text-white/80 text-sm">{txt.coreSubjectsDesc}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-white/20 text-white">{totalHours} {txt.hours}</Badge>
-                      {openSections.knowledge ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
-                    </div>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <BookOpen className="h-4 w-4" />
+                      {txt.coreSubjectsTitle}
+                    </CardTitle>
+                    <Button variant="ghost" size="sm" onClick={() => setExpandedSection(null)} className="text-white hover:bg-white/20 h-7 w-7 p-0">
+                      <X className="h-4 w-4" />
+                    </Button>
                   </div>
                 </CardHeader>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="p-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {coreSubjects.map((subject) => (
+                <CardContent className="p-4">
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {coreSubjects.map(subject => (
                       <div 
                         key={subject.id} 
-                        className="p-4 bg-stone-50 rounded-xl hover:bg-stone-100 cursor-pointer transition-colors group"
+                        className={`p-3 bg-stone-50 rounded-lg cursor-pointer hover:bg-stone-100 transition-colors ${isRTL ? 'text-right' : ''}`}
                         onClick={() => setSelectedSubject(subject)}
                       >
-                        <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                          <div className={`w-10 h-10 ${subject.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
-                            <BookOpen className="h-5 w-5 text-white" />
+                        <div className={`flex items-center gap-2 mb-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                          <div className={`w-8 h-8 ${subject.color} rounded-lg flex items-center justify-center`}>
+                            <BookOpen className="h-4 w-4 text-white" />
                           </div>
-                          <div className={`flex-1 ${isRTL ? 'text-right' : ''}`}>
-                            <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-                              <h4 className="font-semibold text-stone-800">{subject.title[language]}</h4>
-                              <Badge variant="outline" className="text-xs">{subject.hours}h</Badge>
-                            </div>
-                            <p className="text-sm text-stone-500 mt-1">{subject.description[language]}</p>
-                            <p className="text-xs text-haggai mt-2 group-hover:underline">
-                              {language === 'sv' ? 'Klicka för mer info →' : 'Click for more →'}
-                            </p>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-stone-800 text-sm">{subject.title[language]}</h4>
+                            <Badge variant="outline" className="text-[10px]">{subject.hours}h</Badge>
                           </div>
                         </div>
+                        <p className="text-xs text-stone-500 mt-1">{subject.description[language]}</p>
                       </div>
                     ))}
                   </div>
-                  
-                  {/* Certification notice */}
-                  <div className={`mt-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200 ${isRTL ? 'text-right' : ''}`}>
-                    <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <GraduationCap className="h-5 w-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-emerald-800">
-                          {language === 'sv' ? 'Certifierad Workshop med Diplom' : language === 'ar' ? 'ورشة عمل معتمدة مع شهادة' : 'Certified Workshop with Diploma'}
-                        </p>
-                        <p className="text-sm text-emerald-600">
-                          {language === 'sv' 
-                            ? 'Efter genomförd utbildning erhåller du ett officiellt diplom från Haggai International.' 
-                            : language === 'ar'
-                            ? 'بعد إتمام التدريب، ستحصل على شهادة رسمية من حجاي الدولية.'
-                            : 'Upon completion, you will receive an official diploma from Haggai International.'}
-                        </p>
-                      </div>
+                  <div className={`mt-3 p-3 bg-purple-50 rounded-lg ${isRTL ? 'text-right' : ''}`}>
+                    <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <GraduationCap className="h-4 w-4 text-purple-600" />
+                      <span className="text-sm font-medium text-purple-800">
+                        {language === 'sv' ? 'Certifierad Workshop med Diplom' : 'Certified Workshop with Diploma'}
+                      </span>
                     </div>
                   </div>
                 </CardContent>
-              </CollapsibleContent>
-            </Collapsible>
-          </Card>
+              </Card>
+            )}
 
-          {/* Section 2: Bylaws */}
-          <Card className="border-0 shadow-xl overflow-hidden">
-            <Collapsible open={openSections.bylaws} onOpenChange={() => toggleSection('bylaws')}>
-              <CollapsibleTrigger asChild>
-                <CardHeader className="bg-gradient-to-r from-teal-600 to-teal-700 text-white cursor-pointer hover:from-teal-700 hover:to-teal-800 transition-all">
+            {/* Bylaws Content */}
+            {expandedSection === 'bylaws' && (
+              <Card className="border-0 shadow-lg animate-in slide-in-from-top-2 duration-200" data-testid="bylaws-content">
+                <CardHeader className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-2 px-4">
                   <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                        <FileText className="h-6 w-6" />
-                      </div>
-                      <div className={isRTL ? 'text-right' : ''}>
-                        <CardTitle className="text-xl text-white">{txt.bylaws}</CardTitle>
-                        <p className="text-white/80 text-sm">{txt.adoptedDate}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-white/20 text-white">9 §</Badge>
-                      {openSections.bylaws ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
-                    </div>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <FileText className="h-4 w-4" />
+                      {txt.bylaws}
+                    </CardTitle>
+                    <Button variant="ghost" size="sm" onClick={() => setExpandedSection(null)} className="text-white hover:bg-white/20 h-7 w-7 p-0">
+                      <X className="h-4 w-4" />
+                    </Button>
                   </div>
                 </CardHeader>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    {bylawsContent.map((item, index) => (
-                      <div key={index} className={`p-4 bg-stone-50 rounded-xl ${isRTL ? 'text-right' : ''}`}>
-                        <div className={`flex items-center gap-2 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                          <Badge className="bg-haggai text-white">{item.section}</Badge>
-                          <h4 className="font-semibold text-stone-800">{item.title}</h4>
+                <CardContent className="p-4">
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {bylawsContent.map((item, idx) => (
+                      <div key={idx} className={`p-2 bg-stone-50 rounded-lg ${isRTL ? 'text-right' : ''}`}>
+                        <div className={`flex items-center gap-2 mb-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                          <Badge className="bg-haggai text-white text-xs">{item.section}</Badge>
+                          <span className="font-medium text-stone-800 text-xs">{item.title}</span>
                         </div>
-                        <p className="text-sm text-stone-600 whitespace-pre-line leading-relaxed">
-                          {item.content}
-                        </p>
+                        <p className="text-[11px] text-stone-600 leading-relaxed">{item.content}</p>
                       </div>
                     ))}
                   </div>
-                  <div className={`mt-6 p-4 bg-haggai-50 rounded-xl ${isRTL ? 'text-right' : ''}`}>
-                    <p className="text-sm text-haggai-dark font-medium">
-                      {language === 'sv' 
-                        ? 'Dessa stadgar har antagits vid föreningens konstituerande möte den 16 april 2025.'
-                        : 'These bylaws were adopted at the association\'s constituent meeting on April 16, 2025.'}
-                    </p>
-                  </div>
                 </CardContent>
-              </CollapsibleContent>
-            </Collapsible>
-          </Card>
+              </Card>
+            )}
 
-          {/* Section 3: Board Members */}
-          <Card className="border-0 shadow-xl overflow-hidden">
-            <Collapsible open={openSections.board} onOpenChange={() => toggleSection('board')}>
-              <CollapsibleTrigger asChild>
-                <CardHeader className="bg-gradient-to-r from-violet-500 to-violet-600 text-white cursor-pointer hover:from-violet-600 hover:to-violet-700 transition-all">
+            {/* Board Content */}
+            {expandedSection === 'board' && (
+              <Card className="border-0 shadow-lg animate-in slide-in-from-top-2 duration-200" data-testid="board-content">
+                <CardHeader className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white py-2 px-4">
                   <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                        <Users className="h-6 w-6" />
-                      </div>
-                      <div className={isRTL ? 'text-right' : ''}>
-                        <CardTitle className="text-xl text-white">{txt.currentBoard}</CardTitle>
-                        <p className="text-white/80 text-sm">{language === 'sv' ? 'Nuvarande styrelsemedlemmar' : 'Current board members'}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-white/20 text-white">{displayBoard.length} {language === 'sv' ? 'ledamöter' : 'members'}</Badge>
-                      {openSections.board ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
-                    </div>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Building2 className="h-4 w-4" />
+                      {txt.currentBoard}
+                    </CardTitle>
+                    <Button variant="ghost" size="sm" onClick={() => setExpandedSection(null)} className="text-white hover:bg-white/20 h-7 w-7 p-0">
+                      <X className="h-4 w-4" />
+                    </Button>
                   </div>
                 </CardHeader>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="p-6">
+                <CardContent className="p-4">
                   {loadingBoard ? (
-                    <div className="flex justify-center py-8">
-                      <div className="w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full animate-spin" />
+                    <div className="flex justify-center py-4">
+                      <div className="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
                     </div>
                   ) : (
-                    <>
-                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {displayBoard.map((member, idx) => (
-                          <div key={member.id || idx} className={`p-4 bg-stone-50 rounded-xl ${isRTL ? 'text-right' : ''}`}>
-                            <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                              {member.image_url ? (
-                                <img 
-                                  src={member.image_url} 
-                                  alt={member.name}
-                                  className="w-12 h-12 rounded-full object-cover flex-shrink-0"
-                                />
-                              ) : (
-                                <div className="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
-                                  <User className="h-6 w-6 text-violet-600" />
-                                </div>
-                              )}
-                              <div className={isRTL ? 'text-right' : ''}>
-                                <p className="font-semibold text-stone-800">{member.name}</p>
-                                <p className="text-sm text-violet-600">{member.role}</p>
-                                {member.term_start && (
-                                  <p className="text-xs text-stone-500">{txt.term}: {member.term_start} →</p>
-                                )}
-                              </div>
-                            </div>
-                            {member.email && (
-                              <div className={`flex items-center gap-2 mt-3 text-xs text-stone-500 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                                <Mail className="h-3 w-3" />
-                                {member.email}
-                              </div>
-                            )}
-                            {member.phone && (
-                              <div className={`flex items-center gap-2 mt-1 text-xs text-stone-500 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                                <Phone className="h-3 w-3" />
-                                {member.phone}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {previousBoard.length > 0 && (
-                        <div className="mt-6 pt-6 border-t border-stone-200">
-                          <Button
-                            variant="outline"
-                            onClick={() => setShowPreviousBoard(!showPreviousBoard)}
-                            className={`w-full justify-between ${isRTL ? 'flex-row-reverse' : ''}`}
-                          >
-                            <span>{showPreviousBoard ? txt.hidePrevious : txt.showPrevious}</span>
-                            {showPreviousBoard ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                          </Button>
-                          
-                          {showPreviousBoard && (
-                            <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                              {previousBoard.map((member) => (
-                                <div key={member.id} className={`p-3 bg-stone-100 rounded-lg ${isRTL ? 'text-right' : ''}`}>
-                                  <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                    <div className="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center flex-shrink-0">
-                                      <User className="h-5 w-5 text-stone-400" />
-                                    </div>
-                                    <div className={isRTL ? 'text-right' : ''}>
-                                      <p className="font-medium text-stone-700">{member.name}</p>
-                                      <p className="text-xs text-stone-500">{member.role}</p>
-                                      <p className="text-xs text-stone-400">{member.term_start} - {member.term_end}</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+                      {displayBoard.map((member, idx) => (
+                        <div key={member.id || idx} className={`p-2 bg-stone-50 rounded-lg text-center`}>
+                          {member.image_url ? (
+                            <img src={member.image_url} alt={member.name} className="w-10 h-10 rounded-full object-cover mx-auto mb-1" />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center mx-auto mb-1">
+                              <User className="h-5 w-5 text-indigo-600" />
                             </div>
                           )}
+                          <p className="font-medium text-stone-800 text-xs">{member.name}</p>
+                          <p className="text-[10px] text-stone-500">{member.role}</p>
                         </div>
-                      )}
-                    </>
+                      ))}
+                    </div>
+                  )}
+                  {previousBoard.length > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowPreviousBoard(!showPreviousBoard)}
+                      className="mt-3 text-xs"
+                    >
+                      {showPreviousBoard ? txt.hidePrevious : txt.showPrevious}
+                    </Button>
                   )}
                 </CardContent>
-              </CollapsibleContent>
-            </Collapsible>
-          </Card>
+              </Card>
+            )}
 
-          {/* Section 4: Board Meetings */}
-          {/* Section 4: Board Work (Styrelsearbete) */}
-          <Card className="border-0 shadow-xl overflow-hidden">
-            <Collapsible open={openSections.meetings} onOpenChange={() => toggleSection('meetings')}>
-              <CollapsibleTrigger asChild>
-                <CardHeader className="bg-gradient-to-r from-amber-500 to-amber-600 text-white cursor-pointer hover:from-amber-600 hover:to-amber-700 transition-all">
-                  <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                        <Briefcase className="h-6 w-6" />
-                      </div>
-                      <div className={isRTL ? 'text-right' : ''}>
-                        <CardTitle className="text-xl text-white">
-                          {language === 'sv' ? 'Styrelsearbete' : language === 'ar' ? 'عمل مجلس الإدارة' : 'Board Work'}
-                        </CardTitle>
-                        <p className="text-white/80 text-sm">
-                          {language === 'sv' ? 'Planera och dokumentera styrelsearbetet' : 'Plan and document board work'}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {openSections.meetings ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
-                    </div>
-                  </div>
-                </CardHeader>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="p-6">
-                  <BoardMeetings language={language} isRTL={isRTL} />
-                </CardContent>
-              </CollapsibleContent>
-            </Collapsible>
-          </Card>
-
-          {/* Contact Info */}
-          <Card className="border-0 shadow-lg bg-stone-50">
-            <CardContent className="p-6">
-              <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <div className="w-12 h-12 bg-haggai-100 rounded-xl flex items-center justify-center">
-                  <Building2 className="h-6 w-6 text-haggai" />
-                </div>
-                <div className={isRTL ? 'text-right' : ''}>
-                  <p className="font-semibold text-stone-800">Haggai Sweden</p>
-                  <p className="text-stone-600">Modulvägen 6, 141 75 Kungens Kurva</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+            {/* Meetings Section - Always visible */}
+            <Card className="border-0 shadow-lg" data-testid="meetings-section">
+              <CardHeader className="bg-gradient-to-r from-stone-600 to-stone-700 text-white py-2 px-4">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  {txt.meetings}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4">
+                <BoardMeetings />
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 
       {/* Subject Detail Modal */}
       {selectedSubject && (
         <Dialog open={!!selectedSubject} onOpenChange={() => setSelectedSubject(null)}>
-          <DialogContent className={`max-w-4xl max-h-[90vh] overflow-y-auto ${isRTL ? 'rtl' : 'ltr'}`}>
+          <DialogContent className={`max-w-2xl max-h-[80vh] overflow-y-auto ${isRTL ? 'rtl' : 'ltr'}`}>
             <DialogHeader>
-              <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <div className={`w-12 h-12 ${selectedSubject.color} rounded-xl flex items-center justify-center`}>
-                  <BookOpen className="h-6 w-6 text-white" />
+              <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <div className={`w-10 h-10 ${selectedSubject.color} rounded-lg flex items-center justify-center`}>
+                  <BookOpen className="h-5 w-5 text-white" />
                 </div>
                 <div className={isRTL ? 'text-right' : ''}>
-                  <DialogTitle className="text-2xl text-stone-800">
-                    {selectedSubject.title[language]}
-                  </DialogTitle>
-                  <p className="text-stone-500 mt-1">{selectedSubject.title.ar}</p>
+                  <DialogTitle className="text-lg text-stone-800">{selectedSubject.title[language]}</DialogTitle>
+                  <Badge variant="outline" className="text-xs mt-1">{selectedSubject.hours} {txt.hours}</Badge>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSelectedSubject(null)}
-                  className={`${isRTL ? 'mr-auto' : 'ml-auto'} text-stone-400 hover:text-stone-600`}
-                >
-                  <X className="h-5 w-5" />
-                </Button>
               </div>
             </DialogHeader>
-
-            <div className="space-y-6 mt-6">
-              {/* Hours Badge */}
-              <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                <Badge className="bg-stone-100 text-stone-700 px-3 py-1">
-                  <Clock className="h-4 w-4 mr-1" />
-                  {selectedSubject.hours} {txt.hours}
-                </Badge>
-              </div>
-
-              {/* Overview */}
+            <div className="space-y-4 mt-4">
               <div className={isRTL ? 'text-right' : ''}>
-                <h3 className="text-lg font-semibold text-stone-800 mb-3">
-                  {language === 'sv' ? 'Översikt' : language === 'ar' ? 'نظرة عامة' : 'Overview'}
+                <h3 className="text-sm font-semibold text-stone-800 mb-2">
+                  {language === 'sv' ? 'Översikt' : 'Overview'}
                 </h3>
-                <p className="text-stone-600 leading-relaxed">
-                  {selectedSubject.fullContent[language].overview}
-                </p>
+                <p className="text-sm text-stone-600">{selectedSubject.fullContent[language].overview}</p>
               </div>
-
-              {/* Topics */}
               <div className={isRTL ? 'text-right' : ''}>
-                <h3 className="text-lg font-semibold text-stone-800 mb-3">
-                  {language === 'sv' ? 'Ämnen som behandlas' : language === 'ar' ? 'المواضيع المغطاة' : 'Topics Covered'}
+                <h3 className="text-sm font-semibold text-stone-800 mb-2">
+                  {language === 'sv' ? 'Ämnen' : 'Topics'}
                 </h3>
-                <ul className={`space-y-2 ${isRTL ? 'text-right' : ''}`}>
-                  {selectedSubject.fullContent[language].topics.map((topic, index) => (
-                    <li key={index} className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <div className={`w-2 h-2 ${selectedSubject.color} rounded-full mt-2 flex-shrink-0`} />
-                      <span className="text-stone-600">{topic}</span>
+                <ul className="space-y-1">
+                  {selectedSubject.fullContent[language].topics.map((topic, idx) => (
+                    <li key={idx} className={`flex items-start gap-2 text-sm text-stone-600 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className={`w-1.5 h-1.5 ${selectedSubject.color} rounded-full mt-1.5`} />
+                      {topic}
                     </li>
                   ))}
                 </ul>
               </div>
-
-              {/* Learning Outcome */}
-              <div className={`p-4 bg-haggai-50 rounded-xl ${isRTL ? 'text-right' : ''}`}>
-                <h3 className="text-lg font-semibold text-haggai-dark mb-2">
-                  {language === 'sv' ? 'Lärandemål' : language === 'ar' ? 'نتائج التعلم' : 'Learning Outcome'}
+              <div className={`p-3 bg-haggai-50 rounded-lg ${isRTL ? 'text-right' : ''}`}>
+                <h3 className="text-sm font-semibold text-haggai-dark mb-1">
+                  {language === 'sv' ? 'Lärandemål' : 'Outcome'}
                 </h3>
-                <p className="text-haggai-dark">
-                  {selectedSubject.fullContent[language].outcome}
-                </p>
+                <p className="text-sm text-haggai-dark">{selectedSubject.fullContent[language].outcome}</p>
               </div>
             </div>
           </DialogContent>
