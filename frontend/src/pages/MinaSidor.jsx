@@ -68,7 +68,8 @@ const MinaSidor = () => {
       backToHome: 'Back to home',
       pendingEvaluations: 'Pending Evaluations',
       evaluateNow: 'Evaluate now',
-      noEvaluations: 'No pending evaluations'
+      noEvaluations: 'No pending evaluations',
+      facilitators: 'Facilitators/Trainers'
     },
     ar: {
       title: 'صفحاتي',
