@@ -191,6 +191,12 @@ const MinaSidor = () => {
       color: 'bg-orange-500'
     },
     { 
+      icon: UserCog, 
+      label: txt.facilitators, 
+      link: '/mina-sidor/facilitatorer',
+      color: 'bg-amber-500'
+    },
+    { 
       icon: MessageCircle, 
       label: txt.forum, 
       link: '/mina-sidor/forum',
