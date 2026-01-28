@@ -117,12 +117,10 @@ const MemberFacilitators = () => {
 
   const fetchFacilitators = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/leaders?active_only=true`);
+      const response = await fetch(`${BACKEND_URL}/api/leader-registrations?status=approved`);
       if (response.ok) {
         const data = await response.json();
-        // Only show approved facilitators
-        const approved = data.filter(f => f.status === 'approved');
-        setFacilitators(approved);
+        setFacilitators(data);
       }
     } catch (error) {
       console.error('Error fetching facilitators:', error);
