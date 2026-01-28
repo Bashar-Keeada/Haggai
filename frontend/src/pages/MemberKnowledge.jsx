@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
-import { ArrowLeft, BookOpen, Clock, GraduationCap } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, GraduationCap, CheckCircle, Target, List, X } from 'lucide-react';
 import { useEffect } from 'react';
 
 const MemberKnowledge = () => {
@@ -23,58 +24,247 @@ const MemberKnowledge = () => {
   const translations = {
     sv: {
       title: 'Kärnämnen',
-      subtitle: '21 timmars certifierad utbildning',
+      subtitle: '21 timmars certifierad ledarskapsutbildning',
       back: 'Tillbaka',
       hours: 'timmar',
+      hour: 'timme',
       totalHours: 'Totalt 21 timmar',
       diploma: 'Certifierad Workshop med Diplom',
-      diplomaDesc: 'Efter genomförd utbildning erhåller du ett officiellt diplom från Haggai International.',
+      diplomaDesc: 'Efter genomförd utbildning erhåller du ett officiellt diplom från Haggai International som erkänns globalt.',
       overview: 'Översikt',
-      topics: 'Ämnen',
-      outcome: 'Lärandemål'
+      topics: 'Ämnen som behandlas',
+      outcome: 'Lärandemål',
+      close: 'Stäng',
+      clickToLearn: 'Klicka för att lära dig mer'
     },
     en: {
       title: 'Core Subjects',
-      subtitle: '21 hours of certified training',
+      subtitle: '21 hours of certified leadership training',
       back: 'Back',
       hours: 'hours',
+      hour: 'hour',
       totalHours: 'Total 21 hours',
       diploma: 'Certified Workshop with Diploma',
-      diplomaDesc: 'Upon completion, you will receive an official diploma from Haggai International.',
+      diplomaDesc: 'Upon completion, you will receive an official diploma from Haggai International recognized globally.',
       overview: 'Overview',
-      topics: 'Topics',
-      outcome: 'Learning Outcome'
+      topics: 'Topics Covered',
+      outcome: 'Learning Outcome',
+      close: 'Close',
+      clickToLearn: 'Click to learn more'
     },
     ar: {
       title: 'المواضيع الأساسية',
-      subtitle: '21 ساعة من التدريب المعتمد',
+      subtitle: '21 ساعة من التدريب القيادي المعتمد',
       back: 'رجوع',
       hours: 'ساعات',
+      hour: 'ساعة',
       totalHours: 'المجموع 21 ساعة',
       diploma: 'ورشة عمل معتمدة مع شهادة',
-      diplomaDesc: 'بعد إتمام التدريب، ستحصل على شهادة رسمية من حجاي الدولية.',
+      diplomaDesc: 'بعد إتمام التدريب، ستحصل على شهادة رسمية من حجاي الدولية معترف بها عالمياً.',
       overview: 'نظرة عامة',
-      topics: 'المواضيع',
-      outcome: 'نتائج التعلم'
+      topics: 'المواضيع المغطاة',
+      outcome: 'نتائج التعلم',
+      close: 'إغلاق',
+      clickToLearn: 'انقر لمعرفة المزيد'
     }
   };
 
   const txt = translations[language] || translations.sv;
 
   const coreSubjects = [
-    { id: 1, title: { sv: 'Bibliskt Mandat', en: 'Biblical Mandate', ar: 'الأساس الكتابي' }, hours: 3, color: 'from-blue-500 to-blue-600', description: { sv: 'Det bibliska mandatet för evangelisation.', en: 'The biblical foundation for evangelism.', ar: 'الأساس الكتابي للكرازة.' }, fullContent: { sv: { overview: 'Förstå Guds plan för evangelisation och vårt personliga engagemang.', topics: ['Guds natur som sändare', 'Människans fall och syndens herravälde', 'Frälsning genom Kristus', 'Den stora missionsbefallningen', 'Den Helige Andes verk'], outcome: 'Förstå det bibliska mandatet och göra ett personligt åtagande för evangelisation.' }, en: { overview: 'Understanding God\'s plan for evangelism and our personal commitment.', topics: ['God\'s nature as sender', 'The fall of man', 'Salvation through Christ', 'The Great Commission', 'The work of the Holy Spirit'], outcome: 'Understand the biblical mandate and make a personal commitment.' }, ar: { overview: 'فهم خطة الله للكرازة والتزامنا الشخصي.', topics: ['طبيعة الله كمرسل', 'سقوط الإنسان', 'الخلاص بالمسيح', 'المأمورية العظمى', 'عمل الروح القدس'], outcome: 'فهم الأساس الكتابي والالتزام الشخصي.' } } },
-    { id: 2, title: { sv: 'Förvaltarskap', en: 'Stewardship', ar: 'الوكالة' }, hours: 3, color: 'from-green-500 to-green-600', description: { sv: 'Bibliskt förvaltarskap och resursutveckling.', en: 'Biblical stewardship and resource development.', ar: 'الوكالة الكتابية وتطوير الموارد.' }, fullContent: { sv: { overview: 'Utrusta deltagare att förvalta ekonomiska resurser effektivt.', topics: ['Utveckla lokala resurser', 'Bibliska principer för tionde', 'Andramils-givande', 'Färdigheter för resursutveckling', 'Sätta mål för bidrag'], outcome: 'Utveckla och använda lokala resurser för effektiv tjänst.' }, en: { overview: 'Equipping participants to manage financial resources effectively.', topics: ['Developing local resources', 'Biblical tithing principles', 'Second mile giving', 'Resource development skills', 'Setting contribution goals'], outcome: 'Develop and use local resources for effective ministry.' }, ar: { overview: 'تجهيز المشاركين لإدارة الموارد المالية بفعالية.', topics: ['تطوير الموارد المحلية', 'مبادئ العشور الكتابية', 'عطاء الميل الثاني', 'مهارات تطوير الموارد', 'وضع أهداف التبرعات'], outcome: 'تطوير واستخدام الموارد المحلية للخدمة الفعالة.' } } },
-    { id: 3, title: { sv: 'Kontext', en: 'Context', ar: 'السياق' }, hours: 5, color: 'from-purple-500 to-purple-600', description: { sv: 'Evangeliet i det nuvarande sammanhanget.', en: 'The Gospel in the present context.', ar: 'الإنجيل في السياق الحاضر.' }, fullContent: { sv: { overview: 'Utrusta deltagare att förmedla evangeliet till majoritetsbefolkningen.', topics: ['Islams utmaning för evangelisation', 'Grundläggande islamiska principer', 'Religiösa seder', 'Vad man bör och inte bör göra', 'Visa kärlek och be för muslimska vänner'], outcome: 'Närma dig och dela evangeliet med människor från olika bakgrunder.' }, en: { overview: 'Equipping participants to communicate the Gospel to the majority.', topics: ['Islam\'s challenge for evangelism', 'Basic Islamic principles', 'Religious practices', 'Dos and don\'ts', 'Show love and pray for Muslim friends'], outcome: 'Approach and share the Gospel with people from different backgrounds.' }, ar: { overview: 'تجهيز المشاركين لتوصيل الإنجيل للأغلبية.', topics: ['تحدي الإسلام للكرازة', 'المبادئ الإسلامية الأساسية', 'الممارسات الدينية', 'ما يجب وما لا يجب', 'إظهار المحبة والصلاة للأصدقاء المسلمين'], outcome: 'الوصول ومشاركة الإنجيل مع خلفيات مختلفة.' } } },
-    { id: 4, title: { sv: 'Nästa Generation', en: 'Next Generation', ar: 'الجيل القادم' }, hours: 5, color: 'from-orange-500 to-orange-600', description: { sv: 'Förmedla evangeliet till unga.', en: 'Communicating the Gospel to the youth.', ar: 'توصيل الإنجيل للشباب.' }, fullContent: { sv: { overview: 'Visa hur man förmedlar evangeliet till den unga generationen.', topics: ['Ungdomsvärlden (13-30 år)', 'Kommunicera genom lyssnande', 'Metoder: musik, sport', 'Ungas roll i kyrkan', 'Unga som kraft för evangelisation'], outcome: 'Engagera och utrusta nästa generation för evangelisation.' }, en: { overview: 'Demonstrating how to communicate the Gospel to the youth.', topics: ['Youth world (ages 13-30)', 'Communicate through listening', 'Methods: music, sports', 'Youth role in church', 'Youth as evangelism force'], outcome: 'Engage and equip the next generation for evangelism.' }, ar: { overview: 'إظهار كيفية نقل الإنجيل لجيل الشباب.', topics: ['عالم الشباب (13-30)', 'التواصل من خلال الاستماع', 'الوسائل: الموسيقى والرياضة', 'دور الشباب في الكنيسة', 'الشباب كقوة للكرازة'], outcome: 'إشراك وتجهيز الجيل القادم للكرازة.' } } },
-    { id: 5, title: { sv: 'Ledarskap', en: 'Leadership', ar: 'القيادة' }, hours: 4, color: 'from-red-500 to-red-600', description: { sv: 'Effektivt vittnesbörd i ledarskap.', en: 'Effective witness in leadership.', ar: 'شهادة فعالة في القيادة.' }, fullContent: { sv: { overview: 'Principer och verktyg för effektivt ledarskap.', topics: ['Ledaren enligt Bibeln', 'Roller och ansvar', 'Ledare vs icke-ledare', 'Ledarstilar', 'Tjänande ledarskap', 'Utveckla andra generations ledarskap'], outcome: 'Leda effektivt i evangelisationsarbetet.' }, en: { overview: 'Principles and tools for effective leadership.', topics: ['Biblical leader', 'Roles and responsibilities', 'Leaders vs non-leaders', 'Leadership styles', 'Servant leadership', 'Develop second-level leadership'], outcome: 'Lead effectively in evangelism work.' }, ar: { overview: 'مبادئ وأدوات للقيادة الفعالة.', topics: ['القائد الكتابي', 'الأدوار والمسؤوليات', 'القادة وغير القادة', 'أساليب القيادة', 'القيادة الخادمة', 'تطوير قيادة المستوى الثاني'], outcome: 'قيادة بفعالية في عمل الكرازة.' } } },
-    { id: 6, title: { sv: 'Målsättning', en: 'Goal Setting', ar: 'وضع الأهداف' }, hours: 5, color: 'from-teal-500 to-teal-600', description: { sv: 'Sätta och uppnå mål för evangelisation.', en: 'Setting and achieving goals for evangelism.', ar: 'وضع وتحقيق الأهداف للكرازة.' }, fullContent: { sv: { overview: 'Använda målsättning som ett effektivt verktyg.', topics: ['Guds syfte för ditt liv', 'Personlig uppdragsbeskrivning', 'Integrera mål genom vision', 'Skriva personliga mål', 'Mål för: tjänst, familj, ekonomi, hälsa'], outcome: 'Sätta och nå mål som driver evangelisationsarbetet framåt.' }, en: { overview: 'Using goal setting as an effective tool.', topics: ['God\'s purpose for your life', 'Personal mission statement', 'Integrate goals through vision', 'Write personal goals', 'Goals for: ministry, family, finances, health'], outcome: 'Set and achieve goals that drive evangelism forward.' }, ar: { overview: 'استخدام وضع الأهداف كأداة فعالة.', topics: ['قصد الله لحياتك', 'بيان المهمة الشخصية', 'دمج الأهداف من خلال الرؤية', 'كتابة أهداف شخصية', 'أهداف: الخدمة، الأسرة، المال، الصحة'], outcome: 'وضع وتحقيق أهداف تدفع عمل الكرازة للأمام.' } } }
+    { 
+      id: 1, 
+      title: { sv: 'Bibliskt Mandat', en: 'Biblical Mandate', ar: 'الأساس الكتابي' }, 
+      hours: 3, 
+      color: 'from-blue-500 to-blue-600',
+      bgLight: 'bg-blue-50',
+      textColor: 'text-blue-600',
+      icon: '📖',
+      description: { 
+        sv: 'Utforska det bibliska mandatet för evangelisation och förstå Guds plan för världen.', 
+        en: 'Explore the biblical mandate for evangelism and understand God\'s plan for the world.', 
+        ar: 'استكشف الأساس الكتابي للكرازة وافهم خطة الله للعالم.' 
+      }, 
+      fullContent: { 
+        sv: { 
+          overview: 'Detta ämne ger dig en djup förståelse för Guds plan för evangelisation och ditt personliga engagemang i den stora missionsbefallningen. Du kommer att upptäcka hur Bibeln från början till slut visar Guds hjärta för alla folk.', 
+          topics: ['Guds natur som den sändande Guden', 'Människans fall och syndens konsekvenser', 'Frälsning genom Jesus Kristus allena', 'Den stora missionsbefallningen i Matteus 28', 'Den Helige Andes kraft för vittnesbörd', 'Församlingens roll i Guds plan'], 
+          outcome: 'Efter detta ämne kommer du att förstå det bibliska mandatet för evangelisation och kunna göra ett personligt åtagande för att dela evangeliet med andra.' 
+        }, 
+        en: { 
+          overview: 'This subject gives you a deep understanding of God\'s plan for evangelism and your personal involvement in the Great Commission. You will discover how the Bible from beginning to end shows God\'s heart for all peoples.', 
+          topics: ['God\'s nature as the sending God', 'The fall of man and consequences of sin', 'Salvation through Jesus Christ alone', 'The Great Commission in Matthew 28', 'The Holy Spirit\'s power for witness', 'The church\'s role in God\'s plan'], 
+          outcome: 'After this subject, you will understand the biblical mandate for evangelism and be able to make a personal commitment to share the Gospel with others.' 
+        }, 
+        ar: { 
+          overview: 'يمنحك هذا الموضوع فهماً عميقاً لخطة الله للكرازة ومشاركتك الشخصية في المأمورية العظمى.', 
+          topics: ['طبيعة الله كالإله المرسل', 'سقوط الإنسان وعواقب الخطية', 'الخلاص بيسوع المسيح وحده', 'المأمورية العظمى في متى 28', 'قوة الروح القدس للشهادة', 'دور الكنيسة في خطة الله'], 
+          outcome: 'بعد هذا الموضوع، ستفهم الأساس الكتابي للكرازة وستتمكن من الالتزام الشخصي بمشاركة الإنجيل.' 
+        } 
+      } 
+    },
+    { 
+      id: 2, 
+      title: { sv: 'Förvaltarskap', en: 'Stewardship', ar: 'الوكالة' }, 
+      hours: 3, 
+      color: 'from-emerald-500 to-emerald-600',
+      bgLight: 'bg-emerald-50',
+      textColor: 'text-emerald-600',
+      icon: '💰',
+      description: { 
+        sv: 'Lär dig bibliska principer för förvaltarskap och hur du kan utveckla resurser för Guds rike.', 
+        en: 'Learn biblical principles of stewardship and how to develop resources for God\'s kingdom.', 
+        ar: 'تعلم المبادئ الكتابية للوكالة وكيفية تطوير الموارد لملكوت الله.' 
+      }, 
+      fullContent: { 
+        sv: { 
+          overview: 'Detta ämne utrustar dig att förvalta ekonomiska och materiella resurser på ett sätt som ärar Gud och främjar evangelisation. Du kommer att lära dig praktiska verktyg för resursutveckling.', 
+          topics: ['Bibliska principer för tionde och givande', 'Utveckla lokala resurser för tjänst', 'Andramils-givande - att ge utöver det förväntade', 'Praktiska färdigheter för resursutveckling', 'Sätta ekonomiska mål för din församling', 'Ansvarsfull förvaltning av Guds gåvor'], 
+          outcome: 'Du kommer att kunna utveckla och använda lokala resurser effektivt för att stödja evangelisationsarbete utan att vara beroende av utomstående finansiering.' 
+        }, 
+        en: { 
+          overview: 'This subject equips you to manage financial and material resources in a way that honors God and promotes evangelism. You will learn practical tools for resource development.', 
+          topics: ['Biblical principles for tithing and giving', 'Developing local resources for ministry', 'Second mile giving - giving beyond expectations', 'Practical skills for resource development', 'Setting financial goals for your church', 'Responsible stewardship of God\'s gifts'], 
+          outcome: 'You will be able to develop and use local resources effectively to support evangelism work without depending on outside funding.' 
+        }, 
+        ar: { 
+          overview: 'يجهزك هذا الموضوع لإدارة الموارد المالية والمادية بطريقة تكرم الله وتعزز الكرازة.', 
+          topics: ['المبادئ الكتابية للعشور والعطاء', 'تطوير الموارد المحلية للخدمة', 'عطاء الميل الثاني', 'مهارات عملية لتطوير الموارد', 'وضع أهداف مالية لكنيستك', 'الوكالة المسؤولة لعطايا الله'], 
+          outcome: 'ستتمكن من تطوير واستخدام الموارد المحلية بفعالية لدعم عمل الكرازة.' 
+        } 
+      } 
+    },
+    { 
+      id: 3, 
+      title: { sv: 'Kontext', en: 'Context', ar: 'السياق' }, 
+      hours: 5, 
+      color: 'from-purple-500 to-purple-600',
+      bgLight: 'bg-purple-50',
+      textColor: 'text-purple-600',
+      icon: '🌍',
+      description: { 
+        sv: 'Förstå hur du kan kommunicera evangeliet effektivt i olika kulturella sammanhang.', 
+        en: 'Understand how to communicate the Gospel effectively in different cultural contexts.', 
+        ar: 'افهم كيفية توصيل الإنجيل بفعالية في سياقات ثقافية مختلفة.' 
+      }, 
+      fullContent: { 
+        sv: { 
+          overview: 'Detta omfattande ämne utrustar dig att förmedla evangeliet till människor med muslimsk bakgrund och andra kulturella sammanhang. Du kommer att lära dig att bygga broar och visa kärlek.', 
+          topics: ['Islams utmaning för kristen evangelisation', 'Grundläggande islamiska principer och trosuppfattningar', 'Kulturella seder och traditioner att förstå', 'Vad man bör och inte bör göra i mötet', 'Bygga äkta vänskapsrelationer', 'Be för och visa kärlek till muslimska vänner'], 
+          outcome: 'Du kommer att kunna närma dig och dela evangeliet med människor från olika religiösa och kulturella bakgrunder på ett respektfullt och kärleksfullt sätt.' 
+        }, 
+        en: { 
+          overview: 'This comprehensive subject equips you to communicate the Gospel to people with Muslim backgrounds and other cultural contexts. You will learn to build bridges and show love.', 
+          topics: ['Islam\'s challenge for Christian evangelism', 'Basic Islamic principles and beliefs', 'Cultural customs and traditions to understand', 'Dos and don\'ts in encounters', 'Building genuine friendship relationships', 'Praying for and showing love to Muslim friends'], 
+          outcome: 'You will be able to approach and share the Gospel with people from different religious and cultural backgrounds in a respectful and loving way.' 
+        }, 
+        ar: { 
+          overview: 'يجهزك هذا الموضوع الشامل لتوصيل الإنجيل للأشخاص من خلفيات إسلامية وسياقات ثقافية أخرى.', 
+          topics: ['تحدي الإسلام للكرازة المسيحية', 'المبادئ والمعتقدات الإسلامية الأساسية', 'العادات والتقاليد الثقافية', 'ما يجب وما لا يجب في اللقاءات', 'بناء علاقات صداقة حقيقية', 'الصلاة وإظهار المحبة للأصدقاء المسلمين'], 
+          outcome: 'ستتمكن من الوصول ومشاركة الإنجيل مع أشخاص من خلفيات دينية وثقافية مختلفة بطريقة محترمة ومحبة.' 
+        } 
+      } 
+    },
+    { 
+      id: 4, 
+      title: { sv: 'Nästa Generation', en: 'Next Generation', ar: 'الجيل القادم' }, 
+      hours: 5, 
+      color: 'from-orange-500 to-orange-600',
+      bgLight: 'bg-orange-50',
+      textColor: 'text-orange-600',
+      icon: '👥',
+      description: { 
+        sv: 'Lär dig strategier för att nå och engagera unga människor med evangeliet.', 
+        en: 'Learn strategies for reaching and engaging young people with the Gospel.', 
+        ar: 'تعلم استراتيجيات للوصول وإشراك الشباب بالإنجيل.' 
+      }, 
+      fullContent: { 
+        sv: { 
+          overview: 'Detta viktiga ämne visar hur du kan förmedla evangeliet till den unga generationen (13-30 år) på sätt som är relevanta och engagerande för dem.', 
+          topics: ['Förstå ungdomsvärlden idag (13-30 år)', 'Kommunicera genom aktivt lyssnande', 'Kreativa metoder: musik, sport, sociala medier', 'Ungas roll och potential i församlingen', 'Unga som kraft för evangelisation', 'Mentorskap av nästa generations ledare'], 
+          outcome: 'Du kommer att kunna engagera och utrusta nästa generation för evangelisation och ledarskap i församlingen.' 
+        }, 
+        en: { 
+          overview: 'This important subject shows how to communicate the Gospel to the young generation (ages 13-30) in ways that are relevant and engaging for them.', 
+          topics: ['Understanding today\'s youth world (ages 13-30)', 'Communicating through active listening', 'Creative methods: music, sports, social media', 'Youth role and potential in the church', 'Youth as a force for evangelism', 'Mentoring next generation leaders'], 
+          outcome: 'You will be able to engage and equip the next generation for evangelism and leadership in the church.' 
+        }, 
+        ar: { 
+          overview: 'يوضح هذا الموضوع المهم كيفية توصيل الإنجيل لجيل الشباب (13-30 سنة) بطرق مناسبة وجذابة لهم.', 
+          topics: ['فهم عالم الشباب اليوم (13-30 سنة)', 'التواصل من خلال الاستماع النشط', 'أساليب إبداعية: الموسيقى والرياضة ووسائل التواصل', 'دور الشباب وإمكاناتهم في الكنيسة', 'الشباب كقوة للكرازة', 'إرشاد قادة الجيل القادم'], 
+          outcome: 'ستتمكن من إشراك وتجهيز الجيل القادم للكرازة والقيادة في الكنيسة.' 
+        } 
+      } 
+    },
+    { 
+      id: 5, 
+      title: { sv: 'Ledarskap', en: 'Leadership', ar: 'القيادة' }, 
+      hours: 4, 
+      color: 'from-red-500 to-red-600',
+      bgLight: 'bg-red-50',
+      textColor: 'text-red-600',
+      icon: '🎯',
+      description: { 
+        sv: 'Utveckla ditt ledarskap enligt bibliska principer för effektivt vittnesbörd.', 
+        en: 'Develop your leadership according to biblical principles for effective witness.', 
+        ar: 'طور قيادتك وفقاً للمبادئ الكتابية للشهادة الفعالة.' 
+      }, 
+      fullContent: { 
+        sv: { 
+          overview: 'Detta ämne ger dig principer och praktiska verktyg för att leda effektivt i evangelisationsarbetet. Du kommer att lära dig tjänande ledarskap efter Jesu exempel.', 
+          topics: ['Den bibliska ledarens karaktär och kvaliteter', 'Ledarskapets roller och ansvar', 'Skillnaden mellan ledare och följare', 'Olika ledarstilar och när de passar', 'Tjänande ledarskap efter Jesu modell', 'Utveckla andra generations ledarskap'], 
+          outcome: 'Du kommer att kunna leda effektivt i evangelisationsarbetet och multiplicera ditt ledarskap genom att utrusta andra.' 
+        }, 
+        en: { 
+          overview: 'This subject gives you principles and practical tools for leading effectively in evangelism work. You will learn servant leadership following Jesus\' example.', 
+          topics: ['The biblical leader\'s character and qualities', 'Leadership roles and responsibilities', 'Difference between leaders and followers', 'Different leadership styles and when they fit', 'Servant leadership following Jesus\' model', 'Developing second generation leadership'], 
+          outcome: 'You will be able to lead effectively in evangelism work and multiply your leadership by equipping others.' 
+        }, 
+        ar: { 
+          overview: 'يمنحك هذا الموضوع مبادئ وأدوات عملية للقيادة بفعالية في عمل الكرازة. ستتعلم القيادة الخادمة على مثال يسوع.', 
+          topics: ['شخصية وصفات القائد الكتابي', 'أدوار ومسؤوليات القيادة', 'الفرق بين القادة والأتباع', 'أساليب القيادة المختلفة ومتى تناسب', 'القيادة الخادمة على نموذج يسوع', 'تطوير قيادة الجيل الثاني'], 
+          outcome: 'ستتمكن من القيادة بفعالية في عمل الكرازة ومضاعفة قيادتك من خلال تجهيز الآخرين.' 
+        } 
+      } 
+    },
+    { 
+      id: 6, 
+      title: { sv: 'Målsättning', en: 'Goal Setting', ar: 'وضع الأهداف' }, 
+      hours: 5, 
+      color: 'from-teal-500 to-teal-600',
+      bgLight: 'bg-teal-50',
+      textColor: 'text-teal-600',
+      icon: '✅',
+      description: { 
+        sv: 'Lär dig sätta och uppnå mål som driver evangelisationsarbetet framåt.', 
+        en: 'Learn to set and achieve goals that drive evangelism work forward.', 
+        ar: 'تعلم وضع وتحقيق أهداف تدفع عمل الكرازة للأمام.' 
+      }, 
+      fullContent: { 
+        sv: { 
+          overview: 'Detta avslutande ämne lär dig använda målsättning som ett kraftfullt verktyg för att förverkliga Guds syfte för ditt liv och din tjänst.', 
+          topics: ['Upptäck Guds syfte för ditt liv', 'Skriv din personliga uppdragsbeskrivning', 'Integrera mål genom en tydlig vision', 'Formulera SMARTA personliga mål', 'Mål för olika livsområden: tjänst, familj, ekonomi, hälsa', 'Uppföljning och utvärdering av framsteg'], 
+          outcome: 'Du kommer att kunna sätta tydliga, mätbara mål som driver ditt evangelisationsarbete framåt och hålla dig ansvarig för att nå dem.' 
+        }, 
+        en: { 
+          overview: 'This concluding subject teaches you to use goal setting as a powerful tool for realizing God\'s purpose for your life and ministry.', 
+          topics: ['Discover God\'s purpose for your life', 'Write your personal mission statement', 'Integrate goals through a clear vision', 'Formulate SMART personal goals', 'Goals for different life areas: ministry, family, finances, health', 'Follow-up and evaluation of progress'], 
+          outcome: 'You will be able to set clear, measurable goals that drive your evangelism work forward and hold yourself accountable for reaching them.' 
+        }, 
+        ar: { 
+          overview: 'يعلمك هذا الموضوع الختامي استخدام وضع الأهداف كأداة قوية لتحقيق قصد الله لحياتك وخدمتك.', 
+          topics: ['اكتشف قصد الله لحياتك', 'اكتب بيان مهمتك الشخصية', 'ادمج الأهداف من خلال رؤية واضحة', 'صِغ أهدافاً شخصية ذكية', 'أهداف لمجالات الحياة المختلفة: الخدمة والأسرة والمال والصحة', 'المتابعة وتقييم التقدم'], 
+          outcome: 'ستتمكن من وضع أهداف واضحة وقابلة للقياس تدفع عمل الكرازة للأمام ومحاسبة نفسك على تحقيقها.' 
+        } 
+      } 
+    }
   ];
 
   return (
     <div className={`min-h-screen bg-gradient-to-br from-purple-50 via-cream-50 to-cream-100 pt-16 pb-8 ${isRTL ? 'rtl' : 'ltr'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Compact Header */}
-        <div className="flex items-center justify-between mb-4">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
           <Link 
             to="/medlemmar" 
             className={`inline-flex items-center text-stone-600 hover:text-purple-600 text-sm ${isRTL ? 'flex-row-reverse' : ''}`}
@@ -82,91 +272,142 @@ const MemberKnowledge = () => {
             <ArrowLeft className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
             {txt.back}
           </Link>
-          <Badge className="bg-purple-100 text-purple-700 text-xs">
-            <Clock className="h-3 w-3 mr-1" />
+          <Badge className="bg-purple-600 text-white text-sm px-3 py-1">
+            <Clock className="h-4 w-4 mr-1" />
             {txt.totalHours}
           </Badge>
         </div>
 
-        {/* Compact Title */}
-        <div className={`flex items-center gap-3 mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow">
-            <BookOpen className="h-5 w-5 text-white" />
+        {/* Title Section */}
+        <div className={`text-center mb-8 ${isRTL ? 'text-right' : ''}`}>
+          <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <BookOpen className="h-8 w-8 text-white" />
           </div>
-          <div>
-            <h1 className="text-lg font-bold text-stone-800">{txt.title}</h1>
-            <p className="text-xs text-stone-500">{txt.subtitle}</p>
-          </div>
+          <h1 className="text-2xl font-bold text-stone-800 mb-2">{txt.title}</h1>
+          <p className="text-stone-600">{txt.subtitle}</p>
         </div>
 
-        {/* Subjects Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-4">
+        {/* Subjects Grid - Larger Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           {coreSubjects.map(subject => (
             <Card 
               key={subject.id} 
-              className="border-0 shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden bg-white cursor-pointer"
+              className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-white cursor-pointer group"
               onClick={() => setSelectedSubject(subject)}
             >
-              <div className={`bg-gradient-to-br ${subject.color} p-3 text-center`}>
-                <BookOpen className="h-5 w-5 text-white mx-auto mb-1" />
-                <p className="text-white font-medium text-xs">{subject.title[language]}</p>
-                <Badge className="bg-white/20 text-white text-[10px] mt-1">{subject.hours}h</Badge>
+              <div className={`bg-gradient-to-br ${subject.color} p-6 text-center relative overflow-hidden`}>
+                {/* Decorative elements */}
+                <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+                
+                <span className="text-4xl mb-3 block relative z-10">{subject.icon}</span>
+                <h3 className="text-lg font-bold text-white relative z-10">{subject.title[language]}</h3>
+                <Badge className="bg-white/20 text-white mt-2 text-sm">
+                  {subject.hours} {subject.hours === 1 ? txt.hour : txt.hours}
+                </Badge>
               </div>
-              <CardContent className="p-2">
-                <p className="text-stone-600 text-[10px] leading-tight line-clamp-2">{subject.description[language]}</p>
+              <CardContent className="p-4">
+                <p className="text-stone-600 text-sm leading-relaxed mb-3">{subject.description[language]}</p>
+                <p className={`text-xs ${subject.textColor} font-medium group-hover:underline`}>
+                  {txt.clickToLearn} →
+                </p>
               </CardContent>
             </Card>
           ))}
         </div>
 
         {/* Diploma Notice */}
-        <Card className="border-0 shadow-md bg-purple-50">
-          <CardContent className="p-3">
-            <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-              <GraduationCap className="h-5 w-5 text-purple-600" />
-              <div>
-                <p className="text-sm font-medium text-purple-800">{txt.diploma}</p>
-                <p className="text-xs text-purple-600">{txt.diplomaDesc}</p>
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-purple-600 to-purple-700">
+          <CardContent className="p-6">
+            <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <GraduationCap className="h-7 w-7 text-white" />
+              </div>
+              <div className={isRTL ? 'text-right' : ''}>
+                <h3 className="text-lg font-bold text-white mb-1">{txt.diploma}</h3>
+                <p className="text-white/80 text-sm">{txt.diplomaDesc}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Subject Detail Modal */}
+        {/* Large Subject Detail Modal */}
         {selectedSubject && (
           <Dialog open={!!selectedSubject} onOpenChange={() => setSelectedSubject(null)}>
-            <DialogContent className={`max-w-lg max-h-[80vh] overflow-y-auto ${isRTL ? 'rtl' : 'ltr'}`}>
-              <DialogHeader>
-                <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                  <div className={`w-8 h-8 bg-gradient-to-br ${selectedSubject.color} rounded-lg flex items-center justify-center`}>
-                    <BookOpen className="h-4 w-4 text-white" />
+            <DialogContent className={`max-w-3xl max-h-[90vh] overflow-y-auto p-0 ${isRTL ? 'rtl' : 'ltr'}`}>
+              {/* Modal Header with gradient */}
+              <div className={`bg-gradient-to-br ${selectedSubject.color} p-8 text-center relative overflow-hidden`}>
+                <button 
+                  onClick={() => setSelectedSubject(null)}
+                  className="absolute top-4 right-4 text-white/80 hover:text-white"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+                
+                <span className="text-6xl mb-4 block relative z-10">{selectedSubject.icon}</span>
+                <DialogTitle className="text-2xl font-bold text-white relative z-10 mb-2">
+                  {selectedSubject.title[language]}
+                </DialogTitle>
+                <Badge className="bg-white/20 text-white text-base px-4 py-1">
+                  <Clock className="h-4 w-4 mr-2" />
+                  {selectedSubject.hours} {selectedSubject.hours === 1 ? txt.hour : txt.hours}
+                </Badge>
+              </div>
+
+              {/* Modal Content */}
+              <div className="p-8 space-y-6">
+                {/* Overview Section */}
+                <div className={`${selectedSubject.bgLight} rounded-xl p-6 ${isRTL ? 'text-right' : ''}`}>
+                  <div className={`flex items-center gap-2 mb-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <Target className={`h-5 w-5 ${selectedSubject.textColor}`} />
+                    <h3 className={`text-lg font-bold ${selectedSubject.textColor}`}>{txt.overview}</h3>
                   </div>
-                  <div>
-                    <DialogTitle className="text-base text-stone-800">{selectedSubject.title[language]}</DialogTitle>
-                    <Badge variant="outline" className="text-xs">{selectedSubject.hours} {txt.hours}</Badge>
+                  <p className="text-stone-700 leading-relaxed">
+                    {selectedSubject.fullContent[language].overview}
+                  </p>
+                </div>
+
+                {/* Topics Section */}
+                <div className={isRTL ? 'text-right' : ''}>
+                  <div className={`flex items-center gap-2 mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <List className={`h-5 w-5 ${selectedSubject.textColor}`} />
+                    <h3 className={`text-lg font-bold ${selectedSubject.textColor}`}>{txt.topics}</h3>
                   </div>
-                </div>
-              </DialogHeader>
-              <div className="space-y-3 mt-3">
-                <div className={isRTL ? 'text-right' : ''}>
-                  <h3 className="text-xs font-semibold text-stone-800 mb-1">{txt.overview}</h3>
-                  <p className="text-xs text-stone-600">{selectedSubject.fullContent[language].overview}</p>
-                </div>
-                <div className={isRTL ? 'text-right' : ''}>
-                  <h3 className="text-xs font-semibold text-stone-800 mb-1">{txt.topics}</h3>
-                  <ul className="space-y-1">
+                  <div className="grid sm:grid-cols-2 gap-3">
                     {selectedSubject.fullContent[language].topics.map((topic, idx) => (
-                      <li key={idx} className={`flex items-start gap-1 text-xs text-stone-600 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                        <div className={`w-1 h-1 bg-gradient-to-br ${selectedSubject.color} rounded-full mt-1.5`} />
-                        {topic}
-                      </li>
+                      <div 
+                        key={idx} 
+                        className={`flex items-start gap-3 p-3 bg-stone-50 rounded-lg ${isRTL ? 'flex-row-reverse text-right' : ''}`}
+                      >
+                        <div className={`w-6 h-6 bg-gradient-to-br ${selectedSubject.color} rounded-full flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                          <span className="text-white text-xs font-bold">{idx + 1}</span>
+                        </div>
+                        <span className="text-stone-700">{topic}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
-                <div className={`p-2 bg-purple-50 rounded-lg ${isRTL ? 'text-right' : ''}`}>
-                  <h3 className="text-xs font-semibold text-purple-800 mb-1">{txt.outcome}</h3>
-                  <p className="text-xs text-purple-700">{selectedSubject.fullContent[language].outcome}</p>
+
+                {/* Outcome Section */}
+                <div className={`border-2 border-dashed ${selectedSubject.textColor.replace('text', 'border')} rounded-xl p-6 ${isRTL ? 'text-right' : ''}`}>
+                  <div className={`flex items-center gap-2 mb-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <CheckCircle className={`h-5 w-5 ${selectedSubject.textColor}`} />
+                    <h3 className={`text-lg font-bold ${selectedSubject.textColor}`}>{txt.outcome}</h3>
+                  </div>
+                  <p className="text-stone-700 leading-relaxed">
+                    {selectedSubject.fullContent[language].outcome}
+                  </p>
                 </div>
+
+                {/* Close Button */}
+                <Button 
+                  onClick={() => setSelectedSubject(null)}
+                  className={`w-full bg-gradient-to-r ${selectedSubject.color} hover:opacity-90 text-white py-6 text-lg`}
+                >
+                  {txt.close}
+                </Button>
               </div>
             </DialogContent>
           </Dialog>
