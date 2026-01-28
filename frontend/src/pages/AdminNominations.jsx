@@ -192,14 +192,28 @@ const AdminNominations = () => {
       confirmDelete: 'هل أنت متأكد أنك تريد حذف هذا الترشيح؟',
       statistics: 'الإحصائيات',
       hideStats: 'إخفاء الإحصائيات',
-      showStats: 'إظهار الإحصائيات'
+      showStats: 'إظهار الإحصائيات',
+      createNomination: 'إنشاء ترشيح'
     }
   }[language] || {};
 
   useEffect(() => {
     fetchNominations();
     fetchStats();
+    fetchWorkshops();
   }, [statusFilter]);
+
+  const fetchWorkshops = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/workshops`);
+      if (response.ok) {
+        const data = await response.json();
+        setWorkshops(data);
+      }
+    } catch (error) {
+      console.error('Error fetching workshops:', error);
+    }
+  };
 
   const fetchNominations = async () => {
     try {
