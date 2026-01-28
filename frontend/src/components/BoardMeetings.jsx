@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Calendar, Plus, Edit2, Archive, Trash2, Save, X, Clock, MapPin, 
   Users, FileText, ChevronDown, ChevronUp, CheckCircle, AlertCircle,
-  RefreshCw, ClipboardList, LogIn, LogOut, Lock, Bell, Send, Eye, EyeOff
+  RefreshCw, ClipboardList, LogIn, LogOut, Lock, Bell, Send, Eye, EyeOff, User
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
