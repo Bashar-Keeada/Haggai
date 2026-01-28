@@ -827,6 +827,81 @@ async def delete_bylaw_item(item_id: str):
     return {"message": "Bylaw item deleted"}
 
 
+# ==================== CONTACT REQUESTS ENDPOINTS ====================
+
+class ContactRequest(BaseModel):
+    name: str
+    email: str
+    phone: Optional[str] = None
+    message: Optional[str] = None
+    workshop_id: Optional[str] = None
+    workshop_title: Optional[str] = None
+    type: str = "interest"  # interest, question, other
+
+@api_router.post("/contact-requests")
+async def create_contact_request(request: ContactRequest):
+    """Save contact request from interested participants"""
+    contact_doc = {
+        "id": str(uuid.uuid4()),
+        "name": request.name,
+        "email": request.email,
+        "phone": request.phone,
+        "message": request.message,
+        "workshop_id": request.workshop_id,
+        "workshop_title": request.workshop_title,
+        "type": request.type,
+        "status": "new",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.contact_requests.insert_one(contact_doc)
+    
+    # Send notification email to admin
+    try:
+        admin_html = f"""
+        <!DOCTYPE html>
+        <html dir="rtl">
+        <head><meta charset="UTF-8"></head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <div style="background: #15564e; color: white; padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
+                <h2 style="margin: 0;">📩 طلب تواصل جديد</h2>
+            </div>
+            <div style="background: #f5f5f5; padding: 20px; border: 1px solid #ddd; border-radius: 0 0 10px 10px;">
+                <p><strong>الاسم:</strong> {request.name}</p>
+                <p><strong>البريد:</strong> {request.email}</p>
+                <p><strong>الهاتف:</strong> {request.phone or 'غير محدد'}</p>
+                <p><strong>البرنامج:</strong> {request.workshop_title or 'غير محدد'}</p>
+                <p><strong>الرسالة:</strong> {request.message or 'لا يوجد'}</p>
+            </div>
+        </body>
+        </html>
+        """
+        
+        await asyncio.to_thread(resend.Emails.send, {
+            "from": SENDER_EMAIL,
+            "to": [ADMIN_EMAIL],
+            "subject": f"📩 طلب تواصل جديد: {request.name}",
+            "html": admin_html
+        })
+    except Exception as e:
+        logging.error(f"Failed to send admin notification: {e}")
+    
+    contact_doc.pop('_id', None)
+    return contact_doc
+
+@api_router.get("/contact-requests")
+async def get_contact_requests(status: Optional[str] = None):
+    """Get all contact requests"""
+    query = {}
+    if status:
+        query["status"] = status
+    
+    requests = await db.contact_requests.find(query).sort("created_at", -1).to_list(500)
+    for r in requests:
+        r.pop('_id', None)
+    return requests
+
+
 # ==================== BOARD MEMBER AUTHENTICATION ====================
 
 class BoardMemberLogin(BaseModel):
