@@ -176,57 +176,57 @@ const Membership = () => {
                         className={`rounded-lg h-9 ${isRTL ? 'text-right' : ''}`}
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">{t('membership.lastName') || 'Efternamn'} *</Label>
+                    <div className="space-y-1">
+                      <Label htmlFor="lastName" className="text-sm">{t('membership.lastName') || 'Efternamn'} *</Label>
                       <Input
                         id="lastName"
                         value={formData.lastName}
                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                         required
-                        className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                        className={`rounded-lg h-9 ${isRTL ? 'text-right' : ''}`}
                       />
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">{t('membership.email')} *</Label>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label htmlFor="email" className="text-sm">{t('membership.email')} *</Label>
                       <Input
                         id="email"
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         required
-                        className="rounded-lg"
+                        className="rounded-lg h-9"
                         dir="ltr"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">{t('membership.phone')} *</Label>
+                    <div className="space-y-1">
+                      <Label htmlFor="phone" className="text-sm">{t('membership.phone')} *</Label>
                       <Input
                         id="phone"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         required
-                        className="rounded-lg"
+                        className="rounded-lg h-9"
                         dir="ltr"
                       />
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="city">{t('membership.city') || 'Stad'} *</Label>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label htmlFor="city" className="text-sm">{t('membership.city') || 'Stad'} *</Label>
                       <Input
                         id="city"
                         value={formData.city}
                         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                         required
-                        className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                        className={`rounded-lg h-9 ${isRTL ? 'text-right' : ''}`}
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="organization">
+                    <div className="space-y-1">
+                      <Label htmlFor="organization" className="text-sm">
                         {selectedType === 'individual' ? t('membership.churchOrg') : `${t('membership.orgName')} *`}
                       </Label>
                       <Input
@@ -234,19 +234,19 @@ const Membership = () => {
                         value={formData.organization}
                         onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
                         required={selectedType !== 'individual'}
-                        className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                        className={`rounded-lg h-9 ${isRTL ? 'text-right' : ''}`}
                         placeholder={selectedType === 'individual' ? t('membership.optional') : ''}
                       />
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="message">{t('calendar.message')}</Label>
+                  <div className="space-y-1">
+                    <Label htmlFor="message" className="text-sm">{t('calendar.message')}</Label>
                     <Textarea
                       id="message"
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      rows={4}
+                      rows={3}
                       className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
                       placeholder={t('membership.messagePlaceholder')}
                     />
