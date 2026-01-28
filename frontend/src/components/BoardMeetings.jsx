@@ -267,10 +267,9 @@ const BoardMeetings = ({ language, isRTL }) => {
   // Check for existing login on mount
   useEffect(() => {
     const token = localStorage.getItem('boardMemberToken');
-    const member = localStorage.getItem('boardMemberData');
-    if (token && member) {
+    if (token === 'board_authenticated') {
       setIsLoggedIn(true);
-      setCurrentMember(JSON.parse(member));
+      setCurrentMember({ name: 'Styrelsemedlem' });
     }
     fetchMeetings();
   }, []);
@@ -297,59 +296,23 @@ const BoardMeetings = ({ language, isRTL }) => {
     }
   };
 
-  // Auth functions
-  const handleCheckEmail = async () => {
-    if (!loginEmail) return;
-    
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/board-auth/check-email/${encodeURIComponent(loginEmail.toLowerCase())}`);
-      const data = await res.json();
-      
-      if (!data.exists) {
-        toast.error(txt.emailNotFound);
-        return false;
-      }
-      
-      if (!data.has_account) {
-        setLoginMode('setup');
-        toast.info(`${txt.setupSubtitle} (${data.name})`);
-      }
-      return true;
-    } catch (error) {
-      console.error('Error checking email:', error);
-      return false;
-    }
-  };
-
+  // Simple password login
   const handleLogin = async (e) => {
     e.preventDefault();
     setAuthLoading(true);
     
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/board-auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: loginEmail.toLowerCase(), password: loginPassword })
-      });
-      
-      if (res.ok) {
-        const data = await res.json();
-        localStorage.setItem('boardMemberToken', data.token);
-        localStorage.setItem('boardMemberData', JSON.stringify(data.member));
-        setIsLoggedIn(true);
-        setCurrentMember(data.member);
-        setShowLoginDialog(false);
-        toast.success(`${txt.welcomeBack}, ${data.member.name}!`);
-        resetLoginForm();
-      } else {
-        const error = await res.json();
-        toast.error(error.detail || 'Login failed');
-      }
-    } catch (error) {
-      toast.error('Network error');
-    } finally {
-      setAuthLoading(false);
+    // Simple password check
+    if (loginPassword === 'board2030!') {
+      localStorage.setItem('boardMemberToken', 'board_authenticated');
+      setIsLoggedIn(true);
+      setCurrentMember({ name: 'Styrelsemedlem' });
+      setShowLoginDialog(false);
+      toast.success(txt.welcomeBack || 'Välkommen!');
+      resetLoginForm();
+    } else {
+      toast.error(language === 'sv' ? 'Felaktigt lösenord' : 'Incorrect password');
     }
+    setAuthLoading(false);
   };
 
   const handleSetupAccount = async (e) => {
