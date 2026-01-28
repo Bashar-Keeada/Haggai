@@ -885,46 +885,6 @@ const BoardMeetings = ({ language, isRTL }) => {
           </form>
         </DialogContent>
       </Dialog>
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
-
-            {loginMode === 'setup' && (
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">{txt.confirmPassword}</Label>
-                <div className="relative">
-                  <Lock className={`absolute top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 ${isRTL ? 'right-3' : 'left-3'}`} />
-                  <Input
-                    id="confirmPassword"
-                    type={showPassword ? 'text' : 'password'}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={`${isRTL ? 'pr-10' : 'pl-10'}`}
-                    placeholder="••••••••"
-                    required
-                    minLength={6}
-                  />
-                </div>
-              </div>
-            )}
-
-            <Button 
-              type="submit" 
-              className="w-full bg-haggai hover:bg-haggai-dark"
-              disabled={authLoading}
-            >
-              {authLoading ? (
-                <RefreshCw className="h-4 w-4 animate-spin" />
-              ) : (
-                language === 'sv' ? 'Logga in' : 'Log in'
-              )}
-            </Button>
-          </form>
-        </DialogContent>
-      </Dialog>
 
       {/* Create/Edit Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
