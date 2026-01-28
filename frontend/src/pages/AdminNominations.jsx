@@ -28,8 +28,24 @@ const AdminNominations = () => {
   const [showStats, setShowStats] = useState(true);
   const [showApproveDialog, setShowApproveDialog] = useState(false);
   const [showRejectDialog, setShowRejectDialog] = useState(false);
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [actionNomination, setActionNomination] = useState(null);
   const [rejectReason, setRejectReason] = useState('');
+  const [workshops, setWorkshops] = useState([]);
+  const [createForm, setCreateForm] = useState({
+    nominee_name: '',
+    nominee_email: '',
+    nominee_phone: '',
+    nominee_church: '',
+    nominee_role: '',
+    nominee_activities: '',
+    nominator_name: 'Admin',
+    nominator_email: 'admin@haggai.se',
+    event_id: '',
+    event_title: '',
+    motivation: ''
+  });
+  const [creating, setCreating] = useState(false);
 
   const txt = {
     sv: {
