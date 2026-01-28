@@ -94,6 +94,7 @@ function App() {
               <Route path="/mina-sidor/diplom" element={<MemberDiplomas />} />
               <Route path="/mina-sidor/namnskylt" element={<MemberNameBadge />} />
               <Route path="/mina-sidor/facilitatorer" element={<MemberFacilitators />} />
+              <Route path="/medlemmar/facilitatorer" element={<MemberFacilitators />} />
               {/* All other routes handled by ProtectedApp */}
               <Route path="/*" element={<ProtectedAppContent />} />
             </Routes>
