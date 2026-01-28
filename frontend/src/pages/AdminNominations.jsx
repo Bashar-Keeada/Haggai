@@ -866,6 +866,149 @@ const AdminNominations = () => {
             </div>
           </DialogContent>
         </Dialog>
+
+        {/* Create Nomination Dialog */}
+        <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+          <DialogContent className={`max-w-2xl max-h-[90vh] overflow-y-auto ${isRTL ? 'rtl' : 'ltr'}`}>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Plus className="h-5 w-5 text-haggai" />
+                {txt.createNomination || 'Skapa nominering'}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              {/* Workshop Selection */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium">{txt.selectWorkshop || 'Välj utbildning'} *</label>
+                <Select
+                  value={createForm.event_id}
+                  onValueChange={(value) => {
+                    const workshop = workshops.find(w => w.id === value);
+                    setCreateForm(prev => ({
+                      ...prev,
+                      event_id: value,
+                      event_title: workshop?.title?.sv || workshop?.title || ''
+                    }));
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={txt.selectWorkshop || 'Välj utbildning'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {workshops.map(workshop => (
+                      <SelectItem key={workshop.id} value={workshop.id}>
+                        {workshop.title?.sv || workshop.title} {workshop.is_active ? '(Aktiv)' : ''}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Nominee Info */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">{txt.nomineeNameLabel || 'Namn på nominerad'} *</label>
+                  <Input
+                    value={createForm.nominee_name}
+                    onChange={(e) => setCreateForm(prev => ({ ...prev, nominee_name: e.target.value }))}
+                    placeholder="Förnamn Efternamn"
+                    data-testid="create-nominee-name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">{txt.nomineeEmailLabel || 'E-post'} *</label>
+                  <Input
+                    type="email"
+                    value={createForm.nominee_email}
+                    onChange={(e) => setCreateForm(prev => ({ ...prev, nominee_email: e.target.value }))}
+                    placeholder="email@example.com"
+                    data-testid="create-nominee-email"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">{txt.nomineePhoneLabel || 'Telefon'}</label>
+                  <Input
+                    value={createForm.nominee_phone}
+                    onChange={(e) => setCreateForm(prev => ({ ...prev, nominee_phone: e.target.value }))}
+                    placeholder="+46 70 123 45 67"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">{txt.nomineeChurchLabel || 'Kyrka/församling'}</label>
+                  <Input
+                    value={createForm.nominee_church}
+                    onChange={(e) => setCreateForm(prev => ({ ...prev, nominee_church: e.target.value }))}
+                    placeholder="Kyrkans namn"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">{txt.nomineeRoleLabel || 'Roll/ansvar'}</label>
+                  <Input
+                    value={createForm.nominee_role}
+                    onChange={(e) => setCreateForm(prev => ({ ...prev, nominee_role: e.target.value }))}
+                    placeholder="Pastor, Ledare, etc."
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">{txt.nominatorNameLabel || 'Nominerad av'}</label>
+                  <Input
+                    value={createForm.nominator_name}
+                    onChange={(e) => setCreateForm(prev => ({ ...prev, nominator_name: e.target.value }))}
+                    placeholder="Admin"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">{txt.nomineeActivitiesLabel || 'Aktiviteter'}</label>
+                <Input
+                  value={createForm.nominee_activities}
+                  onChange={(e) => setCreateForm(prev => ({ ...prev, nominee_activities: e.target.value }))}
+                  placeholder="Beskrivning av aktiviteter"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">{txt.motivationLabel || 'Motivering'}</label>
+                <Textarea
+                  value={createForm.motivation}
+                  onChange={(e) => setCreateForm(prev => ({ ...prev, motivation: e.target.value }))}
+                  placeholder="Varför nomineras personen?"
+                  rows={3}
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 pt-4 border-t">
+              <Button variant="outline" onClick={() => { setShowCreateDialog(false); resetCreateForm(); }}>
+                {txt.cancel || 'Avbryt'}
+              </Button>
+              <Button 
+                className="bg-haggai hover:bg-haggai-dark text-white" 
+                onClick={createNomination}
+                disabled={creating}
+                data-testid="submit-create-nomination"
+              >
+                {creating ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                    {txt.creating || 'Skapar...'}
+                  </>
+                ) : (
+                  <>
+                    <Check className="h-4 w-4 mr-2" />
+                    {txt.createNomination || 'Skapa nominering'}
+                  </>
+                )}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
