@@ -271,13 +271,13 @@ const MembersArea = () => {
 
           {/* Meetings Section - Always visible */}
           <Card className="border-0 shadow-md" data-testid="meetings-section">
-            <CardHeader className="bg-gradient-to-r from-stone-600 to-stone-700 text-white py-2 px-3">
-              <CardTitle className="text-sm flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
+            <CardHeader className="bg-gradient-to-r from-stone-600 to-stone-700 text-white py-3 px-4">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Calendar className="h-5 w-5" />
                 {txt.meetings}
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-3">
+            <CardContent className="p-4">
               <BoardMeetings />
             </CardContent>
           </Card>
