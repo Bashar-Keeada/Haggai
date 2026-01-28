@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap, ChevronDown, ChevronUp, User, Phone, Eye, EyeOff, LogIn, Info, X, Briefcase, Heart, Globe, MapPin, UserPlus, Sparkles } from 'lucide-react';
+import { FileText, Users, Building2, Calendar, Mail, Download, Lock, BookOpen, Clock, GraduationCap, ChevronDown, ChevronUp, ChevronRight, User, Phone, Eye, EyeOff, LogIn, Info, X, Briefcase, Heart, Globe, MapPin, UserPlus, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
