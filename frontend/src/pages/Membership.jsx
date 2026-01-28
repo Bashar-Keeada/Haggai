@@ -154,26 +154,26 @@ const Membership = () => {
             })}
           </div>
 
-          {/* Registration Form */}
+          {/* Registration Form - Compact */}
           <div className="max-w-2xl mx-auto">
-            <Card className="border-0 shadow-xl">
-              <CardHeader className={isRTL ? 'text-right' : ''}>
-                <CardTitle className="text-2xl text-stone-800">{t('membership.applicationTitle')}</CardTitle>
-                <CardDescription>
+            <Card className="border-0 shadow-lg">
+              <CardHeader className={`py-4 ${isRTL ? 'text-right' : ''}`}>
+                <CardTitle className="text-lg text-stone-800">{t('membership.applicationTitle')}</CardTitle>
+                <CardDescription className="text-sm">
                   {t('membership.applicationSubtitle')}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className={`space-y-6 ${isRTL ? 'text-right' : ''}`}>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">{t('membership.firstName') || 'Förnamn'} *</Label>
+              <CardContent className="pt-0">
+                <form onSubmit={handleSubmit} className={`space-y-4 ${isRTL ? 'text-right' : ''}`}>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label htmlFor="firstName" className="text-sm">{t('membership.firstName') || 'Förnamn'} *</Label>
                       <Input
                         id="firstName"
                         value={formData.firstName}
                         onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                         required
-                        className={`rounded-lg ${isRTL ? 'text-right' : ''}`}
+                        className={`rounded-lg h-9 ${isRTL ? 'text-right' : ''}`}
                       />
                     </div>
                     <div className="space-y-2">
