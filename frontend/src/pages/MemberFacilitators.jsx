@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { 
-  ArrowLeft, UserCog, Mail, Phone, BookOpen, Search, User
+  ArrowLeft, UserCog, Mail, Phone, BookOpen, Search, User, UserPlus
 } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
