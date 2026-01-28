@@ -7,7 +7,7 @@ import requests
 import os
 import uuid
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://haggai-training.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://haggai-members.preview.emergentagent.com')
 
 # Test workshop ID provided in the review request
 TEST_WORKSHOP_ID = "f60eb66e-3956-428d-8060-181ceeb498f8"
