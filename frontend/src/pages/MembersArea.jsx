@@ -141,6 +141,12 @@ const MembersArea = () => {
       viewCalendar: 'Se hela kalendern',
       noWorkshops: 'Inga kommande utbildningar just nu',
       spotsLeft: 'platser kvar',
+      // Facilitators section
+      facilitatorsTitle: 'Facilitatorer/Tränare',
+      facilitatorsDesc: 'Våra erfarna facilitatorer som guidar och inspirerar',
+      noFacilitators: 'Inga facilitatorer registrerade än',
+      facilitatorTopic: 'Specialområde',
+      facilitatorContact: 'Kontakt',
       // Haggai global
       haggaiGlobal: 'Haggai International',
       haggaiGlobalDesc: 'Vår globala vision',
