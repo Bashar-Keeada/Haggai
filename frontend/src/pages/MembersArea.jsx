@@ -783,51 +783,172 @@ Styrelsen har rätt till att tillsätta en intern revisor.`
 
   return (
     <div className={`min-h-screen bg-cream-50 ${isRTL ? 'rtl' : 'ltr'}`}>
-      {/* Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-haggai-50 via-cream-50 to-cream-100">
+      {/* Compact Header */}
+      <section className="pt-20 pb-6 bg-gradient-to-br from-haggai-50 via-cream-50 to-cream-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`max-w-3xl ${isRTL ? 'mr-auto text-right' : ''}`}>
-            <div className={`flex items-center justify-between mb-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <Badge className="bg-haggai text-cream-50">
                 <Lock className="h-3 w-3 mr-1" />
-                {language === 'sv' ? 'Endast medlemmar' : language === 'ar' ? 'الأعضاء فقط' : 'Members only'}
+                {language === 'sv' ? 'Medlemmar' : language === 'ar' ? 'الأعضاء' : 'Members'}
               </Badge>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={logoutMembers}
-                className="text-stone-600 hover:text-stone-800"
-              >
-                {txt.logout}
-              </Button>
+              <h1 className="text-2xl font-bold text-stone-800">
+                {txt.pageTitle}
+              </h1>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-stone-800 mb-6">
-              {txt.pageTitle}
-            </h1>
-            <p className="text-xl text-haggai font-medium mb-4">
-              {txt.pageSubtitle}
-            </p>
-            <p className="text-lg text-stone-600 leading-relaxed">
-              {txt.welcomeDesc}
-            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={logoutMembers}
+              className="text-stone-600 hover:text-stone-800"
+            >
+              {txt.logout}
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* Categorized Sections */}
-      <section className="py-12 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+      {/* Horizontal Grid of Sections */}
+      <section className="py-6 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Row 1: Main sections as clickable cards */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
+            
+            {/* Vår Enhet */}
+            <Card 
+              className="border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden"
+              onClick={() => toggleSection('unity')}
+            >
+              <div className="bg-gradient-to-br from-rose-500 to-rose-600 p-4 text-center">
+                <Heart className="h-8 w-8 text-white mx-auto mb-2" />
+                <p className="text-white font-semibold text-sm">{txt.ourUnity}</p>
+              </div>
+            </Card>
+
+            {/* Kommande Utbildningar */}
+            <Card 
+              className="border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden"
+              onClick={() => toggleSection('workshops')}
+            >
+              <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-4 text-center">
+                <Calendar className="h-8 w-8 text-white mx-auto mb-2" />
+                <p className="text-white font-semibold text-sm">{txt.upcomingWorkshops}</p>
+                <Badge className="bg-white/20 text-white text-xs mt-1">{workshops.length}</Badge>
+              </div>
+            </Card>
+
+            {/* Facilitatorer */}
+            <Card 
+              className="border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden"
+              onClick={() => navigate('/medlemmar/facilitatorer')}
+            >
+              <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-4 text-center">
+                <Users className="h-8 w-8 text-white mx-auto mb-2" />
+                <p className="text-white font-semibold text-sm">{txt.facilitatorsTitle}</p>
+                <Badge className="bg-white/20 text-white text-xs mt-1">{facilitators.length}</Badge>
+              </div>
+            </Card>
+
+            {/* Kärnämnen */}
+            <Card 
+              className="border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden"
+              onClick={() => toggleSection('knowledge')}
+            >
+              <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-4 text-center">
+                <BookOpen className="h-8 w-8 text-white mx-auto mb-2" />
+                <p className="text-white font-semibold text-sm">{txt.coreSubjectsTitle}</p>
+                <Badge className="bg-white/20 text-white text-xs mt-1">21h</Badge>
+              </div>
+            </Card>
+
+            {/* Stadgar */}
+            <Card 
+              className="border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden"
+              onClick={() => toggleSection('bylaws')}
+            >
+              <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 p-4 text-center">
+                <FileText className="h-8 w-8 text-white mx-auto mb-2" />
+                <p className="text-white font-semibold text-sm">{txt.bylaws}</p>
+              </div>
+            </Card>
+
+            {/* Styrelse */}
+            <Card 
+              className="border-0 shadow-md hover:shadow-lg transition-all cursor-pointer overflow-hidden"
+              onClick={() => toggleSection('board')}
+            >
+              <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-4 text-center">
+                <Building2 className="h-8 w-8 text-white mx-auto mb-2" />
+                <p className="text-white font-semibold text-sm">{txt.boardMembers}</p>
+                <Badge className="bg-white/20 text-white text-xs mt-1">{currentBoard.length}</Badge>
+              </div>
+            </Card>
+          </div>
+
+          {/* Expandable Content Area */}
+          <div className="space-y-4">
           
-          {/* Section 0: Vår Enhet - Motiverande sektion */}
-          <Card className="border-0 shadow-xl overflow-hidden">
-            <Collapsible open={openSections.unity} onOpenChange={() => toggleSection('unity')}>
-              <CollapsibleTrigger asChild>
-                <CardHeader className="bg-gradient-to-r from-rose-500 to-rose-600 text-white cursor-pointer hover:from-rose-600 hover:to-rose-700 transition-all">
-                  <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                        <Heart className="h-6 w-6" />
+          {/* Vår Enhet Content */}
+          {openSections.unity && (
+            <Card className="border-0 shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-rose-500 to-rose-600 text-white py-3">
+                <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <CardTitle className="text-lg">{txt.ourUnity}</CardTitle>
+                  <Button variant="ghost" size="sm" onClick={() => toggleSection('unity')} className="text-white hover:bg-white/20">
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className={`space-y-4 ${isRTL ? 'text-right' : ''}`}>
+                  <div className="p-4 bg-rose-50 rounded-lg border border-rose-100">
+                    <h3 className="text-lg font-bold text-rose-800 mb-2">{txt.unityTitle}</h3>
+                    <p className="text-stone-700 text-sm leading-relaxed mb-2">{txt.unityText}</p>
+                    <p className="text-rose-700 font-semibold italic text-sm">"{txt.unityCall}"</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Workshops Content */}
+          {openSections.workshops && (
+            <Card className="border-0 shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3">
+                <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <CardTitle className="text-lg">{txt.upcomingWorkshops}</CardTitle>
+                  <Button variant="ghost" size="sm" onClick={() => toggleSection('workshops')} className="text-white hover:bg-white/20">
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="p-4">
+                {loadingWorkshops ? (
+                  <div className="flex justify-center py-4">
+                    <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                  </div>
+                ) : workshops.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {workshops.map(workshop => (
+                      <div key={workshop.id} className="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                        <h4 className="font-semibold text-stone-800 text-sm">{getLocalizedText(workshop.title)}</h4>
+                        <p className="text-xs text-stone-500">{workshop.date}</p>
+                        <Button 
+                          size="sm" 
+                          className="mt-2 bg-blue-600 hover:bg-blue-700 text-xs"
+                          onClick={() => navigate(`/nominera/${workshop.id}`)}
+                        >
+                          {txt.nominateBtn}
+                        </Button>
                       </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-center text-stone-500 text-sm py-4">{txt.noWorkshops}</p>
+                )}
+              </CardContent>
+            </Card>
+          )}
                       <div className={isRTL ? 'text-right' : ''}>
                         <CardTitle className="text-xl text-white">{txt.ourUnity}</CardTitle>
                         <p className="text-white/80 text-sm">{txt.ourUnityDesc}</p>
