@@ -1320,7 +1320,7 @@ async def send_nomination_email_to_nominee(nomination: Nomination):
     """Send email to the nominated person with registration link - Always in Arabic"""
     # Get the frontend URL from env or use default
     frontend_url = os.environ.get('FRONTEND_URL', 'https://membership-hub-30.preview.emergentagent.com')
-    registration_link = f"{frontend_url}/registrering/{nomination.id}"
+    registration_link = f"{frontend_url}/registrering/{nomination.id}?lang=ar"
     
     html_content = f"""
     <!DOCTYPE html>
