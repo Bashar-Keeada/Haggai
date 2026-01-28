@@ -24,7 +24,7 @@ const AdminLeaders = () => {
   const [editingLeader, setEditingLeader] = useState(null);
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const [sendingInvite, setSendingInvite] = useState(false);
-  const [inviteData, setInviteData] = useState({ name: '', email: '', workshop_id: '', workshop_title: '', language: 'sv' });
+  const [inviteData, setInviteData] = useState({ name: '', email: '', workshop_id: '', workshop_title: '', language: 'ar' });
   const [activeTab, setActiveTab] = useState('leaders');
   const [formData, setFormData] = useState({
     name: '',
@@ -300,7 +300,7 @@ const AdminLeaders = () => {
       if (response.ok) {
         toast.success(language === 'sv' ? 'Inbjudan skickad!' : 'Invitation sent!');
         setShowInviteDialog(false);
-        setInviteData({ name: '', email: '', workshop_id: '', workshop_title: '', language: 'sv' });
+        setInviteData({ name: '', email: '', workshop_id: '', workshop_title: '', language: 'ar' });
         fetchInvitations();
       } else {
         const errorData = await response.json();
