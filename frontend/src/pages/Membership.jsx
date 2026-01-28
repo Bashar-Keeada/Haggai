@@ -173,6 +173,7 @@ const Membership = () => {
                         value={formData.firstName}
                         onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                         required
+                        placeholder={language === 'sv' ? 'Förnamn' : 'First name'}
                         className={`rounded-lg h-9 ${isRTL ? 'text-right' : ''}`}
                       />
                     </div>
@@ -183,6 +184,7 @@ const Membership = () => {
                         value={formData.lastName}
                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                         required
+                        placeholder={language === 'sv' ? 'Efternamn' : 'Last name'}
                         className={`rounded-lg h-9 ${isRTL ? 'text-right' : ''}`}
                       />
                     </div>
