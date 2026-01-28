@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
 import { toast } from 'sonner';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 import { 
-  ArrowLeft, UserCog, Mail, Phone, BookOpen, Search, User
+  ArrowLeft, UserCog, Mail, Phone, BookOpen, Search, User, MapPin
 } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const MemberFacilitators = () => {
   const { language, isRTL } = useLanguage();
+  const { isMembersAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [facilitators, setFacilitators] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,43 +22,43 @@ const MemberFacilitators = () => {
 
   const translations = {
     sv: {
-      title: 'Facilitatorer/Tränare',
-      subtitle: 'Våra erfarna facilitatorer som guidar och inspirerar',
-      back: 'Tillbaka till Mina Sidor',
+      title: 'Våra Facilitatorer/Tränare',
+      subtitle: 'Erfarna facilitatorer som guidar och inspirerar i våra utbildningar',
+      back: 'Tillbaka till Medlemsområdet',
       search: 'Sök facilitator...',
       topics: 'Specialområden',
       contact: 'Kontakt',
-      noFacilitators: 'Inga facilitatorer hittades.',
+      noFacilitators: 'Inga facilitatorer registrerade än. Nya facilitatorer kommer att visas här när de registrerar sig.',
       loading: 'Laddar...',
       email: 'E-post',
       phone: 'Telefon',
-      bio: 'Om'
+      bio: 'Om mig'
     },
     en: {
-      title: 'Facilitators/Trainers',
-      subtitle: 'Our experienced facilitators who guide and inspire',
-      back: 'Back to My Pages',
+      title: 'Our Facilitators/Trainers',
+      subtitle: 'Experienced facilitators who guide and inspire in our trainings',
+      back: 'Back to Members Area',
       search: 'Search facilitator...',
       topics: 'Areas of Expertise',
       contact: 'Contact',
-      noFacilitators: 'No facilitators found.',
+      noFacilitators: 'No facilitators registered yet. New facilitators will appear here when they register.',
       loading: 'Loading...',
       email: 'Email',
       phone: 'Phone',
-      bio: 'About'
+      bio: 'About me'
     },
     ar: {
-      title: 'الميسرين/المدربين',
-      subtitle: 'ميسرونا ذوو الخبرة الذين يوجهون ويلهمون',
-      back: 'العودة إلى صفحاتي',
+      title: 'ميسرونا ومدربونا',
+      subtitle: 'ميسرون ذوو خبرة يوجهون ويلهمون في تدريباتنا',
+      back: 'العودة إلى منطقة الأعضاء',
       search: 'ابحث عن ميسر...',
       topics: 'مجالات الخبرة',
       contact: 'اتصل',
-      noFacilitators: 'لم يتم العثور على ميسرين.',
+      noFacilitators: 'لم يتم تسجيل ميسرين بعد. سيظهر الميسرون الجدد هنا عند تسجيلهم.',
       loading: 'جاري التحميل...',
       email: 'البريد الإلكتروني',
       phone: 'الهاتف',
-      bio: 'نبذة'
+      bio: 'نبذة عني'
     }
   };
 
@@ -107,13 +108,12 @@ const MemberFacilitators = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('memberToken');
-    if (!token) {
-      navigate('/medlem-login');
+    if (!isMembersAuthenticated) {
+      navigate('/medlemmar');
       return;
     }
     fetchFacilitators();
-  }, [navigate]);
+  }, [isMembersAuthenticated, navigate]);
 
   const fetchFacilitators = async () => {
     try {
@@ -143,117 +143,127 @@ const MemberFacilitators = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-cream-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-haggai"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-haggai-50 via-cream-50 to-cream-100 pt-20 pb-12 ${isRTL ? 'rtl' : 'ltr'}`}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className={`min-h-screen bg-gradient-to-br from-amber-50 via-cream-50 to-cream-100 pt-24 pb-12 ${isRTL ? 'rtl' : 'ltr'}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <Link 
-          to="/mina-sidor" 
-          className={`inline-flex items-center text-stone-600 hover:text-haggai mb-6 transition-colors ${isRTL ? 'flex-row-reverse' : ''}`}
+          to="/medlemmar" 
+          className={`inline-flex items-center text-stone-600 hover:text-amber-600 mb-8 transition-colors ${isRTL ? 'flex-row-reverse' : ''}`}
         >
           <ArrowLeft className={`h-5 w-5 ${isRTL ? 'ml-2 rotate-180' : 'mr-2'}`} />
           {txt.back}
         </Link>
 
         {/* Header */}
-        <div className={`mb-8 ${isRTL ? 'text-right' : ''}`}>
-          <div className={`flex items-center gap-3 mb-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-            <UserCog className="h-8 w-8 text-haggai" />
-            <h1 className="text-3xl font-bold text-stone-800">{txt.title}</h1>
+        <div className={`text-center mb-12 ${isRTL ? 'text-right' : ''}`}>
+          <div className={`inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl mb-6 shadow-lg`}>
+            <UserCog className="h-10 w-10 text-white" />
           </div>
-          <p className="text-stone-600">{txt.subtitle}</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-stone-800 mb-4">{txt.title}</h1>
+          <p className="text-xl text-stone-600 max-w-2xl mx-auto">{txt.subtitle}</p>
         </div>
 
         {/* Search */}
-        <div className="mb-8">
-          <div className="relative max-w-md">
-            <Search className={`absolute top-1/2 transform -translate-y-1/2 h-5 w-5 text-stone-400 ${isRTL ? 'right-3' : 'left-3'}`} />
+        <div className="mb-10 flex justify-center">
+          <div className="relative w-full max-w-lg">
+            <Search className={`absolute top-1/2 transform -translate-y-1/2 h-5 w-5 text-stone-400 ${isRTL ? 'right-4' : 'left-4'}`} />
             <Input
               type="text"
               placeholder={txt.search}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className={`${isRTL ? 'pr-10 text-right' : 'pl-10'} bg-white`}
+              className={`${isRTL ? 'pr-12 text-right' : 'pl-12'} py-6 text-lg bg-white shadow-lg border-0 rounded-xl`}
             />
           </div>
         </div>
 
         {/* Facilitators Grid */}
         {filteredFacilitators.length === 0 ? (
-          <Card className="border-0 shadow-lg">
-            <CardContent className="p-12 text-center">
-              <UserCog className="h-16 w-16 text-stone-300 mx-auto mb-4" />
-              <p className="text-stone-500">{txt.noFacilitators}</p>
+          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur">
+            <CardContent className="p-16 text-center">
+              <div className="w-24 h-24 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <UserCog className="h-12 w-12 text-amber-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-stone-700 mb-4">
+                {language === 'sv' ? 'Inga facilitatorer än' : language === 'ar' ? 'لا يوجد ميسرون بعد' : 'No facilitators yet'}
+              </h3>
+              <p className="text-stone-500 max-w-md mx-auto">{txt.noFacilitators}</p>
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredFacilitators.map((facilitator) => (
-              <Card key={facilitator.id} className="border-0 shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
+              <Card 
+                key={facilitator.id} 
+                className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden bg-white group"
+              >
                 <CardContent className="p-0">
-                  {/* Header with photo or placeholder */}
-                  <div className="bg-gradient-to-br from-haggai to-haggai-dark p-6 text-center">
+                  {/* Profile Header */}
+                  <div className="bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 p-8 text-center relative overflow-hidden">
+                    {/* Decorative circles */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+                    
                     {facilitator.profile_photo_url ? (
                       <img 
                         src={facilitator.profile_photo_url} 
                         alt={facilitator.name}
-                        className="w-24 h-24 rounded-full mx-auto object-cover border-4 border-white/20"
+                        className="w-28 h-28 rounded-full mx-auto object-cover border-4 border-white/30 shadow-xl relative z-10 group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
-                      <div className="w-24 h-24 rounded-full mx-auto bg-white/20 flex items-center justify-center">
-                        <User className="h-12 w-12 text-white/80" />
+                      <div className="w-28 h-28 rounded-full mx-auto bg-white/20 flex items-center justify-center border-4 border-white/30 shadow-xl relative z-10">
+                        <User className="h-14 w-14 text-white/90" />
                       </div>
                     )}
-                    <h3 className="text-xl font-bold text-white mt-4">{facilitator.name}</h3>
+                    <h3 className="text-2xl font-bold text-white mt-5 relative z-10">{facilitator.name}</h3>
                     {facilitator.role_sv && (
-                      <p className="text-white/80 text-sm mt-1">{facilitator.role_sv}</p>
+                      <p className="text-white/80 text-sm mt-1 relative z-10">{facilitator.role_sv}</p>
                     )}
                   </div>
 
                   {/* Content */}
                   <div className={`p-6 ${isRTL ? 'text-right' : ''}`}>
-                    {/* Topics */}
+                    {/* Topics/Expertise */}
                     {facilitator.primary_topic && (
-                      <div className="mb-4">
-                        <p className="text-xs text-stone-500 uppercase tracking-wide mb-2">
+                      <div className="mb-5">
+                        <p className="text-xs text-stone-400 uppercase tracking-wider mb-2 font-semibold">
                           {txt.topics}
                         </p>
-                        <div className="flex flex-wrap gap-2">
-                          <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100">
-                            <BookOpen className="h-3 w-3 mr-1" />
-                            {getTopicName(facilitator.primary_topic)}
-                          </Badge>
-                        </div>
+                        <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 px-4 py-2 text-sm font-medium">
+                          <BookOpen className="h-4 w-4 mr-2" />
+                          {getTopicName(facilitator.primary_topic)}
+                        </Badge>
                       </div>
                     )}
 
                     {/* Bio */}
                     {facilitator.bio && (
-                      <div className="mb-4">
-                        <p className="text-xs text-stone-500 uppercase tracking-wide mb-2">
+                      <div className="mb-5">
+                        <p className="text-xs text-stone-400 uppercase tracking-wider mb-2 font-semibold">
                           {txt.bio}
                         </p>
-                        <p className="text-stone-600 text-sm line-clamp-3">
+                        <p className="text-stone-600 text-sm leading-relaxed line-clamp-3">
                           {facilitator.bio}
                         </p>
                       </div>
                     )}
 
                     {/* Contact */}
-                    <div className="pt-4 border-t border-stone-100">
-                      <p className="text-xs text-stone-500 uppercase tracking-wide mb-2">
+                    <div className="pt-5 border-t border-stone-100">
+                      <p className="text-xs text-stone-400 uppercase tracking-wider mb-3 font-semibold">
                         {txt.contact}
                       </p>
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         {facilitator.email && (
                           <a 
                             href={`mailto:${facilitator.email}`}
-                            className={`flex items-center text-sm text-haggai hover:underline ${isRTL ? 'flex-row-reverse' : ''}`}
+                            className={`flex items-center text-sm text-amber-600 hover:text-amber-700 hover:underline transition-colors ${isRTL ? 'flex-row-reverse' : ''}`}
                           >
                             <Mail className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
                             {facilitator.email}
@@ -262,7 +272,7 @@ const MemberFacilitators = () => {
                         {facilitator.phone && (
                           <a 
                             href={`tel:${facilitator.phone}`}
-                            className={`flex items-center text-sm text-stone-600 hover:text-haggai ${isRTL ? 'flex-row-reverse' : ''}`}
+                            className={`flex items-center text-sm text-stone-600 hover:text-amber-600 transition-colors ${isRTL ? 'flex-row-reverse' : ''}`}
                           >
                             <Phone className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
                             {facilitator.phone}
