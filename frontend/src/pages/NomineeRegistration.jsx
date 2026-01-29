@@ -442,7 +442,7 @@ const NomineeRegistration = () => {
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <User className="h-4 w-4" />
                     {txt.fullName}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Input
                     required
@@ -456,7 +456,7 @@ const NomineeRegistration = () => {
                 <div>
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     {txt.gender}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <div className={`flex gap-4 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <label className="flex items-center gap-2 cursor-pointer">
