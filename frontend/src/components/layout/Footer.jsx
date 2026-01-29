@@ -1,11 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Lock } from 'lucide-react';
+import { Mail, Phone, MapPin, Lock, LogOut } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
 import { contactInfo } from '../../data/mock';
+import { toast } from 'sonner';
 
 const Footer = () => {
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, language } = useLanguage();
+  const { isAdminAuthenticated, logoutAdmin } = useAuth();
+
+  const handleAdminLogout = () => {
+    logoutAdmin();
+    toast.success(language === 'sv' ? 'Admin utloggad' : language === 'ar' ? 'تم تسجيل خروج المدير' : 'Admin logged out');
+  };
 
   return (
     <footer className="bg-haggai-dark text-cream-100">
