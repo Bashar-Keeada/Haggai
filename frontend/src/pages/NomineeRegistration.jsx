@@ -5,7 +5,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
-import { Badge } from '../components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { toast } from 'sonner';
 import { useLanguage } from '../context/LanguageContext';
 import { Calendar, User, Mail, Phone, MapPin, Briefcase, Church, GraduationCap, CheckCircle, AlertCircle, Loader2, Globe } from 'lucide-react';
@@ -30,12 +30,16 @@ const NomineeRegistration = () => {
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const [registrationComplete, setRegistrationComplete] = useState(false);
   const [error, setError] = useState(null);
+  const [showOtherCountry, setShowOtherCountry] = useState(false);
+  const [showOtherNationality, setShowOtherNationality] = useState(false);
 
   const [formData, setFormData] = useState({
     full_name: '',
     gender: '',
     country_of_residence: '',
+    country_other: '',
     nationality: '',
+    nationality_other: '',
     phone: '',
     email: '',
     job_title: '',
