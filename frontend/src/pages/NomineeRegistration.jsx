@@ -658,6 +658,7 @@ const NomineeRegistration = () => {
                     required
                     value={formData.job_title}
                     onChange={(e) => handleChange('job_title', e.target.value)}
+                    placeholder={txt.jobPlaceholder}
                     className={isRTL ? 'text-right' : ''}
                   />
                 </div>
@@ -673,6 +674,7 @@ const NomineeRegistration = () => {
                     required
                     value={formData.church_organization}
                     onChange={(e) => handleChange('church_organization', e.target.value)}
+                    placeholder={txt.churchPlaceholder}
                     className={isRTL ? 'text-right' : ''}
                   />
                 </div>
@@ -687,23 +689,33 @@ const NomineeRegistration = () => {
                     required
                     value={formData.ministry_participation}
                     onChange={(e) => handleChange('ministry_participation', e.target.value)}
+                    placeholder={txt.ministryPlaceholder}
                     className={isRTL ? 'text-right' : ''}
                     rows={3}
                   />
                 </div>
 
-                {/* Marital Status */}
+                {/* Marital Status - Select */}
                 <div>
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     {txt.maritalStatus}
                     <span className="text-red-500 text-lg">*</span>
                   </Label>
-                  <Input
+                  <Select 
+                    value={formData.marital_status} 
+                    onValueChange={(value) => handleChange('marital_status', value)}
                     required
-                    value={formData.marital_status}
-                    onChange={(e) => handleChange('marital_status', e.target.value)}
-                    className={isRTL ? 'text-right' : ''}
-                  />
+                  >
+                    <SelectTrigger className={isRTL ? 'text-right' : ''}>
+                      <SelectValue placeholder={txt.selectOption} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="single">{txt.single}</SelectItem>
+                      <SelectItem value="married">{txt.married}</SelectItem>
+                      <SelectItem value="divorced">{txt.divorced}</SelectItem>
+                      <SelectItem value="widowed">{txt.widowed}</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 {/* Address */}
@@ -717,6 +729,7 @@ const NomineeRegistration = () => {
                     required
                     value={formData.address}
                     onChange={(e) => handleChange('address', e.target.value)}
+                    placeholder={txt.addressPlaceholder}
                     className={isRTL ? 'text-right' : ''}
                   />
                 </div>
