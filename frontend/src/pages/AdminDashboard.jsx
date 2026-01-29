@@ -203,6 +203,29 @@ const AdminDashboard = () => {
 
   const txt = translations[language] || translations.sv;
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoginError('');
+    
+    try {
+      const success = await loginAdmin(loginPassword);
+      if (success) {
+        setLoginPassword('');
+        toast.success(language === 'sv' ? 'Inloggning lyckades!' : language === 'ar' ? 'تم تسجيل الدخول بنجاح!' : 'Login successful!');
+      } else {
+        setLoginError(txt.loginError);
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setLoginError(txt.loginError);
+    }
+  };
+
+  const handleLogout = () => {
+    logoutAdmin();
+    toast.success(language === 'sv' ? 'Du har loggats ut' : language === 'ar' ? 'تم تسجيل الخروج' : 'Logged out successfully');
+  };
+
   useEffect(() => {
     fetchAllData();
   }, []);
