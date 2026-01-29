@@ -5,6 +5,7 @@ const AuthContext = createContext();
 // Passwords from environment variables
 // Site password removed - public access allowed
 const MEMBERS_PASSWORD = process.env.REACT_APP_MEMBERS_PASSWORD || 'Haggai2030!';
+const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD || 'admin2030!';
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -18,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   // Site is now publicly accessible - always authenticated
   const [isAuthenticated] = useState(true);
   const [isMembersAuthenticated, setIsMembersAuthenticated] = useState(false);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -25,6 +27,11 @@ export const AuthProvider = ({ children }) => {
     const membersAuthStatus = localStorage.getItem('haggai-members-auth');
     if (membersAuthStatus === 'true') {
       setIsMembersAuthenticated(true);
+    }
+    // Check if user has admin access
+    const adminAuthStatus = localStorage.getItem('haggai-admin-auth');
+    if (adminAuthStatus === 'true') {
+      setIsAdminAuthenticated(true);
     }
     setIsLoading(false);
   }, []);
@@ -43,9 +50,20 @@ export const AuthProvider = ({ children }) => {
     return false;
   };
 
+  const loginAdmin = (password) => {
+    if (password === ADMIN_PASSWORD) {
+      setIsAdminAuthenticated(true);
+      localStorage.setItem('haggai-admin-auth', 'true');
+      return true;
+    }
+    return false;
+  };
+
   const logout = () => {
     setIsMembersAuthenticated(false);
+    setIsAdminAuthenticated(false);
     localStorage.removeItem('haggai-members-auth');
+    localStorage.removeItem('haggai-admin-auth');
   };
 
   const logoutMembers = () => {
@@ -53,15 +71,23 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('haggai-members-auth');
   };
 
+  const logoutAdmin = () => {
+    setIsAdminAuthenticated(false);
+    localStorage.removeItem('haggai-admin-auth');
+  };
+
   return (
     <AuthContext.Provider value={{ 
       isAuthenticated, 
-      isMembersAuthenticated, 
+      isMembersAuthenticated,
+      isAdminAuthenticated,
       isLoading, 
       login, 
       loginMembers,
+      loginAdmin,
       logout,
-      logoutMembers 
+      logoutMembers,
+      logoutAdmin
     }}>
       {children}
     </AuthContext.Provider>
