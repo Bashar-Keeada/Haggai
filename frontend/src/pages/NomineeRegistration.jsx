@@ -758,7 +758,6 @@ const NomineeRegistration = () => {
                     value={formData.age}
                     onChange={(e) => handleChange('age', e.target.value)}
                     placeholder={isRTL ? "مثال: ٣٥" : "t.ex. 35"}
-                    className={isRTL ? 'text-right' : ''}}
                     className={isRTL ? 'text-right' : ''}
                   />
                 </div>
