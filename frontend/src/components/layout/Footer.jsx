@@ -90,14 +90,26 @@ const Footer = () => {
           <p className="text-cream-500 text-xs mt-2">
             © {new Date().getFullYear()} Haggai Sweden. {t('footer.copyright')}
           </p>
-          {/* Admin login icon - discrete */}
-          <Link 
-            to="/admin" 
-            className="inline-flex items-center justify-center mt-4 p-2 text-cream-600 hover:text-cream-400 transition-colors opacity-50 hover:opacity-100"
-            title="Admin"
-          >
-            <Lock className="h-4 w-4" />
-          </Link>
+          {/* Admin login/logout icons */}
+          <div className="flex items-center justify-center gap-4 mt-4">
+            <Link 
+              to="/admin" 
+              className="inline-flex items-center justify-center p-2 text-cream-600 hover:text-cream-400 transition-colors opacity-50 hover:opacity-100"
+              title="Admin"
+            >
+              <Lock className="h-4 w-4" />
+            </Link>
+            {isAdminAuthenticated && (
+              <button
+                onClick={handleAdminLogout}
+                className="inline-flex items-center justify-center gap-1 px-3 py-1 text-xs text-cream-500 hover:text-cream-300 transition-colors opacity-70 hover:opacity-100 border border-cream-700 rounded-full hover:border-cream-500"
+                title={language === 'sv' ? 'Logga ut admin' : language === 'ar' ? 'تسجيل خروج المدير' : 'Logout admin'}
+              >
+                <LogOut className="h-3 w-3" />
+                <span>{language === 'sv' ? 'Logga ut' : language === 'ar' ? 'خروج' : 'Logout'}</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </footer>
