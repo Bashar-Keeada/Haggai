@@ -514,67 +514,105 @@ const NomineeRegistration = () => {
                   />
                 </div>
 
-                {/* Gender */}
+                {/* Gender - Select */}
                 <div>
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     {txt.gender}
                     <span className="text-red-500 text-lg">*</span>
                   </Label>
-                  <div className={`flex gap-4 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="gender"
-                        value="male"
-                        checked={formData.gender === 'male'}
-                        onChange={(e) => handleChange('gender', e.target.value)}
-                        required
-                        className="text-haggai"
-                      />
-                      {txt.male}
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="gender"
-                        value="female"
-                        checked={formData.gender === 'female'}
-                        onChange={(e) => handleChange('gender', e.target.value)}
-                        className="text-haggai"
-                      />
-                      {txt.female}
-                    </label>
-                  </div>
+                  <Select 
+                    value={formData.gender} 
+                    onValueChange={(value) => handleChange('gender', value)}
+                    required
+                  >
+                    <SelectTrigger className={isRTL ? 'text-right' : ''}>
+                      <SelectValue placeholder={txt.selectOption} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">{txt.male}</SelectItem>
+                      <SelectItem value="female">{txt.female}</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
-                {/* Country of Residence */}
+                {/* Country of Residence - Select with Other option */}
                 <div>
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <MapPin className="h-4 w-4" />
                     {txt.countryOfResidence}
                     <span className="text-red-500 text-lg">*</span>
                   </Label>
-                  <Input
+                  <Select 
+                    value={formData.country_of_residence} 
+                    onValueChange={(value) => {
+                      handleChange('country_of_residence', value);
+                      setShowOtherCountry(value === 'other');
+                    }}
                     required
-                    value={formData.country_of_residence}
-                    onChange={(e) => handleChange('country_of_residence', e.target.value)}
-                    className={isRTL ? 'text-right' : ''}
-                  />
+                  >
+                    <SelectTrigger className={isRTL ? 'text-right' : ''}>
+                      <SelectValue placeholder={txt.selectOption} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={txt.sweden}>{txt.sweden}</SelectItem>
+                      <SelectItem value={txt.norway}>{txt.norway}</SelectItem>
+                      <SelectItem value={txt.denmark}>{txt.denmark}</SelectItem>
+                      <SelectItem value={txt.germany}>{txt.germany}</SelectItem>
+                      <SelectItem value="other">{txt.other}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {showOtherCountry && (
+                    <Input
+                      className={`mt-2 ${isRTL ? 'text-right' : ''}`}
+                      placeholder={txt.specifyOther}
+                      value={formData.country_other}
+                      onChange={(e) => handleChange('country_other', e.target.value)}
+                      required
+                    />
+                  )}
                 </div>
 
-                {/* Nationality */}
+                {/* Nationality - Select with Other option */}
                 <div>
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <Globe className="h-4 w-4" />
                     {txt.nationality}
                     <span className="text-red-500 text-lg">*</span>
                   </Label>
-                  <Input
+                  <Select 
+                    value={formData.nationality} 
+                    onValueChange={(value) => {
+                      handleChange('nationality', value);
+                      setShowOtherNationality(value === 'other');
+                    }}
                     required
-                    value={formData.nationality}
-                    onChange={(e) => handleChange('nationality', e.target.value)}
-                    className={isRTL ? 'text-right' : ''}
-                  />
+                  >
+                    <SelectTrigger className={isRTL ? 'text-right' : ''}>
+                      <SelectValue placeholder={txt.selectOption} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={txt.iraqi}>{txt.iraqi}</SelectItem>
+                      <SelectItem value={txt.syrian}>{txt.syrian}</SelectItem>
+                      <SelectItem value={txt.lebanese}>{txt.lebanese}</SelectItem>
+                      <SelectItem value={txt.egyptian}>{txt.egyptian}</SelectItem>
+                      <SelectItem value={txt.jordanian}>{txt.jordanian}</SelectItem>
+                      <SelectItem value={txt.palestinian}>{txt.palestinian}</SelectItem>
+                      <SelectItem value={txt.swedish}>{txt.swedish}</SelectItem>
+                      <SelectItem value={txt.norwegian}>{txt.norwegian}</SelectItem>
+                      <SelectItem value={txt.danish}>{txt.danish}</SelectItem>
+                      <SelectItem value={txt.german}>{txt.german}</SelectItem>
+                      <SelectItem value="other">{txt.other}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {showOtherNationality && (
+                    <Input
+                      className={`mt-2 ${isRTL ? 'text-right' : ''}`}
+                      placeholder={txt.specifyOther}
+                      value={formData.nationality_other}
+                      onChange={(e) => handleChange('nationality_other', e.target.value)}
+                      required
+                    />
+                  )}
                 </div>
 
                 {/* Phone */}
