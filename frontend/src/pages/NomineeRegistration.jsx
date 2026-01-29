@@ -788,7 +788,7 @@ const NomineeRegistration = () => {
                 <div className="mb-6 p-4 bg-amber-50 rounded-xl">
                   <Label className={`block mb-3 ${isRTL ? 'text-right' : ''}`}>
                     {txt.commitmentAttendance}
-                    <Badge variant="destructive" className="text-xs ml-2">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <div className={`flex gap-4 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <label className="flex items-center gap-2 cursor-pointer">
@@ -819,7 +819,7 @@ const NomineeRegistration = () => {
                 <div className="mb-6 p-4 bg-stone-50 rounded-xl">
                   <Label className={`block mb-3 ${isRTL ? 'text-right' : ''}`}>
                     {txt.commitmentActiveRole}
-                    <Badge variant="destructive" className="text-xs ml-2">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <div className={`flex gap-4 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <label className="flex items-center gap-2 cursor-pointer">
