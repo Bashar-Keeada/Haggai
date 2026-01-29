@@ -490,7 +490,7 @@ const NomineeRegistration = () => {
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <MapPin className="h-4 w-4" />
                     {txt.countryOfResidence}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Input
                     required
@@ -505,7 +505,7 @@ const NomineeRegistration = () => {
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <Globe className="h-4 w-4" />
                     {txt.nationality}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Input
                     required
@@ -520,7 +520,7 @@ const NomineeRegistration = () => {
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <Phone className="h-4 w-4" />
                     {txt.phone}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Input
                     type="tel"
@@ -536,7 +536,7 @@ const NomineeRegistration = () => {
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <Mail className="h-4 w-4" />
                     {txt.email}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Input
                     type="email"
@@ -552,7 +552,7 @@ const NomineeRegistration = () => {
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <Briefcase className="h-4 w-4" />
                     {txt.jobTitle}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Input
                     required
@@ -567,7 +567,7 @@ const NomineeRegistration = () => {
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <Church className="h-4 w-4" />
                     {txt.churchOrganization}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Input
                     required
@@ -581,7 +581,7 @@ const NomineeRegistration = () => {
                 <div className="md:col-span-2">
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     {txt.ministryParticipation}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Textarea
                     required
@@ -596,7 +596,7 @@ const NomineeRegistration = () => {
                 <div>
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     {txt.maritalStatus}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Input
                     required
@@ -611,7 +611,7 @@ const NomineeRegistration = () => {
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <MapPin className="h-4 w-4" />
                     {txt.address}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Input
                     required
@@ -625,7 +625,7 @@ const NomineeRegistration = () => {
                 <div>
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     {txt.age}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Input
                     type="number"
@@ -643,7 +643,7 @@ const NomineeRegistration = () => {
                   <Label className={`flex items-center gap-1 mb-2 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                     <Calendar className="h-4 w-4" />
                     {txt.dateOfBirth}
-                    <Badge variant="destructive" className="text-xs">{txt.required}</Badge>
+                    <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Input
                     type="date"
