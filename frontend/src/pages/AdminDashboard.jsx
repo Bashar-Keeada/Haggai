@@ -147,6 +147,13 @@ const AdminDashboard = () => {
     ar: {
       title: 'لوحة الإدارة',
       subtitle: 'إدارة جميع الطلبات والرسائل',
+      loginTitle: 'تسجيل دخول الإدارة',
+      loginSubtitle: 'أدخل كلمة المرور للوصول إلى لوحة الإدارة',
+      password: 'كلمة المرور',
+      passwordPlaceholder: 'أدخل كلمة مرور الإدارة...',
+      loginButton: 'تسجيل الدخول',
+      loginError: 'كلمة مرور خاطئة. حاول مرة أخرى.',
+      logout: 'تسجيل الخروج',
       leaderApplications: 'طلبات خبرة القيادة',
       membershipApplications: 'طلبات العضوية',
       contactMessages: 'رسائل الاتصال',
