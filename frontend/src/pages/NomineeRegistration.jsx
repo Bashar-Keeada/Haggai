@@ -752,12 +752,13 @@ const NomineeRegistration = () => {
                     <span className="text-red-500 text-lg">*</span>
                   </Label>
                   <Input
-                    type="number"
+                    type="text"
+                    inputMode="numeric"
                     required
-                    min="18"
-                    max="99"
                     value={formData.age}
                     onChange={(e) => handleChange('age', e.target.value)}
+                    placeholder={isRTL ? "مثال: ٣٥" : "t.ex. 35"}
+                    className={isRTL ? 'text-right' : ''}}
                     className={isRTL ? 'text-right' : ''}
                   />
                 </div>
