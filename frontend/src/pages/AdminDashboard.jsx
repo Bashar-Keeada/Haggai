@@ -2,19 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Users, FileText, Mail, Calendar, ChevronDown, ChevronUp, 
-  Eye, Check, X, Clock, Filter, Search, Download, RefreshCw, UserCog, Shield, Building2, Handshake, Quote, UserPlus, GraduationCap, Heart
+  Eye, Check, X, Clock, Filter, Search, Download, RefreshCw, UserCog, Shield, Building2, Handshake, Quote, UserPlus, GraduationCap, Heart, Lock, EyeOff, LogOut
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const AdminDashboard = () => {
   const { language, isRTL } = useLanguage();
+  const { isAdminAuthenticated, loginAdmin, logoutAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState('applications');
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
