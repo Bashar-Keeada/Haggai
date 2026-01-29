@@ -327,13 +327,83 @@ const AdminDashboard = () => {
     );
   }
 
+  // Show login form if not authenticated
+  if (!isAdminAuthenticated) {
+    return (
+      <div className={`min-h-screen bg-cream-50 flex items-center justify-center py-12 px-4 ${isRTL ? 'rtl' : 'ltr'}`}>
+        <Card className="w-full max-w-md border-0 shadow-xl">
+          <CardHeader className={`text-center pb-8 ${isRTL ? 'text-right' : ''}`}>
+            <div className="w-16 h-16 bg-haggai rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Lock className="h-8 w-8 text-white" />
+            </div>
+            <CardTitle className="text-2xl font-bold text-stone-800">{txt.loginTitle}</CardTitle>
+            <p className="text-stone-600 mt-2">{txt.loginSubtitle}</p>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-stone-700">
+                  {txt.password}
+                </label>
+                <div className="relative">
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    placeholder={txt.passwordPlaceholder}
+                    className={`${isRTL ? 'pr-12' : 'pl-4 pr-12'} h-12`}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className={`absolute top-1/2 -translate-y-1/2 ${isRTL ? 'left-3' : 'right-3'} text-stone-400 hover:text-stone-600`}
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                </div>
+              </div>
+
+              {loginError && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-sm text-red-600 text-center">{loginError}</p>
+                </div>
+              )}
+
+              <Button 
+                type="submit" 
+                className="w-full h-12 bg-haggai hover:bg-haggai-600 text-white font-semibold"
+                disabled={!loginPassword.trim()}
+              >
+                <Lock className="h-4 w-4 mr-2" />
+                {txt.loginButton}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className={`min-h-screen bg-cream-50 py-24 ${isRTL ? 'rtl' : 'ltr'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className={`mb-8 ${isRTL ? 'text-right' : ''}`}>
-          <h1 className="text-4xl font-bold text-stone-800 mb-2">{txt.title}</h1>
-          <p className="text-lg text-stone-600">{txt.subtitle}</p>
+          <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <div>
+              <h1 className="text-4xl font-bold text-stone-800 mb-2">{txt.title}</h1>
+              <p className="text-lg text-stone-600">{txt.subtitle}</p>
+            </div>
+            <Button 
+              variant="outline" 
+              onClick={handleLogout}
+              className="flex items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              {txt.logout}
+            </Button>
+          </div>
         </div>
 
         {/* Admin Quick Links */}
