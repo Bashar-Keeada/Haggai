@@ -565,10 +565,10 @@ const NomineeRegistration = () => {
                       <SelectValue placeholder={txt.selectOption} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={txt.sweden}>{txt.sweden}</SelectItem>
-                      <SelectItem value={txt.norway}>{txt.norway}</SelectItem>
-                      <SelectItem value={txt.denmark}>{txt.denmark}</SelectItem>
-                      <SelectItem value={txt.germany}>{txt.germany}</SelectItem>
+                      <SelectItem value="sweden">{txt.sweden}</SelectItem>
+                      <SelectItem value="norway">{txt.norway}</SelectItem>
+                      <SelectItem value="denmark">{txt.denmark}</SelectItem>
+                      <SelectItem value="germany">{txt.germany}</SelectItem>
                       <SelectItem value="other">{txt.other}</SelectItem>
                     </SelectContent>
                   </Select>
@@ -602,16 +602,16 @@ const NomineeRegistration = () => {
                       <SelectValue placeholder={txt.selectOption} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={txt.iraqi}>{txt.iraqi}</SelectItem>
-                      <SelectItem value={txt.syrian}>{txt.syrian}</SelectItem>
-                      <SelectItem value={txt.lebanese}>{txt.lebanese}</SelectItem>
-                      <SelectItem value={txt.egyptian}>{txt.egyptian}</SelectItem>
-                      <SelectItem value={txt.jordanian}>{txt.jordanian}</SelectItem>
-                      <SelectItem value={txt.palestinian}>{txt.palestinian}</SelectItem>
-                      <SelectItem value={txt.swedish}>{txt.swedish}</SelectItem>
-                      <SelectItem value={txt.norwegian}>{txt.norwegian}</SelectItem>
-                      <SelectItem value={txt.danish}>{txt.danish}</SelectItem>
-                      <SelectItem value={txt.german}>{txt.german}</SelectItem>
+                      <SelectItem value="iraqi">{txt.iraqi}</SelectItem>
+                      <SelectItem value="syrian">{txt.syrian}</SelectItem>
+                      <SelectItem value="lebanese">{txt.lebanese}</SelectItem>
+                      <SelectItem value="egyptian">{txt.egyptian}</SelectItem>
+                      <SelectItem value="jordanian">{txt.jordanian}</SelectItem>
+                      <SelectItem value="palestinian">{txt.palestinian}</SelectItem>
+                      <SelectItem value="swedish">{txt.swedish}</SelectItem>
+                      <SelectItem value="norwegian">{txt.norwegian}</SelectItem>
+                      <SelectItem value="danish">{txt.danish}</SelectItem>
+                      <SelectItem value="german">{txt.german}</SelectItem>
                       <SelectItem value="other">{txt.other}</SelectItem>
                     </SelectContent>
                   </Select>
