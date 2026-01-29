@@ -92,6 +92,13 @@ const AdminDashboard = () => {
     en: {
       title: 'Admin Dashboard',
       subtitle: 'Manage all applications and messages',
+      loginTitle: 'Admin Login',
+      loginSubtitle: 'Enter password to access admin panel',
+      password: 'Password',
+      passwordPlaceholder: 'Enter admin password...',
+      loginButton: 'Login',
+      loginError: 'Wrong password. Please try again.',
+      logout: 'Logout',
       leaderApplications: 'Leader Experience Applications',
       membershipApplications: 'Membership Applications',
       contactMessages: 'Contact Messages',
