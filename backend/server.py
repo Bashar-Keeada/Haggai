@@ -2225,57 +2225,51 @@ async def send_registration_email_to_admin(nomination: dict, registration: Nomin
     
     html_content = f"""
     <!DOCTYPE html>
-    <html>
+    <html dir="rtl">
     <head>
         <meta charset="UTF-8">
     </head>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl; text-align: right;">
         <div style="background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); padding: 30px; border-radius: 10px 10px 0 0;">
-            <h1 style="color: white; margin: 0; font-size: 24px;">✅ Ny registrering mottagen!</h1>
-            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">En nominerad person har registrerat sig</p>
+            <h1 style="color: white; margin: 0; font-size: 24px;">✅ تسجيل جديد مستلم!</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">قام شخص مرشح بالتسجيل</p>
         </div>
         
         <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none;">
-            <h3 style="color: #15564e; margin-top: 0;">Program</h3>
+            <h3 style="color: #15564e; margin-top: 0;">البرنامج</h3>
             <p><strong>{nomination.get('event_title', 'N/A')}</strong></p>
             
-            <h3 style="color: #15564e;">Personuppgifter</h3>
+            <h3 style="color: #15564e;">البيانات الشخصية</h3>
             <table style="width: 100%; border-collapse: collapse;">
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Namn:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.full_name}</td></tr>
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Kön:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.gender}</td></tr>
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Födelsedatum:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.date_of_birth}</td></tr>
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Telefon:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.phone}</td></tr>
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>E-post:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.email}</td></tr>
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Adress:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.full_address}</td></tr>
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Civilstånd:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.marital_status}</td></tr>
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Födelseort:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.place_of_birth}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>الاسم:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.full_name}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>الجنس:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.gender}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>العمر:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.age or 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>تاريخ الميلاد:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.date_of_birth or 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>الهاتف:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.phone}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>البريد:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.email}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>بلد الإقامة:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.country_of_residence or 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>الجنسية:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.nationality or 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>العنوان:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.address or 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>الحالة الاجتماعية:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.marital_status or 'N/A'}</td></tr>
             </table>
             
-            <h3 style="color: #15564e;">Arbetsinformation</h3>
+            <h3 style="color: #15564e;">معلومات العمل والكنيسة</h3>
             <table style="width: 100%; border-collapse: collapse;">
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Arbetsområde:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.work_field}</td></tr>
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Yrke:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.current_profession}</td></tr>
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Arbetsgivare:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.employer_name}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>الوظيفة:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.job_title or 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>الكنيسة/المنظمة:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.church_organization or 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>المشاركة في الخدمة:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.ministry_participation or 'N/A'}</td></tr>
             </table>
             
-            <h3 style="color: #15564e;">Kyrkoinformation</h3>
+            <h3 style="color: #15564e;">التعهدات</h3>
             <table style="width: 100%; border-collapse: collapse;">
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Kyrka:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.church_name}</td></tr>
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Roll i kyrkan:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{registration.church_role}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>تعهد الحضور:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{'✅ نعم' if registration.commitment_attendance == 'yes' else '❌ لا'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>دور فعال:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{'✅ نعم' if registration.commitment_active_role == 'yes' else '❌ لا'}</td></tr>
             </table>
             
-            <h3 style="color: #15564e;">Åtaganden</h3>
-            <table style="width: 100%; border-collapse: collapse;">
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Närvaroåtagande:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{'✅ Åtar sig' if registration.commitment_attendance == 'yes' else '❌ Åtar sig inte'}</td></tr>
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Aktivt deltagande:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">{'✅ Ja' if registration.commitment_active_role == 'yes' else '❌ Nej'}</td></tr>
-            </table>
-            
-            {f'<h3 style="color: #15564e;">Ekonomiskt stöd</h3><p>{registration.fee_support_request}</p>' if registration.fee_support_request else ''}
-            
-            {f'<h3 style="color: #15564e;">Övriga kommentarer</h3><p>{registration.notes}</p>' if registration.notes else ''}
+            {f'<h3 style="color: #15564e;">ملاحظات</h3><p>{registration.notes}</p>' if registration.notes else ''}
             
             <div style="margin-top: 30px; padding: 15px; background: #e8f5e9; border-radius: 8px;">
-                <p style="margin: 0; color: #2e7d32;"><strong>Nominerad av:</strong> {nomination.get('nominator_name', 'N/A')} ({nomination.get('nominator_email', 'N/A')})</p>
+                <p style="margin: 0; color: #2e7d32;"><strong>تم الترشيح بواسطة:</strong> {nomination.get('nominator_name', 'N/A')} ({nomination.get('nominator_phone', 'N/A')})</p>
             </div>
         </div>
     </body>
@@ -2286,7 +2280,7 @@ async def send_registration_email_to_admin(nomination: dict, registration: Nomin
         email = resend.Emails.send({
             "from": SENDER_EMAIL,
             "to": [ADMIN_EMAIL],
-            "subject": f"✅ Ny registrering: {registration.full_name} - {nomination.get('event_title', 'N/A')}",
+            "subject": f"✅ تسجيل جديد: {registration.full_name} - {nomination.get('event_title', 'N/A')}",
             "html": html_content
         })
         logging.info(f"Registration email sent to admin, id: {email.get('id')}")
