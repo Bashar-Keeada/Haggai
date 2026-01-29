@@ -1440,24 +1440,32 @@ class Nomination(BaseModel):
 
 
 class NomineeRegistrationData(BaseModel):
-    profile_image: Optional[str] = None
     full_name: str
     gender: str
-    date_of_birth: str
+    country_of_residence: Optional[str] = None
+    nationality: Optional[str] = None
     phone: str
     email: str
-    full_address: str
-    marital_status: str
-    place_of_birth: str
-    work_field: str
-    current_profession: str
-    employer_name: str
-    church_name: str
-    church_role: str
+    job_title: Optional[str] = None
+    church_organization: Optional[str] = None
+    ministry_participation: Optional[str] = None
+    marital_status: Optional[str] = None
+    address: Optional[str] = None
+    age: Optional[str] = None
+    date_of_birth: Optional[str] = None
     commitment_attendance: str
     commitment_active_role: str
-    fee_support_request: Optional[str] = None
     notes: Optional[str] = None
+    # Legacy fields for backwards compatibility
+    profile_image: Optional[str] = None
+    full_address: Optional[str] = None
+    place_of_birth: Optional[str] = None
+    work_field: Optional[str] = None
+    current_profession: Optional[str] = None
+    employer_name: Optional[str] = None
+    church_name: Optional[str] = None
+    church_role: Optional[str] = None
+    fee_support_request: Optional[str] = None
 
 
 class NominationCreate(BaseModel):
