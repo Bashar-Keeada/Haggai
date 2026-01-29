@@ -299,20 +299,41 @@ const NomineeRegistration = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  // Map internal values to display text
+  const countryMap = {
+    sweden: 'Sweden',
+    norway: 'Norway', 
+    denmark: 'Denmark',
+    germany: 'Germany'
+  };
+
+  const nationalityMap = {
+    iraqi: 'Iraqi',
+    syrian: 'Syrian',
+    lebanese: 'Lebanese',
+    egyptian: 'Egyptian',
+    jordanian: 'Jordanian',
+    palestinian: 'Palestinian',
+    swedish: 'Swedish',
+    norwegian: 'Norwegian',
+    danish: 'Danish',
+    german: 'German'
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      // Prepare data - handle "other" options
+      // Prepare data - handle "other" options and convert values
       const submitData = {
         ...formData,
         country_of_residence: formData.country_of_residence === 'other' 
           ? formData.country_other 
-          : formData.country_of_residence,
+          : (countryMap[formData.country_of_residence] || formData.country_of_residence),
         nationality: formData.nationality === 'other' 
           ? formData.nationality_other 
-          : formData.nationality
+          : (nationalityMap[formData.nationality] || formData.nationality)
       };
 
       const response = await fetch(`${BACKEND_URL}/api/nominations/${nominationId}/register`, {
