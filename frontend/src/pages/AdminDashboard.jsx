@@ -22,6 +22,11 @@ const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   
+  // Login state
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  
   // Data states
   const [leaderApplications, setLeaderApplications] = useState([]);
   const [membershipApplications, setMembershipApplications] = useState([]);
@@ -32,6 +37,13 @@ const AdminDashboard = () => {
     sv: {
       title: 'Admin Dashboard',
       subtitle: 'Hantera alla ansökningar och meddelanden',
+      loginTitle: 'Admin-inloggning',
+      loginSubtitle: 'Ange lösenord för att komma åt admin-panelen',
+      password: 'Lösenord',
+      passwordPlaceholder: 'Ange admin-lösenord...',
+      loginButton: 'Logga in',
+      loginError: 'Fel lösenord. Försök igen.',
+      logout: 'Logga ut',
       leaderApplications: 'Leader Experience Ansökningar',
       membershipApplications: 'Medlemsansökningar',
       contactMessages: 'Kontaktmeddelanden',
