@@ -304,10 +304,21 @@ const NomineeRegistration = () => {
     setSubmitting(true);
 
     try {
+      // Prepare data - handle "other" options
+      const submitData = {
+        ...formData,
+        country_of_residence: formData.country_of_residence === 'other' 
+          ? formData.country_other 
+          : formData.country_of_residence,
+        nationality: formData.nationality === 'other' 
+          ? formData.nationality_other 
+          : formData.nationality
+      };
+
       const response = await fetch(`${BACKEND_URL}/api/nominations/${nominationId}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(submitData)
       });
 
       if (response.ok) {
