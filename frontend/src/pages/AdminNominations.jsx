@@ -701,27 +701,25 @@ const AdminNominations = () => {
                       {/* Show full registration data if completed */}
                       {nomination.registration_data && (
                         <div className={`mt-3 p-4 bg-blue-50 border border-blue-200 rounded-lg ${isRTL ? 'text-right' : ''}`}>
-                          <p className="text-sm font-bold text-blue-800 mb-3">📋 Fullständig registrering</p>
+                          <p className="text-sm font-bold text-blue-800 mb-3">📋 {isRTL ? 'بيانات التسجيل الكاملة' : 'Fullständig registrering'}</p>
                           <div className="grid md:grid-cols-2 gap-3 text-sm">
-                            <div><strong>Kön:</strong> {nomination.registration_data.gender === 'male' ? 'Man' : 'Kvinna'}</div>
-                            <div><strong>Födelsedatum:</strong> {nomination.registration_data.date_of_birth}</div>
-                            <div><strong>Telefon:</strong> {nomination.registration_data.phone}</div>
-                            <div><strong>E-post:</strong> {nomination.registration_data.email}</div>
-                            <div className="md:col-span-2"><strong>Adress:</strong> {nomination.registration_data.full_address}</div>
-                            <div><strong>Civilstånd:</strong> {nomination.registration_data.marital_status}</div>
-                            <div><strong>Födelseort:</strong> {nomination.registration_data.place_of_birth}</div>
-                            <div><strong>Arbetsområde:</strong> {nomination.registration_data.work_field}</div>
-                            <div><strong>Yrke:</strong> {nomination.registration_data.current_profession}</div>
-                            <div className="md:col-span-2"><strong>Arbetsgivare:</strong> {nomination.registration_data.employer_name}</div>
-                            <div><strong>Kyrka:</strong> {nomination.registration_data.church_name}</div>
-                            <div><strong>Roll i kyrkan:</strong> {nomination.registration_data.church_role}</div>
-                            <div><strong>Närvaroåtagande:</strong> {nomination.registration_data.commitment_attendance === 'yes' ? '✅ Ja' : '❌ Nej'}</div>
-                            <div><strong>Aktivt deltagande:</strong> {nomination.registration_data.commitment_active_role === 'yes' ? '✅ Ja' : '❌ Nej'}</div>
-                            {nomination.registration_data.fee_support_request && (
-                              <div className="md:col-span-2"><strong>Ekonomiskt stöd:</strong> {nomination.registration_data.fee_support_request}</div>
-                            )}
+                            <div><strong>{isRTL ? 'الاسم:' : 'Namn:'}</strong> {nomination.registration_data.full_name}</div>
+                            <div><strong>{isRTL ? 'الجنس:' : 'Kön:'}</strong> {nomination.registration_data.gender === 'male' ? (isRTL ? 'ذكر' : 'Man') : (isRTL ? 'أنثى' : 'Kvinna')}</div>
+                            <div><strong>{isRTL ? 'العمر:' : 'Ålder:'}</strong> {nomination.registration_data.age || 'N/A'}</div>
+                            <div><strong>{isRTL ? 'تاريخ الميلاد:' : 'Födelsedatum:'}</strong> {nomination.registration_data.date_of_birth || 'N/A'}</div>
+                            <div><strong>{isRTL ? 'الهاتف:' : 'Telefon:'}</strong> {nomination.registration_data.phone}</div>
+                            <div><strong>{isRTL ? 'البريد:' : 'E-post:'}</strong> {nomination.registration_data.email}</div>
+                            <div><strong>{isRTL ? 'بلد الإقامة:' : 'Bostadsland:'}</strong> {nomination.registration_data.country_of_residence || 'N/A'}</div>
+                            <div><strong>{isRTL ? 'الجنسية:' : 'Nationalitet:'}</strong> {nomination.registration_data.nationality || 'N/A'}</div>
+                            <div className="md:col-span-2"><strong>{isRTL ? 'العنوان:' : 'Adress:'}</strong> {nomination.registration_data.address || nomination.registration_data.full_address || 'N/A'}</div>
+                            <div><strong>{isRTL ? 'الحالة الاجتماعية:' : 'Civilstånd:'}</strong> {nomination.registration_data.marital_status || 'N/A'}</div>
+                            <div className="md:col-span-2"><strong>{isRTL ? 'الوظيفة:' : 'Yrke:'}</strong> {nomination.registration_data.job_title || nomination.registration_data.current_profession || 'N/A'}</div>
+                            <div className="md:col-span-2"><strong>{isRTL ? 'الكنيسة/المنظمة:' : 'Kyrka/Organisation:'}</strong> {nomination.registration_data.church_organization || nomination.registration_data.church_name || 'N/A'}</div>
+                            <div className="md:col-span-2"><strong>{isRTL ? 'المشاركة في الخدمة:' : 'Tjänstedeltagande:'}</strong> {nomination.registration_data.ministry_participation || nomination.registration_data.church_role || 'N/A'}</div>
+                            <div><strong>{isRTL ? 'تعهد الحضور:' : 'Närvaroåtagande:'}</strong> {nomination.registration_data.commitment_attendance === 'yes' ? '✅' : '❌'}</div>
+                            <div><strong>{isRTL ? 'دور فعال:' : 'Aktivt deltagande:'}</strong> {nomination.registration_data.commitment_active_role === 'yes' ? '✅' : '❌'}</div>
                             {nomination.registration_data.notes && (
-                              <div className="md:col-span-2"><strong>Kommentarer:</strong> {nomination.registration_data.notes}</div>
+                              <div className="md:col-span-2"><strong>{isRTL ? 'ملاحظات:' : 'Kommentarer:'}</strong> {nomination.registration_data.notes}</div>
                             )}
                           </div>
                         </div>
