@@ -3060,30 +3060,27 @@ async def get_leader_sessions(leader_id: str):
 
 
 async def notify_participants_agenda_published(workshop_id: str, workshop: dict):
-    """Send email to all accepted participants AND leaders when agenda is published"""
+    """Send email to all accepted participants AND ALL approved leaders when agenda is published"""
     # Get all accepted participants for this workshop
     participants = await db.nominations.find({
         "event_id": workshop_id,
         "status": {"$in": ["approved", "registered", "completed"]}
     }, {"_id": 0}).to_list(1000)
     
-    # Get all leaders/facilitators assigned to this workshop's sessions
-    agenda = await db.workshop_agendas.find_one({"workshop_id": workshop_id}, {"_id": 0})
+    # Get ALL approved leaders/facilitators
     leader_emails = set()
-    if agenda:
-        for day in agenda.get("days", []):
-            for session in day.get("sessions", []):
-                leader_id = session.get("leader_id")
-                if leader_id:
-                    # Check in leader_registrations first
-                    leader_reg = await db.leader_registrations.find_one({"id": leader_id}, {"_id": 0})
-                    if leader_reg and leader_reg.get("email"):
-                        leader_emails.add(leader_reg.get("email"))
-                    else:
-                        # Check in leaders collection
-                        leader = await db.leaders.find_one({"id": leader_id}, {"_id": 0})
-                        if leader and leader.get("email"):
-                            leader_emails.add(leader.get("email"))
+    
+    # Get from leader_registrations (approved status)
+    approved_registrations = await db.leader_registrations.find({"status": "approved"}, {"_id": 0}).to_list(1000)
+    for reg in approved_registrations:
+        if reg.get("email"):
+            leader_emails.add(reg.get("email"))
+    
+    # Also get from leaders collection (manually added leaders)
+    all_leaders = await db.leaders.find({}, {"_id": 0}).to_list(1000)
+    for leader in all_leaders:
+        if leader.get("email"):
+            leader_emails.add(leader.get("email"))
     
     frontend_url = os.environ.get('FRONTEND_URL', 'https://haggai-portal-2.preview.emergentagent.com')
     agenda_link = f"{frontend_url}/program/{workshop_id}"
