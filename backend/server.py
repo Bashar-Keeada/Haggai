@@ -3060,21 +3060,36 @@ async def get_leader_sessions(leader_id: str):
 
 
 async def notify_participants_agenda_published(workshop_id: str, workshop: dict):
-    """Send email to all accepted participants when agenda is published"""
+    """Send email to all accepted participants AND leaders when agenda is published"""
     # Get all accepted participants for this workshop
     participants = await db.nominations.find({
         "event_id": workshop_id,
         "status": {"$in": ["approved", "registered", "completed"]}
     }, {"_id": 0}).to_list(1000)
     
-    if not participants:
-        logging.info(f"No participants to notify for workshop {workshop_id}")
-        return
+    # Get all leaders/facilitators assigned to this workshop's sessions
+    agenda = await db.workshop_agendas.find_one({"workshop_id": workshop_id}, {"_id": 0})
+    leader_emails = set()
+    if agenda:
+        for day in agenda.get("days", []):
+            for session in day.get("sessions", []):
+                leader_id = session.get("leader_id")
+                if leader_id:
+                    # Check in leader_registrations first
+                    leader_reg = await db.leader_registrations.find_one({"id": leader_id}, {"_id": 0})
+                    if leader_reg and leader_reg.get("email"):
+                        leader_emails.add(leader_reg.get("email"))
+                    else:
+                        # Check in leaders collection
+                        leader = await db.leaders.find_one({"id": leader_id}, {"_id": 0})
+                        if leader and leader.get("email"):
+                            leader_emails.add(leader.get("email"))
     
     frontend_url = os.environ.get('FRONTEND_URL', 'https://haggai-portal-2.preview.emergentagent.com')
     agenda_link = f"{frontend_url}/program/{workshop_id}"
     
-    html_content = f"""
+    # Email template for participants
+    participant_html_content = f"""
     <!DOCTYPE html>
     <html>
     <head><meta charset="UTF-8"></head>
@@ -3109,19 +3124,78 @@ async def notify_participants_agenda_published(workshop_id: str, workshop: dict)
     </html>
     """
     
-    for participant in participants:
-        email = participant.get("nominee_email") or participant.get("registration_data", {}).get("email")
-        if email:
+    # Email template for leaders/facilitators
+    leader_html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">📋 Programmet är publicerat!</h1>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Hej!</p>
+            
+            <p>Du är inplanerad som <strong>facilitator/tränare</strong> för <strong>{workshop.get('title', 'utbildningen')}</strong>.</p>
+            
+            <p>Programmet är nu publicerat och deltagarna har meddelats!</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 10px; border-left: 4px solid #014D73; margin: 20px 0;">
+                <p style="margin: 0;"><strong>📅 Datum:</strong> {workshop.get('date', 'Se programmet')}</p>
+                <p style="margin: 5px 0 0 0;"><strong>📍 Plats:</strong> {workshop.get('location', 'Se programmet')}</p>
+            </div>
+            
+            <p>Se hela dagsprogrammet med dina sessioner genom att klicka på knappen nedan:</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{agenda_link}" style="display: inline-block; background: #014D73; color: white; padding: 15px 40px; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 16px;">
+                    Se programmet →
+                </a>
+            </div>
+            
+            <p style="color: #666; font-size: 14px;">Logga in på din dashboard för att se dina tilldelade sessioner.</p>
+            
+            <p style="margin-top: 30px;">Tack för ditt engagemang!<br><strong>Haggai Sweden</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    # Send to participants
+    if participants:
+        for participant in participants:
+            email = participant.get("nominee_email") or participant.get("registration_data", {}).get("email")
+            if email:
+                try:
+                    await asyncio.to_thread(resend.Emails.send, {
+                        "from": SENDER_EMAIL,
+                        "to": [email],
+                        "subject": f"📋 Programmet för {workshop.get('title', 'utbildningen')} är klart!",
+                        "html": participant_html_content
+                    })
+                    logging.info(f"Agenda notification sent to participant {email}")
+                except Exception as e:
+                    logging.error(f"Failed to send agenda notification to {email}: {str(e)}")
+    else:
+        logging.info(f"No participants to notify for workshop {workshop_id}")
+    
+    # Send to leaders/facilitators
+    if leader_emails:
+        for email in leader_emails:
             try:
                 await asyncio.to_thread(resend.Emails.send, {
                     "from": SENDER_EMAIL,
                     "to": [email],
-                    "subject": f"📋 Programmet för {workshop.get('title', 'utbildningen')} är klart!",
-                    "html": html_content
+                    "subject": f"📋 Du är inplanerad: {workshop.get('title', 'utbildningen')} - Programmet publicerat!",
+                    "html": leader_html_content
                 })
-                logging.info(f"Agenda notification sent to {email}")
+                logging.info(f"Agenda notification sent to leader {email}")
             except Exception as e:
-                logging.error(f"Failed to send agenda notification to {email}: {str(e)}")
+                logging.error(f"Failed to send agenda notification to leader {email}: {str(e)}")
+        logging.info(f"Notified {len(leader_emails)} leaders for workshop {workshop_id}")
+    else:
+        logging.info(f"No leaders to notify for workshop {workshop_id}")
 
 
 async def send_daily_reminder(workshop_id: str, day_data: dict, workshop: dict):
