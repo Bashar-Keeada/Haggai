@@ -204,7 +204,9 @@ const AdminLeaders = () => {
         registered: 'مسجل',
         expired: 'منتهي الصلاحية',
         sentAt: 'أرسلت',
-        resend: 'إعادة إرسال'
+        resend: 'إعادة إرسال',
+        copyLink: 'نسخ الرابط',
+        linkCopied: 'تم نسخ الرابط!'
       },
       registrations: {
         noRegistrations: 'لا توجد تسجيلات في انتظار الموافقة.',
