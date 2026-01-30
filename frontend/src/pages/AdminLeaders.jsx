@@ -143,7 +143,9 @@ const AdminLeaders = () => {
         registered: 'Registered',
         expired: 'Expired',
         sentAt: 'Sent',
-        resend: 'Resend'
+        resend: 'Resend',
+        copyLink: 'Copy link',
+        linkCopied: 'Link copied!'
       },
       registrations: {
         noRegistrations: 'No registrations waiting for approval.',
