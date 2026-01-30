@@ -84,6 +84,8 @@ function App() {
               {/* Leader Portal Routes */}
               <Route path="/ledare/registrera/:token" element={<LeaderRegistrationForm />} />
               <Route path="/ledare/login" element={<LeaderLogin />} />
+              <Route path="/ledare/glomt-losenord" element={<LeaderForgotPassword />} />
+              <Route path="/ledare/aterstall-losenord/:token" element={<LeaderResetPassword />} />
               <Route path="/ledare/portal" element={<LeaderPortal />} />
               {/* Participant Portal Routes */}
               <Route path="/deltagare/login" element={<ParticipantLogin />} />
