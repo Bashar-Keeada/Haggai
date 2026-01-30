@@ -171,6 +171,12 @@ const LeaderLogin = () => {
                   </>
                 )}
               </Button>
+              
+              <div className="text-center mt-4">
+                <Link to="/ledare/glomt-losenord" className="text-sm text-haggai hover:underline">
+                  {txt.forgotPassword}
+                </Link>
+              </div>
             </form>
             
             <div className="mt-6 pt-6 border-t text-center">
