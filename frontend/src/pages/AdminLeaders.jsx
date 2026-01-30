@@ -669,17 +669,42 @@ const AdminLeaders = () => {
                             {txt.invitations[inv.status] || inv.status}
                           </Badge>
                           {inv.status === 'pending' && (
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              onClick={() => handleResendInvite(inv.id)}
-                            >
-                              <RefreshCw className="h-4 w-4 mr-1" />
-                              {txt.invitations.resend}
-                            </Button>
+                            <>
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => {
+                                  const link = `https://haggai.se/ledare/registrera/${inv.token}?lang=${inv.language || 'ar'}`;
+                                  navigator.clipboard.writeText(link);
+                                  toast.success(txt.invitations.linkCopied);
+                                }}
+                              >
+                                <Copy className="h-4 w-4 mr-1" />
+                                {txt.invitations.copyLink}
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => handleResendInvite(inv.id)}
+                              >
+                                <RefreshCw className="h-4 w-4 mr-1" />
+                                {txt.invitations.resend}
+                              </Button>
+                            </>
                           )}
                         </div>
                       </div>
+                      {/* Show invitation link */}
+                      {inv.status === 'pending' && (
+                        <div className="mt-3 p-2 bg-stone-50 rounded-lg">
+                          <div className="flex items-center gap-2 text-xs text-stone-500">
+                            <Link className="h-3 w-3" />
+                            <span className="font-mono break-all select-all">
+                              https://haggai.se/ledare/registrera/{inv.token}?lang={inv.language || 'ar'}
+                            </span>
+                          </div>
+                        </div>
+                      )}
                       {inv.sent_at && (
                         <p className="text-xs text-stone-400 mt-2">
                           {txt.invitations.sentAt}: {new Date(inv.sent_at).toLocaleDateString()}
