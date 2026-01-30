@@ -698,7 +698,7 @@ const AdminLeaders = () => {
                       {inv.status === 'pending' && (
                         <div className="mt-3 p-2 bg-stone-50 rounded-lg">
                           <div className="flex items-center gap-2 text-xs text-stone-500">
-                            <Link className="h-3 w-3" />
+                            <LinkIcon className="h-3 w-3" />
                             <span className="font-mono break-all select-all">
                               https://haggai.se/ledare/registrera/{inv.token}?lang={inv.language || 'ar'}
                             </span>
