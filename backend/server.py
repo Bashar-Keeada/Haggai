@@ -3036,6 +3036,31 @@ async def get_public_agenda(workshop_id: str):
     }
 
 
+@api_router.get("/public/agendas")
+async def get_all_published_agendas():
+    """Get all published agendas (for leaders/facilitators portal)"""
+    agendas = await db.workshop_agendas.find({"is_published": True}, {"_id": 0}).to_list(100)
+    
+    result = []
+    for agenda in agendas:
+        workshop = await db.workshops.find_one({"id": agenda["workshop_id"]}, {"_id": 0})
+        if workshop:
+            workshop_title = workshop.get("title", "")
+            if isinstance(workshop_title, dict):
+                workshop_title = workshop_title.get("sv", workshop_title.get("en", ""))
+            
+            result.append({
+                "workshop_id": agenda["workshop_id"],
+                "workshop_title": workshop_title,
+                "workshop_date": workshop.get("date", ""),
+                "workshop_location": workshop.get("location", ""),
+                "days_count": len(agenda.get("days", [])),
+                "published_at": agenda.get("published_at")
+            })
+    
+    return result
+
+
 @api_router.get("/leaders/{leader_id}/sessions")
 async def get_leader_sessions(leader_id: str):
     """Get all sessions assigned to a specific leader"""
