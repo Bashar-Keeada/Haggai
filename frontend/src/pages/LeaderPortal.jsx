@@ -697,6 +697,56 @@ const LeaderPortal = () => {
             </Card>
           </TabsContent>
 
+          {/* Agendas Tab */}
+          <TabsContent value="agendas">
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-haggai" />
+                  {txt.agendas?.title || 'Publicerade program'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {agendas.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Calendar className="h-12 w-12 text-stone-300 mx-auto mb-4" />
+                    <p className="text-stone-500">{txt.agendas?.noAgendas || 'Inga program är publicerade än.'}</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {agendas.map((agenda) => (
+                      <div key={agenda.workshop_id} className="border rounded-lg p-4 hover:bg-stone-50 transition-colors">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="font-semibold text-lg text-stone-800">{agenda.workshop_title}</h3>
+                            <div className="flex items-center gap-4 mt-2 text-sm text-stone-500">
+                              <span className="flex items-center gap-1">
+                                <Calendar className="h-4 w-4" />
+                                {agenda.workshop_date}
+                              </span>
+                              {agenda.workshop_location && (
+                                <span className="flex items-center gap-1">
+                                  <MapPin className="h-4 w-4" />
+                                  {agenda.workshop_location}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <Link to={`/program/${agenda.workshop_id}`}>
+                            <Button variant="outline" className="text-haggai border-haggai hover:bg-haggai hover:text-white">
+                              <Eye className="h-4 w-4 mr-2" />
+                              {txt.agendas?.viewProgram || 'Se programmet'}
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* Documents Tab */}
           <TabsContent value="documents">
             <Card className="border-0 shadow-lg">
