@@ -39,6 +39,8 @@ import PublicNominationForm from "./pages/PublicNominationForm";
 // Leader Portal Pages
 import LeaderRegistrationForm from "./pages/LeaderRegistrationForm";
 import LeaderLogin from "./pages/LeaderLogin";
+import LeaderForgotPassword from "./pages/LeaderForgotPassword";
+import LeaderResetPassword from "./pages/LeaderResetPassword";
 import LeaderPortal from "./pages/LeaderPortal";
 // Member Portal Pages
 import MemberLogin from "./pages/MemberLogin";
