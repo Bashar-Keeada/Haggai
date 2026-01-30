@@ -24,6 +24,7 @@ const LeaderPortal = () => {
   
   const [leader, setLeader] = useState(null);
   const [sessions, setSessions] = useState([]);
+  const [agendas, setAgendas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
