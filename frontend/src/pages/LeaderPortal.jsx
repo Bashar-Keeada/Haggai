@@ -118,6 +118,7 @@ const LeaderPortal = () => {
       tabs: {
         profile: 'My Profile',
         sessions: 'My Sessions',
+        agendas: 'Programs',
         documents: 'Documents',
         badge: 'Name Badge'
       },
@@ -155,6 +156,12 @@ const LeaderPortal = () => {
         date: 'Date',
         time: 'Time',
         topic: 'Topic'
+      },
+      agendas: {
+        title: 'Published programs',
+        noAgendas: 'No programs published yet.',
+        viewProgram: 'View program',
+        location: 'Location'
       },
       documents: {
         title: 'My documents',
