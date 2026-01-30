@@ -434,8 +434,12 @@ const LeaderPortal = () => {
               <Calendar className="h-4 w-4 mr-2" />
               {txt.tabs.sessions}
             </TabsTrigger>
-            <TabsTrigger value="documents" className="data-[state=active]:bg-haggai data-[state=active]:text-white">
+            <TabsTrigger value="agendas" className="data-[state=active]:bg-haggai data-[state=active]:text-white">
               <FileText className="h-4 w-4 mr-2" />
+              {txt.tabs.agendas}
+            </TabsTrigger>
+            <TabsTrigger value="documents" className="data-[state=active]:bg-haggai data-[state=active]:text-white">
+              <Upload className="h-4 w-4 mr-2" />
               {txt.tabs.documents}
             </TabsTrigger>
             <TabsTrigger value="badge" className="data-[state=active]:bg-haggai data-[state=active]:text-white">
