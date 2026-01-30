@@ -27,7 +27,11 @@ const MemberLogin = () => {
       loggingIn: 'Loggar in...',
       backToHome: 'Tillbaka till startsidan',
       welcome: 'Välkommen!',
-      loginSuccess: 'Du är nu inloggad'
+      loginSuccess: 'Du är nu inloggad',
+      forgotPassword: 'Glömt lösenord?',
+      resetHere: 'Återställ här',
+      leaderLogin: 'Är du facilitator/tränare?',
+      leaderLoginLink: 'Logga in här'
     },
     en: {
       title: 'Member Login',
@@ -38,7 +42,11 @@ const MemberLogin = () => {
       loggingIn: 'Logging in...',
       backToHome: 'Back to home',
       welcome: 'Welcome!',
-      loginSuccess: 'You are now logged in'
+      loginSuccess: 'You are now logged in',
+      forgotPassword: 'Forgot password?',
+      resetHere: 'Reset here',
+      leaderLogin: 'Are you a facilitator/trainer?',
+      leaderLoginLink: 'Log in here'
     },
     ar: {
       title: 'تسجيل دخول الأعضاء',
@@ -49,7 +57,11 @@ const MemberLogin = () => {
       loggingIn: 'جاري تسجيل الدخول...',
       backToHome: 'العودة إلى الصفحة الرئيسية',
       welcome: 'أهلاً وسهلاً!',
-      loginSuccess: 'تم تسجيل الدخول بنجاح'
+      loginSuccess: 'تم تسجيل الدخول بنجاح',
+      forgotPassword: 'نسيت كلمة المرور؟',
+      resetHere: 'إعادة التعيين هنا',
+      leaderLogin: 'هل أنت ميسر/مدرب؟',
+      leaderLoginLink: 'سجل الدخول هنا'
     }
   };
 
