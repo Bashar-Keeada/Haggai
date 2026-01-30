@@ -169,10 +169,16 @@ const MemberLogin = () => {
                 </Button>
               </form>
 
-              <div className="mt-6 text-center">
+              <div className="mt-6 text-center space-y-3">
                 <p className="text-sm text-stone-500">
-                  Glömt lösenord? <Link to="/medlem/glomt-losenord" className="text-haggai hover:underline font-medium">Återställ här</Link>
+                  {txt.forgotPassword} <Link to="/medlem/glomt-losenord" className="text-haggai hover:underline font-medium">{txt.resetHere}</Link>
                 </p>
+                
+                <div className="border-t border-stone-200 pt-4">
+                  <p className="text-sm text-stone-600">
+                    {txt.leaderLogin} <Link to="/ledare/login" className="text-haggai hover:underline font-medium">{txt.leaderLoginLink}</Link>
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>
