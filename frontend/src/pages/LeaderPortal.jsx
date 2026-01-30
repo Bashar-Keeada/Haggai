@@ -200,6 +200,7 @@ const LeaderPortal = () => {
     
     fetchLeaderData(token);
     fetchSessions(token);
+    fetchAgendas();
   }, []);
 
   const fetchLeaderData = async (token) => {
@@ -237,6 +238,18 @@ const LeaderPortal = () => {
       }
     } catch (err) {
       console.error('Error fetching sessions:', err);
+    }
+  };
+
+  const fetchAgendas = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/public/agendas`);
+      if (response.ok) {
+        const data = await response.json();
+        setAgendas(data);
+      }
+    } catch (err) {
+      console.error('Error fetching agendas:', err);
     }
   };
 
