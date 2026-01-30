@@ -82,7 +82,9 @@ const AdminLeaders = () => {
         registered: 'Registrerad',
         expired: 'Utgången',
         sentAt: 'Skickad',
-        resend: 'Skicka igen'
+        resend: 'Skicka igen',
+        copyLink: 'Kopiera länk',
+        linkCopied: 'Länk kopierad!'
       },
       registrations: {
         noRegistrations: 'Inga registreringar väntar på godkännande.',
