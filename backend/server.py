@@ -6565,6 +6565,104 @@ async def leader_login(input: LeaderLogin):
     }
 
 
+@api_router.post("/leaders/forgot-password")
+async def leader_forgot_password(request: ForgotPasswordRequest):
+    """Send password reset email to leader"""
+    leader = await db.leader_registrations.find_one(
+        {"email": request.email.lower()},
+        {"_id": 0}
+    )
+    
+    if not leader:
+        # Also check in leaders collection
+        leader = await db.leaders.find_one(
+            {"email": request.email.lower()},
+            {"_id": 0}
+        )
+    
+    if not leader:
+        return {"success": True, "message": "If email exists, reset link sent"}
+    
+    reset_token = secrets.token_urlsafe(32)
+    expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
+    
+    await db.password_resets.insert_one({
+        "id": str(uuid.uuid4()),
+        "user_id": leader['id'],
+        "user_type": "leader",
+        "token": reset_token,
+        "email": leader['email'],
+        "expires_at": expires_at.isoformat(),
+        "used": False,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    await send_password_reset_email(
+        leader['email'],
+        leader['name'],
+        reset_token,
+        "leader"
+    )
+    
+    return {"success": True, "message": "Reset link sent"}
+
+
+@api_router.get("/leaders/validate-reset-token/{token}")
+async def validate_leader_reset_token(token: str):
+    """Validate if reset token is valid"""
+    reset_record = await db.password_resets.find_one(
+        {"token": token, "user_type": "leader", "used": False},
+        {"_id": 0}
+    )
+    
+    if not reset_record:
+        raise HTTPException(status_code=404, detail="Invalid token")
+    
+    expires_at = datetime.fromisoformat(reset_record['expires_at'].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=410, detail="Token expired")
+    
+    return {"valid": True}
+
+
+@api_router.post("/leaders/reset-password")
+async def leader_reset_password(request: ResetPasswordRequest):
+    """Reset leader password using token"""
+    reset_record = await db.password_resets.find_one(
+        {"token": request.token, "user_type": "leader", "used": False},
+        {"_id": 0}
+    )
+    
+    if not reset_record:
+        raise HTTPException(status_code=404, detail="Invalid token")
+    
+    expires_at = datetime.fromisoformat(reset_record['expires_at'].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=410, detail="Token expired")
+    
+    password_hash = bcrypt.hashpw(request.new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    
+    # Update in leader_registrations
+    result = await db.leader_registrations.update_one(
+        {"id": reset_record['user_id']},
+        {"$set": {"password_hash": password_hash, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Also try to update in leaders collection if not found
+    if result.matched_count == 0:
+        await db.leaders.update_one(
+            {"id": reset_record['user_id']},
+            {"$set": {"password_hash": password_hash, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
+    
+    await db.password_resets.update_one(
+        {"token": request.token},
+        {"$set": {"used": True, "used_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    return {"success": True, "message": "Password reset successfully"}
+
+
 @api_router.post("/leaders/me/documents")
 async def upload_leader_document(
     document_type: str = None,
