@@ -1833,7 +1833,7 @@ class NominationShareCreate(BaseModel):
 
 @api_router.post("/nomination-shares")
 async def create_nomination_shares(input: NominationShareCreate):
-    """Create nomination share links for multiple recipients with unique tracking"""
+    """Create nominations for multiple recipients and return registration form links"""
     workshop = await db.workshops.find_one({"id": input.workshop_id}, {"_id": 0})
     if not workshop:
         raise HTTPException(status_code=404, detail="Workshop not found")
@@ -1848,12 +1848,35 @@ async def create_nomination_shares(input: NominationShareCreate):
     for recipient in input.recipients:
         share_token = secrets.token_urlsafe(16)
         share_id = str(uuid.uuid4())
+        nomination_id = str(uuid.uuid4())
         
+        # Create a nomination for each recipient
+        nomination_doc = {
+            "id": nomination_id,
+            "nominee_name": recipient.name,
+            "nominee_phone": recipient.contact if recipient.contact_type == "phone" else "",
+            "nominee_email": recipient.contact if recipient.contact_type == "email" else "",
+            "nominator_name": input.sender_name,
+            "nominator_email": input.sender_email or "",
+            "nominator_phone": input.sender_phone or "",
+            "event_id": input.workshop_id,
+            "event_title": workshop_title,
+            "status": "approved",
+            "direct_invitation": True,
+            "registration_completed": False,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.nominations.insert_one(nomination_doc)
+        
+        # Create share tracking record
         share_doc = {
             "id": share_id,
             "token": share_token,
             "workshop_id": input.workshop_id,
             "workshop_title": workshop_title,
+            "nomination_id": nomination_id,
             "recipient_name": recipient.name,
             "recipient_contact": recipient.contact,
             "recipient_contact_type": recipient.contact_type,
@@ -1862,12 +1885,23 @@ async def create_nomination_shares(input: NominationShareCreate):
             "sender_phone": input.sender_phone,
             "message": input.message,
             "send_method": input.send_method,
-            "status": "created",  # created, sent, opened, responded
-            "link": f"{frontend_url}/nominera/{input.workshop_id}?ref={share_token}",
+            "status": "created",
+            "link": f"{frontend_url}/registrering/{nomination_id}?lang=ar&ref={share_token}",
             "opened_at": None,
             "responded_at": None,
-            "response_nomination_id": None,
             "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.nomination_shares.insert_one(share_doc)
+        shares_created.append({
+            "id": share_id,
+            "token": share_token,
+            "nomination_id": nomination_id,
+            "recipient_name": recipient.name,
+            "recipient_contact": recipient.contact,
+            "link": share_doc["link"],
+            "status": "created"
+        })
         }
         
         await db.nomination_shares.insert_one(share_doc)
