@@ -10,6 +10,12 @@ const Footer = () => {
   const { t, isRTL, language } = useLanguage();
   const { isAdminAuthenticated, logoutAdmin } = useAuth();
 
+  const leaderExpLabel = {
+    sv: 'Leader Experience',
+    en: 'Leader Experience',
+    ar: 'خبرة قادة حجاي'
+  };
+
   const handleAdminLogout = () => {
     logoutAdmin();
     toast.success(language === 'sv' ? 'Admin utloggad' : language === 'ar' ? 'تم تسجيل خروج المدير' : 'Admin logged out');
