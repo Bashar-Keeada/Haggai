@@ -337,6 +337,19 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
     });
   };
 
+  const copyWhatsAppMessage = async () => {
+    const success = await safeCopyToClipboard(whatsappModal.message);
+    if (success) {
+      toast.success(t.messageCopied);
+    }
+  };
+
+  const openWhatsAppDirect = () => {
+    window.open(whatsappModal.link, '_blank');
+    markAsSent(whatsappModal.recipientId);
+    setWhatsappModal({ open: false, message: '', phone: '', link: '' });
+  };
+
   const sendViaEmail = async (recipient) => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/nomination-shares/send-email?share_id=${recipient.id}&recipient_email=${recipient.recipient_contact}&recipient_name=${recipient.recipient_name}&sender_name=${senderInfo.name}&workshop_title=${workshopTitle}&link=${recipient.link}&message=${message || ''}`, {
