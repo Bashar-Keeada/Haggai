@@ -26,6 +26,7 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
   const [shareResults, setShareResults] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [contactsSupported, setContactsSupported] = useState(false);
+  const [whatsappModal, setWhatsappModal] = useState({ open: false, message: '', phone: '', link: '' });
 
   const txt = {
     sv: {
