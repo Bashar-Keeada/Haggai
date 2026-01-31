@@ -214,6 +214,7 @@ const AdminWorkshops = () => {
       online: 'عبر الإنترنت',
       tot: 'تدريب المدربين',
       shareLink: 'مشاركة رابط الترشيح',
+      shareToMultiple: 'مشاركة للعديد',
       showQR: 'عرض رمز QR',
       nominationLink: 'رابط الترشيح',
       qrCodeTitle: 'رمز QR للترشيح',
