@@ -1737,8 +1737,22 @@ async def get_nominations(status: Optional[str] = None, event_id: Optional[str] 
 async def get_nomination_stats():
     """Get nomination statistics"""
     total = await db.nominations.count_documents({})
-    pending = await db.nominations.count_documents({"status": "pending"})
-    approved = await db.nominations.count_documents({"status": "approved"})
+    
+    # Pending: status=pending OR (status=approved AND direct_invitation=True AND registration_completed=False)
+    pending_traditional = await db.nominations.count_documents({"status": "pending"})
+    pending_direct = await db.nominations.count_documents({
+        "status": "approved", 
+        "direct_invitation": True, 
+        "registration_completed": {"$ne": True}
+    })
+    pending = pending_traditional + pending_direct
+    
+    # Approved: status=approved AND registration_completed=True
+    approved = await db.nominations.count_documents({
+        "status": "approved",
+        "registration_completed": True
+    })
+    
     rejected = await db.nominations.count_documents({"status": "rejected"})
     contacted = await db.nominations.count_documents({"status": "contacted"})
     
