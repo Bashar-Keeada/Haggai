@@ -315,23 +315,26 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
   };
 
   const sendViaWhatsApp = (recipient, link) => {
-    const text = encodeURIComponent(`${senderInfo.name} ${language === 'ar' ? 'يدعوك للترشيح في' : language === 'sv' ? 'bjuder in dig till' : 'invites you to nominate for'} ${workshopTitle}:\n\n${message ? message + '\n\n' : ''}${link}`);
+    const plainMessage = `${senderInfo.name} ${language === 'ar' ? 'يدعوك للترشيح في' : language === 'sv' ? 'bjuder in dig till' : 'invites you to nominate for'} ${workshopTitle}:\n\n${message ? message + '\n\n' : ''}${link}`;
     let phone = recipient.recipient_contact.replace(/[^0-9+]/g, '');
     
     // Convert Swedish phone number format (07...) to international format (467...)
     if (phone.startsWith('07') && phone.length === 10) {
       phone = '46' + phone.substring(1);
     } else if (phone.startsWith('0') && !phone.startsWith('00')) {
-      // Other Swedish numbers starting with 0
       phone = '46' + phone.substring(1);
     } else if (phone.startsWith('+')) {
       phone = phone.substring(1);
     }
     
-    const whatsappUrl = `https://wa.me/${phone}?text=${text}`;
-    console.log('WhatsApp URL:', whatsappUrl);
-    window.open(whatsappUrl, '_blank');
-    markAsSent(recipient.id);
+    // Show modal with message to copy
+    setWhatsappModal({
+      open: true,
+      message: plainMessage,
+      phone: phone,
+      link: `https://wa.me/${phone}?text=${encodeURIComponent(plainMessage)}`,
+      recipientId: recipient.id
+    });
   };
 
   const sendViaEmail = async (recipient) => {
