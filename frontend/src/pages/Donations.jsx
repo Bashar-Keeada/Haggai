@@ -534,8 +534,8 @@ const Donations = () => {
           </h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {suggestedAmounts.map((item) => (
-              <Card key={item.amount} className="border-2 border-stone-100 hover:border-haggai transition-all cursor-pointer group">
-                <CardContent className="p-6 text-center">
+              <Card key={item.amount} className={`border-2 border-stone-100 hover:border-haggai transition-all cursor-pointer group ${isRTL ? 'text-right' : ''}`}>
+                <CardContent className={`p-6 ${isRTL ? 'text-right' : 'text-center'}`}>
                   <p className="text-3xl font-bold text-haggai mb-2">{item.amount} kr</p>
                   <p className="text-sm text-stone-500">{item.description}</p>
                 </CardContent>
