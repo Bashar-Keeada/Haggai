@@ -158,6 +158,7 @@ const AdminWorkshops = () => {
       online: 'Online',
       tot: 'ToT',
       shareLink: 'Share nomination link',
+      shareToMultiple: 'Share to multiple',
       showQR: 'Show QR code',
       nominationLink: 'Nomination link',
       qrCodeTitle: 'QR code for nomination',
