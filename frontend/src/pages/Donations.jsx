@@ -506,7 +506,7 @@ const Donations = () => {
       {/* Impact Section */}
       <section className="py-24 bg-cream-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
+          <div className={`mb-16 ${isRTL ? 'text-right' : 'text-center'}`}>
             <h2 className="text-4xl font-bold text-stone-800 mb-4">{txt.yourImpact}</h2>
           </div>
           
