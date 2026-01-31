@@ -138,6 +138,8 @@ const PublicNominationForm = () => {
       required: 'يرجى ملء جميع الحقول المطلوبة',
       errorTitle: 'التدريب غير موجود',
       errorMessage: 'هذا التدريب لم يعد موجودًا أو الرابط غير صحيح.',
+      shareToMultiple: 'دعوة عدة أشخاص',
+      shareToMultipleDesc: 'إرسال الدعوة لعدة أشخاص في وقت واحد',
       
       // Success page
       successTitle: 'تم إنشاء الدعوة!',
