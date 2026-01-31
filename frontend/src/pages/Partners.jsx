@@ -234,10 +234,10 @@ const Partners = () => {
 
       {/* Become a Partner CTA */}
       <section className="py-24 bg-haggai-dark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Handshake className="h-16 w-16 text-haggai-200 mx-auto mb-6" />
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${isRTL ? 'text-right' : 'text-center'}`}>
+          <Handshake className={`h-16 w-16 text-haggai-200 mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`} />
           <h2 className="text-3xl font-bold text-white mb-4">{txt.becomePartner}</h2>
-          <p className="text-haggai-200 text-lg mb-8 max-w-2xl mx-auto">
+          <p className={`text-haggai-200 text-lg mb-8 max-w-2xl ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
             {txt.becomePartnerDesc}
           </p>
           <a href="/kontakt">
