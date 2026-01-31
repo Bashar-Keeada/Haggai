@@ -487,6 +487,24 @@ ${registrationLink}`;
             </div>
           </div>
 
+          {/* Share to Multiple Button - TOP POSITION */}
+          <Card className="border-2 border-blue-400 bg-blue-50 shadow-lg">
+            <CardContent className="p-4">
+              <Button 
+                type="button"
+                variant="outline"
+                onClick={() => setShowShareDialog(true)}
+                className="w-full border-2 border-blue-500 text-blue-600 hover:bg-blue-100 py-5 text-lg font-semibold"
+              >
+                <Users className="h-5 w-5 mr-2" />
+                {txt.shareToMultiple}
+              </Button>
+              <p className="text-center text-sm text-blue-600 mt-2 font-medium">
+                {txt.shareToMultipleDesc}
+              </p>
+            </CardContent>
+          </Card>
+
           {/* Nominee Info - FIRST */}
           <Card className="border-0 shadow-lg">
             <CardContent className="p-6">
