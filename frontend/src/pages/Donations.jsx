@@ -547,8 +547,8 @@ const Donations = () => {
 
       {/* Thank You Section */}
       <section className="py-24 text-white" style={{ backgroundColor: '#0f403a' }}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Heart className="h-16 w-16 text-white/60 mx-auto mb-6" />
+        <div className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 ${isRTL ? 'text-right' : 'text-center'}`}>
+          <Heart className={`h-16 w-16 text-white/60 mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`} />
           <h2 className="text-3xl font-bold mb-4 text-white">{txt.thankYou}</h2>
           <p className="text-white/80 text-lg mb-8">
             {txt.thankYouDesc}
