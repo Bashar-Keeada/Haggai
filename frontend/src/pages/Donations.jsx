@@ -346,16 +346,16 @@ const Donations = () => {
               <CardContent className={isRTL ? 'text-right' : ''}>
                 <div className="space-y-3">
                   {[
-                    { label: txt.bankName, value: donationSettings.bank_name, key: 'bank' },
-                    { label: txt.accountNumber, value: donationSettings.account_number, key: 'account' },
-                    { label: txt.iban, value: donationSettings.iban, key: 'iban' },
-                    { label: txt.bic, value: donationSettings.bic, key: 'bic' },
-                    { label: txt.reference, value: donationSettings.reference, key: 'ref' }
+                    { label: txt.bankName, value: donationSettings.bank_name, key: 'bank', isNumber: false },
+                    { label: txt.accountNumber, value: donationSettings.account_number, key: 'account', isNumber: true },
+                    { label: txt.iban, value: donationSettings.iban, key: 'iban', isNumber: true },
+                    { label: txt.bic, value: donationSettings.bic, key: 'bic', isNumber: true },
+                    { label: txt.reference, value: donationSettings.reference, key: 'ref', isNumber: false }
                   ].map((item) => (
                     <div key={item.key} className={`flex items-center justify-between p-3 bg-stone-50 rounded-xl ${isRTL ? 'flex-row-reverse' : ''}`}>
                       <div className={isRTL ? 'text-right' : ''}>
                         <p className="text-xs text-stone-500">{item.label}</p>
-                        <p className="font-medium text-stone-800">{item.value}</p>
+                        <p className="font-medium text-stone-800" dir={item.isNumber ? 'ltr' : undefined}>{item.value}</p>
                       </div>
                       <Button 
                         size="sm" 
