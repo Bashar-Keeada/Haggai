@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Calendar, MapPin, Users, Send, CheckCircle2, AlertCircle, Globe, Phone, User, Copy, Check, MessageCircle } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -13,6 +13,8 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const PublicNominationForm = () => {
   const { workshopId } = useParams();
+  const [searchParams] = useSearchParams();
+  const refToken = searchParams.get('ref'); // Track reference token for shared links
   const { language: globalLanguage } = useLanguage();
   const [formLanguage, setFormLanguage] = useState(globalLanguage);
   const isRTL = formLanguage === 'ar';
