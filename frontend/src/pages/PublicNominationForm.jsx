@@ -244,6 +244,9 @@ const PublicNominationForm = () => {
         const link = `${window.location.origin}/registrering/${result.id}?lang=ar`;
         setRegistrationLink(link);
         setSubmitted(true);
+        
+        // Track that this shared link resulted in a nomination
+        await trackShareResponse(result.id);
       } else {
         throw new Error('Failed to submit');
       }
