@@ -1801,6 +1801,217 @@ async def delete_nomination(nomination_id: str):
     return {"message": "Nomination deleted successfully"}
 
 
+# ==================== NOMINATION SHARING SYSTEM ====================
+
+class NominationShareRecipient(BaseModel):
+    name: str
+    contact: str  # email or phone
+    contact_type: str  # "email" or "phone"
+
+class NominationShareCreate(BaseModel):
+    workshop_id: str
+    recipients: List[NominationShareRecipient]
+    sender_name: str
+    sender_email: Optional[str] = None
+    sender_phone: Optional[str] = None
+    message: Optional[str] = None
+    send_method: str = "link"  # "sms", "email", "whatsapp", "link"
+
+@api_router.post("/nomination-shares")
+async def create_nomination_shares(input: NominationShareCreate):
+    """Create nomination share links for multiple recipients with unique tracking"""
+    workshop = await db.workshops.find_one({"id": input.workshop_id}, {"_id": 0})
+    if not workshop:
+        raise HTTPException(status_code=404, detail="Workshop not found")
+    
+    workshop_title = workshop.get("title", "")
+    if isinstance(workshop_title, dict):
+        workshop_title = workshop_title.get("sv", workshop_title.get("ar", "Workshop"))
+    
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://haggai.se')
+    shares_created = []
+    
+    for recipient in input.recipients:
+        share_token = secrets.token_urlsafe(16)
+        share_id = str(uuid.uuid4())
+        
+        share_doc = {
+            "id": share_id,
+            "token": share_token,
+            "workshop_id": input.workshop_id,
+            "workshop_title": workshop_title,
+            "recipient_name": recipient.name,
+            "recipient_contact": recipient.contact,
+            "recipient_contact_type": recipient.contact_type,
+            "sender_name": input.sender_name,
+            "sender_email": input.sender_email,
+            "sender_phone": input.sender_phone,
+            "message": input.message,
+            "send_method": input.send_method,
+            "status": "created",  # created, sent, opened, responded
+            "link": f"{frontend_url}/nominera/{input.workshop_id}?ref={share_token}",
+            "opened_at": None,
+            "responded_at": None,
+            "response_nomination_id": None,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.nomination_shares.insert_one(share_doc)
+        shares_created.append({
+            "id": share_id,
+            "token": share_token,
+            "recipient_name": recipient.name,
+            "recipient_contact": recipient.contact,
+            "link": share_doc["link"],
+            "status": "created"
+        })
+    
+    return {
+        "success": True,
+        "shares_count": len(shares_created),
+        "shares": shares_created,
+        "workshop_title": workshop_title
+    }
+
+
+@api_router.get("/nomination-shares/track/{token}")
+async def track_nomination_share_open(token: str):
+    """Track when a shared nomination link is opened"""
+    share = await db.nomination_shares.find_one({"token": token})
+    if not share:
+        raise HTTPException(status_code=404, detail="Share not found")
+    
+    # Update status to opened if not already responded
+    if share.get("status") in ["created", "sent"]:
+        await db.nomination_shares.update_one(
+            {"token": token},
+            {"$set": {
+                "status": "opened",
+                "opened_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+    
+    return {
+        "workshop_id": share["workshop_id"],
+        "token": token
+    }
+
+
+@api_router.post("/nomination-shares/respond/{token}")
+async def track_nomination_share_response(token: str, nomination_id: str):
+    """Track when a nomination form is submitted via a shared link"""
+    share = await db.nomination_shares.find_one({"token": token})
+    if not share:
+        return {"success": True}  # Don't fail if token not found
+    
+    await db.nomination_shares.update_one(
+        {"token": token},
+        {"$set": {
+            "status": "responded",
+            "responded_at": datetime.now(timezone.utc).isoformat(),
+            "response_nomination_id": nomination_id
+        }}
+    )
+    
+    return {"success": True}
+
+
+@api_router.get("/nomination-shares")
+async def get_nomination_shares(workshop_id: Optional[str] = None, sender_email: Optional[str] = None):
+    """Get all nomination shares with optional filtering"""
+    query = {}
+    if workshop_id:
+        query["workshop_id"] = workshop_id
+    if sender_email:
+        query["sender_email"] = sender_email
+    
+    shares = await db.nomination_shares.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    
+    # Calculate stats
+    stats = {
+        "total": len(shares),
+        "created": len([s for s in shares if s.get("status") == "created"]),
+        "sent": len([s for s in shares if s.get("status") == "sent"]),
+        "opened": len([s for s in shares if s.get("status") == "opened"]),
+        "responded": len([s for s in shares if s.get("status") == "responded"])
+    }
+    
+    return {"shares": shares, "stats": stats}
+
+
+@api_router.put("/nomination-shares/{share_id}/mark-sent")
+async def mark_nomination_share_sent(share_id: str):
+    """Mark a share as sent (after user confirms sending via SMS/WhatsApp/etc)"""
+    result = await db.nomination_shares.update_one(
+        {"id": share_id},
+        {"$set": {
+            "status": "sent",
+            "sent_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Share not found")
+    
+    return {"success": True}
+
+
+@api_router.post("/nomination-shares/send-email")
+async def send_nomination_share_email(share_id: str, recipient_email: str, recipient_name: str, 
+                                       sender_name: str, workshop_title: str, link: str, 
+                                       message: Optional[str] = None):
+    """Send nomination share via email"""
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;" dir="rtl">
+        <div style="background: linear-gradient(135deg, #014D73 0%, #012d44 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">📋 دعوة للترشيح</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Haggai Sweden</p>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">مرحباً <strong>{recipient_name}</strong>،</p>
+            
+            <p>لقد قام <strong>{sender_name}</strong> بدعوتك للمشاركة في <strong>{workshop_title}</strong>.</p>
+            
+            {f'<p style="background: white; padding: 15px; border-radius: 8px; border-right: 4px solid #014D73;">{message}</p>' if message else ''}
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{link}" style="display: inline-block; background: #014D73; color: white; padding: 15px 40px; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 16px;">
+                    سجل الآن ←
+                </a>
+            </div>
+            
+            <p style="color: #666; font-size: 14px;">انقر على الزر أعلاه للتسجيل في الورشة.</p>
+            
+            <p style="margin-top: 30px;">مع تحيات،<br><strong>Haggai Sweden</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        await asyncio.to_thread(resend.Emails.send, {
+            "from": SENDER_EMAIL,
+            "to": [recipient_email],
+            "subject": f"📋 دعوة للترشيح - {workshop_title}",
+            "html": html_content
+        })
+        
+        # Mark as sent
+        await db.nomination_shares.update_one(
+            {"id": share_id},
+            {"$set": {"status": "sent", "sent_at": datetime.now(timezone.utc).isoformat()}}
+        )
+        
+        return {"success": True}
+    except Exception as e:
+        logging.error(f"Failed to send nomination share email: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to send email")
+
+
 @api_router.post("/nominations/{nomination_id}/approve")
 async def approve_nomination(nomination_id: str, admin_notes: Optional[str] = None):
     """Approve a nomination and send invitation to the nominee"""
