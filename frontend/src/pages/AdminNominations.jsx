@@ -217,16 +217,21 @@ const AdminNominations = () => {
 
   const fetchNominations = async () => {
     try {
-      const url = statusFilter === 'all' 
-        ? `${BACKEND_URL}/api/nominations`
-        : `${BACKEND_URL}/api/nominations?status=${statusFilter}`;
+      // Always fetch all nominations, then filter in frontend
+      const shouldFilterLocally = statusFilter === 'pending' || statusFilter === 'approved';
+      const url = shouldFilterLocally 
+        ? `${BACKEND_URL}/api/nominations`  // Fetch all for smart filtering
+        : statusFilter === 'all'
+          ? `${BACKEND_URL}/api/nominations`
+          : `${BACKEND_URL}/api/nominations?status=${statusFilter}`;
+      
       const response = await fetch(url);
       if (response.ok) {
         let data = await response.json();
         
         // Apply smart filtering for pending/approved based on registration_completed
         if (statusFilter === 'pending') {
-          // Show those waiting for registration (approved but not completed)
+          // Show those waiting for registration (pending OR approved but not completed)
           data = data.filter(nom => 
             (nom.status === 'pending') || 
             (nom.status === 'approved' && nom.direct_invitation && !nom.registration_completed)
