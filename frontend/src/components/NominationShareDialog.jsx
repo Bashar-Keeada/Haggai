@@ -240,15 +240,49 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
     }
   };
 
-  const copyLink = (link) => {
-    navigator.clipboard.writeText(link);
-    toast.success(t.linksCopied);
+  const safeCopyToClipboard = async (text) => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch (err) {
+      // Fallback below
+    }
+    
+    // Fallback method
+    try {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      return true;
+    } catch (e) {
+      return false;
+    }
   };
 
-  const copyAllLinks = () => {
+  const copyLink = async (link) => {
+    const success = await safeCopyToClipboard(link);
+    if (success) {
+      toast.success(t.linksCopied);
+    } else {
+      toast.error('Could not copy link');
+    }
+  };
+
+  const copyAllLinks = async () => {
     const allLinks = shareResults.map(s => `${s.recipient_name}: ${s.link}`).join('\n');
-    navigator.clipboard.writeText(allLinks);
-    toast.success(t.linksCopied);
+    const success = await safeCopyToClipboard(allLinks);
+    if (success) {
+      toast.success(t.linksCopied);
+    } else {
+      toast.error('Could not copy links');
+    }
   };
 
   const sendViaSMS = (recipient, link) => {
