@@ -102,6 +102,7 @@ const AdminWorkshops = () => {
       online: 'Online',
       tot: 'ToT',
       shareLink: 'Dela nomineringslänk',
+      shareToMultiple: 'Dela till flera',
       showQR: 'Visa QR-kod',
       nominationLink: 'Nomineringslänk',
       qrCodeTitle: 'QR-kod för nominering',
