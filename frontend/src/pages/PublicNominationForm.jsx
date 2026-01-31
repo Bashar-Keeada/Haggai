@@ -496,23 +496,31 @@ ${registrationLink}`;
             </div>
           </div>
 
-          {/* Share to Multiple Button - TOP POSITION */}
-          <Card className="border-2 border-blue-400 bg-blue-50 shadow-lg">
-            <CardContent className="p-4">
-              <Button 
-                type="button"
-                variant="outline"
-                onClick={() => setShowShareDialog(true)}
-                className="w-full border-2 border-blue-500 text-blue-600 hover:bg-blue-100 py-5 text-lg font-semibold"
-              >
-                <Users className="h-5 w-5 mr-2" />
-                {txt.shareToMultiple}
-              </Button>
-              <p className="text-center text-sm text-blue-600 mt-2 font-medium">
-                {txt.shareToMultipleDesc}
-              </p>
-            </CardContent>
-          </Card>
+          {/* Choose Option - One or Multiple */}
+          <div className="flex gap-3 p-1 bg-stone-100 rounded-lg">
+            <button
+              type="button"
+              onClick={() => {}}
+              className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md bg-white shadow-sm border-2 border-haggai text-haggai font-medium"
+            >
+              <User className="h-4 w-4" />
+              <div className="text-left">
+                <div className="text-sm font-semibold">{txt.inviteOne}</div>
+                <div className="text-xs opacity-75">{txt.inviteOneDesc}</div>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowShareDialog(true)}
+              className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md bg-stone-50 hover:bg-white transition-colors text-stone-600 hover:text-haggai font-medium border-2 border-transparent hover:border-haggai"
+            >
+              <Users className="h-4 w-4" />
+              <div className="text-left">
+                <div className="text-sm font-semibold">{txt.shareToMultiple}</div>
+                <div className="text-xs opacity-75">{txt.shareToMultipleDesc}</div>
+              </div>
+            </button>
+          </div>
 
           {/* Nominee Info - FIRST */}
           <Card className="border-0 shadow-lg">
