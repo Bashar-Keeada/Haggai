@@ -553,7 +553,7 @@ const Donations = () => {
           <p className="text-white/80 text-lg mb-8">
             {txt.thankYouDesc}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className={`flex flex-col sm:flex-row gap-4 ${isRTL ? 'justify-end' : 'justify-center'}`}>
             <a href="/kontakt">
               <Button variant="outline" className="border-white text-white hover:bg-white hover:text-stone-800">
                 {txt.questions} {txt.contactUs}
