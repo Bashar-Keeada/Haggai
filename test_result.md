@@ -342,10 +342,10 @@ frontend:
     status_history:
       - working: false
         agent: "testing"
-        comment: "❌ CRITICAL BUG: 'Kopiera länk' button inside QR dialog passes qrWorkshop.id instead of qrWorkshop object to copyNominationLink function (line 879). This causes the copied link to be 'https://haggai-portal-2.preview.emergentagent.com/nominera/undefined' instead of the correct workshop ID. FIX: Change line 879 from onClick={() => copyNominationLink(qrWorkshop.id)} to onClick={() => copyNominationLink(qrWorkshop)}. The main 'Dela nomineringslänk' button (line 569) works correctly. QR dialog opens properly, QR code displays correctly, and link format is correct when using the main share button."
+        comment: "❌ CRITICAL BUG: 'Kopiera länk' button inside QR dialog passes qrWorkshop.id instead of qrWorkshop object to copyNominationLink function (line 879). This causes the copied link to be 'https://nomination-mgmt.preview.emergentagent.com/nominera/undefined' instead of the correct workshop ID. FIX: Change line 879 from onClick={() => copyNominationLink(qrWorkshop.id)} to onClick={() => copyNominationLink(qrWorkshop)}. The main 'Dela nomineringslänk' button (line 569) works correctly. QR dialog opens properly, QR code displays correctly, and link format is correct when using the main share button."
       - working: true
         agent: "testing"
-        comment: "✅ BUG FIX VERIFIED! Comprehensive testing completed: Login with 'Haggai2030' successful, navigation to /admin/workshops working, found 5 workshops with share buttons. Tested first workshop (ID: e72af028-aa6c-4cdd-8b98-4c360e27798a). 'Dela nomineringslänk' button opens QR dialog correctly. CRITICAL FIX CONFIRMED: Nomination link now displays correctly as 'https://haggai-portal-2.preview.emergentagent.com/nominera/e72af028-aa6c-4cdd-8b98-4c360e27798a' - NO 'undefined' in the link. Line 879 has been corrected to pass qrWorkshop object instead of qrWorkshop.id. 'Kopiera länk' button is clickable (clipboard API limitation in automated tests is expected). 'Visa QR-kod' button works separately and shows same correct link. All functionality working as expected."
+        comment: "✅ BUG FIX VERIFIED! Comprehensive testing completed: Login with 'Haggai2030' successful, navigation to /admin/workshops working, found 5 workshops with share buttons. Tested first workshop (ID: e72af028-aa6c-4cdd-8b98-4c360e27798a). 'Dela nomineringslänk' button opens QR dialog correctly. CRITICAL FIX CONFIRMED: Nomination link now displays correctly as 'https://nomination-mgmt.preview.emergentagent.com/nominera/e72af028-aa6c-4cdd-8b98-4c360e27798a' - NO 'undefined' in the link. Line 879 has been corrected to pass qrWorkshop object instead of qrWorkshop.id. 'Kopiera länk' button is clickable (clipboard API limitation in automated tests is expected). 'Visa QR-kod' button works separately and shows same correct link. All functionality working as expected."
 
   - task: "Participant Password Reset Flow"
     implemented: true
@@ -422,7 +422,7 @@ agent_communication:
     message: |
       🔍 PUBLIC AGENDA PAGE TESTING COMPLETED - CRITICAL BUG FOUND
       
-      **TESTED URL:** https://haggai-portal-2.preview.emergentagent.com/program/f60eb66e-3956-428d-8060-181ceeb498f8
+      **TESTED URL:** https://nomination-mgmt.preview.emergentagent.com/program/f60eb66e-3956-428d-8060-181ceeb498f8
       
       ❌ CRITICAL ISSUE: DAY HEADERS NOT VISIBLE
       • Day headers exist in DOM (4 headers found: Dag 1-4)
@@ -516,7 +516,7 @@ agent_communication:
       • Leader Experience Applications API: All endpoints including program-specific queries working
       
       📊 RESULTS: 15/15 API tests passed (100% success rate)
-      🔗 Backend URL: https://haggai-portal-2.preview.emergentagent.com/api
+      🔗 Backend URL: https://nomination-mgmt.preview.emergentagent.com/api
       📝 Test file created: /app/backend_test.py
       
       All backend APIs are production-ready. The main agent can now focus on frontend testing or summarize completion.
@@ -645,8 +645,8 @@ agent_communication:
       • "Kopiera länk" button inside QR dialog has a bug (Line 879 in AdminWorkshops.jsx)
       • Current code: onClick={() => copyNominationLink(qrWorkshop.id)}
       • Issue: Function expects workshop object but receives only ID
-      • Result: Link copied is "https://haggai-portal-2.preview.emergentagent.com/nominera/undefined"
-      • Expected: "https://haggai-portal-2.preview.emergentagent.com/nominera/{workshopId}"
+      • Result: Link copied is "https://nomination-mgmt.preview.emergentagent.com/nominera/undefined"
+      • Expected: "https://nomination-mgmt.preview.emergentagent.com/nominera/{workshopId}"
       
       🔧 FIX REQUIRED:
       Change line 879 from:
@@ -663,7 +663,7 @@ agent_communication:
     message: |
       🎉 SPECIAL TEST REQUEST COMPLETED - LEADER INVITATION REGISTRATION LINK
       
-      **TESTED URL:** https://haggai-portal-2.preview.emergentagent.com/ledare/registrera/QmDoiQaNN70QCL1JkvZ0cApNG9nKYorFC1EJsmVCeNM
+      **TESTED URL:** https://nomination-mgmt.preview.emergentagent.com/ledare/registrera/QmDoiQaNN70QCL1JkvZ0cApNG9nKYorFC1EJsmVCeNM
       
       ✅ ALL TESTS PASSED - WORKING PERFECTLY:
       
@@ -714,8 +714,8 @@ agent_communication:
       • "Dela nomineringslänk" button clicked - SUCCESS ✅
       • QR Dialog opened successfully - SUCCESS ✅
       • **CRITICAL FIX CONFIRMED**: Nomination link displays correctly:
-        * Expected: https://haggai-portal-2.preview.emergentagent.com/nominera/{workshop-id}
-        * Actual: https://haggai-portal-2.preview.emergentagent.com/nominera/e72af028-aa6c-4cdd-8b98-4c360e27798a
+        * Expected: https://nomination-mgmt.preview.emergentagent.com/nominera/{workshop-id}
+        * Actual: https://nomination-mgmt.preview.emergentagent.com/nominera/e72af028-aa6c-4cdd-8b98-4c360e27798a
         * ✅ NO "undefined" in the link!
       • Workshop ID correctly extracted and displayed - SUCCESS ✅
       
