@@ -58,6 +58,8 @@ const PublicNominationForm = () => {
       required: 'Vänligen fyll i alla obligatoriska fält',
       errorTitle: 'Utbildning hittades inte',
       errorMessage: 'Denna utbildning finns inte längre eller länken är felaktig.',
+      shareToMultiple: 'Bjud in flera personer',
+      shareToMultipleDesc: 'Skicka inbjudan till flera samtidigt',
       
       // Success page
       successTitle: 'Inbjudan skapad!',
