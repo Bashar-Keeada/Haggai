@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { Calendar, MapPin, Users, Send, CheckCircle2, AlertCircle, Globe, Phone, User, Copy, Check, MessageCircle } from 'lucide-react';
+import { Calendar, MapPin, Users, Send, CheckCircle2, AlertCircle, Globe, Phone, User, Copy, Check, MessageCircle, Share2 } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -8,6 +8,7 @@ import { Label } from '../components/ui/label';
 import { Badge } from '../components/ui/badge';
 import { useLanguage } from '../context/LanguageContext';
 import { toast } from 'sonner';
+import NominationShareDialog from '../components/NominationShareDialog';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -27,6 +28,7 @@ const PublicNominationForm = () => {
   const [nominationId, setNominationId] = useState(null);
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
 
   const [formData, setFormData] = useState({
     nominee_name: '',
