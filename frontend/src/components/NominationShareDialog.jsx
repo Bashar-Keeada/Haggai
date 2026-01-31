@@ -309,7 +309,9 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
       phone = phone.substring(1);
     }
     
-    window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+    const whatsappUrl = `https://wa.me/${phone}?text=${text}`;
+    console.log('WhatsApp URL:', whatsappUrl);
+    window.open(whatsappUrl, '_blank');
     markAsSent(recipient.id);
   };
 
