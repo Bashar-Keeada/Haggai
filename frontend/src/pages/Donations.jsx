@@ -266,7 +266,7 @@ const Donations = () => {
               <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
                 <Heart className="h-7 w-7 text-white" />
               </div>
-              <span className="text-white/70 font-medium text-sm tracking-wider uppercase">{language === 'sv' ? 'Ge en gåva' : language === 'ar' ? 'قدم هدية' : 'Make a Gift'}</span>
+              <span className="text-white/70 font-medium text-sm tracking-wider uppercase">{language === 'sv' ? 'Ge en gåva' : language === 'ar' ? 'تبرع' : 'Make a Gift'}</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
               {txt.pageTitle}
