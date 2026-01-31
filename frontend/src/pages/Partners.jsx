@@ -173,8 +173,8 @@ const Partners = () => {
 
       {partners.length === 0 ? (
         <section className="py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <Handshake className="h-20 w-20 text-stone-300 mx-auto mb-6" />
+          <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${isRTL ? 'text-right' : 'text-center'}`}>
+            <Handshake className={`h-20 w-20 text-stone-300 mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`} />
             <p className="text-xl text-stone-500">{txt.noPartners}</p>
           </div>
         </section>
