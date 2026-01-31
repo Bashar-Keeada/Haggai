@@ -100,6 +100,7 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
       createLinks: 'Create links',
       noRecipients: 'Add at least one recipient',
       linksCopied: 'Links copied!',
+      messageCopied: 'Message copied!',
       linksCreated: 'Links created!',
       sendNow: 'Send now',
       results: 'Results',
@@ -110,7 +111,12 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
         responded: 'Responded'
       },
       close: 'Close',
-      remove: 'Remove'
+      remove: 'Remove',
+      whatsappModalTitle: 'Send via WhatsApp',
+      whatsappModalDesc: 'Copy the message below and paste it in WhatsApp',
+      copyMessage: 'Copy message',
+      openWhatsapp: 'Open WhatsApp',
+      orOpenDirectly: 'Or try to open directly:'
     },
     ar: {
       title: 'مشاركة رابط الترشيح',
