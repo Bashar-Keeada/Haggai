@@ -266,11 +266,43 @@ const PublicNominationForm = () => {
     }
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(registrationLink);
-    setCopied(true);
-    toast.success(txt.copied);
-    setTimeout(() => setCopied(false), 2000);
+  const copyToClipboard = async () => {
+    try {
+      // Try modern Clipboard API first
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(registrationLink);
+      } else {
+        // Fallback for older browsers or restricted contexts
+        const textArea = document.createElement('textarea');
+        textArea.value = registrationLink;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+      setCopied(true);
+      toast.success(txt.copied);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      // Fallback method
+      const textArea = document.createElement('textarea');
+      textArea.value = registrationLink;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        setCopied(true);
+        toast.success(txt.copied);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (e) {
+        toast.error('Kunde inte kopiera länken');
+      }
+      document.body.removeChild(textArea);
+    }
   };
 
   const sendViaWhatsApp = () => {
