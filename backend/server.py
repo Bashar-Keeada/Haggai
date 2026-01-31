@@ -49,13 +49,18 @@ JWT_EXPIRATION_HOURS = 24 * 7  # 1 week
 # Create the main app without a prefix
 app = FastAPI()
 
-# Health check endpoint for Kubernetes
+# Health check endpoint for Kubernetes (root level)
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
+
+# Health check endpoint also under /api
+@api_router.get("/health")
+async def api_health_check():
+    return {"status": "healthy"}
 
 
 # Define Models
