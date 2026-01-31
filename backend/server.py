@@ -1902,17 +1902,6 @@ async def create_nomination_shares(input: NominationShareCreate):
             "link": share_doc["link"],
             "status": "created"
         })
-        }
-        
-        await db.nomination_shares.insert_one(share_doc)
-        shares_created.append({
-            "id": share_id,
-            "token": share_token,
-            "recipient_name": recipient.name,
-            "recipient_contact": recipient.contact,
-            "link": share_doc["link"],
-            "status": "created"
-        })
     
     return {
         "success": True,
