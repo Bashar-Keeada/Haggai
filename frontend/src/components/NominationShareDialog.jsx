@@ -144,6 +144,7 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
       createLinks: 'إنشاء الروابط',
       noRecipients: 'أضف مستلماً واحداً على الأقل',
       linksCopied: 'تم نسخ الروابط!',
+      messageCopied: 'تم نسخ الرسالة!',
       linksCreated: 'تم إنشاء الروابط!',
       sendNow: 'إرسال الآن',
       results: 'النتائج',
@@ -154,7 +155,12 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
         responded: 'تم الرد'
       },
       close: 'إغلاق',
-      remove: 'إزالة'
+      remove: 'إزالة',
+      whatsappModalTitle: 'إرسال عبر واتساب',
+      whatsappModalDesc: 'انسخ الرسالة أدناه والصقها في واتساب',
+      copyMessage: 'نسخ الرسالة',
+      openWhatsapp: 'فتح واتساب',
+      orOpenDirectly: 'أو حاول الفتح مباشرة:'
     }
   };
 
