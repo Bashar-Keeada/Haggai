@@ -512,7 +512,7 @@ const Donations = () => {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {txt.impactItems.map((item, index) => (
-              <Card key={index} className="border-0 shadow-lg text-center">
+              <Card key={index} className={`border-0 shadow-lg ${isRTL ? 'text-right' : 'text-center'}`}>
                 <CardContent className="p-8">
                   <div className="w-16 h-16 bg-haggai-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-haggai">
                     <IconComponent name={item.icon} />
