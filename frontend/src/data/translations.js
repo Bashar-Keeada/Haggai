@@ -650,7 +650,7 @@ export const translations = {
       contact: 'اتصل بنا',
       haggaiInternational: 'هجاي الدولية',
       proudPart: 'نحن فخورون بأن نكون جزءاً من شبكة هجاي العالمية.',
-      visitHaggai: 'زيارة هجاي الدولية',
+      visitHaggai: 'موقع هجاي الدولي',
       copyright: 'جميع الحقوق محفوظة.'
     },
     // Common
