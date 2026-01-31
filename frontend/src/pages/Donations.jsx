@@ -173,11 +173,11 @@ const Donations = () => {
     ar: {
       pageTitle: 'ادعم عملنا',
       pageSubtitle: 'معًا نقوي القادة الذين يغيرون العالم',
-      pageDescription: 'هديتك تمكننا من تجهيز وتقوية القادة الذين يمكنهم اكتساب المعرفة وتحمل المسؤولية والتصرف والتأثير في مجتمعاتهم.',
+      pageDescription: 'تبرعك يمكننا من تجهيز وتقوية القادة الذين يمكنهم اكتساب المعرفة وتحمل المسؤولية والتصرف والتأثير في مجتمعاتهم.',
       
-      oneTime: 'هدية لمرة واحدة',
-      oneTimeDesc: 'قدم هدية عندما تريد',
-      recurring: 'هدية منتظمة',
+      oneTime: 'تبرع لمرة واحدة',
+      oneTimeDesc: 'تبرع عندما تريد',
+      recurring: 'تبرع منتظم',
       recurringDesc: 'ادعمنا شهريًا',
       
       paymentMethods: 'خيارات الدفع',
@@ -186,7 +186,7 @@ const Donations = () => {
       swishInstructions: 'افتح تطبيق سويش وأدخل الرقم أعلاه',
       
       bankTransfer: 'تحويل بنكي',
-      bankTransferDesc: 'للهدايا الكبيرة أو التحويلات المنتظمة',
+      bankTransferDesc: 'للتبرعات الكبيرة أو التحويلات المنتظمة',
       bankName: 'اسم البنك',
       accountNumber: 'رقم الحساب',
       iban: 'آيبان',
@@ -196,7 +196,7 @@ const Donations = () => {
       copyToClipboard: 'نسخ',
       copied: 'تم النسخ!',
       
-      yourImpact: 'هديتك تصنع فرقًا',
+      yourImpact: 'تبرعك يصنع فرقًا',
       impactItems: [
         {
           icon: 'BookOpen',
@@ -224,7 +224,7 @@ const Donations = () => {
       perMonth: '/شهر',
       
       thankYou: 'شكرًا لدعمك!',
-      thankYouDesc: 'كل هدية، كبيرة أو صغيرة، تصنع فرقًا في عملنا لتقوية القادة في جميع أنحاء العالم.',
+      thankYouDesc: 'كل تبرع، كبير أو صغير، يصنع فرقًا في عملنا لتقوية القادة في جميع أنحاء العالم.',
       
       questions: 'أسئلة حول التبرعات؟',
       contactUs: 'اتصل بنا'
