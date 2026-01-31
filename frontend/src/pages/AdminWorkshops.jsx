@@ -579,7 +579,7 @@ const AdminWorkshops = () => {
                     
                     <div className={`flex flex-col items-end gap-3 ${isRTL ? 'items-start' : ''}`}>
                       {/* Share buttons row */}
-                      <div className={`flex gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className={`flex gap-2 flex-wrap ${isRTL ? 'flex-row-reverse' : ''}`}>
                         <Button 
                           size="sm" 
                           variant="outline"
@@ -589,6 +589,19 @@ const AdminWorkshops = () => {
                         >
                           <Share2 className="h-4 w-4 mr-1" />
                           {txt.shareLink}
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => {
+                            setShareWorkshop(workshop);
+                            setShowShareDialog(true);
+                          }}
+                          className="border-blue-500 text-blue-600 hover:bg-blue-50"
+                          data-testid={`share-multiple-btn-${workshop.id}`}
+                        >
+                          <Users className="h-4 w-4 mr-1" />
+                          {txt.shareToMultiple}
                         </Button>
                         <Button 
                           size="sm" 
