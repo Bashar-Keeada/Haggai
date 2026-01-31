@@ -14,6 +14,8 @@ import { Label } from '../components/ui/label';
 import { useLanguage } from '../context/LanguageContext';
 import { toast } from 'sonner';
 import { QRCodeSVG } from 'qrcode.react';
+import NominationShareDialog from '../components/NominationShareDialog';
+import NominationShareStatus from '../components/NominationShareStatus';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -25,6 +27,8 @@ const AdminWorkshops = () => {
   const [editingWorkshop, setEditingWorkshop] = useState(null);
   const [showQRDialog, setShowQRDialog] = useState(false);
   const [qrWorkshop, setQrWorkshop] = useState(null);
+  const [showShareDialog, setShowShareDialog] = useState(false);
+  const [shareWorkshop, setShareWorkshop] = useState(null);
 
   const [formData, setFormData] = useState({
     title: '',
