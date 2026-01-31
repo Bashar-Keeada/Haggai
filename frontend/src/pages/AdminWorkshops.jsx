@@ -926,6 +926,17 @@ const AdminWorkshops = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Nomination Share Dialog */}
+      <NominationShareDialog
+        open={showShareDialog}
+        onClose={() => {
+          setShowShareDialog(false);
+          setShareWorkshop(null);
+        }}
+        workshopId={shareWorkshop?.id}
+        workshopTitle={shareWorkshop ? getLocalizedText(shareWorkshop.title) : ''}
+      />
     </div>
   );
 };
