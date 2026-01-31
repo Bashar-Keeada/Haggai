@@ -189,7 +189,6 @@ const MemberLogin = () => {
                     </div>
                   </Link>
                 </div>
-                </div>
               </div>
             </CardContent>
           </Card>
