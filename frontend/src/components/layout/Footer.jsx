@@ -44,7 +44,7 @@ const Footer = () => {
             <h4 className="text-cream-50 font-semibold mb-4">{t('footer.quickLinks')}</h4>
             <ul className="space-y-3">
               <li><Link to="/om-oss" className="text-cream-300 hover:text-haggai-200 transition-colors text-sm">{t('nav.about')}</Link></li>
-              <li><Link to="/leader-experience" className="text-cream-300 hover:text-haggai-200 transition-colors text-sm">Leader Experience</Link></li>
+              <li><Link to="/leader-experience" className="text-cream-300 hover:text-haggai-200 transition-colors text-sm">{leaderExpLabel[language] || 'Leader Experience'}</Link></li>
               <li><Link to="/kalender" className="text-cream-300 hover:text-haggai-200 transition-colors text-sm">{t('nav.calendar')}</Link></li>
               <li><Link to="/bli-medlem" className="text-cream-300 hover:text-haggai-200 transition-colors text-sm">{t('nav.membership')}</Link></li>
             </ul>
