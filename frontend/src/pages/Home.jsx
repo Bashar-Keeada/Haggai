@@ -128,7 +128,7 @@ const Home = () => {
               { icon: Globe, title: t('home.impact'), desc: t('home.impactDesc') }
             ].map((value, index) => (
               <Card key={index} className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-cream-50 hover:-translate-y-1">
-                <CardContent className={`p-8 text-center ${isRTL ? 'text-right' : ''}`}>
+                <CardContent className={`p-8 ${isRTL ? 'text-right' : 'text-center'}`}>
                   <div className={`w-16 h-16 mb-6 bg-haggai-100 rounded-2xl flex items-center justify-center group-hover:bg-haggai transition-colors duration-300 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
                     <value.icon className="h-8 w-8 text-haggai group-hover:text-cream-50 transition-colors duration-300" />
                   </div>
