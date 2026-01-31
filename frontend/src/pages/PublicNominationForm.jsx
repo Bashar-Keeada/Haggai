@@ -565,8 +565,32 @@ ${registrationLink}`;
               </>
             )}
           </Button>
+
+          {/* Share to Multiple Button */}
+          <div className="border-t border-stone-200 pt-6 mt-6">
+            <Button 
+              type="button"
+              variant="outline"
+              onClick={() => setShowShareDialog(true)}
+              className="w-full border-2 border-blue-500 text-blue-600 hover:bg-blue-50 py-5 text-lg"
+            >
+              <Users className="h-5 w-5 mr-2" />
+              {txt.shareToMultiple}
+            </Button>
+            <p className="text-center text-sm text-stone-500 mt-2">
+              {txt.shareToMultipleDesc}
+            </p>
+          </div>
         </form>
       </div>
+
+      {/* Nomination Share Dialog */}
+      <NominationShareDialog
+        open={showShareDialog}
+        onClose={() => setShowShareDialog(false)}
+        workshopId={workshopId}
+        workshopTitle={getLocalizedText(workshop?.title)}
+      />
     </div>
   );
 };
