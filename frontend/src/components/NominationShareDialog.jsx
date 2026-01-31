@@ -55,6 +55,7 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
       createLinks: 'Skapa inbjudningar',
       noRecipients: 'Lägg till minst en mottagare',
       linksCopied: 'Länk kopierad!',
+      messageCopied: 'Meddelande kopierat!',
       linksCreated: 'Inbjudningar skapade! Registreringslänkar genererade.',
       sendNow: 'Skicka nu',
       results: 'Registreringslänkar',
@@ -66,7 +67,12 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
         responded: 'Registrerad'
       },
       close: 'Stäng',
-      remove: 'Ta bort'
+      remove: 'Ta bort',
+      whatsappModalTitle: 'Skicka via WhatsApp',
+      whatsappModalDesc: 'Kopiera meddelandet nedan och klistra in det i WhatsApp',
+      copyMessage: 'Kopiera meddelande',
+      openWhatsapp: 'Öppna WhatsApp',
+      orOpenDirectly: 'Eller försök öppna direkt:'
     },
     en: {
       title: 'Invite multiple participants',
