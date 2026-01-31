@@ -301,7 +301,7 @@ const Donations = () => {
                 </div>
               </CardHeader>
               <CardContent className={isRTL ? 'text-right' : ''}>
-                <div className="bg-green-50 rounded-2xl p-6 text-center mb-4">
+                <div className={`bg-green-50 rounded-2xl p-6 mb-4 ${isRTL ? 'text-right' : 'text-center'}`}>
                   <p className="text-sm text-stone-500 mb-2">{language === 'sv' ? 'Swish-nummer' : language === 'ar' ? 'رقم سويش' : 'Swish Number'}</p>
                   <div className={`flex items-center justify-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
                     <p className="text-3xl font-bold text-green-700 tracking-wider" dir="ltr">{donationSettings.swish_number}</p>
@@ -315,7 +315,7 @@ const Donations = () => {
                     </Button>
                   </div>
                 </div>
-                <p className="text-sm text-stone-600 text-center">{txt.swishInstructions}</p>
+                <p className={`text-sm text-stone-600 ${isRTL ? 'text-right' : 'text-center'}`}>{txt.swishInstructions}</p>
                 
                 {/* Swish QR placeholder */}
                 <div className="mt-6 flex justify-center">
