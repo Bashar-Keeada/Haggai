@@ -154,7 +154,31 @@ const PublicNominationForm = () => {
 
   useEffect(() => {
     fetchWorkshop();
-  }, [workshopId]);
+    
+    // Track if this is opened via a shared link
+    if (refToken) {
+      trackShareOpen();
+    }
+  }, [workshopId, refToken]);
+
+  const trackShareOpen = async () => {
+    try {
+      await fetch(`${BACKEND_URL}/api/nomination-shares/track/${refToken}`);
+    } catch (err) {
+      console.log('Share tracking failed:', err);
+    }
+  };
+
+  const trackShareResponse = async (newNominationId) => {
+    if (!refToken) return;
+    try {
+      await fetch(`${BACKEND_URL}/api/nomination-shares/respond/${refToken}?nomination_id=${newNominationId}`, {
+        method: 'POST'
+      });
+    } catch (err) {
+      console.log('Share response tracking failed:', err);
+    }
+  };
 
   const fetchWorkshop = async () => {
     try {
