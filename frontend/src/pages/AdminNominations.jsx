@@ -222,7 +222,22 @@ const AdminNominations = () => {
         : `${BACKEND_URL}/api/nominations?status=${statusFilter}`;
       const response = await fetch(url);
       if (response.ok) {
-        const data = await response.json();
+        let data = await response.json();
+        
+        // Apply smart filtering for pending/approved based on registration_completed
+        if (statusFilter === 'pending') {
+          // Show those waiting for registration (approved but not completed)
+          data = data.filter(nom => 
+            (nom.status === 'pending') || 
+            (nom.status === 'approved' && nom.direct_invitation && !nom.registration_completed)
+          );
+        } else if (statusFilter === 'approved') {
+          // Show only those who have completed registration
+          data = data.filter(nom => 
+            nom.status === 'approved' && nom.registration_completed
+          );
+        }
+        
         setNominations(data);
       }
     } catch (error) {
