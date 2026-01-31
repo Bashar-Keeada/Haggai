@@ -101,8 +101,11 @@ const PublicNominationForm = () => {
       required: 'Please fill in all required fields',
       errorTitle: 'Training not found',
       errorMessage: 'This training no longer exists or the link is incorrect.',
-      shareToMultiple: 'Invite multiple people',
-      shareToMultipleDesc: 'Send invitation to multiple at once',
+      shareToMultiple: 'Multiple people',
+      shareToMultipleDesc: 'Send to multiple at once',
+      inviteOne: 'One person',
+      inviteOneDesc: 'Fill in the form below',
+      chooseOption: 'Choose option',
       
       // Success page
       successTitle: 'Invitation created!',
