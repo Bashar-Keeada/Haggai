@@ -113,7 +113,7 @@ const Home = () => {
       {/* Values Section */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
+          <div className={`mb-16 ${isRTL ? 'text-right' : 'text-center'}`}>
             <h2 className="text-4xl font-bold text-stone-800 mb-4">{t('home.coreValues')}</h2>
             <p className="text-lg text-stone-600 max-w-2xl mx-auto">
               {t('home.coreValuesSubtitle')}
@@ -236,7 +236,7 @@ const Home = () => {
       {!loadingTestimonials && testimonials.length > 0 && (
         <section className="py-24 bg-haggai-dark">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
+            <div className={`mb-16 ${isRTL ? 'text-right' : 'text-center'}`}>
               <h2 className="text-4xl font-bold text-cream-50 mb-4">{t('home.testimonials')}</h2>
               <p className="text-haggai-200">{t('home.testimonialsSubtitle')}</p>
             </div>
