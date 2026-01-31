@@ -287,8 +287,11 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
   };
 
   const sendViaSMS = (recipient, link) => {
-    const smsBody = encodeURIComponent(`${senderInfo.name} ${language === 'ar' ? 'يدعوك للترشيح' : 'invites you to nominate'}: ${link}`);
-    window.open(`sms:${recipient.recipient_contact}?body=${smsBody}`, '_blank');
+    const smsBody = encodeURIComponent(`${senderInfo.name} ${language === 'ar' ? 'يدعوك للترشيح' : language === 'sv' ? 'bjuder in dig' : 'invites you to nominate'}: ${link}`);
+    let phone = recipient.recipient_contact.replace(/[^0-9+]/g, '');
+    
+    // Keep original format for SMS (local format works better)
+    window.open(`sms:${phone}?body=${smsBody}`, '_blank');
     markAsSent(recipient.id);
   };
 
