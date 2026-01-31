@@ -664,6 +664,63 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
           </div>
         )}
       </DialogContent>
+
+      {/* WhatsApp Modal - for copying message */}
+      <Dialog open={whatsappModal.open} onOpenChange={(open) => setWhatsappModal({ ...whatsappModal, open })}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-green-600">
+              <MessageCircle className="h-5 w-5" />
+              {t.whatsappModalTitle}
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <p className="text-sm text-stone-600">{t.whatsappModalDesc}</p>
+            
+            {/* Message to copy */}
+            <div className="relative">
+              <Textarea
+                value={whatsappModal.message}
+                readOnly
+                rows={6}
+                className="bg-stone-50 text-sm pr-12"
+                dir={language === 'ar' ? 'rtl' : 'ltr'}
+              />
+              <Button
+                size="sm"
+                variant="ghost"
+                className="absolute top-2 right-2 text-haggai"
+                onClick={copyWhatsAppMessage}
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+            
+            {/* Copy button */}
+            <Button
+              onClick={copyWhatsAppMessage}
+              className="w-full bg-green-600 hover:bg-green-700 text-white"
+            >
+              <Copy className="h-4 w-4 mr-2" />
+              {t.copyMessage}
+            </Button>
+            
+            {/* Direct open option */}
+            <div className="border-t pt-4">
+              <p className="text-xs text-stone-500 mb-2">{t.orOpenDirectly}</p>
+              <Button
+                variant="outline"
+                onClick={openWhatsAppDirect}
+                className="w-full text-green-600 border-green-200 hover:bg-green-50"
+              >
+                <MessageCircle className="h-4 w-4 mr-2" />
+                {t.openWhatsapp}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Dialog>
   );
 };
