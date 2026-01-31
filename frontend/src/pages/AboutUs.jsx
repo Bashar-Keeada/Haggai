@@ -248,7 +248,7 @@ const AboutUs = () => {
       {/* Strategy */}
       <section className="py-24 bg-haggai-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
+          <div className={`mb-16 ${isRTL ? 'text-right' : 'text-center'}`}>
             <div className={`w-16 h-16 bg-haggai rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
               <Compass className="h-8 w-8 text-cream-50" />
             </div>
@@ -271,7 +271,7 @@ const AboutUs = () => {
       {/* Approach */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
+          <div className={`mb-16 ${isRTL ? 'text-right' : 'text-center'}`}>
             <div className={`w-16 h-16 bg-haggai rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
               <Lightbulb className="h-8 w-8 text-cream-50" />
             </div>
@@ -299,7 +299,7 @@ const AboutUs = () => {
       {/* Global Network Stats */}
       <section className="py-24 bg-haggai-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`max-w-3xl mx-auto text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
+          <div className={`max-w-3xl mx-auto mb-16 ${isRTL ? 'text-right' : 'text-center'}`}>
             <h2 className="text-4xl font-bold text-stone-800 mb-6">{txt.globalNetwork}</h2>
             <p className="text-lg text-stone-600 leading-relaxed">
               {txt.globalNetworkText}
@@ -331,7 +331,7 @@ const AboutUs = () => {
       {/* Board */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
+          <div className={`mb-16 ${isRTL ? 'text-right' : 'text-center'}`}>
             <h2 className="text-4xl font-bold text-stone-800 mb-4">{txt.board}</h2>
             <p className="text-lg text-stone-600">{txt.boardSubtitle}</p>
           </div>
@@ -357,7 +357,7 @@ const AboutUs = () => {
                         </div>
                       )}
                     </div>
-                    <div className={`p-5 text-center ${isRTL ? 'text-right' : ''}`}>
+                    <div className={`p-5 ${isRTL ? 'text-right' : 'text-center'}`}>
                       <h3 className="text-lg font-semibold text-stone-800 mb-1">{member.name}</h3>
                       <p className="text-haggai text-sm font-medium">{member.role}</p>
                       {member.term_start && (
@@ -379,26 +379,26 @@ const AboutUs = () => {
       {/* Who We Serve */}
       <section className="py-24 bg-haggai-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 ${isRTL ? 'text-right' : ''}`}>
+          <div className={`mb-16 ${isRTL ? 'text-right' : 'text-center'}`}>
             <h2 className="text-4xl font-bold text-cream-50 mb-4">{txt.whoWeServe}</h2>
             <p className="text-haggai-200 text-lg">{txt.whoWeServeSubtitle}</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className={`bg-haggai/50 backdrop-blur rounded-2xl p-8 text-center ${isRTL ? 'text-right' : ''}`}>
+            <div className={`bg-haggai/50 backdrop-blur rounded-2xl p-8 ${isRTL ? 'text-right' : 'text-center'}`}>
               <div className={`w-16 h-16 bg-haggai-light rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
                 <Users className="h-8 w-8 text-cream-50" />
               </div>
               <h3 className="text-xl font-semibold text-cream-50 mb-3">{txt.individuals}</h3>
               <p className="text-haggai-200">{txt.individualsDesc}</p>
             </div>
-            <div className={`bg-haggai/50 backdrop-blur rounded-2xl p-8 text-center ${isRTL ? 'text-right' : ''}`}>
+            <div className={`bg-haggai/50 backdrop-blur rounded-2xl p-8 ${isRTL ? 'text-right' : 'text-center'}`}>
               <div className={`w-16 h-16 bg-haggai-light rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
                 <Award className="h-8 w-8 text-cream-50" />
               </div>
               <h3 className="text-xl font-semibold text-cream-50 mb-3">{txt.churches}</h3>
               <p className="text-haggai-200">{txt.churchesDesc}</p>
             </div>
-            <div className={`bg-haggai/50 backdrop-blur rounded-2xl p-8 text-center ${isRTL ? 'text-right' : ''}`}>
+            <div className={`bg-haggai/50 backdrop-blur rounded-2xl p-8 ${isRTL ? 'text-right' : 'text-center'}`}>
               <div className={`w-16 h-16 bg-haggai-light rounded-2xl flex items-center justify-center mb-6 ${isRTL ? 'mr-0 ml-auto' : 'mx-auto'}`}>
                 <Target className="h-8 w-8 text-cream-50" />
               </div>
