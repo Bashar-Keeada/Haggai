@@ -175,9 +175,20 @@ const MemberLogin = () => {
                 </p>
                 
                 <div className="border-t border-stone-200 pt-4">
-                  <p className="text-sm text-stone-600">
-                    {txt.leaderLogin} <Link to="/ledare/login" className="text-haggai hover:underline font-medium">{txt.leaderLoginLink}</Link>
-                  </p>
+                  <Link to="/ledare/login" className="block">
+                    <div className="bg-gradient-to-r from-haggai-50 to-cream-100 border-2 border-haggai/20 rounded-xl p-4 hover:border-haggai/50 hover:shadow-md transition-all">
+                      <div className="flex items-center justify-center gap-3">
+                        <div className="bg-haggai/10 rounded-full p-2">
+                          <User className="h-5 w-5 text-haggai" />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-sm font-semibold text-haggai">{txt.leaderLogin}</p>
+                          <p className="text-xs text-stone-500">{txt.leaderLoginLink} →</p>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
                 </div>
               </div>
             </CardContent>
