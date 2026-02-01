@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ArrowLeft, Plus, Edit2, Trash2, Save, X, Calendar, MapPin, 
-  Users, Globe, Home, Monitor, GraduationCap, CalendarDays, QrCode, Share2
+  Users, Globe, Home, Monitor, GraduationCap, CalendarDays, QrCode, Share2, Upload
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { QRCodeSVG } from 'qrcode.react';
 import NominationShareDialog from '../components/NominationShareDialog';
 import NominationShareStatus from '../components/NominationShareStatus';
+import ImportCSVDialog from '../components/ImportCSVDialog';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -29,6 +30,8 @@ const AdminWorkshops = () => {
   const [qrWorkshop, setQrWorkshop] = useState(null);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [shareWorkshop, setShareWorkshop] = useState(null);
+  const [showImportDialog, setShowImportDialog] = useState(false);
+  const [importWorkshop, setImportWorkshop] = useState(null);
 
   const [formData, setFormData] = useState({
     title: '',
