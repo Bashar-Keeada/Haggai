@@ -7136,6 +7136,232 @@ async def update_donation_settings(settings: DonationSettingsUpdate):
     return {"message": "Settings updated successfully"}
 
 
+# ==================== CSV IMPORT ====================
+
+import csv
+from io import StringIO
+
+@api_router.post("/import/nominations")
+async def import_nominations_csv(
+    file: UploadFile = File(...),
+    workshop_id: str = None
+):
+    """Import nominations from CSV file (Google Forms export)"""
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="File must be a CSV")
+    
+    content = await file.read()
+    try:
+        # Try different encodings
+        try:
+            text = content.decode('utf-8')
+        except UnicodeDecodeError:
+            text = content.decode('utf-8-sig')
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Could not decode file: {str(e)}")
+    
+    reader = csv.DictReader(StringIO(text))
+    
+    # Column mapping from Google Forms to our system
+    column_mapping = {
+        # Swedish
+        'namn': 'full_name',
+        'fullständigt namn': 'full_name',
+        'förnamn': 'first_name',
+        'efternamn': 'last_name',
+        'e-post': 'email',
+        'e-postadress': 'email',
+        'telefon': 'phone',
+        'telefonnummer': 'phone',
+        'mobilnummer': 'phone',
+        'kön': 'gender',
+        'födelsedatum': 'date_of_birth',
+        'födelseort': 'birthplace',
+        'adress': 'address',
+        'civilstånd': 'marital_status',
+        'nationalitet': 'nationality',
+        'bosättningsland': 'country_of_residence',
+        'kyrka': 'church_name',
+        'församling': 'church_name',
+        'kyrkoroll': 'church_role',
+        'roll i kyrkan': 'church_role',
+        'arbetsgivare': 'employer_name',
+        'yrke': 'current_profession',
+        'jobbtitel': 'job_title',
+        'anteckningar': 'notes',
+        'kommentarer': 'notes',
+        # Arabic
+        'الاسم': 'full_name',
+        'الاسم الكامل': 'full_name',
+        'البريد الإلكتروني': 'email',
+        'الهاتف': 'phone',
+        'رقم الهاتف': 'phone',
+        'الجنس': 'gender',
+        'تاريخ الميلاد': 'date_of_birth',
+        'مكان الولادة': 'birthplace',
+        'العنوان': 'address',
+        'الحالة الاجتماعية': 'marital_status',
+        'الجنسية': 'nationality',
+        'بلد الإقامة': 'country_of_residence',
+        'الكنيسة': 'church_name',
+        'الدور في الكنيسة': 'church_role',
+        'جهة العمل': 'employer_name',
+        'المهنة': 'current_profession',
+        'ملاحظات': 'notes',
+        # English
+        'name': 'full_name',
+        'full name': 'full_name',
+        'first name': 'first_name',
+        'last name': 'last_name',
+        'email': 'email',
+        'email address': 'email',
+        'phone': 'phone',
+        'phone number': 'phone',
+        'mobile': 'phone',
+        'gender': 'gender',
+        'date of birth': 'date_of_birth',
+        'birth date': 'date_of_birth',
+        'birthplace': 'birthplace',
+        'place of birth': 'birthplace',
+        'address': 'address',
+        'marital status': 'marital_status',
+        'nationality': 'nationality',
+        'country of residence': 'country_of_residence',
+        'church': 'church_name',
+        'church name': 'church_name',
+        'church role': 'church_role',
+        'role in church': 'church_role',
+        'employer': 'employer_name',
+        'profession': 'current_profession',
+        'job title': 'job_title',
+        'notes': 'notes',
+        'comments': 'notes'
+    }
+    
+    imported = []
+    errors = []
+    row_num = 0
+    
+    for row in reader:
+        row_num += 1
+        try:
+            # Map columns
+            mapped_data = {}
+            for col, value in row.items():
+                if col and value:
+                    col_lower = col.lower().strip()
+                    if col_lower in column_mapping:
+                        mapped_data[column_mapping[col_lower]] = value.strip()
+                    else:
+                        # Keep original column name if no mapping found
+                        mapped_data[col_lower.replace(' ', '_')] = value.strip()
+            
+            # Combine first_name and last_name if full_name not present
+            if 'first_name' in mapped_data and 'last_name' in mapped_data and 'full_name' not in mapped_data:
+                mapped_data['full_name'] = f"{mapped_data['first_name']} {mapped_data['last_name']}"
+            
+            # Skip if no name
+            if not mapped_data.get('full_name'):
+                errors.append({"row": row_num, "error": "Missing name"})
+                continue
+            
+            # Create nomination
+            nomination_id = str(uuid.uuid4())
+            now = datetime.now(timezone.utc).isoformat()
+            
+            nomination = {
+                "id": nomination_id,
+                "event_id": workshop_id,
+                "nominee_name": mapped_data.get('full_name', ''),
+                "nominee_email": mapped_data.get('email', ''),
+                "nominee_phone": mapped_data.get('phone', ''),
+                "nominee_church": mapped_data.get('church_name', ''),
+                "nominee_role": mapped_data.get('church_role', ''),
+                "status": "approved",
+                "registration_completed": True,
+                "registration_data": mapped_data,
+                "imported_from_csv": True,
+                "created_at": now,
+                "updated_at": now
+            }
+            
+            await db.nominations.insert_one(nomination)
+            
+            # Create participant account if email exists
+            if mapped_data.get('email'):
+                # Generate random password
+                password = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12))
+                password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+                
+                # Check if participant already exists
+                existing = await db.participants.find_one({"email": mapped_data.get('email').lower()})
+                if not existing:
+                    participant = {
+                        "id": str(uuid.uuid4()),
+                        "nomination_id": nomination_id,
+                        "email": mapped_data.get('email').lower(),
+                        "password_hash": password_hash,
+                        "full_name": mapped_data.get('full_name', ''),
+                        "phone": mapped_data.get('phone', ''),
+                        "gender": mapped_data.get('gender', ''),
+                        "date_of_birth": mapped_data.get('date_of_birth', ''),
+                        "church_name": mapped_data.get('church_name'),
+                        "church_role": mapped_data.get('church_role'),
+                        "workshop_id": workshop_id,
+                        "attendance_hours": 0,
+                        "diploma_received": False,
+                        "created_at": now,
+                        "updated_at": now,
+                        "is_active": True
+                    }
+                    await db.participants.insert_one(participant)
+                    mapped_data['generated_password'] = password
+            
+            imported.append({
+                "row": row_num,
+                "name": mapped_data.get('full_name'),
+                "email": mapped_data.get('email'),
+                "password": mapped_data.get('generated_password', 'N/A - already exists or no email')
+            })
+            
+        except Exception as e:
+            errors.append({"row": row_num, "error": str(e)})
+    
+    return {
+        "success": True,
+        "imported_count": len(imported),
+        "error_count": len(errors),
+        "imported": imported,
+        "errors": errors
+    }
+
+
+@api_router.get("/import/template")
+async def get_import_template():
+    """Get CSV template for import"""
+    return {
+        "columns": [
+            {"name": "full_name", "required": True, "description": "Fullständigt namn / الاسم الكامل"},
+            {"name": "email", "required": False, "description": "E-post / البريد الإلكتروني"},
+            {"name": "phone", "required": False, "description": "Telefon / الهاتف"},
+            {"name": "gender", "required": False, "description": "Kön (male/female) / الجنس"},
+            {"name": "date_of_birth", "required": False, "description": "Födelsedatum (YYYY-MM-DD) / تاريخ الميلاد"},
+            {"name": "birthplace", "required": False, "description": "Födelseort / مكان الولادة"},
+            {"name": "address", "required": False, "description": "Adress / العنوان"},
+            {"name": "marital_status", "required": False, "description": "Civilstånd / الحالة الاجتماعية"},
+            {"name": "nationality", "required": False, "description": "Nationalitet / الجنسية"},
+            {"name": "country_of_residence", "required": False, "description": "Bosättningsland / بلد الإقامة"},
+            {"name": "church_name", "required": False, "description": "Kyrka/Församling / الكنيسة"},
+            {"name": "church_role", "required": False, "description": "Roll i kyrkan / الدور في الكنيسة"},
+            {"name": "employer_name", "required": False, "description": "Arbetsgivare / جهة العمل"},
+            {"name": "current_profession", "required": False, "description": "Yrke / المهنة"},
+            {"name": "job_title", "required": False, "description": "Jobbtitel / المسمى الوظيفي"},
+            {"name": "notes", "required": False, "description": "Anteckningar / ملاحظات"}
+        ],
+        "example_csv": "full_name,email,phone,gender\\nJohn Doe,john@example.com,+46701234567,male"
+    }
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
