@@ -106,6 +106,7 @@ const AdminWorkshops = () => {
       tot: 'ToT',
       shareLink: 'Dela nomineringslänk',
       shareToMultiple: 'Dela till flera',
+      importCSV: 'Importera CSV',
       showQR: 'Visa QR-kod',
       nominationLink: 'Nomineringslänk',
       qrCodeTitle: 'QR-kod för nominering',
