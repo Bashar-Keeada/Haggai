@@ -135,6 +135,7 @@ const AdminWorkshops = () => {
       typeNational: 'National',
       typeOnline: 'Online',
       typeTot: 'ToT (Training of Trainers)',
+      importCSV: 'Import CSV',
       targetGender: 'Target Group',
       genderAll: 'All',
       genderWomen: 'Women',
