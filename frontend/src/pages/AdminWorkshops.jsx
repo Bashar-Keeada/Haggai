@@ -942,6 +942,20 @@ const AdminWorkshops = () => {
         workshopId={shareWorkshop?.id}
         workshopTitle={shareWorkshop ? getLocalizedText(shareWorkshop.title) : ''}
       />
+
+      {/* Import CSV Dialog */}
+      <ImportCSVDialog
+        open={showImportDialog}
+        onClose={() => {
+          setShowImportDialog(false);
+          setImportWorkshop(null);
+        }}
+        workshopId={importWorkshop?.id}
+        workshopTitle={importWorkshop ? getLocalizedText(importWorkshop.title) : ''}
+        onImportComplete={() => {
+          // Refresh data if needed
+        }}
+      />
     </div>
   );
 };
