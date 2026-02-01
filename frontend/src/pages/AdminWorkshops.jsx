@@ -611,6 +611,19 @@ const AdminWorkshops = () => {
                         <Button 
                           size="sm" 
                           variant="outline"
+                          onClick={() => {
+                            setImportWorkshop(workshop);
+                            setShowImportDialog(true);
+                          }}
+                          className="border-orange-500 text-orange-600 hover:bg-orange-50"
+                          data-testid={`import-csv-btn-${workshop.id}`}
+                        >
+                          <Upload className="h-4 w-4 mr-1" />
+                          {txt.importCSV}
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
                           onClick={() => openQRModal(workshop)}
                           className="border-violet-500 text-violet-600 hover:bg-violet-50"
                           data-testid={`show-qr-btn-${workshop.id}`}
