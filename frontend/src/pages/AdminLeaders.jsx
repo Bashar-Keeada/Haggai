@@ -871,12 +871,48 @@ const AdminLeaders = () => {
                     <label className={`block text-sm font-medium text-stone-700 mb-2 ${isRTL ? 'text-right' : ''}`}>
                       {txt.imageUrl}
                     </label>
-                    <Input
-                      value={formData.image_url}
-                      onChange={(e) => handleInputChange('image_url', e.target.value)}
-                      placeholder="https://..."
-                      className="w-full"
-                    />
+                    <div className="flex flex-col items-center gap-3">
+                      {formData.image_url ? (
+                        <div className="relative">
+                          <img 
+                            src={formData.image_url} 
+                            alt="Preview" 
+                            className="w-24 h-24 rounded-full object-cover border-2 border-haggai"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleInputChange('image_url', '')}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="w-24 h-24 rounded-full bg-stone-100 flex items-center justify-center border-2 border-dashed border-stone-300">
+                          <ImageIcon className="h-8 w-8 text-stone-400" />
+                        </div>
+                      )}
+                      <label className="cursor-pointer">
+                        <span className="px-4 py-2 bg-haggai text-white rounded-lg hover:bg-haggai-dark transition-colors text-sm font-medium">
+                          {formData.image_url ? txt.changeImage : txt.uploadImage}
+                        </span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onload = (event) => {
+                                handleInputChange('image_url', event.target.result);
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
                   </div>
                 </div>
 
