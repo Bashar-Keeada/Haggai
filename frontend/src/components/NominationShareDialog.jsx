@@ -345,7 +345,19 @@ const NominationShareDialog = ({ open, onClose, workshopId, workshopTitle }) => 
   };
 
   const openWhatsAppDirect = () => {
-    window.open(whatsappModal.link, '_blank');
+    // Detect if mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      // On mobile, use whatsapp:// URL scheme which opens the app directly
+      const whatsappAppUrl = `whatsapp://send?phone=${whatsappModal.phone}&text=${encodeURIComponent(whatsappModal.message)}`;
+      window.location.href = whatsappAppUrl;
+    } else {
+      // On desktop, try web.whatsapp.com instead of wa.me
+      const webWhatsappUrl = `https://web.whatsapp.com/send?phone=${whatsappModal.phone}&text=${encodeURIComponent(whatsappModal.message)}`;
+      window.open(webWhatsappUrl, '_blank');
+    }
+    
     markAsSent(whatsappModal.recipientId);
     setWhatsappModal({ open: false, message: '', phone: '', link: '' });
   };
