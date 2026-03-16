@@ -2295,11 +2295,11 @@ async def approve_or_reject_registration(nomination_id: str, approval: Registrat
             }}
         )
         
-        # Send approval email with login credentials
-        await send_participant_approval_email(
+        # Send approval email with password setup link
+        await send_participant_password_setup_email(
             registration_data.get("email", nomination.get("nominee_email")),
             registration_data.get("full_name", nomination.get("nominee_name")),
-            participant_account['password'],
+            participant_account['password_setup_token'],
             nomination.get("event_title", "Haggai Workshop")
         )
         
