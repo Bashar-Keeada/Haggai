@@ -2442,7 +2442,148 @@ async def send_participant_approval_email(email: str, name: str, password: str, 
         logging.error(f"Failed to send approval email: {str(e)}")
 
 
-async def send_participant_rejection_email(email: str, name: str, reason: str, workshop_title: str):
+async def send_participant_password_setup_email(email: str, name: str, token: str, workshop_title: str):
+    """Send approval email with password setup link - Always in Arabic"""
+    frontend_url = FRONTEND_URL
+    password_setup_link = f"{frontend_url}/deltagare/skapa-losenord/{token}?lang=ar"
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html dir="rtl">
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl; text-align: right;">
+        <div style="background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">🎉 تمت الموافقة على تسجيلك!</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">مرحباً بك في {workshop_title}</p>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+            <p>تحية طيبة <strong>{name}</strong>،</p>
+            
+            <p>مبروك! تمت الموافقة على تسجيلك في <strong>{workshop_title}</strong>.</p>
+            
+            <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border-right: 4px solid #2e7d32; margin: 20px 0;">
+                <h3 style="color: #2e7d32; margin-top: 0;">الخطوة التالية: إنشاء كلمة المرور</h3>
+                <p>لتفعيل حسابك، يرجى إنشاء كلمة مرور للوصول إلى بوابة المشاركين.</p>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{password_setup_link}" style="display: inline-block; background: #15564e; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                    إنشاء كلمة المرور ←
+                </a>
+            </div>
+            
+            <p style="font-size: 13px; color: #666;">
+                أو انسخ هذا الرابط في متصفحك:<br>
+                <a href="{password_setup_link}" style="color: #15564e; word-break: break-all;">{password_setup_link}</a>
+            </p>
+            
+            <p><strong>كمشارك، ستتمكن من:</strong></p>
+            <ul style="padding-right: 20px;">
+                <li>📛 تحميل بطاقة اسمك</li>
+                <li>📅 عرض جدول وبرنامج الورشة</li>
+                <li>ℹ️ الوصول إلى معلومات الورشة</li>
+                <li>👤 إدارة ملفك الشخصي</li>
+            </ul>
+            
+            <p style="color: #666; font-size: 14px; margin-top: 30px;">نتطلع إلى رؤيتك في الورشة!</p>
+            
+            <p>مع أطيب التحيات،<br><strong>هاجاي السويد</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        await asyncio.to_thread(resend.Emails.send, {
+            "from": SENDER_EMAIL,
+            "to": [email],
+            "subject": f"✅ تمت الموافقة على تسجيلك - أنشئ كلمة المرور | {workshop_title}",
+            "html": html_content
+        })
+        logging.info(f"Password setup email sent to participant {email}")
+    except Exception as e:
+        logging.error(f"Failed to send password setup email: {str(e)}")
+
+
+# Pydantic model for password setup
+class ParticipantPasswordSetup(BaseModel):
+    token: str
+    password: str
+
+
+@api_router.get("/participants/verify-password-token/{token}")
+async def verify_participant_password_token(token: str):
+    """Verify password setup token and return participant info"""
+    participant = await db.participants.find_one({"password_setup_token": token})
+    
+    if not participant:
+        raise HTTPException(status_code=404, detail="Invalid token")
+    
+    # Check if token is expired
+    expires_at = participant.get("password_setup_token_expires")
+    if expires_at:
+        expires_datetime = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+        if datetime.now(timezone.utc) > expires_datetime:
+            raise HTTPException(status_code=400, detail="Token expired")
+    
+    # Check if password already set
+    if participant.get("password_hash") and participant.get("account_activated"):
+        raise HTTPException(status_code=400, detail="Password already set")
+    
+    return {
+        "valid": True,
+        "name": participant.get("full_name", ""),
+        "email": participant.get("email", ""),
+        "workshop_title": participant.get("workshop_title", "")
+    }
+
+
+@api_router.post("/participants/set-password")
+async def set_participant_password(data: ParticipantPasswordSetup):
+    """Set password for participant account"""
+    participant = await db.participants.find_one({"password_setup_token": data.token})
+    
+    if not participant:
+        raise HTTPException(status_code=404, detail="Invalid token")
+    
+    # Check if token is expired
+    expires_at = participant.get("password_setup_token_expires")
+    if expires_at:
+        expires_datetime = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+        if datetime.now(timezone.utc) > expires_datetime:
+            raise HTTPException(status_code=400, detail="Token expired")
+    
+    # Check if password already set
+    if participant.get("password_hash") and participant.get("account_activated"):
+        raise HTTPException(status_code=400, detail="Password already set")
+    
+    # Validate password
+    if len(data.password) < 8:
+        raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
+    
+    # Hash password and update
+    password_hash = bcrypt.hashpw(data.password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    
+    await db.participants.update_one(
+        {"id": participant["id"]},
+        {"$set": {
+            "password_hash": password_hash,
+            "is_active": True,
+            "account_activated": True,
+            "password_setup_token": None,
+            "password_setup_token_expires": None,
+            "activated_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    logging.info(f"Password set for participant {participant.get('email')}")
+    
+    return {"success": True, "message": "Password set successfully"}
+
+
+async def send_participant_approval_email(email: str, name: str, password: str, workshop_title: str):
     """Send rejection email to participant - Always in Arabic"""
     html_content = f"""
     <!DOCTYPE html>
