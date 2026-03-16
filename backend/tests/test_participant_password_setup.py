@@ -153,13 +153,13 @@ class TestProfileImageUploadUI:
 class TestParticipantEndpoints:
     """Test participant-related endpoints"""
     
-    def test_participants_endpoint(self):
-        """Test participants list endpoint"""
-        response = requests.get(f"{BASE_URL}/api/participants")
+    def test_training_participants_endpoint(self):
+        """Test training participants list endpoint"""
+        response = requests.get(f"{BASE_URL}/api/training-participants")
         assert response.status_code == 200
         data = response.json()
         assert isinstance(data, list)
-        print(f"✓ Participants endpoint returns {len(data)} participants")
+        print(f"✓ Training participants endpoint returns {len(data)} participants")
     
     def test_participant_login_invalid(self):
         """Test participant login with invalid credentials"""
