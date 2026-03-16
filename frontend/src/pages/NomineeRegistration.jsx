@@ -642,6 +642,69 @@ const NomineeRegistration = () => {
                 </p>
               </div>
 
+              {/* Profile Image Upload */}
+              <div className="p-4 bg-stone-50 rounded-xl">
+                <Label className={`flex items-center gap-1 mb-3 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
+                  <ImageIcon className="h-4 w-4" />
+                  {txt.profileImage}
+                  <span className="text-red-500 text-lg">*</span>
+                </Label>
+                <p className={`text-sm text-stone-600 mb-4 ${isRTL ? 'text-right' : ''}`}>
+                  {txt.profileImageDesc}
+                </p>
+                
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageSelect}
+                  className="hidden"
+                  data-testid="profile-image-input"
+                />
+                
+                {profileImagePreview ? (
+                  <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <div className="relative">
+                      <img
+                        src={profileImagePreview}
+                        alt="Profile preview"
+                        className="w-24 h-24 rounded-full object-cover border-4 border-haggai"
+                        data-testid="profile-image-preview"
+                      />
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                        data-testid="remove-profile-image-btn"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="border-haggai text-haggai hover:bg-haggai hover:text-white"
+                      data-testid="change-profile-image-btn"
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      {txt.changeImage}
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-haggai text-haggai hover:bg-haggai hover:text-white"
+                    data-testid="select-profile-image-btn"
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    {txt.selectImage}
+                  </Button>
+                )}
+              </div>
+
               {/* Personal Information */}
               <div className="grid md:grid-cols-2 gap-4">
                 {/* Full Name */}
