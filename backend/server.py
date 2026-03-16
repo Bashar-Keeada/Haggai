@@ -1429,7 +1429,7 @@ class Nomination(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     # Event/Program info
     event_id: str
-    event_title: str
+    event_title: Optional[str] = None  # Made optional for backwards compatibility
     event_date: Optional[str] = None
     # Nominator info (the person nominating) - Optional for direct invitations
     nominator_name: Optional[str] = None
