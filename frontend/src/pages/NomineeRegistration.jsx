@@ -51,7 +51,10 @@ const NomineeRegistration = () => {
     date_of_birth: '',
     commitment_attendance: '',
     commitment_active_role: '',
-    notes: ''
+    notes: '',
+    profile_image: '',
+    password: '',
+    confirm_password: ''
   });
 
   const translations = {
