@@ -355,6 +355,41 @@ const NomineeRegistration = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  // Handle profile image selection
+  const handleImageSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Endast bildformat tillåts');
+      return;
+    }
+    
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Bilden får inte vara större än 5MB');
+      return;
+    }
+    
+    setProfileImageFile(file);
+    
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setProfileImagePreview(e.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeImage = () => {
+    setProfileImageFile(null);
+    setProfileImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   // Map internal values to display text
   const countryMap = {
     sweden: 'Sweden',
