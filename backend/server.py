@@ -6251,7 +6251,7 @@ async def create_leader_invitation(input: LeaderInvitationCreate):
     await db.leader_invitations.insert_one(doc)
     
     # Send invitation email
-    base_url = os.environ.get('FRONTEND_URL', 'https://haggai.se')
+    base_url = FRONTEND_URL
     lang = input.language or "ar"  # Default to Arabic
     registration_link = f"{base_url}/ledare/registrera/{invitation.token}?lang={lang}"
     
@@ -6433,7 +6433,7 @@ async def resend_leader_invitation(invitation_id: str):
     if invitation.get("status") == "registered":
         raise HTTPException(status_code=400, detail="Denna inbjudan har redan använts")
     
-    base_url = os.environ.get('FRONTEND_URL', 'https://haggai.se')
+    base_url = FRONTEND_URL
     registration_link = f"{base_url}/ledare/registrera/{invitation['token']}"
     lang = invitation.get("language", "ar")  # Default to Arabic
     
@@ -6687,7 +6687,7 @@ async def approve_leader_registration(registration_id: str):
     
     # Send approval email
     try:
-        base_url = os.environ.get('FRONTEND_URL', 'https://haggai.se')
+        base_url = FRONTEND_URL
         login_link = f"{base_url}/ledare/login"
         
         email_html = f"""
