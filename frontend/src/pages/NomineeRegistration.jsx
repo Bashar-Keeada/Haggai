@@ -137,7 +137,14 @@ const NomineeRegistration = () => {
       successMessage: 'Haggai-teamet kommer att gå igenom din ansökan och återkommer till dig inom kort med bekräftelse.',
       successNote: 'Vi kontaktar dig via e-post eller telefon.',
       errorTitle: 'Fel',
-      errorDesc: 'Kunde inte skicka ansökan. Försök igen.'
+      errorDesc: 'Kunde inte skicka ansökan. Försök igen.',
+      profileImage: 'Profilbild',
+      profileImageDesc: 'Ladda upp en aktuell bild på dig själv',
+      selectImage: 'Välj bild',
+      changeImage: 'Byt bild',
+      removeImage: 'Ta bort',
+      uploadingImage: 'Laddar upp...',
+      imageRequired: 'Profilbild krävs'
     },
     en: {
       pageTitle: 'Application for Haggai National Leader Experience Training',
@@ -213,7 +220,14 @@ const NomineeRegistration = () => {
       successMessage: 'The Haggai team will review your application and get back to you shortly with confirmation.',
       successNote: 'We will contact you via email or phone.',
       errorTitle: 'Error',
-      errorDesc: 'Could not submit application. Please try again.'
+      errorDesc: 'Could not submit application. Please try again.',
+      profileImage: 'Profile Photo',
+      profileImageDesc: 'Upload a recent photo of yourself',
+      selectImage: 'Select Image',
+      changeImage: 'Change Image',
+      removeImage: 'Remove',
+      uploadingImage: 'Uploading...',
+      imageRequired: 'Profile photo is required'
     },
     ar: {
       pageTitle: 'طلب المشاركة في تدريب خبرة قادة حجاي الوطني - ستوكهولم 2026',
@@ -294,7 +308,14 @@ const NomineeRegistration = () => {
       successMessage: 'سيقوم فريق حجاي بمراجعة طلبك والرد عليك قريباً بالتأكيد.',
       successNote: 'سنتواصل معك عبر البريد الإلكتروني أو الهاتف.',
       errorTitle: 'خطأ',
-      errorDesc: 'لم نتمكن من إرسال الطلب. يرجى المحاولة مرة أخرى.'
+      errorDesc: 'لم نتمكن من إرسال الطلب. يرجى المحاولة مرة أخرى.',
+      profileImage: 'صورة شخصية',
+      profileImageDesc: 'قم بتحميل صورة حديثة لك',
+      selectImage: 'اختر صورة',
+      changeImage: 'تغيير الصورة',
+      removeImage: 'إزالة',
+      uploadingImage: 'جاري التحميل...',
+      imageRequired: 'الصورة الشخصية مطلوبة'
     }
   };
 
