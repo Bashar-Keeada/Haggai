@@ -1671,14 +1671,17 @@ async def send_nomination_email_to_admin(nomination: Nomination):
 @api_router.post("/nominations", response_model=Nomination)
 async def create_nomination(input: NominationCreate):
     """Create a new nomination - direct invitations are auto-approved"""
-    nomination = Nomination(**input.model_dump())
+    # Prepare data, ensuring status has a default value
+    nomination_data = input.model_dump()
     
     # Check if this is a direct invitation (simplified form)
     if input.direct_invitation or input.status == 'approved':
-        nomination.status = "approved"  # Auto-approve for direct invitations
-        nomination.direct_invitation = True
+        nomination_data["status"] = "approved"  # Auto-approve for direct invitations
+        nomination_data["direct_invitation"] = True
     else:
-        nomination.status = "pending"  # Needs admin review
+        nomination_data["status"] = "pending"  # Needs admin review
+    
+    nomination = Nomination(**nomination_data)
     
     doc = nomination.model_dump()
     await db.nominations.insert_one(doc)
