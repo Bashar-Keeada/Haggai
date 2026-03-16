@@ -413,12 +413,33 @@ const NomineeRegistration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate profile image
+    if (!profileImageFile) {
+      toast.error(txt.imageRequired);
+      return;
+    }
+    
     setSubmitting(true);
 
     try {
+      // First, upload the profile image
+      let profileImageBase64 = null;
+      if (profileImageFile) {
+        setUploadingImage(true);
+        const reader = new FileReader();
+        profileImageBase64 = await new Promise((resolve, reject) => {
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(profileImageFile);
+        });
+        setUploadingImage(false);
+      }
+      
       // Prepare data - handle "other" options and convert values
       const submitData = {
         ...formData,
+        profile_image: profileImageBase64,
         country_of_residence: formData.country_of_residence === 'other' 
           ? formData.country_other 
           : (countryMap[formData.country_of_residence] || formData.country_of_residence),
@@ -442,6 +463,7 @@ const NomineeRegistration = () => {
       toast.error(txt.errorTitle, { description: txt.errorDesc });
     } finally {
       setSubmitting(false);
+      setUploadingImage(false);
     }
   };
 
