@@ -64,6 +64,7 @@ import ParticipantLogin from "./pages/ParticipantLogin";
 import ParticipantPortal from "./pages/ParticipantPortal";
 import ParticipantForgotPassword from "./pages/ParticipantForgotPassword";
 import ParticipantResetPassword from "./pages/ParticipantResetPassword";
+import SetParticipantPassword from "./pages/SetParticipantPassword";
 
 function App() {
   return (
@@ -92,6 +93,7 @@ function App() {
               <Route path="/deltagare/portal" element={<ParticipantPortal />} />
               <Route path="/deltagare/glomt-losenord" element={<ParticipantForgotPassword />} />
               <Route path="/deltagare/aterstall-losenord/:token" element={<ParticipantResetPassword />} />
+              <Route path="/deltagare/skapa-losenord/:token" element={<SetParticipantPassword />} />
               {/* Member Portal Routes */}
               <Route path="/mina-sidor" element={<MinaSidor />} />
               <Route path="/mina-sidor/profil" element={<MemberProfile />} />
