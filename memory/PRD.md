@@ -16,9 +16,25 @@ Multi-page website for "Haggai Sweden" - a comprehensive full-stack application 
 3. **Participants** - Register for workshops, complete training
 4. **Facilitators/Trainers** - Lead workshops, access session materials
 
-## Completed Features (as of 2026-01-28)
+## Completed Features (as of 2026-03-14)
 
-### This Session (2026-01-28)
+### This Session (2026-03-14) - Nominee Workflow Enhancement
+- [x] **Profile Image Upload** - Nominees can now upload profile picture directly from computer during registration (NomineeRegistration.jsx):
+  - File input with image preview
+  - Image validation (type & max 5MB size)
+  - Base64 encoding for storage
+  - Swedish/English/Arabic translations
+- [x] **Password Creation Flow** - After admin approval, nominees create their own password:
+  - New page: `/deltagare/skapa-losenord/{token}` (SetParticipantPassword.jsx)
+  - Backend endpoints: `GET /api/participants/verify-password-token/{token}`, `POST /api/participants/set-password`
+  - Email with password setup link sent instead of auto-generated password
+  - Password token expires after 7 days
+- [x] **Backend Flow Changes**:
+  - `create_participant_account()` now creates `password_setup_token` instead of auto-password
+  - `send_participant_password_setup_email()` - new function for password setup emails
+  - Participant account starts inactive, activated when password is set
+
+### Previous Session (2026-01-28)
 - [x] **Board Member Management - FIXED** - Backend API endpoints now properly connected to frontend:
   - `POST /api/board-members` - Create new board member (with term_start)
   - `PUT /api/board-members/{id}/archive` - Archive existing member (with term_end query param)
@@ -55,25 +71,18 @@ Multi-page website for "Haggai Sweden" - a comprehensive full-stack application 
 - [x] Multi-language support (Swedish, English, Arabic)
 - [x] Email notifications via Resend
 
-## Known Issues
-
-### P0 - Critical
-- **Deployment Database Separation**: Production and preview environments use separate databases. Data entered on production is NOT visible in preview environment. **Requires Emergent Support for data migration.**
-
-### P1 - Fixed This Session
-- ~~**Board Member Management Not Working**~~ - FIXED: Backend endpoints existed but frontend had wrong HTTP methods and missing required fields
-
-### P1 - High
-- None currently
-
-### P2 - Medium
-- Workshop deactivation perceived as not working (likely browser cache - advise hard refresh)
-
 ## Upcoming Tasks (P1)
 
-1. **LeaderSessions.jsx** - Implement facilitator-specific view showing assigned sessions
-2. **Admin Categories Panel** - UI for managing "Expertise" and "Interest" options
-3. **LeaderExperience.jsx Refactor** - Migrate from mock.js to `/api/workshops` endpoint
+1. **Leader Document Upload Fix** - Change from file upload to link-based system (Google Drive etc.) in LeaderPortal.jsx
+2. **LeaderSessions.jsx** - Implement facilitator-specific view showing assigned sessions
+3. **Admin Categories Panel** - UI for managing "Expertise" and "Interest" options
+4. **LeaderExperience.jsx Refactor** - Migrate from mock.js to `/api/workshops` endpoint
+
+## Known Issues
+
+### Production Environment (haggai.se)
+- **Invitation links pointing to preview** - Environment configuration issue, requires Emergent Support
+- **Leader registration link broken** - Same root cause as above
 
 ## Future/Backlog Tasks (P2-P3)
 
