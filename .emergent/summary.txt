@@ -1,189 +1,199 @@
 <analysis>**original_problem_statement:**
-The user's primary objective is to build a comprehensive full-stack application for Haggai Sweden using React, FastAPI, and MongoDB. The application serves as a portal for members, leaders (facilitators), and administrators, with features for managing workshops, nominations, board members, and more.
+The user's primary objective is to build a comprehensive full-stack application for Haggai Sweden. The application includes portals for members, leaders, and administrators, managing workshops, nominations, and more.
 
-The most recent and significant feature request is to create a sophisticated function for sharing nominations. This function must allow an admin or user to:
-- Send a nomination to multiple recipients simultaneously.
-- Select recipients from the phone's contact book (for mobile) or add them manually.
-- Choose the delivery method: SMS, Email, WhatsApp, or other native sharing options.
-- Ensure each recipient gets a unique, trackable link.
-- Track the status of each shared link (e.g., Sent, Opened, Answered) in an admin view.
+Recent user requests have focused on refining existing features and adding new workflows:
+1.  **Nominee Workflow Enhancement:**
+    *   Nominees should be able to upload a profile picture directly from their computer during registration.
+    *   After an admin approves a nominee, the user should be prompted to create a password to access the participant portal.
+    *   Admins need a list view to manage and follow up with approved nominees as a group.
+2.  **Fix Leader Document Upload:** Leaders are unable to upload documents in their portal; the upload process hangs indefinitely. The user suggested changing this to a link-based system (e.g., Google Drive) to avoid server load.
+3.  **CSV Import:** Import nominations and participants from a Google Forms CSV file.
+4.  **Production Environment Issues:** The user has consistently reported that links (for nominations, leader invitations) generated on the production site () incorrectly point to the preview environment URL.
 
-**User's preferred language**: Swedish. The next agent MUST respond in Swedish.
+**User's preferred language**: Swedish
 
 **what currently exists?**
-A functional full-stack application with a React frontend, a FastAPI backend, and a shared MongoDB Atlas database. Key features include:
-- An admin dashboard for managing workshops, leaders, and nominations.
-- A member portal and a separate leader portal.
-- A public-facing calendar and nomination forms.
-- The database has been successfully migrated from a local instance to MongoDB Atlas, ensuring data consistency between the preview and production environments. Data from the previous preview environment was migrated to the new cloud database.
-- A comprehensive Share Nomination feature has been implemented, including the backend logic and a frontend dialog.
+A full-stack application with a React frontend, a monolithic FastAPI backend (), and a shared MongoDB Atlas database.
+- Admin, Leader, and Member portals with distinct functionalities.
+- A public-facing site with a workshop calendar, donation page, and nomination forms.
+- A complete CSV import feature for workshops has been implemented in the admin panel.
+- Extensive Right-to-Left (RTL) support for Arabic has been added across the application.
+- The database was cleared of test data to prepare for production go-live.
+- A full end-to-end test flow with a sample leader and nominee was created in the database.
 
 **Last working item**:
--   **Last item agent was working:** The agent was correcting the logic of the newly implemented Share Nomination feature. The user specified that when sharing to multiple recipients, the system should automatically create a nomination for each person and send them a direct **registration link** (), rather than the generic nomination form link (). The agent updated the backend and frontend code to reflect this change.
+-   **Last item agent was working:** The agent was starting to implement the user's new three-part request for the nominee workflow. The immediate focus was on the first part: allowing nominees to upload a profile picture directly from their computer in the registration form ().
 -   **Status:** IN PROGRESS
 -   **Agent Testing Done:** N
--   **Which testing method agent to use?** Use the frontend testing agent to test the complete flow of the Share Nomination dialog on the  page. The test should verify that clicking Dela till flera, adding recipients, and generating links results in the creation of new  in the database and provides the user with direct registration links.
+-   **Which testing method agent to use?** Frontend testing agent. The test should navigate to a nominee registration link () and verify that a file input for image upload is present and functional.
 -   **User Testing Done:** N
 
 **All Pending/In progress Issue list**:
--   Issue 1: Verify the corrected Share Nomination link logic (P0)
--   Issue 2: Verify the fix for the nomination status filter (P1)
--   Issue 3: Verify Jennifer's leader account login (P1)
--   Issue 4: User education on deployment process (P2)
+-   Issue 1: Implement new 3-part nominee workflow (P0)
+-   Issue 2: Leader document upload is broken (P1)
+-   Issue 3: Leader registration link is broken on production (P1)
+-   Issue 4: Invitation links sent from production point to preview environment (P2)
 
 **Issues Detail:**
--   **Issue 1: Share Nomination sends the wrong link.**
-    -   **Attempted fixes:** The agent modified  to create a new nomination and a unique registration token for each recipient entered in the share dialog. The frontend component  was also updated.
+-   **Issue 1: Implement new 3-part nominee workflow**
+    -   **Attempted fixes:** The agent started modifying  to add state for an image file but has not implemented the UI or upload logic yet. The other two parts (password creation, admin list) have not been started.
     -   **Next debug checklist:**
-        1.  Go to the  page.
-        2.  Click the Dela till flera (Share to multiple) button for a workshop.
-        3.  In the dialog, add a test recipient (e.g., Test User, test@example.com).
-        4.  Click Skapa Länkar (Create Links).
-        5.  Verify that the link generated for the test user is a direct registration link (e.g., ).
-        6.  Confirm in the  database collection that a new entry was created for Test User.
-    -   **Why fix this issue and what will be achieved with the fix?** This aligns the feature with the user's explicit workflow requirement, simplifying the process for end-nominees.
+        1.  **Image Upload:** In , replace the  URL input with a file input component. Implement the logic to handle file selection, preview, and upload to the backend.
+        2.  **Password Creation:** Design a flow where, after an admin approves a nomination, the user is sent a link to a new page to set their password for the participant portal. This will involve a new endpoint and frontend page.
+        3.  **Admin List:** Create a new component or page in the  section that lists all participants with  and provides tools for group management (e.g., sending group messages, tracking progress).
+    -   **Why fix this issue and what will be achieved with the fix?** This is the user's latest and highest-priority feature request to complete the core user journey.
     -   **Status:** IN PROGRESS
     -   **Is recurring issue?** N
     -   **Should Test frontend/backend/both after fix?** Both.
 
--   **Issue 2: Nomination status filter was incorrect.**
-    -   **Attempted fixes:** The agent adjusted the logic in  to correctly categorize nominations. Väntande (Pending) now means an invitation was sent but the user hasn't completed registration (). Godkända (Approved) means the user has completed registration (). The backend stats endpoint () was also updated.
-    -   **Next debug checklist:** User needs to navigate to  and confirm that the counts and lists under the Väntande and Godkända tabs are now correct.
-    -   **Why fix this issue and what will be achieved with the fix?** Provides admins with an accurate, at-a-glance view of their nomination pipeline.
-    -   **Status:** USER VERIFICATION PENDING
+-   **Issue 2: Leader document upload is broken**
+    -   **Attempted fixes:** The agent identified the issue where the upload hangs. The user suggested changing the feature to accept a document link (e.g., Google Drive) instead of a file upload to reduce server load. The agent started to implement this link-based approach but was interrupted by the higher-priority nominee workflow request.
+    -   **Next debug checklist:**
+        1.  Open .
+        2.  Find the document management section.
+        3.  Replace the current (broken) file upload UI with a text input for a document URL and a Add Link button.
+        4.  Update the backend ( or a new endpoint) to accept a URL and metadata instead of a file.
+    -   **Why fix this issue and what will be achieved with the fix?** Key functionality for leaders is currently broken.
+    -   **Status:** IN PROGRESS
     -   **Is recurring issue?** Y
-    -   **Should Test frontend/backend/both after fix?** Frontend.
+    -   **Should Test frontend/backend/both after fix?** Both.
 
--   **Issue 3: Verify Jennifer's leader account login.**
-    -   **Attempted fixes:** After discovering Jennifer's account did not exist in the new MongoDB Atlas database, the agent manually created a leader account for her.
-    -   **Next debug checklist:** The user needs to confirm if Jennifer can now log in at  using the credentials:  / . This will only work on the production site *after* it has been redeployed.
-    -   **Why fix this issue and what will be achieved with the fix?** A key user is unable to access the system.
-    -   **Status:** USER VERIFICATION PENDING
-    -   **Is recurring issue?** N
-    -   **Should Test frontend/backend/both after fix?** N/A.
-
--   **Issue 4: User education on deployment process.**
-    -   **Attempted fixes:** The agent has repeatedly explained that for changes to appear on the production site (), the user must click the Redeploy button (🔄) and may need to perform a hard refresh () to clear browser cache.
-    -   **Next debug checklist:** This is a recurring educational point. The next agent should reinforce this when finishing any task that affects the production site.
-    -   **Why fix this issue and what will be achieved with the fix?** To prevent user frustration and confusion about why new features/fixes are not visible.
-    -   **Status:** RESOLVED (by explanation).
+-   **Issue 3: Leader registration link is broken on production**
+    -   **Attempted fixes:** The agent verified the feature works correctly on the preview environment. The issue is specific to the production environment (). The agent correctly diagnosed this as a probable misconfiguration of the  environment variable in the production deployment.
+    -   **Next debug checklist:** This is an environment issue, not a code issue. The next agent should reinforce the advice to contact Emergent Support to verify production environment variables.
+    -   **Why fix this issue and what will be achieved with the fix?** Core user onboarding flow for leaders is broken in production.
+    -   **Status:** BLOCKED (on production environment configuration)
     -   **Is recurring issue?** Y
-    -   **Should Test frontend/backend/both after fix?** N/A.
+    -   **Should Test frontend/backend/both after fix?** N/A (Environment issue).
+
+-   **Issue 4: Invitation links sent from production point to preview environment**
+    -   **Attempted fixes:** The agent tried multiple code fixes, culminating in setting a global  variable in  with a hardcoded fallback to . Despite this, the user reports the issue persists on production.
+    -   **Next debug checklist:** This is also an environment issue. The production server is likely using a stale build or an overriding environment variable. The next agent should instruct the user to report this to Emergent Support.
+    -   **Why fix this issue and what will be achieved with the fix?** This breaks the user journey for all nominations and invitations sent from the live site.
+    -   **Status:** BLOCKED (on production environment configuration)
+    -   **Is recurring issue?** Y
+    -   **Should Test frontend/backend/both after fix?** N/A (Environment issue).
 
 **In progress Task List**:
--   None. All work is captured in the issue list.
+-   **Task 1: Implement direct image upload for nominees**
+    -   **Where to resume:** In , the state  has been added. The next step is to add the file input UI element to the form and the handler function to update this state.
+    -   **What will be achieved with this?** The first part of the user's high-priority nominee workflow will be implemented.
+    -   **Status:** IN PROGRESS
+    -   **Should Test frontend/backend/both after fix?** Both.
+    -   **Blocked on something:** None.
 
 **Upcoming and Future Tasks**
-*   **Upcoming Tasks:**
-    *   (P1) Implement Leader-Specific View: The page  needs to be built to show a logged-in facilitator their assigned sessions.
-    *   (P1) Admin Panel for Categories: A UI is needed to manage Expertise and Interest options for member profiles.
-    *   (P1) Refactor : This page still uses mock data from  and should be migrated to fetch live data from the  endpoint.
-*   **Future Tasks:**
-    *   (P2) Agenda Notifications: Implement a system to send reminders to participants about upcoming sessions.
-    *   (P3) PDF Export for Board Meetings: Add functionality to export meeting agendas or minutes to PDF.
-    *   (P3) Online Payment Integration.
+-   **Upcoming Tasks:**
+    -   (P0) Complete the Nominee Workflow:
+        -   Implement password creation flow for approved nominees.
+        -   Create an admin page for managing groups of approved nominees.
+    -   (P1) Implement Leader-Specific View: The page  needs to be built to show a logged-in facilitator their assigned sessions.
+    -   (P1) Admin Panel for Categories: A UI is needed to manage Expertise and Interest options for member profiles.
+    -   (P1) Refactor : This page still uses mock data and should be migrated to fetch live data from the  endpoint.
+-   **Future Tasks:**
+    -   (P2) Agenda Notifications: Implement a system to send reminders to participants about upcoming sessions.
+    -   (P3) PDF Export for Board Meetings: Add functionality to export meeting agendas or minutes to PDF.
+    -   (P3) Online Payment Integration.
 
 **Completed work in this session**
--   **MongoDB Atlas Migration:** The application's backend was reconfigured to use a shared MongoDB Atlas instance for both preview and production. All existing data from the preview environment was migrated to the new cloud database.
--   **Password Protected Admin Dashboard:** Implemented a login wall for the  route.
--   **Enhanced Login/Logout Flow:** Added a prominent logout button in the footer for admins and improved the visibility of the Facilitator Login link on the member login page.
--   **Password Reset Functionality:** Built a complete Forgot Password flow (UI, backend endpoints, email sending) for both Members and Leaders.
--   **Smarter Agenda Notifications:** Updated the Publish Agenda feature to notify all leaders scheduled for that specific workshop program.
--   **Leader Portal Enhancements:** Added a Program tab to the leader portal, allowing any leader to view all published agendas, not just their own.
--   **Comprehensive Nomination Sharing Feature:** Built the new feature from scratch, allowing users to share nominations with multiple recipients via various channels and track their status. This was later added to the public nomination form as well.
--   **Nomination Status Filtering Bugfix:** Corrected the logic in the admin panel to accurately display Pending (awaiting registration) versus Approved (registration complete) nominations.
--   **Clipboard API Bugfix:** Fixed an error related to the Clipboard API by implementing a fallback method.
+-   **CSV Import Feature:** Built a full feature for admins to import nominees/participants from a CSV file (e.g., from Google Forms) for a specific workshop.
+-   **Deployment Health Check:** Added  and  endpoints to the backend to satisfy Kubernetes health checks and fix deployment failures.
+-   **Production URL Hardening:** Attempted to fix the persistent preview link issue by setting a global  in  with a fallback to the production URL, removing reliance on  files in production.
+-   **RTL & Translation Fixes:** Corrected numerous Arabic language issues, including text direction ( for numbers), word choice (donation vs. gift), and ensuring text aligns to the right on all pages.
+-   **UI/UX Improvements:** Redesigned the public nomination form to present a clear choice between nominating a Single Person vs. Multiple People. Moved the button to the top for better visibility.
+-   **WhatsApp Sharing Fix:** Implemented a robust workaround for WhatsApp sharing issues by creating a modal that allows users to copy the message, and using  on desktop to avoid browser blocking.
+-   **Database Management:** Cleared all test data (nominations, participants, etc.) from the database at the user's request to prepare for go-live. Deleted specific board members as requested.
+-   **User Account Management:** Resolved multiple login issues by correcting user email addresses and resetting passwords directly in the database. Created a new leader account.
+-   **Feature Implementation:** Added the full agenda for the National Seminarium March 2026 workshop. Changed the admin form for leaders to use direct image upload instead of a URL field.
+-   **Bug Fix:** Fixed a backend syntax error that was crashing the server.
 
 **Earlier issues found/mentioned but not fixed**
 -   None.
 
 **Known issue recurrence from previous fork**
--   **Deployment Confusion:** The user's recurring confusion about the preview vs. production environments and the need to Redeploy to see changes has been a persistent theme. The migration to a shared MongoDB Atlas instance simplifies the data aspect, but the code deployment workflow still requires user action.
+-   **Issue recurrence in previous fork:** User confusion regarding preview vs. production environments and deployment. This continues to be the root cause of issues like links point to preview and leader registration is broken, which are production environment configuration problems, not code issues.
+-   **Recurrence count:** High.
+-   **Status:** IN PROGRESS (Ongoing user education and code hardening).
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
--   **Shared Cloud Database (MongoDB Atlas):** The application now uses a single source of truth for data across both preview and production environments, resolving previous data inconsistency issues.
--   **Environment Variable Configuration:** The agent managed and updated critical environment variables (, ) and guided the user on the necessity of redeploying the application for these changes to take effect in production.
--   **Complex Feature Development:** A multi-step sharing feature was designed and implemented, involving new data models (), backend endpoints, and a complex frontend dialog with state management and integration with browser APIs.
--   **Data Migration:** A one-time script was executed to successfully migrate 79 documents from the old local database to the new MongoDB Atlas instance.
+-   **Environment Variable Management:** The core of the recurring production issues. The agent has correctly identified that production deployments are not using the right environment variables, leading to incorrect URL generation.
+-   **RTL Support:** Extensive use of conditional CSS () and HTML attributes () to support Arabic.
+-   **CSV Parsing:** Implemented backend logic using Python's  module to read and process uploaded CSV files.
+-   **File Upload:** The agent worked on multiple file upload components, identifying and starting to fix a broken implementation.
 
 **key DB schema**
--   ** (New):** 
--   ** (Modified):** A new leader, Jennifer, was manually added to this collection to resolve a login issue.
--   ** (Modified):** The application now relies on a combination of  and the boolean  to correctly filter the nomination pipeline.
--   **Database Connection:** The  now points to a MongoDB Atlas cluster: 
+-   ****: Contains a  array: . The feature to upload to this is broken.
+-   ****: New participants are created from the CSV import and when a nominee completes registration.
+-   ****: Created by the CSV import or manually. Linked to  upon registration completion.
+
+**changes in tech stack**
+-   None.
 
 **All files of reference**
--   
--   
--   
--   
--   
--   
--   
--   
--   
--   
--   
+-   /app/backend/server.py
+-   /app/frontend/src/pages/NomineeRegistration.jsx (Last worked on)
+-   /app/frontend/src/pages/LeaderPortal.jsx (Broken document upload)
+-   /app/frontend/src/pages/AdminWorkshops.jsx (New CSV import feature)
+-   /app/frontend/src/components/ImportCSVDialog.jsx (New)
+-   /app/frontend/src/pages/PublicNominationForm.jsx
+-   /app/frontend/src/pages/Donations.jsx
+-   /app/frontend/src/data/translations.js
 
 **Areas that need refactoring**:
--   **CRITICAL:**  is extremely large and difficult to maintain. It should be broken down into logical routers using FastAPI's  (e.g., , ). This is a recurring issue that has become more urgent.
--   Several frontend pages have grown significantly and would benefit from logic being extracted into custom hooks or smaller components (e.g., , ).
+-   **CRITICAL:**  is now over 7000 lines long. It is extremely difficult to maintain and debug. It MUST be broken down into logical modules using FastAPI's . This is a top-priority technical debt item.
 
 **key api endpoints**
--   **NEW:**
-    -   : Creates shareable direct registration links.
-    -   : Tracks the status of shared links.
-    -   
-    -   
-    -   : Fetches all published agendas for the leader portal.
--   **MODIFIED:**
-    -   : Backend logic updated to provide correct counts for the fixed filtering.
-    -   : Now notifies all leaders scheduled for the specific workshop.
+-   **NEW:**  (Imports participants from a CSV file)
+-   **NEW:** ,  (For deployment health checks)
+-   **BROKEN:**  (This endpoint likely hangs or fails, causing the frontend to get stuck on Laddar upp...)
 
 **Critical Info for New Agent**
--   **Du MÅSTE svara på svenska.** (You MUST respond in Swedish).
--   The user's main point of confusion is the deployment workflow. When completing tasks, you must remind the user to **Redeploy** (🔄) and clear their browser cache () to see changes on the live site.
--   The highest priority is to test and verify the Share Nomination feature's corrected logic (sending direct registration links). This is the last thing the agent worked on and is not yet user-verified.
--   The database is now a shared MongoDB Atlas instance. This is a stable and positive change.
+-   **You MUST respond in Swedish.**
+-   **Production Environment Issues:** The user is live on . The most persistent issues (incorrect links, broken leader registration) are specific to the production environment and are almost certainly caused by misconfigured environment variables (, ). The code itself works correctly in the preview environment. **Do not get stuck in a loop trying to fix this with code.** Your role is to confirm the code is correct in preview and then gently but firmly guide the user to contact **Emergent Support** to resolve the production configuration.
+-   **User's Priorities:** The user's latest request is the three-part nominee workflow. This should be the highest priority for new development.
+-   **User Confusion:** The user gets confused and frustrated by suggestions to fork or by messages about context limits. Avoid this terminology and continue the work directly.
 
 **documents and test reports created in this job**
 -   None.
 
 **Last 10 User Messages and any pending HUMAN messages**
--   User requests a comprehensive nomination sharing feature.
--   User clarifies the sharing feature should create nominations and send direct registration links (Option B).
--   User reports a bug where the Approved nominations list incorrectly includes people who haven't registered yet. (Fixed, pending verification).
--   User reports the production site () is not showing the latest changes. (Explained).
--   User reports a clipboard-related error on the public nomination form. (Fixed).
--   User wants the sharing feature to be available on the public nomination form itself, not just in the admin panel. (Implemented).
--   User asks why Jennifer cannot log in. (Account manually created, pending verification).
--   User wants the leader login link to be more visible. (Implemented).
--   User asks if publishing an agenda notifies leaders. (Logic updated).
--   User wants all leaders to see all published agendas, not just their own. (Implemented).
+1.  **User:** Requests to create a leader and nominee to test the entire process from start to finish, including attendance, evaluation, and certificate.
+2.  **User:** Reports that the invitation link for a new facilitator doesn't work (points to the wrong page or is invalid).
+3.  **User:** Asks if forking is mandatory. (Agent answered no).
+4.  **User:** Confirms the leader registration link shows an Invalid Link error on .
+5.  **User:** Reports a login issue for leader . (Agent created the account).
+6.  **User:** Reports that leaders cannot upload documents.
+7.  **User:** Provides new requirements: nominees should upload images from their computer, choose a password after being accepted, and admins should have a list to manage them. (This is the current P0 task).
+8.  **User:** Asks not to be shown the context limit warning.
+9.  **User:** Asks for an update on the implementation.
+10. **PENDING:** The user is waiting for the agent to implement the new three-part nominee workflow.
 
 **Project Health Check:**
--   **Broken:** No core functionality is broken. The project is awaiting verification on several bug fixes and new features. The primary blocker is the user's need to redeploy the application to see the latest changes.
--   **Mocked:**  still relies on mock data.
+-   **Broken:**
+    -   Leader document upload in the leader portal.
+    -   Production deployment configuration (causing multiple user-facing issues).
+-   **Mocked:**
+    -    still uses mock data.
 
 **3rd Party Integrations**
 -   **MongoDB Atlas:** Cloud-hosted database.
--   **Resend:** Used for transactional emails (password resets, notifications).
+-   **Resend:** Used for transactional emails.
 -   **lucide-react:** Icon library used in the frontend.
 
 **Testing status**
 -   **Testing agent used after significant changes:** NO
 -   **Troubleshoot agent used after agent stuck in loop:** NO
 -   **Test files created:** None.
--   **Known regressions:** A bug in nomination status filtering was introduced and then fixed within this session.
+-   **Known regressions:** None.
 
 **Credentials to test flow:**
 -   **Admin Dashboard:**  -> 
--   **Member Portal:**  -> 
--   **Board Admin:**  -> 
--   **Leader (Jennifer):**  ->  / 
+-   **Leader (Test):**  ->  / 
+-   **Participant (Test):**  ->  / 
 
 **What agent forgot to execute**
--   The agent did not perform a final test (e.g., via screenshot) to verify the corrected logic of the Share Nomination feature after implementing the user's requested change (sending registration links instead of nomination links).</analysis>
+-   The agent did not complete the implementation of the new nominee workflow, which was the user's last and highest-priority request.
+-   The agent did not fully resolve the broken leader document upload feature; it was left in a half-started state of being converted to a link-based system.</analysis>
