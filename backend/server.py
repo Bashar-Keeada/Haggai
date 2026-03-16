@@ -2332,7 +2332,7 @@ async def approve_or_reject_registration(nomination_id: str, approval: Registrat
 
 
 async def create_participant_account(nomination: dict, registration_data: dict):
-    """Create a participant account with login access"""
+    """Create a participant account with pending password setup"""
     email = registration_data.get("email", nomination.get("nominee_email"))
     
     if not email:
@@ -2343,39 +2343,43 @@ async def create_participant_account(nomination: dict, registration_data: dict):
     if existing:
         return existing
     
-    # Generate password
-    password = generate_password()
-    password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    # Generate password setup token (user will set their own password)
+    password_setup_token = str(uuid.uuid4())
     
     participant = {
         "id": str(uuid.uuid4()),
         "nomination_id": nomination.get("id"),
         "email": email,
-        "password_hash": password_hash,
+        "password_hash": None,  # Will be set when user creates password
+        "password_setup_token": password_setup_token,
+        "password_setup_token_expires": (datetime.now(timezone.utc) + timedelta(days=7)).isoformat(),
         "full_name": registration_data.get("full_name", nomination.get("nominee_name", "")),
         "phone": registration_data.get("phone", ""),
         "gender": registration_data.get("gender", ""),
         "date_of_birth": registration_data.get("date_of_birth", ""),
-        "church_name": registration_data.get("church_name", ""),
-        "church_role": registration_data.get("church_role", ""),
+        "church_name": registration_data.get("church_organization", registration_data.get("church_name", "")),
+        "church_role": registration_data.get("ministry_participation", registration_data.get("church_role", "")),
         "profile_image": registration_data.get("profile_image"),
+        "country": registration_data.get("country_of_residence", ""),
+        "nationality": registration_data.get("nationality", ""),
+        "job_title": registration_data.get("job_title", ""),
+        "address": registration_data.get("address", ""),
+        "marital_status": registration_data.get("marital_status", ""),
+        "age": registration_data.get("age", ""),
         "workshop_id": nomination.get("event_id"),
         "workshop_title": nomination.get("event_title", ""),
         "attendance_hours": 0,
         "diploma_received": False,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
-        "is_active": True,
-        "password": password  # Store temporarily to send in email
+        "is_active": False,  # Inactive until password is set
+        "account_activated": False
     }
-    
-    # Don't store plain password in DB
-    temp_password = participant.pop("password")
     
     await db.participants.insert_one(participant)
     
-    # Return with password for email
-    participant["password"] = temp_password
+    # Return with token for email
+    participant["password_setup_token"] = password_setup_token
     return participant
 
 
