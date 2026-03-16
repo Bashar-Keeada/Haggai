@@ -29,7 +29,15 @@ from reportlab.lib.enums import TA_CENTER
 
 
 ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
+
+# Load .env file if it exists (for local development)
+env_file = ROOT_DIR / '.env'
+if env_file.exists():
+    load_dotenv(env_file)
+
+# FRONTEND_URL - Use environment variable, fallback to production URL
+# In Emergent production, this should be set via environment config
+FRONTEND_URL = os.environ.get('FRONTEND_URL') or 'https://haggai.se'
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
