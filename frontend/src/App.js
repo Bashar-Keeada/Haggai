@@ -36,6 +36,7 @@ import NomineeRegistration from "./pages/NomineeRegistration";
 import PublicAgenda from "./pages/PublicAgenda";
 import LeaderSessions from "./pages/LeaderSessions";
 import PublicNominationForm from "./pages/PublicNominationForm";
+import PublicWorkshopRegistration from "./pages/PublicWorkshopRegistration";
 // Leader Portal Pages
 import LeaderRegistrationForm from "./pages/LeaderRegistrationForm";
 import LeaderLogin from "./pages/LeaderLogin";
@@ -82,6 +83,7 @@ function App() {
               <Route path="/ledare/:leaderId/sessioner" element={<LeaderSessions />} />
               <Route path="/utvardering/:workshopId/:sessionId" element={<SessionEvaluationForm />} />
               <Route path="/nominera/:workshopId" element={<PublicNominationForm />} />
+              <Route path="/anmal/:workshopId" element={<PublicWorkshopRegistration />} />
               {/* Leader Portal Routes */}
               <Route path="/ledare/registrera/:token" element={<LeaderRegistrationForm />} />
               <Route path="/ledare/login" element={<LeaderLogin />} />
