@@ -7313,6 +7313,59 @@ async def upload_leader_document(
     return {"message": "Dokument uppladdat", "document_id": document["id"]}
 
 
+class DocumentLinkInput(BaseModel):
+    document_type: str
+    document_name: str
+    document_url: str
+
+
+@api_router.post("/leaders/me/documents/link")
+async def add_leader_document_link(data: DocumentLinkInput, authorization: str = Header(None)):
+    """Add a document link for the current leader"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Ej auktoriserad")
+    
+    token = authorization.replace("Bearer ", "")
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        if payload.get("type") != "leader":
+            raise HTTPException(status_code=401, detail="Ogiltig token")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token har gått ut")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Ogiltig token")
+    
+    leader_id = payload['sub']
+    
+    # Valid document types
+    valid_types = ["topic_material", "receipt", "travel_ticket", "profile_image", "other"]
+    if data.document_type not in valid_types:
+        raise HTTPException(status_code=400, detail=f"Ogiltig dokumenttyp. Giltiga: {valid_types}")
+    
+    # Validate URL
+    if not data.document_url.startswith(('http://', 'https://')):
+        raise HTTPException(status_code=400, detail="Ogiltig URL")
+    
+    document = {
+        "id": str(uuid.uuid4()),
+        "filename": data.document_name,
+        "type": data.document_type,
+        "url": data.document_url,
+        "uploaded_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.leader_registrations.update_one(
+        {"id": leader_id},
+        {
+            "$push": {"documents": document},
+            "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+        }
+    )
+    
+    logging.info(f"Document link added for leader {leader_id}: {data.document_name}")
+    return {"message": "Dokument tillagt", "document_id": document["id"]}
+
+
 @api_router.delete("/leaders/me/documents/{document_id}")
 async def delete_leader_document(document_id: str, authorization: str = Header(None)):
     """Delete a document"""
