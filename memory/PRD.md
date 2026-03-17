@@ -95,10 +95,9 @@ Multi-page website for "Haggai Sweden" - a comprehensive full-stack application 
 
 ## Upcoming Tasks (P1)
 
-1. **Leader Document Upload Fix** - Change from file upload to link-based system (Google Drive etc.) in LeaderPortal.jsx
-2. **LeaderSessions.jsx** - Implement facilitator-specific view showing assigned sessions
-3. **Admin Categories Panel** - UI for managing "Expertise" and "Interest" options
-4. **LeaderExperience.jsx Refactor** - Migrate from mock.js to `/api/workshops` endpoint
+1. **Admin Categories Panel** - UI för managing "Expertise" and "Interest" options
+2. **LeaderExperience.jsx Refactor** - Migrate from mock.js to `/api/workshops` endpoint
+3. **Admin panel for managing approved nominees** - Group management tools
 
 ## Known Issues
 
