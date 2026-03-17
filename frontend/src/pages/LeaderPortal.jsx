@@ -172,7 +172,7 @@ const LeaderPortal = () => {
       },
       documents: {
         title: 'My documents',
-        upload: 'Upload document',
+        upload: 'Add document link',
         types: {
           profile_image: 'Profile picture',
           topic_material: 'Topic material',
@@ -180,9 +180,13 @@ const LeaderPortal = () => {
           travel_ticket: 'Travel ticket',
           other: 'Other'
         },
-        noDocuments: 'You have no uploaded documents.',
+        noDocuments: 'You have no documents yet.',
         delete: 'Delete',
-        uploadedAt: 'Uploaded'
+        uploadedAt: 'Added',
+        linkPlaceholder: 'Paste link (Google Drive, Dropbox, etc.)',
+        namePlaceholder: 'Document name',
+        addLink: 'Add',
+        openLink: 'Open'
       },
       badge: {
         title: 'Name Badge',
