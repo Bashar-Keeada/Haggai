@@ -109,12 +109,17 @@ const AdminWorkshops = () => {
       importCSV: 'Importera CSV',
       showQR: 'Visa QR-kod',
       nominationLink: 'Nomineringslänk',
-      qrCodeTitle: 'QR-kod för nominering',
+      qrCodeTitle: 'Dela workshop',
       qrCodeDescription: 'Skanna för att nominera en deltagare till denna workshop',
       copyLink: 'Kopiera länk',
       linkCopied: 'Länk kopierad!',
       downloadQR: 'Ladda ner QR-kod',
-      close: 'Stäng'
+      close: 'Stäng',
+      publicRegistration: 'Öppen anmälningslänk',
+      publicRegDescription: 'Dela denna länk så kan vem som helst anmäla sig direkt',
+      publicRegLink: 'Öppen anmälan',
+      nominationSection: 'Nominering (personlig inbjudan)',
+      publicSection: 'Öppen anmälan (dela till alla)'
     },
     en: {
       title: 'Manage Workshops',
@@ -166,12 +171,17 @@ const AdminWorkshops = () => {
       shareToMultiple: 'Share to multiple',
       showQR: 'Show QR code',
       nominationLink: 'Nomination link',
-      qrCodeTitle: 'QR code for nomination',
+      qrCodeTitle: 'Share workshop',
       qrCodeDescription: 'Scan to nominate a participant for this workshop',
       copyLink: 'Copy link',
       linkCopied: 'Link copied!',
       downloadQR: 'Download QR code',
-      close: 'Close'
+      close: 'Close',
+      publicRegistration: 'Public registration link',
+      publicRegDescription: 'Share this link so anyone can register directly',
+      publicRegLink: 'Public registration',
+      nominationSection: 'Nomination (personal invitation)',
+      publicSection: 'Public registration (share with everyone)'
     },
     ar: {
       title: 'إدارة ورش العمل',
