@@ -446,6 +446,12 @@ const AdminWorkshops = () => {
     return `${baseUrl}/nominera/${workshopId}`;
   };
 
+  // Get public registration link for a workshop
+  const getPublicRegistrationLink = (workshopId) => {
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/anmal/${workshopId}?lang=ar`;
+  };
+
   // Copy nomination link to clipboard
   const copyNominationLink = (workshop) => {
     const link = getNominationLink(workshop.id);
@@ -456,6 +462,16 @@ const AdminWorkshops = () => {
     });
     // Also open QR modal to show the link visually
     openQRModal(workshop);
+  };
+
+  // Copy public registration link to clipboard
+  const copyPublicRegistrationLink = (workshopId) => {
+    const link = getPublicRegistrationLink(workshopId);
+    navigator.clipboard.writeText(link).then(() => {
+      toast.success(txt.linkCopied);
+    }).catch(() => {
+      toast.error('Kunde inte kopiera länken');
+    });
   };
 
   // Open QR code modal
