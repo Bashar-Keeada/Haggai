@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { 
   User, Calendar, FileText, Upload, LogOut, Edit2, Save, X,
   Plane, CreditCard, CheckCircle, Clock, MapPin, Users, 
-  ChevronRight, AlertCircle, Trash2, Eye, IdCard, Download, Printer
+  ChevronRight, AlertCircle, Trash2, Eye, IdCard, Download, Printer, Link2, ExternalLink, Plus
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
