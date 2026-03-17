@@ -16,9 +16,21 @@ Multi-page website for "Haggai Sweden" - a comprehensive full-stack application 
 3. **Participants** - Register for workshops, complete training
 4. **Facilitators/Trainers** - Lead workshops, access session materials
 
-## Completed Features (as of 2026-03-14)
+## Completed Features (as of 2026-03-17)
 
-### This Session (2026-03-14) - Nominee Workflow Enhancement
+### This Session (2026-03-17) - Öppen anmälningslänk
+- [x] **Public Workshop Registration** - Ny URL: `/anmal/{workshopId}`:
+  - Samma formulär som nominering men öppet för alla
+  - Nytt fält: "Vem rekommenderade dig?" (valfritt)
+  - Stöd för svenska/engelska/arabiska
+  - Backend endpoint: `POST /api/workshops/{id}/public-register`
+- [x] **Admin QR-dialog uppgraderad**:
+  - Visar nu BÅDA länkar: öppen anmälan (grön) + nominering (grå)
+  - Varje länk har egen QR-kod
+  - Kopiera länk och ladda ner QR-kod för båda
+- [x] **Bug fix**: `create_participant_account()` hanterar nu befintliga deltagare korrekt
+
+### Previous Session (2026-03-14) - Nominee Workflow Enhancement
 - [x] **Profile Image Upload** - Nominees can now upload profile picture directly from computer during registration (NomineeRegistration.jsx):
   - File input with image preview
   - Image validation (type & max 5MB size)
