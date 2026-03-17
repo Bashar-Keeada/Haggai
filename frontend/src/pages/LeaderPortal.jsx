@@ -989,7 +989,7 @@ const LeaderPortal = () => {
             {uploadType && (
               <>
                 <div className="space-y-2">
-                  <Label>{txt.documents.namePlaceholder}</Label>
+                  <Label>{language === 'sv' ? 'Dokumentnamn' : 'Document name'}</Label>
                   <Input 
                     value={documentName}
                     onChange={(e) => setDocumentName(e.target.value)}
