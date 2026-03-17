@@ -320,36 +320,51 @@ const LeaderPortal = () => {
     }
   };
 
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const handleAddDocumentLink = async () => {
+    if (!documentLink || !documentName || !uploadType) {
+      toast.error(language === 'sv' ? 'Fyll i alla fält' : 'Fill in all fields');
+      return;
+    }
+    
+    // Validate URL
+    try {
+      new URL(documentLink);
+    } catch {
+      toast.error(language === 'sv' ? 'Ogiltig länk' : 'Invalid link');
+      return;
+    }
     
     setUploadingDoc(true);
     const token = localStorage.getItem('leader_token');
     
     try {
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        const base64 = event.target.result.split(',')[1];
-        
-        const response = await fetch(`${BACKEND_URL}/api/leaders/me/documents?document_type=${uploadType}&filename=${file.name}&file_data=${encodeURIComponent(base64)}`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        if (response.ok) {
-          toast.success(language === 'sv' ? 'Dokument uppladdat' : 'Document uploaded');
-          fetchLeaderData(token); // Refresh to get updated documents
-          setShowUploadDialog(false);
-        } else {
-          throw new Error('Upload failed');
-        }
-        setUploadingDoc(false);
-      };
-      reader.readAsDataURL(file);
+      const response = await fetch(`${BACKEND_URL}/api/leaders/me/documents/link`, {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          document_type: uploadType,
+          document_name: documentName,
+          document_url: documentLink
+        })
+      });
+      
+      if (response.ok) {
+        toast.success(language === 'sv' ? 'Dokument tillagt' : 'Document added');
+        fetchLeaderData(token);
+        setShowUploadDialog(false);
+        setDocumentLink('');
+        setDocumentName('');
+        setUploadType('');
+      } else {
+        throw new Error('Add failed');
+      }
     } catch (err) {
-      console.error('Error uploading document:', err);
-      toast.error(language === 'sv' ? 'Kunde inte ladda upp dokument' : 'Could not upload document');
+      console.error('Error adding document link:', err);
+      toast.error(language === 'sv' ? 'Kunde inte lägga till dokument' : 'Could not add document');
+    } finally {
       setUploadingDoc(false);
     }
   };
