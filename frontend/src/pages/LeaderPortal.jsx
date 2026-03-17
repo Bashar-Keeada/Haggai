@@ -960,11 +960,14 @@ const LeaderPortal = () => {
         </Tabs>
       </main>
 
-      {/* Upload Dialog */}
+      {/* Add Document Link Dialog */}
       <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{txt.documents.upload}</DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
+              <Link2 className="h-5 w-5 text-haggai" />
+              {txt.documents.upload}
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
