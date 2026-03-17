@@ -18,7 +18,7 @@ Multi-page website for "Haggai Sweden" - a comprehensive full-stack application 
 
 ## Completed Features (as of 2026-03-17)
 
-### This Session (2026-03-17) - Öppen anmälningslänk
+### This Session (2026-03-17) - Öppen anmälningslänk + Ledarfunktioner
 - [x] **Public Workshop Registration** - Ny URL: `/anmal/{workshopId}`:
   - Samma formulär som nominering men öppet för alla
   - Nytt fält: "Vem rekommenderade dig?" (valfritt)
@@ -28,6 +28,16 @@ Multi-page website for "Haggai Sweden" - a comprehensive full-stack application 
   - Visar nu BÅDA länkar: öppen anmälan (grön) + nominering (grå)
   - Varje länk har egen QR-kod
   - Kopiera länk och ladda ner QR-kod för båda
+- [x] **Leader Document Upload → Link-based System**:
+  - Ersatt filuppladdning med länkbaserat system
+  - Stöd för Google Drive, Dropbox, etc.
+  - Ny endpoint: `POST /api/leaders/me/documents/link`
+  - Dokument visas med "Öppna"-knapp
+- [x] **LeaderSessions.jsx Rebuilt**:
+  - Använder nu token-autentisering istället för URL-parameter
+  - Visar "Du är inte inloggad" för ej inloggade
+  - Stöd för svenska/engelska/arabiska
+  - Grupperar sessioner per workshop
 - [x] **Bug fix**: `create_participant_account()` hanterar nu befintliga deltagare korrekt
 
 ### Previous Session (2026-03-14) - Nominee Workflow Enhancement
