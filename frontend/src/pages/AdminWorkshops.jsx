@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ArrowLeft, Plus, Edit2, Trash2, Save, X, Calendar, MapPin, 
-  Users, Globe, Home, Monitor, GraduationCap, CalendarDays, QrCode, Share2, Upload
+  Users, Globe, Home, Monitor, GraduationCap, CalendarDays, QrCode, Share2, Upload, UserPlus
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
