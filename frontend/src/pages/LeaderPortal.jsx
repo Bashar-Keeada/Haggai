@@ -999,13 +999,18 @@ const LeaderPortal = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label>{txt.documents.linkPlaceholder}</Label>
+                  <Label>{language === 'sv' ? 'Länk' : 'Link'}</Label>
                   <Input 
                     value={documentLink}
                     onChange={(e) => setDocumentLink(e.target.value)}
                     placeholder={txt.documents.linkPlaceholder}
                     disabled={uploadingDoc}
                   />
+                  <p className="text-xs text-stone-500">
+                    {language === 'sv' 
+                      ? 'Tips: Ladda upp filen till Google Drive eller Dropbox och klistra in delningslänken här.' 
+                      : 'Tip: Upload the file to Google Drive or Dropbox and paste the sharing link here.'}
+                  </p>
                 </div>
                 
                 <Button 
