@@ -80,6 +80,7 @@ function App() {
               <Route path="/medlem/glomt-losenord" element={<MemberForgotPassword />} />
               <Route path="/medlem/aterstall-losenord/:token" element={<MemberResetPassword />} />
               <Route path="/program/:workshopId" element={<PublicAgenda />} />
+              <Route path="/ledare/sessioner" element={<LeaderSessions />} />
               <Route path="/ledare/:leaderId/sessioner" element={<LeaderSessions />} />
               <Route path="/utvardering/:workshopId/:sessionId" element={<SessionEvaluationForm />} />
               <Route path="/nominera/:workshopId" element={<PublicNominationForm />} />
