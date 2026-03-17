@@ -232,12 +232,17 @@ const AdminWorkshops = () => {
       shareToMultiple: 'مشاركة للعديد',
       showQR: 'عرض رمز QR',
       nominationLink: 'رابط الترشيح',
-      qrCodeTitle: 'رمز QR للترشيح',
+      qrCodeTitle: 'مشاركة الورشة',
       qrCodeDescription: 'امسح لترشيح مشارك لهذه الورشة',
       copyLink: 'نسخ الرابط',
       linkCopied: 'تم نسخ الرابط!',
       downloadQR: 'تحميل رمز QR',
-      close: 'إغلاق'
+      close: 'إغلاق',
+      publicRegistration: 'رابط التسجيل المفتوح',
+      publicRegDescription: 'شارك هذا الرابط ليتمكن أي شخص من التسجيل مباشرة',
+      publicRegLink: 'التسجيل المفتوح',
+      nominationSection: 'الترشيح (دعوة شخصية)',
+      publicSection: 'التسجيل المفتوح (مشاركة للجميع)'
     }
   }[language] || {};
 
