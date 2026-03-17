@@ -91,7 +91,7 @@ const LeaderPortal = () => {
       },
       documents: {
         title: 'Mina dokument',
-        upload: 'Ladda upp dokument',
+        upload: 'Lägg till dokumentlänk',
         types: {
           profile_image: 'Profilbild',
           topic_material: 'Ämnes-material',
@@ -99,9 +99,13 @@ const LeaderPortal = () => {
           travel_ticket: 'Resebiljett',
           other: 'Övrigt'
         },
-        noDocuments: 'Du har inga uppladdade dokument.',
+        noDocuments: 'Du har inga dokument än.',
         delete: 'Radera',
-        uploadedAt: 'Uppladdat'
+        uploadedAt: 'Tillagd',
+        linkPlaceholder: 'Klistra in länk (Google Drive, Dropbox, etc.)',
+        namePlaceholder: 'Dokumentnamn',
+        addLink: 'Lägg till',
+        openLink: 'Öppna'
       },
       badge: {
         title: 'Namnskylt',
