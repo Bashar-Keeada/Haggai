@@ -2344,6 +2344,18 @@ async def create_participant_account(nomination: dict, registration_data: dict):
     # Check if participant already exists
     existing = await db.participants.find_one({"email": email})
     if existing:
+        # If existing participant doesn't have password_setup_token, generate one
+        if not existing.get("password_setup_token") and not existing.get("account_activated"):
+            password_setup_token = str(uuid.uuid4())
+            await db.participants.update_one(
+                {"id": existing["id"]},
+                {"$set": {
+                    "password_setup_token": password_setup_token,
+                    "password_setup_token_expires": (datetime.now(timezone.utc) + timedelta(days=7)).isoformat(),
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }}
+            )
+            existing["password_setup_token"] = password_setup_token
         return existing
     
     # Generate password setup token (user will set their own password)
