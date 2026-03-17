@@ -799,22 +799,35 @@ const LeaderPortal = () => {
                     {leader.documents.map((doc) => (
                       <div key={doc.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-stone-50">
                         <div className="flex items-center gap-3">
-                          <FileText className="h-8 w-8 text-haggai" />
+                          <Link2 className="h-8 w-8 text-haggai" />
                           <div>
-                            <p className="font-medium text-stone-800">{doc.filename}</p>
+                            <p className="font-medium text-stone-800">{doc.document_name || doc.filename}</p>
                             <p className="text-xs text-stone-500">
-                              {txt.documents.types[doc.type] || doc.type} • {txt.documents.uploadedAt}: {new Date(doc.uploaded_at).toLocaleDateString()}
+                              {txt.documents.types[doc.document_type || doc.type] || doc.document_type || doc.type} • {txt.documents.uploadedAt}: {new Date(doc.uploaded_at).toLocaleDateString()}
                             </p>
                           </div>
                         </div>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="text-red-500 hover:text-red-700"
-                          onClick={() => handleDeleteDocument(doc.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <div className="flex items-center gap-2">
+                          {doc.document_url && (
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="text-haggai border-haggai hover:bg-haggai hover:text-white"
+                              onClick={() => window.open(doc.document_url, '_blank')}
+                            >
+                              <ExternalLink className="h-4 w-4 mr-1" />
+                              {txt.documents.openLink}
+                            </Button>
+                          )}
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="text-red-500 hover:text-red-700"
+                            onClick={() => handleDeleteDocument(doc.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </div>
