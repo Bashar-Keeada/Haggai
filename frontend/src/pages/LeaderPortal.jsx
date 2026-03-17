@@ -971,21 +971,42 @@ const LeaderPortal = () => {
             </div>
             
             {uploadType && (
-              <div className="space-y-2">
-                <Label>Fil</Label>
-                <Input 
-                  type="file" 
-                  onChange={handleFileUpload}
-                  disabled={uploadingDoc}
-                  accept={uploadType === 'profile_image' ? 'image/*' : '*'}
-                />
-              </div>
+              <>
+                <div className="space-y-2">
+                  <Label>{txt.documents.namePlaceholder}</Label>
+                  <Input 
+                    value={documentName}
+                    onChange={(e) => setDocumentName(e.target.value)}
+                    placeholder={txt.documents.namePlaceholder}
+                    disabled={uploadingDoc}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label>{txt.documents.linkPlaceholder}</Label>
+                  <Input 
+                    value={documentLink}
+                    onChange={(e) => setDocumentLink(e.target.value)}
+                    placeholder={txt.documents.linkPlaceholder}
+                    disabled={uploadingDoc}
+                  />
+                </div>
+                
+                <Button 
+                  onClick={handleAddDocumentLink}
+                  disabled={uploadingDoc || !documentName || !documentLink}
+                  className="w-full bg-haggai hover:bg-haggai-dark"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  {txt.documents.addLink}
+                </Button>
+              </>
             )}
             
             {uploadingDoc && (
               <div className="flex items-center justify-center py-4">
                 <div className="w-6 h-6 border-2 border-haggai border-t-transparent rounded-full animate-spin" />
-                <span className="ml-2">Laddar upp...</span>
+                <span className="ml-2">{language === 'sv' ? 'Lägger till...' : 'Adding...'}</span>
               </div>
             )}
           </div>
