@@ -1028,6 +1028,8 @@ const LeaderPortal = () => {
                 {txt.documents.addLink}
               </Button>
             )}
+              </>
+            )}
           </div>
         </DialogContent>
       </Dialog>
