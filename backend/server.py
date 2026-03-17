@@ -3209,6 +3209,149 @@ async def delete_workshop(workshop_id: str):
     return {"message": "Workshop deleted successfully"}
 
 
+# ==================== PUBLIC WORKSHOP REGISTRATION ====================
+
+class PublicRegistrationData(BaseModel):
+    full_name: str
+    gender: str
+    country_of_residence: str
+    nationality: str
+    phone: str
+    email: str
+    job_title: str
+    church_organization: str
+    ministry_participation: str
+    marital_status: str
+    address: str
+    age: str
+    date_of_birth: str
+    commitment_attendance: str
+    commitment_active_role: str
+    notes: Optional[str] = None
+    recommended_by: Optional[str] = None
+    profile_image: Optional[str] = None
+
+
+@api_router.post("/workshops/{workshop_id}/public-register")
+async def public_workshop_registration(workshop_id: str, data: PublicRegistrationData):
+    """Public registration for a workshop - creates nomination and registration in one step"""
+    # Verify workshop exists and is active
+    workshop = await db.workshops.find_one({"id": workshop_id})
+    if not workshop:
+        raise HTTPException(status_code=404, detail="Workshop not found")
+    
+    if not workshop.get("is_active", True):
+        raise HTTPException(status_code=400, detail="Workshop is not accepting registrations")
+    
+    # Check if email already registered for this workshop
+    existing = await db.nominations.find_one({
+        "event_id": workshop_id,
+        "$or": [
+            {"nominee_email": data.email},
+            {"registration_data.email": data.email}
+        ]
+    })
+    if existing:
+        raise HTTPException(status_code=400, detail="Already registered for this workshop")
+    
+    # Get workshop title
+    workshop_title = workshop.get("title", "")
+    if isinstance(workshop_title, dict):
+        workshop_title = workshop_title.get("sv", workshop_title.get("ar", "Workshop"))
+    
+    # Create nomination with registration data
+    nomination_id = str(uuid.uuid4())
+    nomination = {
+        "id": nomination_id,
+        "event_id": workshop_id,
+        "event_title": workshop_title,
+        "event_date": workshop.get("date"),
+        "nominator_name": data.recommended_by or "Självregistrering",
+        "nominator_email": "",
+        "nominator_phone": "",
+        "nominee_name": data.full_name,
+        "nominee_email": data.email,
+        "nominee_phone": data.phone,
+        "status": "pending_approval",
+        "registration_completed": True,
+        "registration_data": data.model_dump(),
+        "registration_type": "public",  # Mark as public registration
+        "recommended_by": data.recommended_by,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.nominations.insert_one(nomination)
+    
+    # Send notification to admin
+    try:
+        await send_public_registration_email_to_admin(nomination, data, workshop)
+    except Exception as e:
+        logging.error(f"Failed to send public registration notification: {e}")
+    
+    return {
+        "success": True,
+        "message": "Registration submitted successfully",
+        "nomination_id": nomination_id
+    }
+
+
+async def send_public_registration_email_to_admin(nomination: dict, registration: PublicRegistrationData, workshop: dict):
+    """Send notification to admin about public registration"""
+    if not resend.api_key:
+        logging.warning("Resend API key not configured")
+        return
+    
+    workshop_title = workshop.get("title", "Workshop")
+    recommended_by = registration.recommended_by or "Ingen angiven"
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #15564e 0%, #0f403a 100%); padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 20px;">📝 Ny öppen anmälan</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 5px 0 0 0;">{workshop_title}</p>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+            <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="color: #2e7d32; margin: 0 0 10px 0;">Registreringstyp: Öppen länk</h3>
+                <p style="margin: 0;"><strong>Rekommenderad av:</strong> {recommended_by}</p>
+            </div>
+            
+            <h3 style="color: #333;">Deltagarinformation</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Namn:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">{registration.full_name}</td></tr>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>E-post:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">{registration.email}</td></tr>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Telefon:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">{registration.phone}</td></tr>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Land:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">{registration.country_of_residence}</td></tr>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Kyrka:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">{registration.church_organization}</td></tr>
+            </table>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="{FRONTEND_URL}/admin/nomineringar" style="display: inline-block; background: #15564e; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px;">
+                    Granska i Admin →
+                </a>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        await asyncio.to_thread(resend.Emails.send, {
+            "from": SENDER_EMAIL,
+            "to": [ADMIN_EMAIL],
+            "subject": f"📝 Ny öppen anmälan: {registration.full_name} → {workshop_title}",
+            "html": html_content
+        })
+        logging.info(f"Public registration notification sent to admin for {registration.email}")
+    except Exception as e:
+        logging.error(f"Failed to send public registration email: {str(e)}")
+
+
 @api_router.post("/workshops/seed-initial")
 async def seed_initial_workshops():
     """Seed initial workshops from the specification"""
