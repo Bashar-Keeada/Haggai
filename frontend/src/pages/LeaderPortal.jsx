@@ -1012,23 +1012,21 @@ const LeaderPortal = () => {
                       : 'Tip: Upload the file to Google Drive or Dropbox and paste the sharing link here.'}
                   </p>
                 </div>
-                
-                <Button 
-                  onClick={handleAddDocumentLink}
-                  disabled={uploadingDoc || !documentName || !documentLink}
-                  className="w-full bg-haggai hover:bg-haggai-dark"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  {txt.documents.addLink}
-                </Button>
-              </>
-            )}
             
-            {uploadingDoc && (
+            {uploadingDoc ? (
               <div className="flex items-center justify-center py-4">
                 <div className="w-6 h-6 border-2 border-haggai border-t-transparent rounded-full animate-spin" />
                 <span className="ml-2">{language === 'sv' ? 'Lägger till...' : 'Adding...'}</span>
               </div>
+            ) : (
+              <Button 
+                onClick={handleAddDocumentLink}
+                disabled={!uploadType || !documentName || !documentLink}
+                className="w-full bg-haggai hover:bg-haggai-dark"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                {txt.documents.addLink}
+              </Button>
             )}
           </div>
         </DialogContent>
