@@ -971,13 +971,13 @@ const LeaderPortal = () => {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Typ av dokument</Label>
+              <Label>{language === 'sv' ? 'Typ av dokument' : 'Document type'}</Label>
               <select 
                 value={uploadType}
                 onChange={(e) => setUploadType(e.target.value)}
                 className="w-full p-2 border rounded-lg"
               >
-                <option value="">Välj typ...</option>
+                <option value="">{language === 'sv' ? 'Välj typ...' : 'Select type...'}</option>
                 <option value="profile_image">{txt.documents.types.profile_image}</option>
                 <option value="topic_material">{txt.documents.types.topic_material}</option>
                 <option value="receipt">{txt.documents.types.receipt}</option>
