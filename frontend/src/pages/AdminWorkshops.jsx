@@ -929,47 +929,122 @@ const AdminWorkshops = () => {
                 )}
               </div>
 
-              {/* QR Code */}
-              <div className="flex justify-center p-4 bg-white rounded-xl border-2 border-dashed border-stone-200">
-                <QRCodeSVG 
-                  id="nomination-qr-code"
-                  value={getNominationLink(qrWorkshop.id)}
-                  size={200}
-                  level="H"
-                  includeMargin={true}
-                  data-testid="nomination-qr-code"
-                />
+              {/* PUBLIC REGISTRATION SECTION - Primary */}
+              <div className="bg-emerald-50 rounded-xl p-4 border-2 border-emerald-200">
+                <h4 className={`font-semibold text-emerald-800 mb-3 flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <UserPlus className="h-5 w-5" />
+                  {txt.publicSection || 'Öppen anmälan (dela till alla)'}
+                </h4>
+                
+                {/* QR Code for public registration */}
+                <div className="flex justify-center p-4 bg-white rounded-xl border-2 border-dashed border-emerald-200 mb-4">
+                  <QRCodeSVG 
+                    id="public-registration-qr-code"
+                    value={getPublicRegistrationLink(qrWorkshop.id)}
+                    size={180}
+                    level="H"
+                    includeMargin={true}
+                    data-testid="public-registration-qr-code"
+                  />
+                </div>
+
+                <p className="text-center text-sm text-emerald-700 mb-3">
+                  {txt.publicRegDescription || 'Dela denna länk så kan vem som helst anmäla sig direkt'}
+                </p>
+
+                {/* Link display */}
+                <div className="bg-white rounded-lg p-3 break-all text-sm text-stone-600 font-mono mb-3">
+                  {getPublicRegistrationLink(qrWorkshop.id)}
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-3">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => copyPublicRegistrationLink(qrWorkshop.id)}
+                    className="flex-1 border-emerald-300 text-emerald-700 hover:bg-emerald-100"
+                    data-testid="copy-public-link-btn"
+                  >
+                    <Share2 className="h-4 w-4 mr-2" />
+                    {txt.copyLink}
+                  </Button>
+                  <Button 
+                    onClick={() => {
+                      const svg = document.getElementById('public-registration-qr-code');
+                      if (!svg) return;
+                      const svgData = new XMLSerializer().serializeToString(svg);
+                      const canvas = document.createElement('canvas');
+                      const ctx = canvas.getContext('2d');
+                      const img = new Image();
+                      img.onload = () => {
+                        canvas.width = 300;
+                        canvas.height = 300;
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, 0, 0, 300, 300);
+                        const pngFile = canvas.toDataURL('image/png');
+                        const downloadLink = document.createElement('a');
+                        downloadLink.download = `anmalan-qr-${qrWorkshop?.id || 'workshop'}.png`;
+                        downloadLink.href = pngFile;
+                        downloadLink.click();
+                      };
+                      img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                    }}
+                    className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+                    data-testid="download-public-qr-btn"
+                  >
+                    <QrCode className="h-4 w-4 mr-2" />
+                    {txt.downloadQR}
+                  </Button>
+                </div>
               </div>
 
-              {/* Description */}
-              <p className="text-center text-sm text-stone-500">
-                {txt.qrCodeDescription}
-              </p>
+              {/* NOMINATION SECTION - Secondary */}
+              <div className="bg-stone-50 rounded-xl p-4 border border-stone-200">
+                <h4 className={`font-semibold text-stone-700 mb-3 flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <Users className="h-5 w-5" />
+                  {txt.nominationSection || 'Nominering (personlig inbjudan)'}
+                </h4>
+                
+                {/* QR Code for nomination */}
+                <div className="flex justify-center p-3 bg-white rounded-xl border border-dashed border-stone-200 mb-3">
+                  <QRCodeSVG 
+                    id="nomination-qr-code"
+                    value={getNominationLink(qrWorkshop.id)}
+                    size={120}
+                    level="H"
+                    includeMargin={true}
+                    data-testid="nomination-qr-code"
+                  />
+                </div>
 
-              {/* Link display */}
-              <div className="bg-stone-50 rounded-lg p-3 break-all text-sm text-stone-600 font-mono">
-                {getNominationLink(qrWorkshop.id)}
-              </div>
+                {/* Link display */}
+                <div className="bg-white rounded-lg p-2 break-all text-xs text-stone-500 font-mono mb-3">
+                  {getNominationLink(qrWorkshop.id)}
+                </div>
 
-              {/* Actions */}
-              <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
-                  onClick={() => copyNominationLink(qrWorkshop)}
-                  className="flex-1"
-                  data-testid="copy-nomination-link-btn"
-                >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  {txt.copyLink}
-                </Button>
-                <Button 
-                  onClick={downloadQRCode}
-                  className="flex-1 bg-haggai hover:bg-haggai-dark"
-                  data-testid="download-qr-btn"
-                >
-                  <QrCode className="h-4 w-4 mr-2" />
-                  {txt.downloadQR}
-                </Button>
+                {/* Actions */}
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => copyNominationLink(qrWorkshop)}
+                    className="flex-1"
+                    data-testid="copy-nomination-link-btn"
+                  >
+                    <Share2 className="h-3 w-3 mr-1" />
+                    {txt.copyLink}
+                  </Button>
+                  <Button 
+                    size="sm"
+                    onClick={downloadQRCode}
+                    className="flex-1 bg-haggai hover:bg-haggai-dark"
+                    data-testid="download-qr-btn"
+                  >
+                    <QrCode className="h-3 w-3 mr-1" />
+                    {txt.downloadQR}
+                  </Button>
+                </div>
               </div>
             </div>
           )}
