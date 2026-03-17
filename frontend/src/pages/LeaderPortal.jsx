@@ -31,6 +31,8 @@ const LeaderPortal = () => {
   const [uploadingDoc, setUploadingDoc] = useState(false);
   const [showUploadDialog, setShowUploadDialog] = useState(false);
   const [uploadType, setUploadType] = useState('');
+  const [documentLink, setDocumentLink] = useState('');
+  const [documentName, setDocumentName] = useState('');
   
   const [formData, setFormData] = useState({});
 
