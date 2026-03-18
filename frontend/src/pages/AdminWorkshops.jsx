@@ -675,6 +675,16 @@ const AdminWorkshops = () => {
                             {language === 'sv' ? 'Agenda' : 'Agenda'}
                           </Button>
                         </Link>
+                        <Link to={`/admin/workshops/${workshop.id}/deltagare`}>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="border-emerald-500 text-emerald-600 hover:bg-emerald-500 hover:text-white"
+                          >
+                            <Users className="h-4 w-4 mr-1" />
+                            {language === 'sv' ? 'Deltagare' : 'Participants'}
+                          </Button>
+                        </Link>
                         <Button 
                           size="sm" 
                           onClick={() => openEditDialog(workshop)}
