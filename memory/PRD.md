@@ -18,27 +18,33 @@ Multi-page website for "Haggai Sweden" - a comprehensive full-stack application 
 
 ## Completed Features (as of 2026-03-17)
 
-### This Session (2026-03-17) - Öppen anmälningslänk + Ledarfunktioner
+### This Session (2026-03-17/18) - Komplett deltagarflöde
 - [x] **Public Workshop Registration** - Ny URL: `/anmal/{workshopId}`:
   - Samma formulär som nominering men öppet för alla
   - Nytt fält: "Vem rekommenderade dig?" (valfritt)
-  - Stöd för svenska/engelska/arabiska
   - Backend endpoint: `POST /api/workshops/{id}/public-register`
 - [x] **Admin QR-dialog uppgraderad**:
-  - Visar nu BÅDA länkar: öppen anmälan (grön) + nominering (grå)
+  - Visar BÅDA länkar: öppen anmälan (grön) + nominering (grå)
   - Varje länk har egen QR-kod
-  - Kopiera länk och ladda ner QR-kod för båda
 - [x] **Leader Document Upload → Link-based System**:
-  - Ersatt filuppladdning med länkbaserat system
-  - Stöd för Google Drive, Dropbox, etc.
+  - Ersatt filuppladdning med länkbaserat system (Google Drive, Dropbox)
   - Ny endpoint: `POST /api/leaders/me/documents/link`
-  - Dokument visas med "Öppna"-knapp
-- [x] **LeaderSessions.jsx Rebuilt**:
-  - Använder nu token-autentisering istället för URL-parameter
-  - Visar "Du är inte inloggad" för ej inloggade
-  - Stöd för svenska/engelska/arabiska
-  - Grupperar sessioner per workshop
-- [x] **Bug fix**: `create_participant_account()` hanterar nu befintliga deltagare korrekt
+- [x] **LeaderSessions.jsx Rebuilt** med token-autentisering
+- [x] **Ny: AdminWorkshopParticipants.jsx** - Komplett deltagarhantering:
+  - Statistik-kort (totalt, väntar, godkända, slutförda, certifikat)
+  - Deltagarlista med sök och statusfilter
+  - Gruppkommunikation (skicka e-post till alla)
+  - Påminnelse-funktion
+  - Session-baserad närvarospårning
+  - Automatisk timräkning och certifikat vid 21h
+- [x] **Backend endpoints för deltagarhantering**:
+  - `GET /api/workshops/{id}/participants` - Lista deltagare
+  - `GET /api/workshops/{id}/participants/stats` - Statistik
+  - `POST /api/workshops/{id}/send-group-email` - Gruppmail
+  - `POST /api/workshops/{id}/send-reminder` - Påminnelse
+  - `POST /api/workshops/{id}/sessions/{sid}/attendance` - Registrera närvaro
+  - `GET /api/workshops/{id}/sessions/{sid}/attendance` - Hämta närvaro
+- [x] **Automatiskt certifikat vid 21h** - E-post skickas när deltagare når 21 timmar
 
 ### Previous Session (2026-03-14) - Nominee Workflow Enhancement
 - [x] **Profile Image Upload** - Nominees can now upload profile picture directly from computer during registration (NomineeRegistration.jsx):
