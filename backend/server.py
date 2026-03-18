@@ -4581,6 +4581,441 @@ class TrainingParticipantAttendanceUpdate(BaseModel):
     attendance_hours: float
 
 
+# ==================== WORKSHOP PARTICIPANT MANAGEMENT ====================
+
+class WorkshopGroupEmail(BaseModel):
+    subject: str
+    message: str
+    include_agenda: bool = False
+    include_badge_link: bool = False
+    filter_status: Optional[str] = None  # all, approved, pending_approval, completed
+
+
+class SessionAttendanceUpdate(BaseModel):
+    participant_ids: List[str]
+    session_id: str
+    present: bool
+
+
+@api_router.get("/workshops/{workshop_id}/participants")
+async def get_workshop_participants(workshop_id: str, status: Optional[str] = None):
+    """Get all participants registered for a specific workshop"""
+    query = {"event_id": workshop_id, "registration_completed": True}
+    if status:
+        query["status"] = status
+    
+    participants = await db.nominations.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    
+    # Get participant accounts for additional info
+    for p in participants:
+        participant_account = await db.participants.find_one(
+            {"nomination_id": p.get("id")}, 
+            {"_id": 0, "account_activated": 1, "attendance_hours": 1}
+        )
+        if participant_account:
+            p["account_activated"] = participant_account.get("account_activated", False)
+            p["attendance_hours"] = participant_account.get("attendance_hours", 0)
+        else:
+            p["account_activated"] = False
+            p["attendance_hours"] = p.get("attendance_hours", 0)
+    
+    return participants
+
+
+@api_router.get("/workshops/{workshop_id}/participants/stats")
+async def get_workshop_participant_stats(workshop_id: str):
+    """Get statistics for workshop participants"""
+    participants = await db.nominations.find(
+        {"event_id": workshop_id, "registration_completed": True},
+        {"_id": 0, "status": 1, "attendance_hours": 1}
+    ).to_list(1000)
+    
+    total = len(participants)
+    approved = sum(1 for p in participants if p.get("status") == "approved")
+    pending = sum(1 for p in participants if p.get("status") == "pending_approval")
+    completed = sum(1 for p in participants if p.get("status") == "completed")
+    with_certificate = sum(1 for p in participants if p.get("attendance_hours", 0) >= 21)
+    
+    return {
+        "total": total,
+        "approved": approved,
+        "pending_approval": pending,
+        "completed": completed,
+        "with_certificate": with_certificate
+    }
+
+
+@api_router.post("/workshops/{workshop_id}/send-group-email")
+async def send_workshop_group_email(workshop_id: str, data: WorkshopGroupEmail):
+    """Send email to all participants in a workshop"""
+    # Get workshop info
+    workshop = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
+    if not workshop:
+        raise HTTPException(status_code=404, detail="Workshop not found")
+    
+    workshop_title = workshop.get("title")
+    if isinstance(workshop_title, dict):
+        workshop_title = workshop_title.get("sv", workshop_title.get("ar", "Workshop"))
+    
+    # Get participants based on filter
+    query = {"event_id": workshop_id, "registration_completed": True}
+    if data.filter_status and data.filter_status != "all":
+        query["status"] = data.filter_status
+    
+    nominations = await db.nominations.find(query, {"_id": 0}).to_list(1000)
+    
+    if not nominations:
+        return {"success": False, "message": "No participants found", "sent_count": 0}
+    
+    # Build email content
+    agenda_html = ""
+    if data.include_agenda:
+        agenda = await db.workshop_agendas.find_one({"workshop_id": workshop_id}, {"_id": 0})
+        if agenda and agenda.get("days"):
+            agenda_items = []
+            for day in agenda.get("days", []):
+                day_html = f"<h4 style='color: #15564e; margin: 15px 0 5px 0;'>📅 Dag {day.get('day_number', '')} - {day.get('date', '')}</h4><ul>"
+                for session in day.get("sessions", []):
+                    day_html += f"<li>{session.get('start_time', '')} - {session.get('end_time', '')}: {session.get('title', '')}</li>"
+                day_html += "</ul>"
+                agenda_items.append(day_html)
+            agenda_html = f"""
+            <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="color: #15564e; margin-top: 0;">📋 Program</h3>
+                {''.join(agenda_items)}
+            </div>
+            """
+    
+    badge_html = ""
+    if data.include_badge_link:
+        badge_html = f"""
+        <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
+            <p style="margin: 0 0 10px 0;"><strong>🎫 Din namnskylt är redo!</strong></p>
+            <p style="margin: 0;">Logga in på deltagarportalen för att ladda ner din namnskylt.</p>
+            <a href="{FRONTEND_URL}/deltagare/login" style="display: inline-block; background: #15564e; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; margin-top: 10px;">Gå till portalen →</a>
+        </div>
+        """
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html dir="rtl">
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl; text-align: right;">
+        <div style="background: linear-gradient(135deg, #15564e 0%, #0f403a 100%); padding: 25px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 22px;">📧 رسالة من هاجاي السويد</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0;">{workshop_title}</p>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 25px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+            <div style="white-space: pre-line; font-size: 15px;">{data.message}</div>
+            
+            {agenda_html}
+            {badge_html}
+            
+            <p style="color: #666; font-size: 13px; margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px;">
+                هذه الرسالة مرسلة إلى جميع المشاركين المسجلين في {workshop_title}
+            </p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    sent_count = 0
+    for nomination in nominations:
+        email = nomination.get("registration_data", {}).get("email") or nomination.get("nominee_email")
+        name = nomination.get("registration_data", {}).get("full_name") or nomination.get("nominee_name")
+        
+        if not email:
+            continue
+        
+        try:
+            await asyncio.to_thread(resend.Emails.send, {
+                "from": SENDER_EMAIL,
+                "to": [email],
+                "subject": f"📧 {data.subject} | {workshop_title}",
+                "html": html_content.replace("{{name}}", name or "")
+            })
+            sent_count += 1
+        except Exception as e:
+            logging.error(f"Failed to send group email to {email}: {str(e)}")
+    
+    logging.info(f"Sent group email to {sent_count} participants for workshop {workshop_id}")
+    return {"success": True, "message": f"Email sent to {sent_count} participants", "sent_count": sent_count}
+
+
+@api_router.post("/workshops/{workshop_id}/sessions/{session_id}/attendance")
+async def record_session_attendance(workshop_id: str, session_id: str, data: SessionAttendanceUpdate):
+    """Record attendance for a session - marks participants as present/absent"""
+    # Get session info to calculate hours
+    agenda = await db.workshop_agendas.find_one({"workshop_id": workshop_id}, {"_id": 0})
+    if not agenda:
+        raise HTTPException(status_code=404, detail="Agenda not found")
+    
+    session_data = None
+    for day in agenda.get("days", []):
+        for session in day.get("sessions", []):
+            if session.get("id") == session_id:
+                session_data = session
+                break
+    
+    if not session_data:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    # Calculate session duration in hours
+    try:
+        start_time = datetime.strptime(session_data.get("start_time", "09:00"), "%H:%M")
+        end_time = datetime.strptime(session_data.get("end_time", "10:00"), "%H:%M")
+        session_hours = (end_time - start_time).seconds / 3600
+    except:
+        session_hours = 1  # Default to 1 hour if parsing fails
+    
+    updated_count = 0
+    certificates_generated = []
+    
+    for participant_id in data.participant_ids:
+        # Get current participant
+        participant = await db.nominations.find_one({"id": participant_id}, {"_id": 0})
+        if not participant:
+            continue
+        
+        current_hours = participant.get("attendance_hours", 0)
+        attended_sessions = participant.get("attended_sessions", [])
+        
+        if data.present:
+            # Add attendance if not already recorded
+            if session_id not in attended_sessions:
+                attended_sessions.append(session_id)
+                new_hours = current_hours + session_hours
+                
+                update_data = {
+                    "attendance_hours": new_hours,
+                    "attended_sessions": attended_sessions,
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }
+                
+                # Check if reached 21 hours - mark as completed
+                if new_hours >= 21 and participant.get("status") != "completed":
+                    update_data["status"] = "completed"
+                    update_data["completed_at"] = datetime.now(timezone.utc).isoformat()
+                    certificates_generated.append({
+                        "participant_id": participant_id,
+                        "name": participant.get("registration_data", {}).get("full_name") or participant.get("nominee_name"),
+                        "hours": new_hours
+                    })
+                
+                await db.nominations.update_one({"id": participant_id}, {"$set": update_data})
+                
+                # Also update participants collection if exists
+                await db.participants.update_one(
+                    {"nomination_id": participant_id},
+                    {"$set": {
+                        "attendance_hours": new_hours,
+                        "attended_sessions": attended_sessions,
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }}
+                )
+                
+                updated_count += 1
+        else:
+            # Remove attendance if present
+            if session_id in attended_sessions:
+                attended_sessions.remove(session_id)
+                new_hours = max(0, current_hours - session_hours)
+                
+                await db.nominations.update_one(
+                    {"id": participant_id},
+                    {"$set": {
+                        "attendance_hours": new_hours,
+                        "attended_sessions": attended_sessions,
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }}
+                )
+                
+                await db.participants.update_one(
+                    {"nomination_id": participant_id},
+                    {"$set": {
+                        "attendance_hours": new_hours,
+                        "attended_sessions": attended_sessions,
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }}
+                )
+                
+                updated_count += 1
+    
+    # Send certificate notification emails for those who reached 21 hours
+    for cert in certificates_generated:
+        try:
+            participant = await db.nominations.find_one({"id": cert["participant_id"]}, {"_id": 0})
+            email = participant.get("registration_data", {}).get("email") or participant.get("nominee_email")
+            if email:
+                await send_certificate_ready_email(email, cert["name"], workshop.get("title") if 'workshop' in dir() else "Haggai Workshop")
+        except Exception as e:
+            logging.error(f"Failed to send certificate notification: {e}")
+    
+    return {
+        "success": True,
+        "updated_count": updated_count,
+        "session_hours": session_hours,
+        "certificates_generated": len(certificates_generated),
+        "certificate_recipients": certificates_generated
+    }
+
+
+async def send_certificate_ready_email(email: str, name: str, workshop_title: str):
+    """Send notification that certificate is ready"""
+    html_content = f"""
+    <!DOCTYPE html>
+    <html dir="rtl">
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl; text-align: right;">
+        <div style="background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 26px;">🎓 مبروك!</h1>
+            <p style="color: rgba(255,255,255,0.95); margin: 10px 0 0 0; font-size: 18px;">شهادتك جاهزة</p>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">تحية طيبة <strong>{name}</strong>،</p>
+            
+            <p>🎉 تهانينا! لقد أكملت <strong>21 ساعة</strong> من التدريب في <strong>{workshop_title}</strong>!</p>
+            
+            <div style="background: #dcfce7; padding: 20px; border-radius: 8px; border-right: 4px solid #22c55e; margin: 25px 0;">
+                <h3 style="color: #15803d; margin-top: 0;">🏆 شهادتك جاهزة للتحميل</h3>
+                <p>يمكنك الآن تسجيل الدخول إلى بوابة المشاركين لتحميل شهادتك الرسمية من هاجاي الدولية.</p>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{FRONTEND_URL}/deltagare/login" style="display: inline-block; background: #15564e; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                    تحميل الشهادة ←
+                </a>
+            </div>
+            
+            <p style="color: #666; font-size: 14px;">نحن فخورون بإنجازك ونتمنى لك كل التوفيق في رحلتك القيادية!</p>
+            
+            <p>مع أطيب التحيات،<br><strong>هاجاي السويد</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        await asyncio.to_thread(resend.Emails.send, {
+            "from": SENDER_EMAIL,
+            "to": [email],
+            "subject": f"🎓 مبروك! شهادتك جاهزة | {workshop_title}",
+            "html": html_content
+        })
+        logging.info(f"Certificate notification sent to {email}")
+    except Exception as e:
+        logging.error(f"Failed to send certificate notification: {str(e)}")
+
+
+@api_router.get("/workshops/{workshop_id}/sessions/{session_id}/attendance")
+async def get_session_attendance(workshop_id: str, session_id: str):
+    """Get attendance list for a specific session"""
+    participants = await db.nominations.find(
+        {"event_id": workshop_id, "registration_completed": True},
+        {"_id": 0}
+    ).to_list(1000)
+    
+    attendance_list = []
+    for p in participants:
+        attended_sessions = p.get("attended_sessions", [])
+        attendance_list.append({
+            "participant_id": p.get("id"),
+            "name": p.get("registration_data", {}).get("full_name") or p.get("nominee_name"),
+            "email": p.get("registration_data", {}).get("email") or p.get("nominee_email"),
+            "present": session_id in attended_sessions,
+            "total_hours": p.get("attendance_hours", 0),
+            "status": p.get("status")
+        })
+    
+    return attendance_list
+
+
+@api_router.post("/workshops/{workshop_id}/send-reminder")
+async def send_workshop_reminder(workshop_id: str, days_before: int = 1):
+    """Send reminder email to all approved participants X days before workshop"""
+    workshop = await db.workshops.find_one({"id": workshop_id}, {"_id": 0})
+    if not workshop:
+        raise HTTPException(status_code=404, detail="Workshop not found")
+    
+    workshop_title = workshop.get("title")
+    if isinstance(workshop_title, dict):
+        workshop_title = workshop_title.get("sv", workshop_title.get("ar", "Workshop"))
+    
+    workshop_date = workshop.get("date", "")
+    workshop_location = workshop.get("location", "")
+    if isinstance(workshop_location, dict):
+        workshop_location = workshop_location.get("ar", workshop_location.get("sv", ""))
+    
+    # Get approved participants
+    participants = await db.nominations.find(
+        {"event_id": workshop_id, "status": "approved", "registration_completed": True},
+        {"_id": 0}
+    ).to_list(1000)
+    
+    if not participants:
+        return {"success": False, "message": "No approved participants found", "sent_count": 0}
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html dir="rtl">
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl; text-align: right;">
+        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 25px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">⏰ تذكير: الورشة قريباً!</h1>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 25px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">تحية طيبة،</p>
+            
+            <p>نذكرك بأن <strong>{workshop_title}</strong> ستبدأ قريباً!</p>
+            
+            <div style="background: #fff7ed; padding: 20px; border-radius: 8px; border-right: 4px solid #f59e0b; margin: 20px 0;">
+                <p style="margin: 0 0 10px 0;"><strong>📅 التاريخ:</strong> {workshop_date}</p>
+                <p style="margin: 0;"><strong>📍 المكان:</strong> {workshop_location}</p>
+            </div>
+            
+            <h3 style="color: #15564e;">✅ قبل الورشة:</h3>
+            <ul style="padding-right: 20px;">
+                <li>تأكد من تحميل نامنسكيلت (بطاقة الاسم) من بوابة المشاركين</li>
+                <li>راجع البرنامج والجدول الزمني</li>
+                <li>جهز أي أسئلة تريد طرحها</li>
+            </ul>
+            
+            <div style="text-align: center; margin: 25px 0;">
+                <a href="{FRONTEND_URL}/deltagare/login" style="display: inline-block; background: #15564e; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">
+                    الدخول إلى البوابة ←
+                </a>
+            </div>
+            
+            <p>نتطلع إلى رؤيتك!</p>
+            <p>مع أطيب التحيات،<br><strong>هاجاي السويد</strong></p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    sent_count = 0
+    for p in participants:
+        email = p.get("registration_data", {}).get("email") or p.get("nominee_email")
+        if not email:
+            continue
+        
+        try:
+            await asyncio.to_thread(resend.Emails.send, {
+                "from": SENDER_EMAIL,
+                "to": [email],
+                "subject": f"⏰ تذكير: {workshop_title} - {'غداً' if days_before == 1 else f'خلال {days_before} أيام'}",
+                "html": html_content
+            })
+            sent_count += 1
+        except Exception as e:
+            logging.error(f"Failed to send reminder to {email}: {str(e)}")
+    
+    return {"success": True, "sent_count": sent_count}
+
+
 @api_router.get("/training-participants")
 async def get_training_participants():
     """Get all nominations that have completed registration (training participants)"""
