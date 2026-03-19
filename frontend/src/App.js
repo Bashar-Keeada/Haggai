@@ -27,6 +27,7 @@ import AdminTrainingParticipants from "./pages/AdminTrainingParticipants";
 import AdminEvaluationQuestions from "./pages/AdminEvaluationQuestions";
 import AdminEvaluationResults from "./pages/AdminEvaluationResults";
 import AdminWorkshopParticipants from "./pages/AdminWorkshopParticipants";
+import AdminSubjectMaterials from "./pages/AdminSubjectMaterials";
 import AdminDonationSettings from "./pages/AdminDonationSettings";
 import SessionEvaluationForm from "./pages/SessionEvaluationForm";
 import MembersArea from "./pages/MembersArea";
