@@ -63,7 +63,10 @@ const MemberKnowledge = () => {
       topics: 'Ämnen som behandlas',
       outcome: 'Lärandemål',
       close: 'Stäng',
-      clickToLearn: 'Klicka för att lära dig mer'
+      clickToLearn: 'Klicka för att lära dig mer',
+      materials: 'Studiematerial',
+      noMaterials: 'Inga material tillgängliga ännu',
+      openMaterial: 'Öppna'
     },
     en: {
       title: 'Core Subjects',
