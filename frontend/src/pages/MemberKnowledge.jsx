@@ -15,12 +15,39 @@ const MemberKnowledge = () => {
   const { isMembersAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [selectedSubject, setSelectedSubject] = useState(null);
+  const [allMaterials, setAllMaterials] = useState([]);
+  const [loadingMaterials, setLoadingMaterials] = useState(false);
 
   useEffect(() => {
     if (!isMembersAuthenticated) {
       navigate('/medlemmar');
     }
   }, [isMembersAuthenticated, navigate]);
+
+  // Fetch all materials on mount
+  useEffect(() => {
+    fetchMaterials();
+  }, []);
+
+  const fetchMaterials = async () => {
+    setLoadingMaterials(true);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/subjects/materials`);
+      if (response.ok) {
+        const data = await response.json();
+        setAllMaterials(data);
+      }
+    } catch (error) {
+      console.error('Error fetching materials:', error);
+    } finally {
+      setLoadingMaterials(false);
+    }
+  };
+
+  // Get materials for a specific subject
+  const getSubjectMaterials = (subjectId) => {
+    return allMaterials.filter(m => m.subject_id === subjectId && (m.language === language || m.language === 'all'));
+  };
 
   const translations = {
     sv: {
