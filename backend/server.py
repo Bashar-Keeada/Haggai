@@ -8161,6 +8161,88 @@ async def get_import_template():
     }
 
 
+# ==================== SUBJECT MATERIALS ====================
+
+class SubjectMaterialInput(BaseModel):
+    subject_id: int
+    title: str
+    url: str
+    description: Optional[str] = None
+    language: str = "sv"  # sv, en, ar
+
+
+@api_router.get("/subjects/materials")
+async def get_all_subject_materials():
+    """Get all materials for all subjects"""
+    materials = await db.subject_materials.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return materials
+
+
+@api_router.get("/subjects/{subject_id}/materials")
+async def get_subject_materials(subject_id: int):
+    """Get materials for a specific subject"""
+    materials = await db.subject_materials.find(
+        {"subject_id": subject_id},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    return materials
+
+
+@api_router.post("/subjects/{subject_id}/materials")
+async def add_subject_material(subject_id: int, data: SubjectMaterialInput):
+    """Add a material link to a subject (admin only)"""
+    # Validate URL
+    if not data.url.startswith(('http://', 'https://')):
+        raise HTTPException(status_code=400, detail="Invalid URL")
+    
+    material = {
+        "id": str(uuid.uuid4()),
+        "subject_id": subject_id,
+        "title": data.title,
+        "url": data.url,
+        "description": data.description,
+        "language": data.language,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.subject_materials.insert_one(material)
+    logging.info(f"Material added to subject {subject_id}: {data.title}")
+    
+    return {"success": True, "material": {k: v for k, v in material.items() if k != "_id"}}
+
+
+@api_router.put("/subjects/materials/{material_id}")
+async def update_subject_material(material_id: str, data: SubjectMaterialInput):
+    """Update a material"""
+    result = await db.subject_materials.update_one(
+        {"id": material_id},
+        {"$set": {
+            "title": data.title,
+            "url": data.url,
+            "description": data.description,
+            "language": data.language,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Material not found")
+    
+    return {"success": True, "message": "Material updated"}
+
+
+@api_router.delete("/subjects/materials/{material_id}")
+async def delete_subject_material(material_id: str):
+    """Delete a material"""
+    result = await db.subject_materials.delete_one({"id": material_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Material not found")
+    
+    return {"success": True, "message": "Material deleted"}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
