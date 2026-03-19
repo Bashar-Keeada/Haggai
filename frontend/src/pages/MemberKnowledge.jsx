@@ -438,6 +438,43 @@ const MemberKnowledge = () => {
                   </p>
                 </div>
 
+                {/* Materials Section */}
+                {(() => {
+                  const materials = getSubjectMaterials(selectedSubject.id);
+                  if (materials.length === 0) return null;
+                  
+                  return (
+                    <div className={`bg-amber-50 rounded-xl p-6 ${isRTL ? 'text-right' : ''}`}>
+                      <div className={`flex items-center gap-2 mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                        <FileText className="h-5 w-5 text-amber-600" />
+                        <h3 className="text-lg font-bold text-amber-700">{txt.materials}</h3>
+                      </div>
+                      <div className="space-y-3">
+                        {materials.map((material) => (
+                          <a
+                            key={material.id}
+                            href={material.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`flex items-center justify-between p-3 bg-white rounded-lg border border-amber-200 hover:border-amber-400 hover:shadow-md transition-all group ${isRTL ? 'flex-row-reverse' : ''}`}
+                          >
+                            <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                              <Link2 className="h-5 w-5 text-amber-500 group-hover:text-amber-600" />
+                              <div className={isRTL ? 'text-right' : ''}>
+                                <p className="font-medium text-stone-800 group-hover:text-amber-700">{material.title}</p>
+                                {material.description && (
+                                  <p className="text-xs text-stone-500">{material.description}</p>
+                                )}
+                              </div>
+                            </div>
+                            <ExternalLink className="h-4 w-4 text-stone-400 group-hover:text-amber-600" />
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
+
                 {/* Close Button */}
                 <Button 
                   onClick={() => setSelectedSubject(null)}
