@@ -1474,6 +1474,7 @@ class NomineeRegistrationData(BaseModel):
     commitment_attendance: str
     commitment_active_role: str
     notes: Optional[str] = None
+    language: Optional[str] = "ar"  # Language preference for emails (ar, sv, en)
     # Legacy fields for backwards compatibility
     profile_image: Optional[str] = None
     full_address: Optional[str] = None
