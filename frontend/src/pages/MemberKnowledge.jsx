@@ -81,7 +81,10 @@ const MemberKnowledge = () => {
       topics: 'Topics Covered',
       outcome: 'Learning Outcome',
       close: 'Close',
-      clickToLearn: 'Click to learn more'
+      clickToLearn: 'Click to learn more',
+      materials: 'Study Materials',
+      noMaterials: 'No materials available yet',
+      openMaterial: 'Open'
     },
     ar: {
       title: 'المواضيع الأساسية',
