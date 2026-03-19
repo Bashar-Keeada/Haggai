@@ -4937,37 +4937,89 @@ async def record_session_attendance(workshop_id: str, session_id: str, data: Ses
     }
 
 
-async def send_certificate_ready_email(email: str, name: str, workshop_title: str):
-    """Send notification that certificate is ready"""
+async def send_certificate_ready_email(email: str, name: str, workshop_title: str, language: str = "ar"):
+    """Send notification that certificate is ready - Supports sv, en, ar"""
+    lang = language if language in ['sv', 'en', 'ar'] else 'ar'
+    
+    translations = {
+        'ar': {
+            'dir': 'rtl',
+            'text_align': 'right',
+            'title': '🎓 مبروك!',
+            'subtitle': 'شهادتك جاهزة',
+            'greeting': f'تحية طيبة <strong>{name}</strong>،',
+            'congrats': f'🎉 تهانينا! لقد أكملت <strong>21 ساعة</strong> من التدريب في <strong>{workshop_title}</strong>!',
+            'ready_title': '🏆 شهادتك جاهزة للتحميل',
+            'ready_text': 'يمكنك الآن تسجيل الدخول إلى بوابة المشاركين لتحميل شهادتك الرسمية من هاجاي الدولية.',
+            'download': 'تحميل الشهادة ←',
+            'proud': 'نحن فخورون بإنجازك ونتمنى لك كل التوفيق في رحلتك القيادية!',
+            'regards': 'مع أطيب التحيات،',
+            'org_name': 'هاجاي السويد',
+            'subject': f'🎓 مبروك! شهادتك جاهزة | {workshop_title}'
+        },
+        'sv': {
+            'dir': 'ltr',
+            'text_align': 'left',
+            'title': '🎓 Grattis!',
+            'subtitle': 'Ditt certifikat är klart',
+            'greeting': f'Hej <strong>{name}</strong>,',
+            'congrats': f'🎉 Grattis! Du har slutfört <strong>21 timmar</strong> av utbildningen i <strong>{workshop_title}</strong>!',
+            'ready_title': '🏆 Ditt certifikat är redo att laddas ner',
+            'ready_text': 'Du kan nu logga in på deltagarportalen för att ladda ner ditt officiella certifikat från Haggai International.',
+            'download': 'Ladda ner certifikat →',
+            'proud': 'Vi är stolta över din prestation och önskar dig all lycka på din ledarskapsresa!',
+            'regards': 'Med vänliga hälsningar,',
+            'org_name': 'Haggai Sverige',
+            'subject': f'🎓 Grattis! Ditt certifikat är klart | {workshop_title}'
+        },
+        'en': {
+            'dir': 'ltr',
+            'text_align': 'left',
+            'title': '🎓 Congratulations!',
+            'subtitle': 'Your certificate is ready',
+            'greeting': f'Hello <strong>{name}</strong>,',
+            'congrats': f'🎉 Congratulations! You have completed <strong>21 hours</strong> of training in <strong>{workshop_title}</strong>!',
+            'ready_title': '🏆 Your certificate is ready for download',
+            'ready_text': 'You can now log in to the participant portal to download your official certificate from Haggai International.',
+            'download': 'Download Certificate →',
+            'proud': 'We are proud of your achievement and wish you all the best on your leadership journey!',
+            'regards': 'Best regards,',
+            'org_name': 'Haggai Sweden',
+            'subject': f'🎓 Congratulations! Your certificate is ready | {workshop_title}'
+        }
+    }
+    
+    t = translations.get(lang, translations['ar'])
+    
     html_content = f"""
     <!DOCTYPE html>
-    <html dir="rtl">
+    <html dir="{t['dir']}">
     <head><meta charset="UTF-8"></head>
-    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl; text-align: right;">
+    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: {t['dir']}; text-align: {t['text_align']};">
         <div style="background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 26px;">🎓 مبروك!</h1>
-            <p style="color: rgba(255,255,255,0.95); margin: 10px 0 0 0; font-size: 18px;">شهادتك جاهزة</p>
+            <h1 style="color: white; margin: 0; font-size: 26px;">{t['title']}</h1>
+            <p style="color: rgba(255,255,255,0.95); margin: 10px 0 0 0; font-size: 18px;">{t['subtitle']}</p>
         </div>
         
         <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
-            <p style="font-size: 16px;">تحية طيبة <strong>{name}</strong>،</p>
+            <p style="font-size: 16px;">{t['greeting']}</p>
             
-            <p>🎉 تهانينا! لقد أكملت <strong>21 ساعة</strong> من التدريب في <strong>{workshop_title}</strong>!</p>
+            <p>{t['congrats']}</p>
             
-            <div style="background: #dcfce7; padding: 20px; border-radius: 8px; border-right: 4px solid #22c55e; margin: 25px 0;">
-                <h3 style="color: #15803d; margin-top: 0;">🏆 شهادتك جاهزة للتحميل</h3>
-                <p>يمكنك الآن تسجيل الدخول إلى بوابة المشاركين لتحميل شهادتك الرسمية من هاجاي الدولية.</p>
+            <div style="background: #dcfce7; padding: 20px; border-radius: 8px; border-{'right' if lang == 'ar' else 'left'}: 4px solid #22c55e; margin: 25px 0;">
+                <h3 style="color: #15803d; margin-top: 0;">{t['ready_title']}</h3>
+                <p>{t['ready_text']}</p>
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
                 <a href="{FRONTEND_URL}/deltagare/login" style="display: inline-block; background: #15564e; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
-                    تحميل الشهادة ←
+                    {t['download']}
                 </a>
             </div>
             
-            <p style="color: #666; font-size: 14px;">نحن فخورون بإنجازك ونتمنى لك كل التوفيق في رحلتك القيادية!</p>
+            <p style="color: #666; font-size: 14px;">{t['proud']}</p>
             
-            <p>مع أطيب التحيات،<br><strong>هاجاي السويد</strong></p>
+            <p>{t['regards']}<br><strong>{t['org_name']}</strong></p>
         </div>
     </body>
     </html>
@@ -4977,10 +5029,10 @@ async def send_certificate_ready_email(email: str, name: str, workshop_title: st
         await asyncio.to_thread(resend.Emails.send, {
             "from": SENDER_EMAIL,
             "to": [email],
-            "subject": f"🎓 مبروك! شهادتك جاهزة | {workshop_title}",
+            "subject": t['subject'],
             "html": html_content
         })
-        logging.info(f"Certificate notification sent to {email}")
+        logging.info(f"Certificate notification sent to {email} in {lang}")
     except Exception as e:
         logging.error(f"Failed to send certificate notification: {str(e)}")
 
