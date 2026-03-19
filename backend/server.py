@@ -4923,8 +4923,12 @@ async def record_session_attendance(workshop_id: str, session_id: str, data: Ses
         try:
             participant = await db.nominations.find_one({"id": cert["participant_id"]}, {"_id": 0})
             email = participant.get("registration_data", {}).get("email") or participant.get("nominee_email")
+            user_language = participant.get("registration_data", {}).get("language") or participant.get("language") or "ar"
             if email:
-                await send_certificate_ready_email(email, cert["name"], workshop.get("title") if 'workshop' in dir() else "Haggai Workshop")
+                workshop_title = workshop.get("title") if 'workshop' in dir() else "Haggai Workshop"
+                if isinstance(workshop_title, dict):
+                    workshop_title = workshop_title.get("sv", workshop_title.get("ar", "Workshop"))
+                await send_certificate_ready_email(email, cert["name"], workshop_title, user_language)
         except Exception as e:
             logging.error(f"Failed to send certificate notification: {e}")
     
