@@ -3305,6 +3305,7 @@ class PublicRegistrationData(BaseModel):
     notes: Optional[str] = None
     recommended_by: Optional[str] = None
     profile_image: Optional[str] = None
+    language: Optional[str] = "ar"  # Language preference for emails (ar, sv, en)
 
 
 @api_router.post("/workshops/{workshop_id}/public-register")
