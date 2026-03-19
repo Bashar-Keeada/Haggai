@@ -99,7 +99,10 @@ const MemberKnowledge = () => {
       topics: 'المواضيع المغطاة',
       outcome: 'نتائج التعلم',
       close: 'إغلاق',
-      clickToLearn: 'انقر لمعرفة المزيد'
+      clickToLearn: 'انقر لمعرفة المزيد',
+      materials: 'مواد الدراسة',
+      noMaterials: 'لا توجد مواد متاحة بعد',
+      openMaterial: 'فتح'
     }
   };
 
