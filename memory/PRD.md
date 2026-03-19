@@ -45,6 +45,12 @@ Multi-page website for "Haggai Sweden" - a comprehensive full-stack application 
   - `POST /api/workshops/{id}/sessions/{sid}/attendance` - Registrera närvaro
   - `GET /api/workshops/{id}/sessions/{sid}/attendance` - Hämta närvaro
 - [x] **Automatiskt certifikat vid 21h** - E-post skickas när deltagare når 21 timmar
+- [x] **Subject Materials (Ämnesmaterial)**:
+  - Ny admin-sida: `/admin/amnesmaterial`
+  - Länkbaserade material per ämne (Google Drive, Dropbox, etc.)
+  - Visas i medlemsområdets kunskapsbank (`MemberKnowledge.jsx`)
+  - Backend endpoints: CRUD för `/api/subjects/{id}/materials`
+  - Stöd för språkfiltrering (sv, en, ar, all)
 
 ### Previous Session (2026-03-14) - Nominee Workflow Enhancement
 - [x] **Profile Image Upload** - Nominees can now upload profile picture directly from computer during registration (NomineeRegistration.jsx):
