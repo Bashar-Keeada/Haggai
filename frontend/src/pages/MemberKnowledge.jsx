@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
@@ -6,8 +6,9 @@ import { Button } from '../components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
-import { ArrowLeft, BookOpen, Clock, GraduationCap, CheckCircle, Target, List, X } from 'lucide-react';
-import { useEffect } from 'react';
+import { ArrowLeft, BookOpen, Clock, GraduationCap, CheckCircle, Target, List, X, FileText, ExternalLink, Link2 } from 'lucide-react';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const MemberKnowledge = () => {
   const { language, isRTL } = useLanguage();
