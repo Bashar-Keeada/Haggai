@@ -383,6 +383,7 @@ const PublicWorkshopRegistration = () => {
       const submitData = {
         ...formData,
         profile_image: profileImageBase64,
+        language: formLanguage,  // Include the selected language for email preference
         country_of_residence: formData.country_of_residence === 'other' 
           ? formData.country_other 
           : (countryMap[formData.country_of_residence] || formData.country_of_residence),
