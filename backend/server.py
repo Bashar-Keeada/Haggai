@@ -2457,53 +2457,123 @@ async def send_participant_approval_email(email: str, name: str, password: str, 
         logging.error(f"Failed to send approval email: {str(e)}")
 
 
-async def send_participant_password_setup_email(email: str, name: str, token: str, workshop_title: str):
-    """Send approval email with password setup link - Always in Arabic"""
+async def send_participant_password_setup_email(email: str, name: str, token: str, workshop_title: str, language: str = "ar"):
+    """Send approval email with password setup link - Supports sv, en, ar (default: ar)"""
     frontend_url = FRONTEND_URL
-    password_setup_link = f"{frontend_url}/deltagare/skapa-losenord/{token}?lang=ar"
+    lang = language if language in ['sv', 'en', 'ar'] else 'ar'
+    password_setup_link = f"{frontend_url}/deltagare/skapa-losenord/{token}?lang={lang}"
+    
+    # Email translations
+    translations = {
+        'ar': {
+            'dir': 'rtl',
+            'text_align': 'right',
+            'title': '🎉 تمت الموافقة على تسجيلك!',
+            'welcome': f'مرحباً بك في {workshop_title}',
+            'greeting': f'تحية طيبة <strong>{name}</strong>،',
+            'congrats': f'مبروك! تمت الموافقة على تسجيلك في <strong>{workshop_title}</strong>.',
+            'next_step_title': 'الخطوة التالية: إنشاء كلمة المرور',
+            'next_step_text': 'لتفعيل حسابك، يرجى إنشاء كلمة مرور للوصول إلى بوابة المشاركين.',
+            'create_password': 'إنشاء كلمة المرور ←',
+            'copy_link': 'أو انسخ هذا الرابط في متصفحك:',
+            'as_participant': 'كمشارك، ستتمكن من:',
+            'feature_1': '📛 تحميل بطاقة اسمك',
+            'feature_2': '📅 عرض جدول وبرنامج الورشة',
+            'feature_3': 'ℹ️ الوصول إلى معلومات الورشة',
+            'feature_4': '👤 إدارة ملفك الشخصي',
+            'see_you': 'نتطلع إلى رؤيتك في الورشة!',
+            'regards': 'مع أطيب التحيات،',
+            'org_name': 'هاجاي السويد',
+            'subject': f'✅ تمت الموافقة على تسجيلك - أنشئ كلمة المرور | {workshop_title}'
+        },
+        'sv': {
+            'dir': 'ltr',
+            'text_align': 'left',
+            'title': '🎉 Din registrering är godkänd!',
+            'welcome': f'Välkommen till {workshop_title}',
+            'greeting': f'Hej <strong>{name}</strong>,',
+            'congrats': f'Grattis! Din registrering till <strong>{workshop_title}</strong> har godkänts.',
+            'next_step_title': 'Nästa steg: Skapa ditt lösenord',
+            'next_step_text': 'För att aktivera ditt konto, vänligen skapa ett lösenord för att komma åt deltagarportalen.',
+            'create_password': 'Skapa lösenord →',
+            'copy_link': 'Eller kopiera denna länk i din webbläsare:',
+            'as_participant': 'Som deltagare kan du:',
+            'feature_1': '📛 Ladda ner din namnskylt',
+            'feature_2': '📅 Se workshopens schema och program',
+            'feature_3': 'ℹ️ Få tillgång till workshopinformation',
+            'feature_4': '👤 Hantera din profil',
+            'see_you': 'Vi ser fram emot att träffa dig på workshopen!',
+            'regards': 'Med vänliga hälsningar,',
+            'org_name': 'Haggai Sverige',
+            'subject': f'✅ Din registrering är godkänd - Skapa lösenord | {workshop_title}'
+        },
+        'en': {
+            'dir': 'ltr',
+            'text_align': 'left',
+            'title': '🎉 Your registration is approved!',
+            'welcome': f'Welcome to {workshop_title}',
+            'greeting': f'Hello <strong>{name}</strong>,',
+            'congrats': f'Congratulations! Your registration for <strong>{workshop_title}</strong> has been approved.',
+            'next_step_title': 'Next Step: Create Your Password',
+            'next_step_text': 'To activate your account, please create a password to access the participant portal.',
+            'create_password': 'Create Password →',
+            'copy_link': 'Or copy this link in your browser:',
+            'as_participant': 'As a participant, you can:',
+            'feature_1': '📛 Download your name badge',
+            'feature_2': '📅 View workshop schedule and program',
+            'feature_3': 'ℹ️ Access workshop information',
+            'feature_4': '👤 Manage your profile',
+            'see_you': 'We look forward to seeing you at the workshop!',
+            'regards': 'Best regards,',
+            'org_name': 'Haggai Sweden',
+            'subject': f'✅ Your registration is approved - Create password | {workshop_title}'
+        }
+    }
+    
+    t = translations.get(lang, translations['ar'])
     
     html_content = f"""
     <!DOCTYPE html>
-    <html dir="rtl">
+    <html dir="{t['dir']}">
     <head><meta charset="UTF-8"></head>
-    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl; text-align: right;">
+    <body style="font-family: Arial, sans-serif; line-height: 1.8; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; direction: {t['dir']}; text-align: {t['text_align']};">
         <div style="background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 24px;">🎉 تمت الموافقة على تسجيلك!</h1>
-            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">مرحباً بك في {workshop_title}</p>
+            <h1 style="color: white; margin: 0; font-size: 24px;">{t['title']}</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">{t['welcome']}</p>
         </div>
         
         <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
-            <p>تحية طيبة <strong>{name}</strong>،</p>
+            <p>{t['greeting']}</p>
             
-            <p>مبروك! تمت الموافقة على تسجيلك في <strong>{workshop_title}</strong>.</p>
+            <p>{t['congrats']}</p>
             
-            <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border-right: 4px solid #2e7d32; margin: 20px 0;">
-                <h3 style="color: #2e7d32; margin-top: 0;">الخطوة التالية: إنشاء كلمة المرور</h3>
-                <p>لتفعيل حسابك، يرجى إنشاء كلمة مرور للوصول إلى بوابة المشاركين.</p>
+            <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border-{'right' if lang == 'ar' else 'left'}: 4px solid #2e7d32; margin: 20px 0;">
+                <h3 style="color: #2e7d32; margin-top: 0;">{t['next_step_title']}</h3>
+                <p>{t['next_step_text']}</p>
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
                 <a href="{password_setup_link}" style="display: inline-block; background: #15564e; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
-                    إنشاء كلمة المرور ←
+                    {t['create_password']}
                 </a>
             </div>
             
             <p style="font-size: 13px; color: #666;">
-                أو انسخ هذا الرابط في متصفحك:<br>
+                {t['copy_link']}<br>
                 <a href="{password_setup_link}" style="color: #15564e; word-break: break-all;">{password_setup_link}</a>
             </p>
             
-            <p><strong>كمشارك، ستتمكن من:</strong></p>
-            <ul style="padding-right: 20px;">
-                <li>📛 تحميل بطاقة اسمك</li>
-                <li>📅 عرض جدول وبرنامج الورشة</li>
-                <li>ℹ️ الوصول إلى معلومات الورشة</li>
-                <li>👤 إدارة ملفك الشخصي</li>
+            <p><strong>{t['as_participant']}</strong></p>
+            <ul style="padding-{'right' if lang == 'ar' else 'left'}: 20px;">
+                <li>{t['feature_1']}</li>
+                <li>{t['feature_2']}</li>
+                <li>{t['feature_3']}</li>
+                <li>{t['feature_4']}</li>
             </ul>
             
-            <p style="color: #666; font-size: 14px; margin-top: 30px;">نتطلع إلى رؤيتك في الورشة!</p>
+            <p style="color: #666; font-size: 14px; margin-top: 30px;">{t['see_you']}</p>
             
-            <p>مع أطيب التحيات،<br><strong>هاجاي السويد</strong></p>
+            <p>{t['regards']}<br><strong>{t['org_name']}</strong></p>
         </div>
     </body>
     </html>
@@ -2513,10 +2583,10 @@ async def send_participant_password_setup_email(email: str, name: str, token: st
         await asyncio.to_thread(resend.Emails.send, {
             "from": SENDER_EMAIL,
             "to": [email],
-            "subject": f"✅ تمت الموافقة على تسجيلك - أنشئ كلمة المرور | {workshop_title}",
+            "subject": t['subject'],
             "html": html_content
         })
-        logging.info(f"Password setup email sent to participant {email}")
+        logging.info(f"Password setup email sent to participant {email} in {lang}")
     except Exception as e:
         logging.error(f"Failed to send password setup email: {str(e)}")
 
